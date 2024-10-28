@@ -19,7 +19,7 @@ function Navbar() {
   const handleRouteClick = () => setIsOpen(false);
 
   return (
-      <Container className="flex justify-between gap-4 flex-wrap lg:py-0 px-4 md:px-8">
+      <Container className="flex justify-between gap-4 flex-wrap md:py-0 px-[1vw] md:px-[2vw]">
         {/* Hamburger Menu for mobile */}
         <div className="sm:hidden flex space-x-4 items-center w-full">
           <button
@@ -38,7 +38,8 @@ function Navbar() {
           <Logo />
 
           {/* Search and Dropdown */}
-          <div className="flex space-x-4 items-center pl-[160px]">
+          {/* <div className="flex space-x-4 items-center pl-[160px]"> */}
+          <div className="">
             <Search />
             <LinksDropdown />
           </div>
@@ -67,7 +68,7 @@ function Navbar() {
         </div>
 
         {/* Search and Dropdown for desktop*/}
-        <div className="sm:flex hidden flex space-x-4 items-center">
+        <div className="sm:flex hidden flex space-x-[1vw] items-center">
           <Search />
           <LinksDropdown />
         </div>

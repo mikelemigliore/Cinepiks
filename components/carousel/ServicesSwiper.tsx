@@ -179,14 +179,14 @@ function ServicesSwiper({ services }: Prop) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80"
     >
-      <div className="ml-2 mb-4 md:ml-16 md:mb-2 text-white text-xl md:text-3xl font-semibold">
+      <div className="ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.5vw] font-semibold">
         <h1>What's Your Platform?</h1>
-        <h2 className="text-base md:text-lg pt-4 pb-4 font-medium text-gray-300">
-          Select one or more tags, then click on 'Explore All' to view content offered by your favorite platform :
+        <h2 className="text-[2vw] md:text-[1vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
+          Select one or more tags, then click on 'Explore All' to view content offered by your favorite platform:
         </h2>
       </div>
 
-      <div className="ml-2 md:ml-16">
+      <div className="ml-[1vw] md:ml-[3vw]">
         <Swiper
           speed={1000}
           modules={[Navigation, Pagination]}
@@ -209,7 +209,7 @@ function ServicesSwiper({ services }: Prop) {
             },
           }}
         >
-          {services.map((service, index, img) => {
+          {services.map((service, index) => {
             const isPartialSlide =
               index === (activeIndex + 6) % services.length || // Next partial slide on the right
               index === (activeIndex - 1 + services.length) % services.length; // Previous partial slide on the left
@@ -217,16 +217,16 @@ function ServicesSwiper({ services }: Prop) {
             const isSelected = !!selectedItems[service.id]; // Check if the current service is selected
 
             return (
-                <SwiperSlide key={service.id} className="pb-12 md:pb-16">
-                  <ServicesCard
-                    img={service.img}
-                    title={service.title}
-                    isPartialSlide={isPartialSlide}
-                    activeIndex={activeIndex}
-                    isSelected={isSelected}
-                    onSelect={() => handleSelect(service.id)} // Pass the specific id to the handler
-                  />
-                </SwiperSlide>
+              <SwiperSlide key={service.id} className="pb-[5vh] md:pb-[8vh]">
+                <ServicesCard
+                  img={service.img}
+                  title={service.title}
+                  isPartialSlide={isPartialSlide}
+                  activeIndex={activeIndex}
+                  isSelected={isSelected}
+                  onSelect={() => handleSelect(service.id)} // Pass the specific id to the handler
+                />
+              </SwiperSlide>
             );
           })}
         </Swiper>
@@ -235,23 +235,20 @@ function ServicesSwiper({ services }: Prop) {
       <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
 
       {/* Explore All button with disabled state */}
-      {/* Conditionally render Link only when the button is enabled */}
       {isAnyItemSelected ? (
         <Link href="/search">
           <Button
-          onMouseDown={(e) => e.currentTarget.blur()}  // This blurs the button to reset active/focus state
-            //onClick={() => console.log("Explore All clicked")}
-            className={`ml-2 h-[3rem] w-[10rem] md:ml-16 md:w-[10rem] md:h-[3.5rem] text-md rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
+            onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
+            className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
           >
             Explore All
-            <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+            <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
           </Button>
         </Link>
       ) : (
-        // h-10 w-28 md:w-40 md:h-14 rounded-full text-sm md:text-lg bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 mx-1 md:mx-2
-        <div className="ml-2 h-[3rem] w-[10rem] md:ml-16 md:w-[10rem] md:h-[3.5rem] text-md rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
+        <div className="ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
           Explore All
-          <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
         </div>
       )}
     </div>

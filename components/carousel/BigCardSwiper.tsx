@@ -22,23 +22,22 @@ interface BigCardProps {
 }
 
 function BigCardSwiper({ moviesBigCards }: BigCardProps) {
-    const [swiperInstance, setSwiperInstance] = useState<any>(null);
-    const [showButtons, setShowButtons] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
+  const [swiperInstance, setSwiperInstance] = useState<any>(null);
+  const [showButtons, setShowButtons] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div
-    onMouseEnter={() => setShowButtons(true)}
-    onMouseLeave={() => setShowButtons(false)}
-    className="relative z-80" //bottom-[3rem]
-  >
-
-<div className="ml-2 mb-4 md:ml-16 md:mb-2 text-white text-xl md:text-3xl font-semibold">
+      onMouseEnter={() => setShowButtons(true)}
+      onMouseLeave={() => setShowButtons(false)}
+      className="relative z-80" //bottom-[3rem]
+    >
+      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
         <h1>
           Popular
           <Link href="/search">
             <Button
               variant="ghost"
-              className={`md:w-36 ml-4 md:h-12 rounded-full text-sm md:text-lg !bg-transparent hover:text-white 
+              className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -48,12 +47,12 @@ function BigCardSwiper({ moviesBigCards }: BigCardProps) {
         `}
             >
               View All
-              <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+              <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
             </Button>
           </Link>
         </h1>
       </div>
-      
+
       <Swiper
         speed={1000}
         modules={[Navigation, Pagination]}
@@ -97,13 +96,13 @@ function BigCardSwiper({ moviesBigCards }: BigCardProps) {
           // Define how to find the "8th" slide (partial one)
           const isPartialSlide =
             index === (activeIndex + 1) % moviesBigCards.length || // Next partial slide on the right
-            index === (activeIndex - 1 + moviesBigCards.length) % moviesBigCards.length; // Previous partial slide on the left
-
+            index ===
+              (activeIndex - 1 + moviesBigCards.length) % moviesBigCards.length; // Previous partial slide on the left
 
           const isLastOne = index === moviesBigCards.length - 1;
 
           return (
-            <SwiperSlide className="pb-12 md:pb-16" key={moviesBigCard.id}>
+            <SwiperSlide className="pb-[8vh]" key={moviesBigCard.id}>
               <BigCard
                 image={moviesBigCard.imgUrl}
                 title={moviesBigCard.title}
@@ -120,7 +119,7 @@ function BigCardSwiper({ moviesBigCards }: BigCardProps) {
           );
         })}
       </Swiper>
-      <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons}/>
+      <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
     </div>
   );
 }

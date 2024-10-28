@@ -26,13 +26,13 @@ function MovieSwiper({ movies, title }: Props) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80" //bottom-[3rem]
     >
-      <div className="ml-2 mb-4 md:ml-16 md:mb-2 text-white text-xl md:text-3xl font-semibold">
+      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
         <h1>
           {title}
           <Link href="/search">
             <Button
               variant="ghost"
-              className={`md:w-36 ml-4 md:h-12 rounded-full text-sm md:text-lg !bg-transparent hover:text-white 
+              className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -42,13 +42,13 @@ function MovieSwiper({ movies, title }: Props) {
         `}
             >
               View All
-              <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+              <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
             </Button>
           </Link>
         </h1>
       </div>
 
-      <div className="">
+      <div className="ml-[2.5vw] mr-[3vw]">
         <Swiper
           speed={1000}
           modules={[Navigation, Pagination]}
@@ -72,7 +72,7 @@ function MovieSwiper({ movies, title }: Props) {
             1024: {
               slidesPerView: 7,
               slidesPerGroup: 7,
-              spaceBetween: -110,
+              spaceBetween: -5,
             },
             // // when window width is >= 768px
             // 768: {
@@ -104,7 +104,7 @@ function MovieSwiper({ movies, title }: Props) {
             index === movies.length - 1;
 
             return (
-              <SwiperSlide className="pb-12 md:pb-16" key={movie.id}>
+              <SwiperSlide className="pb-[8vh]" key={movie.id}>
                 <MovieCard
                   imgUrl={movie.imgUrl}
                   title={movie.title}

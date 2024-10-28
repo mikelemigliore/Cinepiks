@@ -28,6 +28,7 @@ const config: Config = {
         customDisabledColor: "#292929",
         customFooterBackground: "#101010",
         customColorBigCard: "#212121",
+        customColorTags: "#3f3f3f",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

@@ -119,7 +119,8 @@ function MainCarousel() {
   // customColor
   return (
     <div>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[2rem] top-[19rem] z-10 md:h-[10rem] md:top-[53.5rem] md:z-30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[5vh] top-[25vh] z-20 md:h-[15vh] md:top-[90vh] md:z-40" />
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[2rem] top-[19rem] z-10 md:h-[10rem] md:top-[53.5rem] md:z-30" /> */}
       {/* // In the MainCarousel component, we pass the activeSlide, setActiveSlide, and totalSlides to the Carousel. This allows the Carousel component 
       to use and modify the state (activeSlide) that tracks which slide is currently active. 
       This link ensures that when the carousel scrolls, the dots and the slides are in sync */}
@@ -142,11 +143,14 @@ function MainCarousel() {
                   reload={reload}
                   handleReload={handleReload}
                   handleStarted={handleStarted}
+                  src={
+                    "https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
+                  }
                 />
               ) : (
                 <img
                   src="https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
-                  className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[17rem] md:w-screen md:h-[73rem] md:mt-0`}
+                  className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
                 />
               )}
             </div>
@@ -155,79 +159,81 @@ function MainCarousel() {
 
             <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full" />
             {started && (
-              <div className=" md:ml-[110rem] md:mt-[27rem] z-50">
+              <div className="ml-[77vw] mt-[50vh] z-50">
                 <Button
                   onClick={() => setUnmute(!unmute)}
-                  className=" mr-3 md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
                   {unmute ? (
-                    <GoUnmute className="md:w-8 md:h-8" />
+                    <GoUnmute className="w-[2vw] h-[2vw]" />
                   ) : (
                     <div>
-                      <GoMute className="md:w-8 md:h-8" />
+                      <GoMute className="w-[2vw] h-[2vw]" />
                     </div>
                   )}
                 </Button>
                 <Button
                   onClick={() => setPause(!pause)}
-                  className="mr-3 md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
                   {pause ? (
-                    <CiPlay1 className="md:w-8 md:h-8" />
+                    <CiPlay1 className="w-[2vw] h-[2vw]" />
                   ) : (
                     <div>
-                      <CiPause1 className="md:w-8 md:h-8" />
+                      <CiPause1 className="w-[2vw] h-[2vw]" />
                     </div>
                   )}
                 </Button>
                 <Button
                   onClick={() => setReload(true)}
-                  className="md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
-                  <MdOutlineReplay className="md:w-9 md:h-9" />
+                  <MdOutlineReplay className="w-[2vw] h-[2vw]" />
                 </Button>
               </div>
             )}
 
-            <h1 className="absolute top-[12rem] md:top-[24rem] left-8 left-4 md:left-20 z-50 text-white font-bold text-sm md:text-lg">
-              Release Date: 12/09/2024
-            </h1>
-            <h1 className="absolute top-[13.5rem] md:top-[27rem] left-8 left-4 md:left-20 z-50 text-white text-2xl md:text-6xl font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-              Alien: Romulus
-            </h1>
-            <div className="absolute top-[16rem] md:top-[32rem] left-4 md:left-20 z-50 max-w-[90%] md:max-w-[40rem]">
-              <h1 className="hidden md:block text-white text-sm md:text-xl overflow-hidden overflow-ellipsis md:line-clamp-4 ">
-                While scavenging the deep ends of a derelict space station, a
-                group of young space colonists come face to face with the most
-                terrifying life form in the universe. While scavenging the deep
-                ends of a derelict space station, a group of young space
-                colonists come face fe for dfbsedfrb
+            <div>
+              <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-sm md:text-lg">
+                Release Date: 12/09/2024
               </h1>
-            </div>
-
-            <div className="absolute top-[16rem] md:top-[43rem] left-7 left-4 md:left-20 z-50 flex justify-center  md:flex-row">
-              <div className="mb-4 md:mb-0">
-                <Link href="/singlemovie">
-                  <Button className="h-10 w-28 md:w-40 md:h-14 rounded-full mr-3 md:mr-6 text-sm md:text-lg bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                    View
-                    <SlArrowRight className="w-4 md:w-6 h-4 md:h-6 ml-6 md:ml-12" />
-                  </Button>
-                </Link>
+              <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                Alien: Romulus
+              </h1>
+              <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
+                <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
+                  While scavenging the deep ends of a derelict space station, a
+                  group of young space colonists come face to face with the most
+                  terrifying life form in the universe. While scavenging the
+                  deep ends of a derelict space station, a group of young space
+                  colonists come face.
+                </h1>
               </div>
-              <div>
-                <Link href="/watchlist">
-                  <Button className="h-10 w-28 md:w-40 md:h-14 rounded-full text-sm md:text-lg pl-4 md:pl-6 bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                    Watchlist
-                    <LuPlus className="w-5 md:w-7 h-5 md:h-7 ml-2 md:ml-4" />
-                  </Button>
-                </Link>
+
+              <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
+                <div className="mb-4 md:mb-0">
+                  <Link href="/singlemovie">
+                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                      View
+                      <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
+                    </Button>
+                  </Link>
+                </div>
+                <div>
+                  <Link href="/watchlist">
+                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                      Watchlist
+                      <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </CarouselItem>
           <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
             {/* Background Image as an absolutely positioned div */}
             <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">
-              {activeSlide === 1 && isCarouselPlaying && isDesktop  ? (
+              {activeSlide === 1 && isCarouselPlaying && isDesktop ? (
                 <YoutubePlayerMainCaroisel
                   isCarouselPlaying={isCarouselPlaying}
                   VideoEnd={handleVideoEnd}
@@ -237,11 +243,14 @@ function MainCarousel() {
                   reload={reload}
                   handleReload={handleReload}
                   handleStarted={handleStarted}
+                  src={
+                    "https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
+                  }
                 />
               ) : (
                 <img
                   src="https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
-                  className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[17rem] md:w-screen md:h-[73rem] md:mt-0`}
+                  className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
                 />
               )}
             </div>
@@ -250,71 +259,74 @@ function MainCarousel() {
 
             <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full" />
             {started && (
-              <div className=" md:ml-[110rem] md:mt-[27rem] z-50">
+              <div className="ml-[77vw] mt-[50vh] z-50">
                 <Button
                   onClick={() => setUnmute(!unmute)}
-                  className=" mr-3 md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="mr-3 w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
                   {unmute ? (
-                    <GoUnmute className="md:w-8 md:h-8" />
+                    <GoUnmute className="w-[2vw] h-[2vw]" />
                   ) : (
                     <div>
-                      <GoMute className="md:w-8 md:h-8" />
+                      <GoMute className="w-[2vw] h-[2vw]" />
                     </div>
                   )}
                 </Button>
                 <Button
                   onClick={() => setPause(!pause)}
-                  className="mr-3 md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="mr-3 w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
                   {pause ? (
-                    <CiPlay1 className="md:w-8 md:h-8" />
+                    <CiPlay1 className="w-[2vw] h-[2vw] max-w-8 max-h-8" />
                   ) : (
                     <div>
-                      <CiPause1 className="md:w-8 md:h-8" />
+                      <CiPause1 className="w-[2vw] h-[2vw] max-w-8 max-h-8" />
                     </div>
                   )}
                 </Button>
                 <Button
                   onClick={() => setReload(true)}
-                  className="md:w-[5rem] md:h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5" //bg-slate-300 bg-opacity-10 backdrop-blur-xl
+                  className="w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
-                  <MdOutlineReplay className="md:w-9 md:h-9" />
+                  <MdOutlineReplay className="w-[2vw] h-[2vw] max-w-9 max-h-9" />
                 </Button>
               </div>
             )}
-            <h1 className="absolute top-[12em] md:top-[24rem] left-8 left-4 md:left-20 z-50 text-white font-bold text-sm md:text-lg">
-              Release Date: 12/09/2024
-            </h1>
-            <h1 className="absolute top-[13.5rem] md:top-[27rem] left-8 left-4 md:left-20 z-50 text-white text-2xl md:text-6xl font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-              Alien: Romulus
-            </h1>
-            <div className="absolute top-[16rem] md:top-[32rem] left-4 md:left-20 z-50 max-w-[90%] md:max-w-[40rem]">
-              <h1 className="hidden md:block text-white text-sm md:text-xl overflow-hidden overflow-ellipsis md:line-clamp-4">
-                While scavenging the deep ends of a derelict space station, a
-                group of young space colonists come face to face with the most
-                terrifying life form in the universe. While scavenging the deep
-                ends of a derelict space station, a group of young space
-                colonists come face fe for dfbsedfrb
-              </h1>
-            </div>
 
-            <div className="absolute top-[16rem] md:top-[43rem] left-7 left-4 md:left-20 z-50 flex justify-center  md:flex-row">
-              <div className="mb-4 md:mb-0">
-                <Link href="/singlemovie">
-                  <Button className="h-10 w-28 md:w-40 md:h-14 rounded-full mr-3 md:mr-6 text-sm md:text-lg bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                    View
-                    <SlArrowRight className="w-4 md:w-6 h-4 md:h-6 ml-6 md:ml-12" />
-                  </Button>
-                </Link>
+            <div>
+              <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-[1vw]">
+                Release Date: 12/09/2024
+              </h1>
+              <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                Alien: Romulus
+              </h1>
+              <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
+                <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
+                  While scavenging the deep ends of a derelict space station, a
+                  group of young space colonists come face to face with the most
+                  terrifying life form in the universe. While scavenging the
+                  deep ends of a derelict space station, a group of young space
+                  colonists come face.
+                </h1>
               </div>
-              <div>
-                <Link href="/watchlist">
-                  <Button className="h-10 w-28 md:w-40 md:h-14 rounded-full text-sm md:text-lg pl-4 md:pl-6 bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                    Watchlist
-                    <LuPlus className="w-5 md:w-7 h-5 md:h-7 ml-2 md:ml-4" />
-                  </Button>
-                </Link>
+
+              <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
+                <div className="mb-4 md:mb-0">
+                  <Link href="/singlemovie">
+                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                      View
+                      <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
+                    </Button>
+                  </Link>
+                </div>
+                <div>
+                  <Link href="/watchlist">
+                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                      Watchlist
+                      <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </CarouselItem>
@@ -329,23 +341,23 @@ function MainCarousel() {
         </CarouselContent>
 
         {/* Position the dots at the bottom center of the carousel */}
-        <div className="absolute bottom-[26rem] md:bottom-[10rem] left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
+        <div className="absolute bottom-[20vh] md:bottom-[17vh] left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <div
               key={index}
-              className={`h-2 md:h-3 rounded-full transition-all duration-300 ${
+              className={`h-[1vh] md:h-[1.5vh] rounded-full transition-all duration-300 ${
                 index === activeSlide
-                  ? "w-10 md:w-14 bg-white"
-                  : "w-2 md:w-3 bg-gray-500"
+                  ? "w-[5vw] md:w-[4vw] bg-white"
+                  : "w-[1vw] md:w-[0.75vw] bg-gray-500"
               }`}
             />
           ))}
           <CarouselPrevious
-            className="hidden md:block mx-16 !bg-transparent hover:text-white text-white/70 border-none z-50 md:w-8 md:h-8 w-5 h-5"
+            className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 w-[1vw]"
             onClick={handlePrev}
           />
           <CarouselNext
-            className="hidden md:block mx-16 !bg-transparent hover:text-white text-white/70 border-none z-50 md:w-8 md:h-8 w-5 h-5"
+            className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 w-[2vw]"
             onClick={handleNext}
           />
         </div>

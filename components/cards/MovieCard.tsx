@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Container from "@/components/global/Container";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
@@ -6,11 +6,12 @@ import TeaserCard from "./TeaserCard";
 
 interface MovieCardProps {
   imgUrl: string;
-  title: string;
+  title?: string;
   className?: string; // Optional className prop
   isPartialSlide?: boolean; // Optional prop to indicate if it's a partial slide
   isLastThreeSlides?: boolean;
-  isLastOne?:boolean;
+  isLastOne?: boolean;
+  list?: boolean;
 }
 
 function MovieCard({
@@ -18,9 +19,12 @@ function MovieCard({
   title,
   isPartialSlide,
   isLastThreeSlides,
-  isLastOne
+  isLastOne,
+  list,
 }: MovieCardProps) {
   const [expandCard, setExpandCard] = useState(false);
+  //const [showContent, setShowContent] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
   //const [hovered, setHovered] = useState(false);
   const hoveredRef = useRef(false);
   //const [activeCard, setActiveCard] = useState<string | null>(null); // Track active card
@@ -29,16 +33,36 @@ function MovieCard({
   //   setActiveCard(true)
   // }
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
+    };
+
+    handleResize(); // Check the initial screen size
+
+    // Add event listener to update on window resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleMouseEnter = () => {
-    hoveredRef.current = true;
-    setTimeout(() => {
-      if (hoveredRef.current) setExpandCard(true);
-    }, 1500);
+    if (isDesktop && !list) {
+      //setShowContent(true);
+      hoveredRef.current = true;
+      setTimeout(() => {
+        if (hoveredRef.current) setExpandCard(true);
+      }, 1500);
+    }
   };
-  
+
   const handleMouseLeave = () => {
-    hoveredRef.current = false;
-    setExpandCard(false);
+    if (isDesktop) {
+      //setShowContent(false);
+      hoveredRef.current = false;
+      setExpandCard(false);
+    }
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -49,7 +73,11 @@ function MovieCard({
   };
 
   return (
-    <div className="relative">
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="relative"
+    >
       <Container
         className={`flex justify-center items-center transition-opacity duration-700 ease-in-out ${
           isPartialSlide ? "opacity-50 pointer-events-none" : ""
@@ -59,16 +87,23 @@ function MovieCard({
           <div
             className="relative"
             onClick={handleClick} // Handle click event for conditional navigation
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            // onMouseEnter={handleMouseEnter}
+            // onMouseLeave={handleMouseLeave}
           >
             {/* Poster Image */}
-            <img
-              src={imgUrl}
-              className={`w-[12rem] rounded-xl md:w-[16.5rem] md:rounded-3xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                expandCard ? "opacity-0" : "opacity-100"
-              }`}
-            />
+            {list ? (
+              <img
+                src={imgUrl}
+                className={`w-[30vw] md:w-[15vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+              />
+            ) : (
+              <img
+                src={imgUrl}
+                className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                  expandCard ? "opacity-0" : "opacity-100"
+                }`}
+              />
+            )}
 
             {/* TeaserCard */}
             <div
@@ -81,10 +116,13 @@ function MovieCard({
                 imgUrl={imgUrl}
                 isLastThreeSlides={isLastThreeSlides}
                 isLastOne={isLastOne}
+                expandCard={expandCard}
+                //showContent={showContent}
+                isDesktop={isDesktop}
               />
             </div>
           </div>
-          <h1 className="pt-4 font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+          <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
             {title}
           </h1>
         </Link>
@@ -94,14 +132,6 @@ function MovieCard({
 }
 
 export default MovieCard;
-
-
-
-
-
-
-
-
 
 // import Container from "@/components/global/Container";
 // import Link from "next/link";

@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
-import { IoTvOutline, IoTv } from "react-icons/io5";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMasksTheater } from "@fortawesome/free-solid-svg-icons"; // Example icon
 
 interface GenresCardProp {
   title: string;
@@ -13,6 +10,7 @@ interface GenresCardProp {
   iconBlack: any;
   iconWhite: any;
 }
+
 function GenresCard({
   title,
   isPartialSlide,
@@ -22,7 +20,6 @@ function GenresCard({
   iconBlack,
   iconWhite,
 }: GenresCardProp) {
-  //const [isSelected, setIsSelected] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -31,32 +28,32 @@ function GenresCard({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => onSelect()}
-        className={`bg-customServicesColor pt-[10rem] rounded-full w-[12rem] h-[12rem] text-2xl font-bold hover:bg-white/90 hover:text-black 
+        className={`bg-customServicesColor rounded-full w-[30vw] h-[30vw] md:w-[9vw] md:h-[9vw] text-[2vw] md:text-[1vw] font-bold hover:bg-white/90 hover:text-black 
               hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
                 isPartialSlide ? "opacity-50 pointer-events-none" : ""
               } ${isSelected ? "bg-white/90" : ""}`}
       >
         {/* Center the icon within the button */}
-        <div className="flex justify-center items-center absolute mb-[10rem]">
+        <div className="flex justify-center items-center absolute">
           {hovered || isSelected ? (
             <img
               src={iconBlack}
               style={{
-                width: "6rem",
-                height: "6rem",
+                width: "5vw",
+                height: "5vw",
               }}
             />
           ) : (
             <img
               src={iconWhite}
               style={{
-                width: "6rem",
-                height: "6rem",
+                width: "5vw",
+                height: "5vw",
               }}
             />
           )}
         </div>
-        <h1 className="mt-[7rem] pointer-events-none text-white transform-none">
+        <h1 className="mt-[26vh] pointer-events-none text-white transform-none">
           {title}
         </h1>
       </Button>

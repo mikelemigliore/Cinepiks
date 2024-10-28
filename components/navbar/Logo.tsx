@@ -4,7 +4,7 @@ import Link from "next/link";
 function Logo() {
   return (
     <Link href="/">
-      <img src="/MovieLogo.png" alt="Movie Logo" className="w-20 h-15 transform scale-150 mx-3" />
+      <img src="/MovieLogo.png" alt="Movie Logo" className="w-[4vw] transform scale-150 " />
     </Link>
   );
 }

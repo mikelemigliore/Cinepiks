@@ -29,7 +29,7 @@ export default function RootLayout({
           <Navbar />
         </nav>
         <Container>{children}</Container>
-        <footer className="mt-auto bg-customFooterBackground text-white pb-20 md:pb-0">
+        <footer className="mt-auto bg-customFooterBackground text-white pb-10 md:pb-0">
           <Footer />
         </footer>
       </body>

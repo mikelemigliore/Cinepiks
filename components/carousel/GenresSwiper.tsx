@@ -44,14 +44,14 @@ function GenresSwiper({ genres }: GenresProp) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80"
     >
-      <div className="ml-2 mb-4 md:ml-16 md:mb-2 text-white text-xl md:text-3xl font-semibold">
+      <div className="ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.5vw] font-semibold">
         <h1>What's Your Genre?</h1>
-        <h2 className="text-base md:text-lg pt-4 pb-4 font-medium text-gray-300">
+        <h2 className="text-[2vw] md:text-[1vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
         Select one or more tags, then click on 'Explore All' to view content from your favorite genres :
         </h2>
       </div>
 
-      <div className="ml-2 md:ml-16">
+      <div className="ml-[1vw] md:ml-[3vw]">
         <Swiper
           speed={1000}
           modules={[Navigation, Pagination]}
@@ -82,7 +82,7 @@ function GenresSwiper({ genres }: GenresProp) {
             const isSelected = !!selectedItems[genre.id]; // Check if the current service is selected
 
             return (
-                <SwiperSlide key={genre.id} className="pb-12 md:pb-16">
+                <SwiperSlide key={genre.id} className="pb-[5vh] md:pb-[8vh]">
                   <GenresCard
                     title={genre.title}
                     iconBlack={genre.iconBlack}
@@ -105,17 +105,17 @@ function GenresSwiper({ genres }: GenresProp) {
       {isAnyItemSelected ? (
         <Link href="/search">
           <Button
-            onClick={() => console.log("Explore All clicked")}
-            className={`ml-2 h-[3rem] w-[10rem] md:ml-16 md:w-[10rem] md:h-[3.5rem] text-md rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
+            onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
+            className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
           >
             Explore All
-            <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+            <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
           </Button>
         </Link>
       ) : (
-        <div className="ml-2 h-[3rem] w-[10rem] md:ml-16 md:w-[10rem] md:h-[3.5rem] text-md rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
+        <div className="ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
           Explore All
-          <SlArrowRight className="w-3 h-3 md:w-4 md:h-4 ml-2 md:ml-5" />
+          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
         </div>
       )}
     </div>

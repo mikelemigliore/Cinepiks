@@ -65,10 +65,8 @@
 // }
 
 // export default ServicesCard;
-
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "../ui/button";
-import { IoTvOutline, IoTv } from "react-icons/io5";
 
 interface ServiceCardProp {
   title: string;
@@ -87,24 +85,22 @@ function ServicesCard({
   isSelected,
   img,
 }: ServiceCardProp) {
-  //const [isSelected, setIsSelected] = useState(false);
-
   return (
-<div>
-  <Button
-    onClick={() => {
-      onSelect(); // Handle selection
-    }}
-    onMouseDown={(e) => e.currentTarget.blur()} // Remove focus on click
-    onTouchEnd={(e) => e.currentTarget.blur()}  // Handle touch events for mobile
-    className={`bg-customServicesColor pt-[10rem] rounded-3xl w-[12rem] md:w-[19rem] text-base md:text-2xl font-bold hover:bg-white/90 hover:text-black 
-            hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
-              isPartialSlide ? "opacity-50 pointer-events-none" : ""
-            } ${isSelected ? "bg-white/90" : "bg-customServicesColor"}`}
-  >
-    <img src={img} alt={title} className="w-[7rem] md:w-[10rem] mb-[10rem]" />
-  </Button>
-</div>
+    <div>
+      <Button
+        onClick={() => {
+          onSelect(); // Handle selection
+        }}
+        onMouseDown={(e) => e.currentTarget.blur()} // Remove focus on click
+        onTouchEnd={(e) => e.currentTarget.blur()}  // Handle touch events for mobile
+        className={`bg-customServicesColor pt-[19vh] rounded-3xl w-[30vw] md:w-[14vw] text-[2vw] md:text-[1.5vw] font-bold hover:bg-white/90 hover:text-black 
+              hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
+                isPartialSlide ? "opacity-50 pointer-events-none" : ""
+              } ${isSelected ? "bg-white/90" : "bg-customServicesColor"}`}
+      >
+        <img src={img} alt={title} className="w-[18vw] md:w-[8vw] mb-[18vh]" />
+      </Button>
+    </div>
   );
 }
 

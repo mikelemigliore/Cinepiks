@@ -4,25 +4,25 @@ import React from "react";
 function Footer() {
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="md:ml-[10rem]">
+      <div className="md:ml-[5vw]">
         <div>
-          <Link href="/" className="inline-block mb-[2rem] md:mb-[0rem] md:mt-[1rem] md:ml-[10rem] ml-[6rem]">
-            <img src="/MovieLogo.png" alt="Movie Logo" className="w-[15rem] md:w-[20rem]" />
+          <Link href="/" className="inline-block mb-[5vh] md:mb-[2vh] md:mt-[2vh] md:ml-[8vw] ml-[10vw]">
+            <img src="/MovieLogo.png" alt="Movie Logo" className="w-[30vw] md:w-[15vw]" />
           </Link>
         </div>
-        <div className="md:ml-[3rem]">
-          <h1 className="mt-[-7rem] text-center mx-10 md:mx-[0rem]">
+        <div className="md:ml-[2vw]">
+          <h1 className="mt-[-15vh] text-center mx-[5vw] md:mx-0 text-[0.8vw]">
             Keeping track of your favorite movies and stay up to date with the
             latest releases <br /> across all platforms and theaters
           </h1>
         </div>
       </div>
-      <div className='flex flex-row'>
-        <div className="md:h-[30rem]">
+      <div className="flex flex-row text-[0.8vw] ml-[10vw]">
+        <div className="md:h-[50vh]">
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[5rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[10vh] ml-[6vw] md:ml-[5vw]"
             >
               Terms of Service
             </Link>
@@ -30,7 +30,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               Privacy Policy
             </Link>
@@ -38,7 +38,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               Disclosure
             </Link>
@@ -46,7 +46,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               About Me
             </Link>
@@ -54,9 +54,9 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
-              The following website is <br/> for informational purposes
+              The following website is <br /> for informational purposes
             </Link>
           </div>
         </div>
@@ -64,7 +64,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[5rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[10vh] ml-[6vw] md:ml-[5vw]"
             >
               Movies
             </Link>
@@ -72,7 +72,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               TV Series
             </Link>
@@ -80,7 +80,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               Watchlist
             </Link>
@@ -88,7 +88,7 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               Watched
             </Link>
@@ -96,26 +96,13 @@ function Footer() {
           <div>
             <Link
               href="/testpage"
-              className="inline-block mt-[2rem] ml-[3rem] md:ml-[10rem]"
+              className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               Box Office
             </Link>
           </div>
         </div>
       </div>
-      {/* <div className='md:ml-[30rem]'>
-        <div>
-          <Link href="/" className="inline-block mt-[1rem] md:ml-[10rem] ">
-          <img src="/MovieLogo.png" alt="Movie Logo" className="w-[20rem]" />
-          </Link>
-        </div>
-        <div className='ml-[3rem]'>
-          <h1 className="mt-[-7rem] text-center">
-          Keeping track of your favorite movies and stay up to date
-          with the latest releases <br /> across all platforms and theaters
-          </h1>
-        </div>
-      </div> */}
     </div>
   );
 }

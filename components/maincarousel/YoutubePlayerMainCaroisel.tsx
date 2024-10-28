@@ -17,6 +17,7 @@ interface YoutubePlayerProps {
   reload:boolean
   handleReload:() => void;
   handleStarted:() => void;
+  src:string
 }
 
 function YoutubePlayerMainCaroisel({
@@ -27,11 +28,16 @@ function YoutubePlayerMainCaroisel({
   pause,
   reload,
   handleReload,
-  handleStarted
+  handleStarted,
+  src
 }: YoutubePlayerProps) {
   const [fadeOut, setFadeOut] = useState(true);
   const playerRef = useRef<any>(null); // Ref to store the player instance
   const [isReady, setIsReady] = useState(false);
+
+
+
+
 
   // YouTube player options
   const opts = {
@@ -50,6 +56,8 @@ function YoutubePlayerMainCaroisel({
       vq: "hd1080", // Suggested video quality level to load
     },
   };
+
+
 
   useEffect(() => {
     if (playerRef.current) {
@@ -89,6 +97,7 @@ function YoutubePlayerMainCaroisel({
 
   // Event handler when the player is ready
   const onReady = (event: any) => {
+
     if (event && event.target) {
       playerRef.current = event.target; // Store player reference
       setIsReady(true);
@@ -119,6 +128,8 @@ function YoutubePlayerMainCaroisel({
     VideoEnd();
   };
 
+
+
   return (
     <div className="relative w-full h-full overflow-hidden">
       <YouTube
@@ -128,7 +139,7 @@ function YoutubePlayerMainCaroisel({
         onEnd={onEnd}
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
         style={{
-          transform: "scale(1.4)",
+          transform: `scale(1.5)`,
           transformOrigin: "center center",
           objectFit: "cover",
           zIndex: 1,
@@ -139,8 +150,8 @@ function YoutubePlayerMainCaroisel({
       <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full z-20 opacity-100" />
 
       <img
-        src="https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
-        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-[73rem] mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
+        src={src}
+        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:h-[110vh] w-full mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
           fadeOut ? "opacity-100" : "opacity-0"
         }`}
       />

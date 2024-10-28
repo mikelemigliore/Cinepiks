@@ -13,10 +13,10 @@ function Home({onClick}:Props) {
       <Button
         variant="ghost"
         onClick={onClick}
-        className="!bg-transparent hover:text-white text-white/70 font-bold text-base"
+        className="!bg-transparent hover:text-white text-white/70 font-bold text-[0.8vw]"
         asChild
       >
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-[0.4vw]">
           <IoHomeOutline className="w-5 h-5" />
           <span>Home</span>
         </Link>

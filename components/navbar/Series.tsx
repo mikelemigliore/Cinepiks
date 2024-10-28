@@ -12,11 +12,11 @@ function Series({ onClick }: Props) {
     <Button
       variant="ghost"
       onClick={onClick}
-      className="!bg-transparent hover:text-white text-white/70 rounded-lg focus:ring-0 font-bold text-base"
+      className="!bg-transparent hover:text-white text-white/70 rounded-lg focus:ring-0 font-bold text-[0.8vw]"
       asChild
     >
-      <Link href="/series" className="flex items-center space-x-2">
-        <MdOutlineLiveTv className="w-6 h-6" />
+      <Link href="/series" className="flex items-center space-x-[0.4vw]">
+        <MdOutlineLiveTv className="w-5 h-5" />
         <span>TV Series</span>
       </Link>
     </Button>
