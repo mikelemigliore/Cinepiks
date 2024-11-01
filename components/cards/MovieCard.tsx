@@ -12,6 +12,7 @@ interface MovieCardProps {
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   list?: boolean;
+  singlemovie?:boolean
 }
 
 function MovieCard({
@@ -21,6 +22,7 @@ function MovieCard({
   isLastThreeSlides,
   isLastOne,
   list,
+  singlemovie
 }: MovieCardProps) {
   const [expandCard, setExpandCard] = useState(false);
   //const [showContent, setShowContent] = useState(false);
@@ -48,7 +50,7 @@ function MovieCard({
   }, []);
 
   const handleMouseEnter = () => {
-    if (isDesktop && !list) {
+    if (isDesktop && !list && !singlemovie) {
       //setShowContent(true);
       hoveredRef.current = true;
       setTimeout(() => {
@@ -94,9 +96,14 @@ function MovieCard({
             {list ? (
               <img
                 src={imgUrl}
-                className={`w-[30vw] md:w-[15vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
               />
-            ) : (
+            ) : singlemovie ? (
+                <img
+                  src={imgUrl}
+                  className={`w-[30vw] md:w-[17vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                />
+            ): (
               <img
                 src={imgUrl}
                 className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${

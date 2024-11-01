@@ -7,7 +7,7 @@ interface Props {
   onClick: React.MouseEventHandler<HTMLButtonElement>; // Button Element
 }
 
-function TestPage({onClick}:Props) {
+function TestPage({ onClick }: Props) {
   return (
     <Button
       variant="ghost"

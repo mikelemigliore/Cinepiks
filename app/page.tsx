@@ -427,7 +427,7 @@ function HomePage() {
       id: 5,
       title: "Avatar:The Way of Water",
       imgUrl:
-        "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
+        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
       genres1: "Action",
       genres2: "Comedy",
       genres3: "Drama",

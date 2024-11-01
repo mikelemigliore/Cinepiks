@@ -26,8 +26,8 @@ import {
 } from "@/components/ui/dialog";
 import YoutubePlayerMainCaroisel from "@/components/maincarousel/YoutubePlayerMainCaroisel";
 import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
-
-
+import GridView from "@/components/gridview/GridView";
+import ListView from "@/components/listview/ListView";
 
 const moviesSearch = [
   {
@@ -200,10 +200,7 @@ const moviesSearch = [
   },
 ];
 
-
-
 //type MovieFilter = (typeof moviesSearch)[number][string][string]
-
 
 function SearchPage() {
   const [filter, setFilterd] = useState(false);
@@ -213,32 +210,9 @@ function SearchPage() {
   const [documentary, setDocumentary] = useState(false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
-  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
-  const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
-  const [isTrailer, setIsTrailer] = useState(false);
-  const [videoKey3, setVideoKey3] = useState("o17MF9vnabg"); // avatar
-  //In your handleSubmit function, the event is an object that represents the event that triggered the function—in this case,
-  //the form submission. When a form is submitted in React, it generates a FormEvent, which is passed to the event handler as an argument
-  //  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   //router.push("/search");
-  // };
+  const [fullscreen, setFullscreen]=useState(false)
 
 
-  const handleAdded = (movieId: number) => {
-    setIsAdded((prevAdded) => ({
-      ...prevAdded,
-      [movieId]: !prevAdded[movieId], // Toggle the like state for the specific movie
-    }));
-  };
-
-
-  const handleLike = (movieId: number) => {
-    setIsLiked((prevLiked) => ({
-      ...prevLiked,
-      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
-    }));
-  };
 
   const handleFilter = () => {
     setFilterd(!filter);
@@ -293,9 +267,6 @@ function SearchPage() {
     setList(!list);
     setGrid(false);
   };
-
-
-  
 
   return (
     <div className="mt-[20vh] mb-[5vh]">
@@ -387,251 +358,9 @@ function SearchPage() {
               </Button>
             </div>
             {grid ? (
-              <div
-                className={`grid gap-y-[5vh] mt-[2vh] mb-[5vh] transition-all duration-700 ease-in-out ${
-                  filter
-                    ? "grid-cols-2 md:grid-cols-6"
-                    : "grid-cols-2 md:grid-cols-7"
-                }`}
-              >
-                {moviesSearch.map((movie, index) => {
-                  const isLastOne = filter ? index === 5 : index === 6;
-
-                  return (
-                    <div
-                      key={movie.id}
-                      className={`m-[1vw] transition-transform duration-700 ml-[-0.2vw]`}
-                      //style={{ width: "12.6vw", height: "40vh" }}
-                    >
-                      <MovieCard
-                        imgUrl={movie.imgUrl}
-                        title={movie.title}
-                        isLastOne={isLastOne}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              <GridView filter={filter} moviesSearch={moviesSearch}></GridView>
             ) : (
-              <div
-                className={`flex flex-col gap-y-[5vh] mt-[2vh] mb-[5vh] transition-all duration-700 ease-in-out ${
-                  filter ? "" : ""
-                }`}
-              >
-                {moviesSearch.map((movie, index) => {
-                  const isLastOne = filter ? index === 5 : index === 6;
-
-                  return (
-                    <div key={movie.id} className="flex flex-col w-full">
-                      <div
-                        className={`flex w-full m-[1vw] transition-transform duration-700`}
-                        //style={{ width: "12.6vw", height: "40vh" }}
-                      >
-                        <MovieCard
-                          imgUrl={movie.imgUrl}
-                          //title={movie.title}
-                          isLastOne={isLastOne}
-                          list={list}
-                        />
-                        <div className="flex">
-                          <div className="flex flex-col pl-[3vw]">
-                            {/* Movie info here */}
-                            <h2 className="text-[2vw] font-bold">
-                              {movie.title}
-                            </h2>
-                            <div className="text-center">
-                              <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.8vw]">
-                                <span>Action</span>
-                                <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
-                                <span>Sci-fi</span>
-                                <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
-                                <span className="pr-[0.6vw]">Comedy</span>
-                                <span className="mx-[0.6vw] text-customTextColor font-bold">
-                                  R
-                                </span>
-                                <span className="mx-[0.6vw] text-customTextColor font-bold">
-                                  2h 3m
-                                </span>
-                              </div>
-                            </div>
-                            <div>
-                              <p className="mt-[1.5vh] text-white text-base md:text-[1vw]  max-w-[23rem] md:max-w-[33vw] line-clamp-4 leading-[2] md:leading-[2]">
-                                While scavenging the deep ends of a derelict
-                                space station, a group of young space colonists
-                                come face to face with the most terrifying life
-                                form in the universe. While scavenging the deep
-                                ends of a derelict space station, a group of
-                                young space
-                              </p>
-                            </div>
-
-                            <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2.5vh]">
-                              <Link href="/singlemovie">
-                                <Button className="h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                                  View
-                                  <SlArrowRight className="w-[2vw] h-[2vh] ml-6 md:ml-[2vw]" />
-                                </Button>
-                              </Link>
-
-                              <Button
-                                onClick={() => handleAdded(movie.id)}
-                                className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                                  isAdded[movie.id]
-                                    ? "bg-white/90 text-black font-bold"
-                                    : ""
-                                }`}
-                              >
-                                Watchlist
-                                {isAdded[movie.id] ? (
-                                  <IoCheckmark className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
-                                ) : (
-                                  <LuPlus className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
-                                )}
-                              </Button>
-
-                              <Button
-                                onClick={() => setIsTrailer(!isTrailer)}
-                                className={``}
-                              >
-                                <Dialog>
-                                  <DialogTrigger className="flex justify-center items-center h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                                    Trailer
-                                    <FaPlay className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
-                                  </DialogTrigger>
-                                  <DialogContent className="md:w-[70vw] md:h-[40vw]">
-                                    <YoutubeTrailerPlayer
-                                      //VideoEnd={handleVideoEnd}
-                                      videoKey={videoKey3}
-                                      //unmute={unmute}
-                                      //pause={pause}
-                                      //reload={reload}
-                                      //handleReload={handleReload}
-                                      //handleStarted={handleStarted}
-                                      src={
-                                       "https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
-                                      }
-                                    />
-                                  </DialogContent>
-                                </Dialog>
-                                {/* {isTrailer ? (
-                                  <Dialog>
-                                    <DialogTrigger>Open</DialogTrigger>
-                                    <DialogContent>
-                                      <DialogHeader>
-                                        <DialogTitle>
-                                          Are you absolutely sure?
-                                        </DialogTitle>
-                                        <DialogDescription>
-                                          This action cannot be undone. This
-                                          will permanently delete your account
-                                          and remove your data from our servers.
-                                        </DialogDescription>
-                                      </DialogHeader>
-                                    </DialogContent>
-                                  </Dialog>
-                                ) : (
-                                  <FaPlay className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
-                                )} */}
-                              </Button>
-
-                              <Button
-                                onClick={() => handleLike(movie.id)}
-                                className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                                  isLiked[movie.id] ? "bg-white/90 text-black font-bold" : ""
-                                }`}
-                              >
-                                Like
-                                {isLiked[movie.id] ? (
-                                  <AiFillLike className="w-[2.5vw] h-[2.5vh] ml-[2vw]" />
-                                ) : (
-                                  <AiOutlineLike className="w-[2.5vw] h-[2.5vh] ml-[2vw]" />
-                                )}
-                              </Button>
-                            </div>
-                            {/* Box for Ratings */}
-                            <div className="w-[22vw]">
-                              <div className="w-full mt-[2vw] hidden md:block">
-                                <h1 className="text-white text-base md:text-[1vw]">
-                                  Ratings
-                                </h1>
-                              </div>
-
-                              {/* Box for Three Titles */}
-                              <div className="w-full flex justify-between items-start mt-[1vh] hidden md:block">
-                                <div className="flex flex-col md:flex-row justify-between">
-                                  <div className="text-customTextColor text-sm md:text-[0.9vw]">
-                                    <span>Rotten&nbsp;Tomatoes</span>
-                                    <div className="flex items-center">
-                                      <div className="flex items-center mt-[1.5vh]">
-                                        <img
-                                          className="w-[3vw] h-[3vh]"
-                                          src="/genresIcons/icons8-rotten-tomatoes.svg"
-                                          alt="Rotten Tomatoes Icon"
-                                        />
-                                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold pr-[2.5vw]">
-                                          80%
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center mt-[1.5vh]">
-                                        <img
-                                          className="w-[3vw] h-[3vh]"
-                                          src="/genresIcons/icons8-rotten-tomatoes.svg"
-                                          alt="Rotten Tomatoes Icon"
-                                        />
-                                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
-                                          80%
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[0.9vw] md:ml-[4vw]">
-                                    iMDB
-                                    <div className="flex items-center">
-                                      <div className="flex items-center">
-                                        <img
-                                          className="w-[2.4vw]"
-                                          src="/genresIcons/icons8-imdb.svg"
-                                          alt="Rotten Tomatoes Icon"
-                                        />
-                                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
-                                          80%
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[0.9vw] md:ml-[5vw]">
-                                    Popularity
-                                    <div className="flex items-center mt-[0.8vh]">
-                                      <div className="flex items-center">
-                                        <img
-                                          className="w-[3vw] h-[3vh]"
-                                          src="/genresIcons/5c2d24739a206a1df3d19e60c801c494 1.svg"
-                                          alt="Popularity"
-                                        />
-                                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold pr-[1vw]">
-                                          80%
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {/* <div className="flex-1 p-[1vw] ml-[20vw]">
-                            <h2 className="text-lg font-bold">{movie.title}</h2>
-                            <p className="text-sm">
-                              Additional movie info here.
-                            </p>
-                          </div> */}
-                        </div>
-                      </div>
-                      {/* Divider line */}
-                      <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                    </div>
-                  );
-                })}
-              </div>
+              <ListView filter={filter} moviesSearch={moviesSearch} list={list}></ListView>
             )}
           </div>
         </div>

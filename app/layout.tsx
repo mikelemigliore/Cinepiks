@@ -25,7 +25,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <nav className="fixed w-full bg-customColor py-0 md:bg-transparent lg:bg-gradient-to-b md:from-customColor/50 md:to-transparent md:hover:bg-customColor md:transition-all md:duration-700 z-50">
+        <nav className="fixed w-full bg-customColor py-0 md:bg-transparent lg:bg-gradient-to-b md:from-customColor/50 md:to-transparent md:hover:bg-customColor md:transition-all md:duration-700 z-[100]">
           <Navbar />
         </nav>
         <Container>{children}</Container>

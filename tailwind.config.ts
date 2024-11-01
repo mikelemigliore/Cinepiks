@@ -20,7 +20,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        buttonColor: "#353534",
+        buttonColor: "#2b2c2d",
         customColor: "#181818",
         customColorCard: "#212121",
         customTextColor: "#9B9999",
@@ -29,6 +29,7 @@ const config: Config = {
         customFooterBackground: "#101010",
         customColorBigCard: "#212121",
         customColorTags: "#3f3f3f",
+        backgroundButton:"#3c3e3f",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -73,6 +74,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/line-clamp"),
+  ],
 };
 export default config;

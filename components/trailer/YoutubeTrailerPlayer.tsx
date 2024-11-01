@@ -1,124 +1,130 @@
 import React, { useEffect, useRef, useState } from "react";
 import YouTube from "react-youtube";
 
-declare global {
-  interface Window {
-    YT: any;
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
-
 interface YoutubeTrailerPlayerProps {
-  //   unmute: boolean;
-  //   isCarouselPlaying: boolean;
   videoKey: string;
-  //   VideoEnd: () => void;
-  //   pause: boolean;
-  //   reload:boolean
-  //   handleReload:() => void;
-  //   handleStarted:() => void;
   src: string;
+  autoplay?: boolean;
+  play?: boolean;
+  handlePlay: () => void;
+  setIsLoading: (loading: boolean) => void; // Add prop to manage loading state
+  pause?: boolean;
+  reload?: boolean;
+  handleReload: () => void;
+  handleEnd: () => void;
+  unmute?: boolean;
+  isListView?: boolean;
 }
 
 function YoutubeTrailerPlayer({
-  //isCarouselPlaying,
   videoKey,
   src,
-}: //   VideoEnd,
-//   unmute,
-//   pause,
-//   reload,
-//   handleReload,
-//   handleStarted,
-//   src
-YoutubeTrailerPlayerProps) {
+  autoplay,
+  play,
+  handlePlay,
+  setIsLoading,
+  unmute,
+  reload,
+  handleReload,
+  isListView,
+  handleEnd
+}: YoutubeTrailerPlayerProps) {
   const [fadeOut, setFadeOut] = useState(true);
+  const playerRef = useRef<any>(null);
 
-  // YouTube player options
   const opts = {
-    height: "100%", // Ensure it fills the height of the container
-    width: "100%", // Ensure it fills the width of the container
+    height: "100%",
+    width: "100%",
     playerVars: {
-      autoplay: 1,
+      autoplay: autoplay ? 0 : 1,
       mute: 1,
-      controls: 1, // Hide the controls (play/pause, volume, etc.)
-      modestbranding: 1, // Reduce YouTube branding
-      rel: 0, // Don't show related videos at the end
-      showinfo: 0, // Hide video title (deprecated but useful in some cases)
-      disablekb: 1, // Disable keyboard controls
+      controls: 1,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      disablekb: 1,
       loop: 0,
-      fs: 1, // Disable fullscreen button
-      vq: "hd1080", // Suggested video quality level to load
+      fs: 1,
+      vq: "hd1080",
     },
   };
 
-  // Event handler when the player is ready
-  // const onReady = (event: any) => {
+  const onEnd = () => {
+    setFadeOut(true);
+    handleEnd(); // This should reset the play state
+    playerRef.current.playVideo();
+  };
 
-  //   if (event && event.target) {
-  //     playerRef.current = event.target; // Store player reference
-  //     setIsReady(true);
+  const onReady = (event: any) => {
+    playerRef.current = event.target;
+    setIsLoading(false); // Video is ready, hide loading spinner
+  };
 
-  //     if (isCarouselPlaying) {
-  //       playerRef.current.playVideo(); // Play the video if isCarouselPlaying is true
-  //     }
+  useEffect(() => {
+    if (playerRef.current) {
+      if (play) {
+        // Play the video
+        playerRef.current.playVideo();
+        setFadeOut(false);
+      } else {
+        // Pause the video
+        playerRef.current.pauseVideo();
+      }
+    }
+  }, [play]);
 
-  //     if (unmute) {
-  //       playerRef.current.unMute();
-  //     } else {
-  //       playerRef.current.mute();
-  //     }
+  useEffect(() => {
+    if (playerRef.current) {
+      if (unmute) {
+        playerRef.current.unMute();
+      } else {
+        playerRef.current.mute();
+      }
+    }
+  }, [unmute]);
 
-  //     playerRef.current.setPlaybackQuality('highres'); // Set to highest quality
+  useEffect(() => {
+    if (playerRef.current && reload) {
+      playerRef.current.seekTo(0); // Restart the video from the beginning
+      //playerRef.current.playVideo(); // Play the video
 
-  //     // Trigger fade-out and signal video started
-  //     setTimeout(() => {
-  //       setFadeOut(false);
-  //       handleStarted();
-  //     }, 2000);
-  //   } else {
-  //     console.error('Player reference is not available');
-  //   }
-  // };
-
-//   const onEnd = (event: any) => {
-//     setFadeOut(true);
-//   };
-
-//   const onReady = (event: any) => {
-//     setTimeout(() => {
-//       setFadeOut(false);
-//     }, 2000);
-//   };
+      // Reset the reload state after the video has restarted
+      setTimeout(() => {
+        handleReload();
+      }, 100); // Short timeout to allow reset
+    }
+  }, [reload]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-3xl">
-      {/* <img
-        src={src}
-        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat md:w-full md:h-full h-[25rem] mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
-          fadeOut ? "opacity-100" : "opacity-0 pointer-events-none"//pointer-events: none; lets you "disable" the image's interactivity when it's faded out, so you can interact with the player without the image blocking it.
-        }`}
-      /> */}
+    <div
+      className={`relative w-full h-full overflow-hidden ${
+        autoplay ? "" : "rounded-3xl"
+      }`}
+    >
+      {autoplay && (
+        <img
+          src={src}
+          className={`absolute inset-0 md:w-full z-10 transition-opacity duration-500 ease-in-out  ${
+            fadeOut ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        />
+      )}
+
       <YouTube
         videoId={videoKey}
         opts={opts}
-        // onReady={onReady}
-        // onEnd={onEnd}
+        onReady={onReady}
+        onEnd={onEnd}
+        //onStateChange={handleStateChange} // Detect state changes
         className="absolute top-0 left-0 w-full h-full"
         style={{
-          transform: "scale(1)",
+          transform: isListView ? "scale(1)" : "scale(1.6)", // Scale based on play state
+          // transform: play ? "scale(1.6)" : "scale(1)", // Scale based on play state
           transformOrigin: "center center",
           objectFit: "cover",
           zIndex: 1,
         }}
       />
-
-      {/* <img
-        src={src}
-        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat md:w-full md:h-full h-[25rem] mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
-          fadeOut ? "opacity-100" : "opacity-0"
-        }`}
-      /> */}
     </div>
   );
 }

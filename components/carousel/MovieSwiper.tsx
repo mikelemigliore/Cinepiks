@@ -12,7 +12,7 @@ import { SlArrowRight } from "react-icons/sl";
 
 interface Props {
   movies: Array<{ id: number; title: string; imgUrl: string }>;
-  title:string;
+  title?:string;
 }
 
 function MovieSwiper({ movies, title }: Props) {
