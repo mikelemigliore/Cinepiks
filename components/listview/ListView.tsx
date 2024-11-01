@@ -23,12 +23,14 @@ interface Movie {
     id: number;
     title: string;
     imgUrl: string;
+    type: string; // Add type here to indicate the media type
 }
 
 interface ListViewProp {
     filter?: boolean;
     moviesSearch: Movie[];
     list?:boolean;
+    //mediaType?: string; // Indicates the type of content
 }
 
 function ListView({filter,moviesSearch,list}:ListViewProp) {
@@ -85,6 +87,7 @@ function ListView({filter,moviesSearch,list}:ListViewProp) {
               //style={{ width: "12.6vw", height: "40vh" }}
             >
               <MovieCard
+              type={movie.type}
                 imgUrl={movie.imgUrl}
                 //title={movie.title}
                 isLastOne={isLastOne}

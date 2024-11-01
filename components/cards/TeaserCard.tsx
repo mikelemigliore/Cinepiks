@@ -15,7 +15,8 @@ interface TeaserCardProps {
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   expandCard?: boolean;
-  isDesktop?:boolean
+  isDesktop?: boolean;
+  href: string;
 }
 
 function TeaserCard({
@@ -24,7 +25,8 @@ function TeaserCard({
   isLastThreeSlides,
   isLastOne,
   expandCard,
-  isDesktop
+  isDesktop,
+  href,
 }: TeaserCardProps) {
   //const [showContent, setShowContent] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -78,23 +80,23 @@ function TeaserCard({
 
   const handleMouseEnter = () => {
     //if (isDesktop) {
-      // Only trigger hover effects if it's a desktop view
-      // Delay the video playback by a short time
-      hoverTimeoutRef.current = setTimeout(() => {
-        setIsPlaying(true);
-        //setShowContent(true);
-      }, 300); // 300ms delay to stabilize hover
+    // Only trigger hover effects if it's a desktop view
+    // Delay the video playback by a short time
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsPlaying(true);
+      //setShowContent(true);
+    }, 300); // 300ms delay to stabilize hover
     //}
   };
 
   const handleMouseLeave = () => {
-      // Only reset states on hover leave if it's a desktop view
-      // Clear the hover timeout when the user leaves early
-      if (hoverTimeoutRef.current) {
-        clearTimeout(hoverTimeoutRef.current);
-      }
-      setIsPlaying(false);
-      setUnmute(false);
+    // Only reset states on hover leave if it's a desktop view
+    // Clear the hover timeout when the user leaves early
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setIsPlaying(false);
+    setUnmute(false);
   };
 
   const handleVideoEnd = () => {
@@ -224,12 +226,21 @@ function TeaserCard({
                   </div>
 
                   <div>
-                    <Link href="/singlemovie">
-                      <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
-                        View
-                        <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
-                      </Button>
-                    </Link>
+                    {href === `/singlemovie` ? (
+                      <Link href={`/singlemovie`}>
+                        <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
+                          View
+                          <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link href={`/singleseries`}>
+                        <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
+                          View
+                          <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
+                        </Button>
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

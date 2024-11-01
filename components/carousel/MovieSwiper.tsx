@@ -11,11 +11,12 @@ import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
 interface Props {
-  movies: Array<{ id: number; title: string; imgUrl: string }>;
+  medias: Array<{ id: number; title: string; imgUrl: string; type:string }>;
   title?:string;
+  mediaType: "movie" | "series"; // Indicates the type of content
 }
 
-function MovieSwiper({ movies, title }: Props) {
+function MovieSwiper({ medias = [], title,mediaType }: Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -88,26 +89,27 @@ function MovieSwiper({ movies, title }: Props) {
             // },
           }}
         >
-          {movies.map((movie, index) => {
+          {medias.map((media, index) => {
             // Define how to find the "8th" slide (partial one)
             const isPartialSlide =
-              index === (activeIndex + 7) % movies.length || // Next partial slide on the right
-              index === (activeIndex - 1 + movies.length) % movies.length; // Previous partial slide on the left
+              index === (activeIndex + 7) % medias.length || // Next partial slide on the right
+              index === (activeIndex - 1 + medias.length) % medias.length; // Previous partial slide on the left
 
             const isLastThreeSlides =
-              (index >= (activeIndex + 6) % movies.length &&
-                index <= (activeIndex + 7) % movies.length) || // Next partial slides on the right
-              (index >= (activeIndex - 3 + movies.length) % movies.length &&
-                index <= (activeIndex - 1 + movies.length) % movies.length); // Previous partial slides on the left
+              (index >= (activeIndex + 6) % medias.length &&
+                index <= (activeIndex + 7) % medias.length) || // Next partial slides on the right
+              (index >= (activeIndex - 3 + medias.length) % medias.length &&
+                index <= (activeIndex - 1 + medias.length) % medias.length); // Previous partial slides on the left
 
             const isLastOne =
-            index === movies.length - 1;
+            index === medias.length - 1;
 
             return (
-              <SwiperSlide className="pb-[8vh]" key={movie.id}>
+              <SwiperSlide className="pb-[8vh]" key={media.id}>
                 <MovieCard
-                  imgUrl={movie.imgUrl}
-                  title={movie.title}
+                 type={media.type}
+                  imgUrl={media.imgUrl}
+                  title={media.title}
                   isPartialSlide={isPartialSlide}
                   isLastThreeSlides={isLastThreeSlides}
                   isLastOne={isLastOne}

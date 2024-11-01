@@ -33,7 +33,6 @@ import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import StarRating from "@/components/starRating/StarRating";
 import React from "react";
 
-
 const movie = [
   {
     id: 1,
@@ -57,7 +56,8 @@ function SingleMoviePage() {
   const [singlemovie, setSinglemovie] = useState(true);
   const [isListView, setIsListView] = useState(true);
   const [reviews, setReviews] = useState(true);
-  const [value, setValue] = React.useState<number | null>(2);
+  const [value, setValue] = React.useState<number | null>(0);
+  const mediaType = "movie";
 
   const handleValue = (newValue: number | null) => {
     if (newValue !== null) {
@@ -220,6 +220,7 @@ function SingleMoviePage() {
               //style={{ width: "12.6vw", height: "40vh" }}
             >
               <MovieCard
+                mediaType={mediaType}
                 imgUrl={movie[0].imgUrl}
                 //title={movie.title}
                 //isLastOne={isLastOne}
@@ -395,9 +396,7 @@ function SingleMoviePage() {
                           className="mr-[0.5vw] w-[1.7vw] h-[1.7vw]"
                           src="genresIcons/icons8-star.svg"
                         />{" "}
-                        {value ? value : "--"} / 5
-                        <div>
-                        </div>
+                        {value ? value : "--"} / 5<div></div>
                       </div>
                     </div>
                   </div>

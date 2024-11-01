@@ -29,176 +29,403 @@ import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
 
-const moviesSearch = [
+const itemSearch = [
   {
     id: 1,
+    type: "movie",
     title: "Deadpool & Wolverine",
     imgUrl:
       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
   },
   {
     id: 2,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 3,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 4,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 5,
-    title: "Avatar:The Way of Water",
+    type: "movie",
+    title: "Avatar: The Way of Water",
     imgUrl:
       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
   },
   {
     id: 6,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 7,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 8,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 9,
+    type: "movie",
     title: "Deadpool & Wolverine",
     imgUrl:
       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
   },
   {
     id: 10,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 11,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 12,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 13,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 14,
-    title: "Avatar:The Way of Water",
+    type: "movie",
+    title: "Avatar: The Way of Water",
     imgUrl:
       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
   },
   {
     id: 15,
+    type: "movie",
     title: "Deadpool & Wolverine",
     imgUrl:
       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
   },
   {
     id: 16,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 17,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 18,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 19,
-    title: "Avatar:The Way of Water",
+    type: "movie",
+    title: "Avatar: The Way of Water",
     imgUrl:
       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
   },
   {
     id: 20,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 21,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 22,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 23,
+    type: "movie",
     title: "Deadpool & Wolverine",
     imgUrl:
       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
   },
   {
     id: 24,
+    type: "movie",
     title: "Spider-Man",
     imgUrl:
       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
   },
   {
     id: 25,
+    type: "movie",
     title: "Avengers",
     imgUrl:
       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
   },
   {
     id: 26,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 27,
+    type: "movie",
     title: "Batman",
     imgUrl:
       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
   },
   {
     id: 28,
-    title: "Avatar:The Way of Water",
+    type: "movie",
+    title: "Avatar: The Way of Water",
     imgUrl:
       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
   },
+  {
+    id: 29,
+    title: "The Penguin",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
+    type: "series",
+  },
+  {
+    id: 30,
+    title: "Breaking Bad",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+    type: "series",
+  },
+  {
+    id: 31,
+    title: "The Office",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
+    type: "series",
+  },
+  {
+    id: 32,
+    title: "Dragon Ball Super",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
+    type: "series",
+  },
+  {
+    id: 33,
+    title: "The Last Of Us",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
+    type: "series",
+  },
+  {
+    id: 34,
+    title: "Loki",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
+    type: "series",
+  },
+  {
+    id: 35,
+    title: "Better Call Saul",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
+    type: "series",
+  },
+  {
+    id: 36,
+    title: "Invincible",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
+    type: "series",
+  },
+  {
+    id: 37,
+    title: "The Boys",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
+    type: "series",
+  },
+  {
+    id: 38,
+    title: "Shougun",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
+    type: "series",
+  },
+  {
+    id: 39,
+    title: "Baki",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
+    type: "series",
+  },
+  {
+    id: 40,
+    title: "The Sopranos",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+    type: "series",
+  },
+  {
+    id: 41,
+    title: "Peaky Blinders",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
+    type: "series",
+  },
+  {
+    id: 42,
+    title: "Rick and Morty",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/gdIrmf2DdY5mgN6ycVP0XlzKzbE.jpg",
+    type: "series",
+  },
+  {
+    id: 43,
+    title: "Drake and Josh",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/udCvGctktHvvf8w51XyTPfcmzDa.jpg",
+    type: "series",
+  },
+  {
+    id: 44,
+    title: "Moon Knight",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/YksR65as1ppF2N48TJAh2PLamX.jpg",
+    type: "series",
+  },
+  {
+    id: 45,
+    title: "The Penguin",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
+    type: "series",
+  },
+  {
+    id: 46,
+    title: "Breaking Bad",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+    type: "series",
+  },
+  {
+    id: 47,
+    title: "The Office",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
+    type: "series",
+  },
+  {
+    id: 48,
+    title: "Dragon Ball Super",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
+    type: "series",
+  },
+  {
+    id: 49,
+    title: "The Last Of Us",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
+    type: "series",
+  },
+  {
+    id: 50,
+    title: "Loki",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
+    type: "series",
+  },
+  {
+    id: 51,
+    title: "Better Call Saul",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
+    type: "series",
+  },
+  {
+    id: 52,
+    title: "Invincible",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
+    type: "series",
+  },
+  {
+    id: 53,
+    title: "The Boys",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
+    type: "series",
+  },
+  {
+    id: 54,
+    title: "Shougun",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
+    type: "series",
+  },
+  {
+    id: 55,
+    title: "Baki",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
+    type: "series",
+  },
+  {
+    id: 56,
+    title: "The Sopranos",
+    imgUrl:
+      "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+    type: "series",
+  },
 ];
+
+const moviesItemSearch = itemSearch.filter((item) => item.type === "movie");
+const seriesItemSearch = itemSearch.filter((item) => item.type === "series");
 
 //type MovieFilter = (typeof moviesSearch)[number][string][string]
 
@@ -207,56 +434,54 @@ function SearchPage() {
   const [all, setAll] = useState(true);
   const [movies, setMovies] = useState(false);
   const [series, setSeries] = useState(false);
-  const [documentary, setDocumentary] = useState(false);
+  //const [documentary, setDocumentary] = useState(false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
-  const [fullscreen, setFullscreen]=useState(false)
-
-
+  const [fullscreen, setFullscreen] = useState(false);
 
   const handleFilter = () => {
     setFilterd(!filter);
   };
 
   const handleAll = () => {
-    setAll(true);
+    setAll((prev) => !prev);
     setMovies(false);
     setSeries(false);
-    setDocumentary(false);
+    //setDocumentary(false);
   };
 
   const handleMovies = () => {
     setMovies((prev) => !prev);
-    //setSeries(false);
-    if (!movies) setAll(false);
+    setSeries(false);
+    //if (!movies) setAll(false);
   };
 
-  const handleDocumentary = () => {
-    setDocumentary((prev) => !prev);
-    // setSeries(false);
-    // setMovies(false);
-    if (!documentary) setAll(false);
-  };
+  // const handleDocumentary = () => {
+  //   setDocumentary((prev) => !prev);
+  //   // setSeries(false);
+  //   // setMovies(false);
+  //   if (!documentary) setAll(false);
+  // };
 
   const handleSeries = () => {
     setSeries((prev) => !prev);
-    //setMovies(false);
-    if (!series) setAll(false);
+    setMovies(false);
+    //if (!series) setAll(false);
   };
 
   // Logic to check if both Movies and Series are selected
-  if (movies && series && documentary) {
-    handleAll(); // Re-enable "All" and disable both movies and series
-  }
+  // if (movies && series) {
+  //   handleAll(); // Re-enable "All" and disable both movies and series
+  // }
 
   // Set 'All' to true when none of the other categories are selected
   useEffect(() => {
-    if (!movies && !series && !documentary) {
+    if (!movies && !series) {
       setAll(true);
     } else {
       setAll(false);
     }
-  }, [movies, series, documentary]);
+  }, [movies, series]);
 
   const handleGrid = () => {
     setGrid(!grid);
@@ -348,20 +573,86 @@ function SearchPage() {
               >
                 Series
               </Button>
-              <Button
+              {/* <Button
                 onClick={handleDocumentary}
                 className={`w-[10vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[1vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                   documentary ? "bg-white/90 text-black font-bold" : ""
                 }`}
               >
                 Documentary
-              </Button>
+              </Button> */}
             </div>
-            {grid ? (
-              <GridView filter={filter} moviesSearch={moviesSearch}></GridView>
+            {/* {grid ? (
+              <GridView
+                //mediaType={"movie"}
+                filter={filter}
+                moviesSearch={moviesItemSearch}
+              ></GridView>
             ) : (
-              <ListView filter={filter} moviesSearch={moviesSearch} list={list}></ListView>
-            )}
+              <ListView
+                //mediaType={"movie"}
+                filter={filter}
+                moviesSearch={moviesItemSearch}
+                list={list}
+              ></ListView>
+            )} */}
+
+            {movies && !series ? (
+              <div>
+                {grid ? (
+                  <GridView
+                  //mediaType={"movie"}
+                    filter={filter}
+                    moviesSearch={moviesItemSearch}
+                  ></GridView>
+                ) : (
+                  <ListView
+                  //mediaType={"movie"}
+                    filter={filter}
+                    moviesSearch={moviesItemSearch}
+                    list={list}
+                  ></ListView>
+                )}
+              </div>
+            ) 
+            : series && !movies ? (
+              <div>
+                {grid ? (
+                  <GridView
+                  //mediaType={"series"}
+                    filter={filter}
+                    moviesSearch={seriesItemSearch}
+                  ></GridView>
+                ) : (
+                  <ListView
+                  //mediaType={"series"}
+                    filter={filter}
+                    moviesSearch={seriesItemSearch}
+                    list={list}
+                  ></ListView>
+                )}
+              </div>
+            ): !series && !movies ?(
+              <div>
+              {grid ? (
+                <GridView
+                //mediaType={type}
+                  filter={filter}
+                  moviesSearch={itemSearch}
+                ></GridView>
+              ) : (
+                <ListView
+                //mediaType={type}
+                  filter={filter}
+                  moviesSearch={itemSearch}
+                  list={list}
+                ></ListView>
+              )}
+            </div>
+            ):(
+              <div>Not found</div>
+            )
+            }
           </div>
         </div>
       </div>

@@ -8,8 +8,9 @@ import { SlArrowRight } from "react-icons/sl";
 import SwiperNavButtons from "@/utils/swiperButtons";
 
 interface BigCardProps {
-  moviesBigCards: Array<{
+  itemBigCards: Array<{
     id: number;
+    type:string
     title: string;
     imgUrl: string;
     genres1: string;
@@ -21,7 +22,7 @@ interface BigCardProps {
   }>;
 }
 
-function BigCardSwiper({ moviesBigCards }: BigCardProps) {
+function BigCardSwiper({ itemBigCards }: BigCardProps) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -92,28 +93,28 @@ function BigCardSwiper({ moviesBigCards }: BigCardProps) {
           // },
         }}
       >
-        {moviesBigCards.map((moviesBigCard, index) => {
+        {itemBigCards.map((itemBigCard, index) => {
           // Define how to find the "8th" slide (partial one)
           const isPartialSlide =
-            index === (activeIndex + 1) % moviesBigCards.length || // Next partial slide on the right
+            index === (activeIndex + 1) % itemBigCards.length || // Next partial slide on the right
             index ===
-              (activeIndex - 1 + moviesBigCards.length) % moviesBigCards.length; // Previous partial slide on the left
+              (activeIndex - 1 + itemBigCards.length) % itemBigCards.length; // Previous partial slide on the left
 
-          const isLastOne = index === moviesBigCards.length - 1;
+          const isLastOne = index === itemBigCards.length - 1;
 
           return (
-            <SwiperSlide className="pb-[8vh]" key={moviesBigCard.id}>
+            <SwiperSlide className="pb-[8vh]" key={itemBigCard.id}>
               <BigCard
-                image={moviesBigCard.imgUrl}
-                title={moviesBigCard.title}
+                image={itemBigCard.imgUrl}
+                title={itemBigCard.title}
                 isPartialSlide={isPartialSlide}
                 isLastOne={isLastOne}
-                genres1={moviesBigCard.genres1}
-                genres2={moviesBigCard.genres2}
-                genres3={moviesBigCard.genres3}
-                rated={moviesBigCard.rated}
-                time={moviesBigCard.time}
-                description={moviesBigCard.description}
+                genres1={itemBigCard.genres1}
+                genres2={itemBigCard.genres2}
+                genres3={itemBigCard.genres3}
+                rated={itemBigCard.rated}
+                time={itemBigCard.time}
+                description={itemBigCard.description}
               />
             </SwiperSlide>
           );

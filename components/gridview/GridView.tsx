@@ -5,11 +5,13 @@ interface Movie {
     id: number;
     title: string;
     imgUrl: string;
+    type: string; // Add type here to indicate the media type
 }
 
 interface GridViewProp {
     filter?: boolean;
     moviesSearch: Movie[];
+    //mediaType?: string; // Indicates the type of content
 }
 
 function GridView({filter,moviesSearch}: GridViewProp) {
@@ -29,6 +31,7 @@ function GridView({filter,moviesSearch}: GridViewProp) {
             //style={{ width: "12.6vw", height: "40vh" }}
           >
             <MovieCard
+            type={movie.type}
               imgUrl={movie.imgUrl}
               title={movie.title}
               isLastOne={isLastOne}

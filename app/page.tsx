@@ -21,176 +21,403 @@ import BigCardSwiper from "@/components/carousel/BigCardSwiper";
 
 function HomePage() {
   // Define an array of movies with their title and poster URLs
-  const movies = [
+  const items = [
     {
       id: 1,
       title: "Deadpool & Wolverine",
       imgUrl:
         "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
+      type: "movie",
     },
     {
       id: 2,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 3,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 4,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 5,
-      title: "Avatar:The Way of Water",
+      title: "Avatar: The Way of Water",
       imgUrl:
         "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
+      type: "movie",
     },
     {
       id: 6,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 7,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 8,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 9,
       title: "Deadpool & Wolverine",
       imgUrl:
         "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
+      type: "movie",
     },
     {
       id: 10,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 11,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 12,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 13,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 14,
-      title: "Avatar:The Way of Water",
+      title: "Avatar: The Way of Water",
       imgUrl:
         "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
+      type: "movie",
     },
     {
       id: 15,
       title: "Deadpool & Wolverine",
       imgUrl:
         "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
+      type: "movie",
     },
     {
       id: 16,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 17,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 18,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 19,
-      title: "Avatar:The Way of Water",
+      title: "Avatar: The Way of Water",
       imgUrl:
         "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
+      type: "movie",
     },
     {
       id: 20,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 21,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 22,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 23,
       title: "Deadpool & Wolverine",
       imgUrl:
         "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
+      type: "movie",
     },
     {
       id: 24,
       title: "Spider-Man",
       imgUrl:
         "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
+      type: "movie",
     },
     {
       id: 25,
       title: "Avengers",
       imgUrl:
         "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+      type: "movie",
     },
     {
       id: 26,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 27,
       title: "Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
+      type: "movie",
     },
     {
       id: 28,
-      title: "Avatar:The Way of Water",
+      title: "Avatar: The Way of Water",
       imgUrl:
         "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
+      type: "movie",
+    },
+    {
+      id: 29,
+      title: "The Penguin",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
+      type: "series",
+    },
+    {
+      id: 30,
+      title: "Breaking Bad",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+      type: "series",
+    },
+    {
+      id: 31,
+      title: "The Office",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
+      type: "series",
+    },
+    {
+      id: 32,
+      title: "Dragon Ball Super",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
+      type: "series",
+    },
+    {
+      id: 33,
+      title: "The Last Of Us",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
+      type: "series",
+    },
+    {
+      id: 34,
+      title: "Loki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
+      type: "series",
+    },
+    {
+      id: 35,
+      title: "Better Call Saul",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
+      type: "series",
+    },
+    {
+      id: 36,
+      title: "Invincible",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
+      type: "series",
+    },
+    {
+      id: 37,
+      title: "The Boys",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
+      type: "series",
+    },
+    {
+      id: 38,
+      title: "Shougun",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
+      type: "series",
+    },
+    {
+      id: 39,
+      title: "Baki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
+      type: "series",
+    },
+    {
+      id: 40,
+      title: "The Sopranos",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      type: "series",
+    },
+    {
+      id: 41,
+      title: "Peaky Blinders",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
+      type: "series",
+    },
+    {
+      id: 42,
+      title: "Rick and Morty",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/gdIrmf2DdY5mgN6ycVP0XlzKzbE.jpg",
+      type: "series",
+    },
+    {
+      id: 43,
+      title: "Drake and Josh",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/udCvGctktHvvf8w51XyTPfcmzDa.jpg",
+      type: "series",
+    },
+    {
+      id: 44,
+      title: "Moon Knight",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/YksR65as1ppF2N48TJAh2PLamX.jpg",
+      type: "series",
+    },
+    {
+      id: 45,
+      title: "The Penguin",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
+      type: "series",
+    },
+    {
+      id: 46,
+      title: "Breaking Bad",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
+      type: "series",
+    },
+    {
+      id: 47,
+      title: "The Office",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
+      type: "series",
+    },
+    {
+      id: 48,
+      title: "Dragon Ball Super",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
+      type: "series",
+    },
+    {
+      id: 49,
+      title: "The Last Of Us",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
+      type: "series",
+    },
+    {
+      id: 50,
+      title: "Loki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
+      type: "series",
+    },
+    {
+      id: 51,
+      title: "Better Call Saul",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
+      type: "series",
+    },
+    {
+      id: 52,
+      title: "Invincible",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
+      type: "series",
+    },
+    {
+      id: 53,
+      title: "The Boys",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
+      type: "series",
+    },
+    {
+      id: 54,
+      title: "Shougun",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
+      type: "series",
+    },
+    {
+      id: 55,
+      title: "Baki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
+      type: "series",
+    },
+    {
+      id: 56,
+      title: "The Sopranos",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
+      type: "series",
     },
   ];
+
+  const movies = items.filter((item) => item.type === "movie");
+  const series = items.filter((item) => item.type === "series");
 
   const services = [
     { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -370,9 +597,10 @@ function HomePage() {
     },
   ];
 
-  const moviesBigCards = [
+  const itemBigCards = [
     {
       id: 1,
+      type:"movie",
       title: "Alien",
       imgUrl:
         "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
@@ -386,6 +614,7 @@ function HomePage() {
     },
     {
       id: 2,
+      type:"movie",
       title: "Spider-Man 3",
       imgUrl:
         "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
@@ -399,6 +628,7 @@ function HomePage() {
     },
     {
       id: 3,
+      type:"movie",
       title: "Avengers: Infinity War",
       imgUrl:
         "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
@@ -412,6 +642,7 @@ function HomePage() {
     },
     {
       id: 4,
+      type:"movie",
       title: "The Batman",
       imgUrl:
         "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
@@ -425,6 +656,7 @@ function HomePage() {
     },
     {
       id: 5,
+      type:"movie",
       title: "Avatar:The Way of Water",
       imgUrl:
         "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
@@ -436,7 +668,82 @@ function HomePage() {
       description:
         "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
     },
+    {
+      id: 6,
+      type:"series",
+      title: "Breaking Bad",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/gc8PfyTqzqltKPW3X0cIVUGmagz.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
+    {
+      id: 7,
+      type:"series",
+      title: "The Penguin",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/56O2drADoJPtv9Z49jKZoBNyMc5.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "The seemingly invincible Spider-Man goes up against an all-new crop of villains—including the shape-shifting Sandman. While Spider-Man’s superpowers are altered by an alien organism, his alter ego, Peter Parker, deals with nemesis Eddie Brock and also gets caught up in a love triangle.",
+    },
+    {
+      id: 8,
+      type:"series",
+      title: "Dragon Ball Super",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/x0dLoNI0ce7GXIwGiMu0GrelxEv.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+    },
+    {
+      id: 9,
+      type:"series",
+      title: "Loki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/1pPcHpANG5mGtSYT7MA9QeYOKuK.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.",
+    },
+    {
+      id: 10,
+      type:"series",
+      title: "The Office",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/b7wyaeJGU2Q4ql7xZr52vdW5TKp.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
   ];
+
+
+  const moviesBigCard = itemBigCards.filter((item) => item.type === "movie");
+  const seriesBigSeries = itemBigCards.filter((item) => item.type === "series");
+
 
   // const image =
   //   "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg";
@@ -451,7 +758,7 @@ function HomePage() {
             key={swiperTitle.id}
             className="relative left-0 my-12 right-0 z-40"
           >
-            <MovieSwiper movies={movies} title={swiperTitle.title} />
+            <MovieSwiper medias={movies} title={swiperTitle.title} mediaType={"movie"} />
             {index === 3 && (
               <div className="relative  left-0 right-0 my-16 z-40">
                 <ServicesSwiper services={services} />
@@ -464,16 +771,21 @@ function HomePage() {
               </div>
             )}
 
+            {index === 0 && (
+              <div className="relative left-0 right-0 my-16 z-40">
+                <MovieSwiper medias={series} title={swiperTitle.title} mediaType={"series"} />
+              </div>
+            )}
+
             {index === 1 && (
               <div className="relative left-0 right-0 my-16 z-40">
-                <BigCardSwiper moviesBigCards={moviesBigCards} />
-                {/* <BigCardSwiper movies={movies}/> */}
+                <BigCardSwiper itemBigCards={moviesBigCard}/>
               </div>
             )}
 
             {index === 11 && (
               <div className="relative left-0 right-0 my-16 z-40">
-                <BigCardSwiper moviesBigCards={moviesBigCards} />
+                <BigCardSwiper itemBigCards={seriesBigSeries}/>
                 {/* <BigCardSwiper movies={movies}/> */}
               </div>
             )}
@@ -485,4 +797,3 @@ function HomePage() {
 }
 
 export default HomePage;
-
