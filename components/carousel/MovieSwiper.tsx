@@ -13,10 +13,10 @@ import { SlArrowRight } from "react-icons/sl";
 interface Props {
   medias: Array<{ id: number; title: string; imgUrl: string; type:string }>;
   title?:string;
-  mediaType: "movie" | "series"; // Indicates the type of content
+  //mediaType: "movie" | "series"; // Indicates the type of content
 }
 
-function MovieSwiper({ medias = [], title,mediaType }: Props) {
+function MovieSwiper({ medias = [], title }: Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);

@@ -45,9 +45,9 @@ function StarRating({ title, value, handleValue }: StarRatingProp) {
         <DialogTrigger className="ml-[1vw] mt-[-0.5vw] flex justify-center items-center px-[0vw] py-[0.5vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
           <MdModeEditOutline className="w-[2vw] h-[2vh]" />
         </DialogTrigger>
-        <DialogContent className="md:w-[25vw] md:h-[14vw] bg-buttonColor flex flex-col items-center justify-center pb-[4vw]">
+        <DialogContent className="md:w-[25vw] md:h-[16vw] bg-buttonColor flex flex-col items-center justify-center pb-[4vw]">
           <img
-            className="w-[4.5vw] h-[4.5vw]"
+            className="w-[4.5vw] h-[4.5vw] mt-[2vw]"
             src="genresIcons/icons8-star.svg"
           />
           <div className='font-bold text-[1.2vw]'>{title}</div>

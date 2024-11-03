@@ -77,7 +77,7 @@ const reviews = [
 function Reviews() {
   return (
     <ScrollArea className="h-[21.5vw]">
-      <div>
+      <div className=''>
         {reviews.map((reviewsItem) => (
           <div
             key={reviewsItem.id}
@@ -113,8 +113,8 @@ function Reviews() {
                 <DialogTrigger className="rounded-full py-1 px-3 md:text-[0.8vw] bg-backgroundButton hover:bg-white/90 hover:text-black text-customTextColor">
                   Real All
                 </DialogTrigger>
-                <DialogContent className=" md:w-[70vw] md:h-[35vw] bg-buttonColor rounded-full">
-                  <div className="flex w-full mx-[1vw]">
+                <DialogContent className=" md:w-[70vw] md:h-[35vw] bg-buttonColor rounded-full ">
+                  <div className="flex w-full mx-[1vw] mt-[2vw]">
                     <div className="flex gap-x-[1vw]">
                       <div className=" ml-[2vw]">
                         <Avatar>
