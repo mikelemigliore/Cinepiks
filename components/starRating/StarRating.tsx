@@ -64,7 +64,7 @@ function StarRating({ title, value, handleValue }: StarRatingProp) {
               setHover(newHover);
             }}
             emptyIcon={
-              <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
+              <StarIcon style={{ opacity: 1 }} fontSize="inherit" />
             }
           />
           {value !== null && (

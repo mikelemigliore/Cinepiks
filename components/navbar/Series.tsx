@@ -15,7 +15,7 @@ function Series({ onClick }: Props) {
       className="!bg-transparent hover:text-white text-white/70 rounded-lg focus:ring-0 font-bold text-[0.8vw]"
       asChild
     >
-      <Link href="/series" className="flex items-center space-x-[0.4vw]">
+      <Link href={{ pathname: "/search", query: { type: "series" } }} className="flex items-center space-x-[0.4vw]">
         <MdOutlineLiveTv className="w-5 h-5" />
         <span>TV Series</span>
       </Link>

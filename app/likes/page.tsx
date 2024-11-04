@@ -432,11 +432,8 @@ const seriesItemSearch = WatchlistItemSearch.filter((item) => item.type === "ser
 
 
 
-
-
-
-function WatchedPage() {
-      //const searchParams = useSearchParams()
+function LikesPage() {
+    //const searchParams = useSearchParams()
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(true);
   const [movies, setMovies] = useState(false);
@@ -444,7 +441,7 @@ function WatchedPage() {
   //const [documentary, setDocumentary] = useState(false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
-  const [watched, setWatched] = useState(true);
+  const [watchlist, setWatchlist] = useState(true);
 
 
   
@@ -511,7 +508,7 @@ function WatchedPage() {
             filter ? "translate-x-[15vw]" : ""
           } transition-transform duration-700 ease-in-out`}
         >
-          <div className="text-[2.5vw] font-bold">Watched</div>
+          <div className="text-[2.5vw] font-bold">Likes</div>
           <div className="h-[5vh] text-[0.7vw] md:text-[0.9vw] text-gray-300">
             Use filter on the left to refine your search
           </div>
@@ -614,7 +611,7 @@ function WatchedPage() {
                   //mediaType={"movie"}
                     filter={filter}
                     mediaSearch={moviesItemSearch}
-                    watched={watched}
+                    watchlist={watchlist}
                   ></GridView>
                 ) : (
                   <ListView
@@ -622,7 +619,7 @@ function WatchedPage() {
                     filter={filter}
                     mediaSearch={moviesItemSearch}
                     list={list}
-                    watched={watched}
+                    watchlist={watchlist}
                   ></ListView>
                 )}
               </div>
@@ -634,7 +631,7 @@ function WatchedPage() {
                   //mediaType={"series"}
                     filter={filter}
                     mediaSearch={seriesItemSearch}
-                    watched={watched}
+                    watchlist={watchlist}
                   ></GridView>
                 ) : (
                   <ListView
@@ -642,7 +639,7 @@ function WatchedPage() {
                     filter={filter}
                     mediaSearch={seriesItemSearch}
                     list={list}
-                    watched={watched}
+                    watchlist={watchlist}
                   ></ListView>
                 )}
               </div>
@@ -653,7 +650,7 @@ function WatchedPage() {
                 //mediaType={type}
                   filter={filter}
                   mediaSearch={WatchlistItemSearch}
-                  watched={watched}
+                  watchlist={watchlist}
                 ></GridView>
               ) : (
                 <ListView
@@ -661,7 +658,7 @@ function WatchedPage() {
                   filter={filter}
                   mediaSearch={WatchlistItemSearch}
                   list={list}
-                  watched={watched}
+                  watchlist={watchlist}
                 ></ListView>
               )}
             </div>
@@ -676,4 +673,4 @@ function WatchedPage() {
     )
   }
   
-  export default WatchedPage
+  export default LikesPage

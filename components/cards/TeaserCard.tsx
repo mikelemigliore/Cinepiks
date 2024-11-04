@@ -17,6 +17,7 @@ interface TeaserCardProps {
   expandCard?: boolean;
   isDesktop?: boolean;
   href: string;
+  type?: string; // Define possible values
 }
 
 function TeaserCard({
@@ -27,6 +28,7 @@ function TeaserCard({
   expandCard,
   isDesktop,
   href,
+  type
 }: TeaserCardProps) {
   //const [showContent, setShowContent] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
@@ -122,7 +124,7 @@ function TeaserCard({
           <div
             className={`transition-all duration-500 ease-in-out transform ${
               expandCard && isDesktop
-                ? "md:w-[22vw] md:h-[44vh] relative bg-customColorCard w-full h-full shadow-xl md:rounded-3xl group-hover:scale-105 md:group-hover:z-10"
+                ? "md:w-[22vw] md:h-[43vh] relative bg-customColorCard w-full h-full shadow-xl md:rounded-3xl group-hover:scale-105 md:group-hover:z-10"
                 : "md:w-[22vw] md:h-[44vh]"
             }  ${
               isLastThreeSlides || isLastOne
@@ -183,7 +185,8 @@ function TeaserCard({
               }`}
             >
               <div className="flex justify-between">
-                <div>
+                {type === "movie" ? (
+                                 <div>
                   <h1 className="font-bold text-[1vw] m-[0.5vh]">{title}</h1>
                   <h2 className="m-[1vh] text-customTextColor font-bold pt-[1.5vh] text-[0.7vw]">
                     2h 3m
@@ -195,7 +198,23 @@ function TeaserCard({
                     <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
                     Comedy
                   </h2>
+                </div> 
+                ):(
+                  <div>
+                  <h1 className="font-bold text-[1vw] m-[0.5vh]">{title}</h1>
+                  <h2 className="m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                    Seasons: 3
+                  </h2>
+                  <h2 className="flex justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                    Action
+                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
+                    Sci-fi
+                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
+                    Comedy
+                  </h2>
                 </div>
+                )}
+
 
                 <div className="">
                   <div className="space-x-[0.5vw]">

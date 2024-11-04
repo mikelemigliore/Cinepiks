@@ -3,6 +3,8 @@ import Container from "@/components/global/Container";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import TeaserCard from "./TeaserCard";
+import WatchListOpt from "./WatchListOpt";
+import WatchedOpt from "./WatchedOpt";
 
 interface MovieCardProps {
   imgUrl: string;
@@ -12,8 +14,10 @@ interface MovieCardProps {
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   list?: boolean;
-  single?:boolean
+  single?: boolean;
   type?: string; // Define possible values
+  watchlist?: boolean;
+  watched?: boolean;
 }
 
 function MovieCard({
@@ -24,11 +28,15 @@ function MovieCard({
   isLastOne,
   list,
   single,
-  type
+  type,
+  watchlist,
+  watched,
 }: MovieCardProps) {
   const [expandCard, setExpandCard] = useState(false);
   //const [showContent, setShowContent] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
+  const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
+  const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
   //const [hovered, setHovered] = useState(false);
   const hoveredRef = useRef(false);
   //const [activeCard, setActiveCard] = useState<string | null>(null); // Track active card
@@ -36,9 +44,7 @@ function MovieCard({
   // const handleActiveCard = () =>{
   //   setActiveCard(true)
   // }
-  const href =
-  type === "movie" ? `/singlemovie` : `/singleseries`;
-
+  const href = type === "movie" ? `/singlemovie` : `/singleseries`;
 
   useEffect(() => {
     const handleResize = () => {
@@ -55,12 +61,16 @@ function MovieCard({
   }, []);
 
   const handleMouseEnter = () => {
-    if (isDesktop && !list && !single) {
+    if (isDesktop && !list && !single && !watchlist && !watched) {
       //setShowContent(true);
       hoveredRef.current = true;
       setTimeout(() => {
         if (hoveredRef.current) setExpandCard(true);
       }, 1500);
+    } else if (isDesktop && !list && !single && watchlist) {
+      setWatchlistOptions(true);
+    }else if (isDesktop && !list && !single && !watchlist && watched) {
+      setWatchedOptions(true);
     }
   };
 
@@ -69,6 +79,8 @@ function MovieCard({
       //setShowContent(false);
       hoveredRef.current = false;
       setExpandCard(false);
+      setWatchlistOptions(false);
+      setWatchedOptions(false)
     }
   };
 
@@ -103,12 +115,26 @@ function MovieCard({
                 src={imgUrl}
                 className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
               />
+            ) : watchlist ? (
+              <WatchListOpt
+                src={imgUrl}
+                watchlistOptions={watchlistOptions}
+                type={type}
+              />
+            ) : watched ? (
+              <WatchedOpt
+                src={imgUrl}
+                watchedOptions={watchedOptions}
+                type={type}
+              />
             ) : single ? (
-                <img
-                  src={imgUrl}
-                  className={`w-[30vw] md:w-[17vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
-                />
-            ): (
+              <img
+                src={imgUrl}
+                className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                  watchlistOptions ? "opacity-25" : ""
+                }`}
+              />
+            ) : (
               <img
                 src={imgUrl}
                 className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
@@ -124,7 +150,8 @@ function MovieCard({
               }`}
             >
               <TeaserCard
-              href={href}
+                type={type}
+                href={href}
                 title={title}
                 imgUrl={imgUrl}
                 isLastThreeSlides={isLastThreeSlides}

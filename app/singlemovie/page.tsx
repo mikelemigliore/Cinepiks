@@ -657,7 +657,7 @@ function SingleMoviePage() {
   };
 
   const handleSetRelaod = () => {
-    setUnmute(!unmute)
+    setReload(!reload)
   };
 
   return (

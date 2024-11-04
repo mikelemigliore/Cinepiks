@@ -28,6 +28,7 @@ import YoutubePlayerMainCaroisel from "@/components/maincarousel/YoutubePlayerMa
 import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
+import { usePathname, useSearchParams } from 'next/navigation'
 
 const itemSearch = [
   {
@@ -430,6 +431,7 @@ const seriesItemSearch = itemSearch.filter((item) => item.type === "series");
 //type MovieFilter = (typeof moviesSearch)[number][string][string]
 
 function SearchPage() {
+  const searchParams = useSearchParams()
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(true);
   const [movies, setMovies] = useState(false);
@@ -438,6 +440,32 @@ function SearchPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [value, setValue] = React.useState<number | null>(0);
+
+  const handleValue = (newValue: number | null) => {
+    if (newValue !== null) {
+      setValue(newValue);
+    } else {
+      setValue(0);
+    }
+  };
+
+
+
+  useEffect(() => {
+    const type = searchParams.get("type");
+    if (type === "movie") {
+      setMovies(true);
+      setSeries(false);
+      setAll(false);
+    } else if (type === "series") {
+      setSeries(true);
+      setMovies(false);
+      setAll(false);
+    }
+  }, [searchParams]);
+
+    
 
   const handleFilter = () => {
     setFilterd(!filter);
@@ -603,14 +631,16 @@ function SearchPage() {
                   <GridView
                   //mediaType={"movie"}
                     filter={filter}
-                    moviesSearch={moviesItemSearch}
+                    mediaSearch={moviesItemSearch}
                   ></GridView>
                 ) : (
                   <ListView
                   //mediaType={"movie"}
                     filter={filter}
-                    moviesSearch={moviesItemSearch}
+                    mediaSearch={moviesItemSearch}
                     list={list}
+                    value={value}
+                    handleValue={handleValue}
                   ></ListView>
                 )}
               </div>
@@ -621,14 +651,16 @@ function SearchPage() {
                   <GridView
                   //mediaType={"series"}
                     filter={filter}
-                    moviesSearch={seriesItemSearch}
+                    mediaSearch={seriesItemSearch}
                   ></GridView>
                 ) : (
                   <ListView
                   //mediaType={"series"}
                     filter={filter}
-                    moviesSearch={seriesItemSearch}
+                    mediaSearch={seriesItemSearch}
                     list={list}
+                    value={value}
+                    handleValue={handleValue}
                   ></ListView>
                 )}
               </div>
@@ -638,14 +670,16 @@ function SearchPage() {
                 <GridView
                 //mediaType={type}
                   filter={filter}
-                  moviesSearch={itemSearch}
+                  mediaSearch={itemSearch}
                 ></GridView>
               ) : (
                 <ListView
                 //mediaType={type}
                   filter={filter}
-                  moviesSearch={itemSearch}
+                  mediaSearch={itemSearch}
                   list={list}
+                  value={value}
+                  handleValue={handleValue}
                 ></ListView>
               )}
             </div>

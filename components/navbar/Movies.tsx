@@ -15,7 +15,7 @@ function Movies({onClick}:Props) {
       className="!bg-transparent hover:text-white text-white/70 rounded-lg focus:ring-0 font-bold text-[0.8vw]"
       asChild
     >
-      <Link href="/movies" className="flex items-center space-x-[0.4vw]">
+      <Link href={{ pathname: "/search", query: { type: "movie" } }} className="flex items-center space-x-[0.4vw]">
         <RiMovie2Line className="w-5 h-5 " />
         <span>Movies</span>
       </Link>
