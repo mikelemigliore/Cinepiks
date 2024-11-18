@@ -30,6 +30,8 @@ const config: Config = {
         customColorBigCard: "#212121",
         customColorTags: "#3f3f3f",
         backgroundButton:"#3c3e3f",
+        customDeleteButton: "#4f1212",
+        hoveredCustomDeleteButton:"#990e0e",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

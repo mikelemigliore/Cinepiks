@@ -32,8 +32,8 @@ interface ListViewProp {
   list?: boolean;
   watchlist?: boolean;
   watched?: boolean;
-  //value: number | null;
-  //handleValue: (newValue: number | null) => void;
+  value?: number | null; //This was commented out
+  //handleValue: (newValue: number | null) => void;  //This was commented out
   //mediaType?: string; // Indicates the type of content
 }
 
@@ -43,6 +43,7 @@ function ListView({
   list,
   watchlist,
   watched,
+  value
 }: //value,
 //handleValue,
 ListViewProp) {
