@@ -65,9 +65,12 @@ function EpisodeCard({
               <SlArrowRight className="w-[1.7vw] h-[1.7vh] md:ml-[0.4vw]" />
             </DialogTrigger>
             <DialogContent className=" md:w-[35vw] md:h-[30vw] bg-customColorCard rounded-full">
-              <img className="rounded-2xl shadow-lg w-full" src={img} />
+              <img className="rounded-3xl shadow-lg w-full" src={img} />
               <div
-                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[20vw] transition-opacity duration-500 ease-in-out`}
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+              />
+              <div
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
               />
               <div className="ml-[1.5vw] mt-[-1.5vw]">
                 <div className="flex justify-between relative z-[100]">

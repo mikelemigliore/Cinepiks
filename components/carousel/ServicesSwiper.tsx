@@ -125,15 +125,6 @@
 
 // export default ServicesSwiper;
 
-
-
-
-
-
-
-
-
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -147,10 +138,11 @@ import ServicesCard from "../cards/ServicesCard";
 import Link from "next/link";
 
 interface Prop {
-  services: Array<{ id: number; title: string; img:any}>;
+  services: Array<{ id: number; title: string; img: any }>;
+  logInPage?: boolean;
 }
 
-function ServicesSwiper({ services }: Prop) {
+function ServicesSwiper({ services, logInPage }: Prop) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -179,11 +171,31 @@ function ServicesSwiper({ services }: Prop) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80"
     >
-      <div className="ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.5vw] font-semibold">
-        <h1>What's Your Platform?</h1>
-        <h2 className="text-[2vw] md:text-[1vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
-          Select one or more tags, then click on 'Explore All' to view content offered by your favorite platform:
-        </h2>
+      <div
+        className={`ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.3vw] font-semibold`}
+      >
+        {logInPage ? (
+          <h1>Discover What Your Favorite Streaming Services Have to Offer</h1>
+        ) : (
+          <h1>What's Your Platform?</h1>
+        )}
+
+        <div
+          className={`text-[2vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300`}
+        >
+          {logInPage ? (
+            <h2>
+              The streaming service icons below are for informational purposes
+              only, indicating their offerings without implying any affiliation
+              or availability on our platform.
+            </h2>
+          ) : (
+            <h2>
+              Select one or more tags, then click on 'Explore All' to view
+              content offered by your favorite platform:
+            </h2>
+          )}
+        </div>
       </div>
 
       <div className="ml-[1vw] md:ml-[3vw]">
@@ -219,6 +231,7 @@ function ServicesSwiper({ services }: Prop) {
             return (
               <SwiperSlide key={service.id} className="pb-[5vh] md:pb-[8vh]">
                 <ServicesCard
+                logInPage={logInPage}
                   img={service.img}
                   title={service.title}
                   isPartialSlide={isPartialSlide}
@@ -235,7 +248,7 @@ function ServicesSwiper({ services }: Prop) {
       <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
 
       {/* Explore All button with disabled state */}
-      {isAnyItemSelected ? (
+      {isAnyItemSelected && !logInPage ? (
         <Link href="/search">
           <Button
             onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
@@ -246,7 +259,11 @@ function ServicesSwiper({ services }: Prop) {
           </Button>
         </Link>
       ) : (
-        <div className="ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
+        <div
+          className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center ${
+            logInPage ? "hidden" : ""
+          }`}
+        >
           Explore All
           <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
         </div>

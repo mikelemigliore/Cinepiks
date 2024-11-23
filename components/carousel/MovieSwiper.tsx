@@ -11,12 +11,13 @@ import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
 interface Props {
-  medias: Array<{ id: number; title: string; imgUrl: string; type:string }>;
-  title?:string;
-  //mediaType: "movie" | "series"; // Indicates the type of content
+  medias: Array<{ id: number; title: string; imgUrl: string; type: string; imgBackdrop:string }>;
+  title?: string;
+  mediaType?: "movie" | "series"; // this line was commented
+  logInPage?: boolean;
 }
 
-function MovieSwiper({ medias = [], title }: Props) {
+function MovieSwiper({ medias = [], title, logInPage }: Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,10 +31,13 @@ function MovieSwiper({ medias = [], title }: Props) {
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
         <h1>
           {title}
-          <Link href="/search">
-            <Button
-              variant="ghost"
-              className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
+          {logInPage ? (
+            <div></div>
+          ) : (
+            <Link href="/search">
+              <Button
+                variant="ghost"
+                className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -41,11 +45,12 @@ function MovieSwiper({ medias = [], title }: Props) {
               : "opacity-100 md:opacity-0 md:-translate-x-10 md:invisible"
           }
         `}
-            >
-              View All
-              <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
-            </Button>
-          </Link>
+              >
+                View All
+                <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
+              </Button>
+            </Link>
+          )}
         </h1>
       </div>
 
@@ -101,13 +106,14 @@ function MovieSwiper({ medias = [], title }: Props) {
               (index >= (activeIndex - 3 + medias.length) % medias.length &&
                 index <= (activeIndex - 1 + medias.length) % medias.length); // Previous partial slides on the left
 
-            const isLastOne =
-            index === medias.length - 1;
+            const isLastOne = index === medias.length - 1;
 
             return (
               <SwiperSlide className="pb-[8vh]" key={media.id}>
                 <MovieCard
-                 type={media.type}
+                  logInPage={logInPage}
+                  type={media.type}
+                  imgBackdrop={media.imgBackdrop}
                   imgUrl={media.imgUrl}
                   title={media.title}
                   isPartialSlide={isPartialSlide}
@@ -121,7 +127,7 @@ function MovieSwiper({ medias = [], title }: Props) {
         </Swiper>
 
         {/* Pass the swiper instance to the SwiperNavButtons allowing the navigation buttons inside that component to control the Swiper (e.g., move to the next or previous slide) */}
-        <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons}/>
+        <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
       </div>
     </div>
   );

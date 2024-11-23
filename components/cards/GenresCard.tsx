@@ -28,7 +28,7 @@ function GenresCard({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={() => onSelect()}
-        className={`bg-customServicesColor rounded-full w-[30vw] h-[30vw] md:w-[9vw] md:h-[9vw] text-[2vw] md:text-[1vw] font-bold hover:bg-white/90 hover:text-black 
+        className={`hover:scale-105 transition-transform duration-300 bg-customServicesColor rounded-full w-[30vw] h-[30vw] md:w-[9vw] md:h-[9vw] text-[2vw] md:text-[1vw] font-bold hover:bg-white/90 hover:text-black 
               hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
                 isPartialSlide ? "opacity-50 pointer-events-none" : ""
               } ${isSelected ? "bg-white/90" : ""}`}

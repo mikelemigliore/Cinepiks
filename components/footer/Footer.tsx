@@ -4,14 +4,14 @@ import React from "react";
 function Footer() {
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="md:ml-[5vw]">
+      <div className="md:ml-[10vw] md:mt-[5vw]">
         <div>
-          <Link href="/" className="inline-block mb-[5vh] md:mb-[2vh] md:mt-[2vh] md:ml-[8vw] ml-[10vw]">
-            <img src="/MovieLogo.png" alt="Movie Logo" className="w-[30vw] md:w-[15vw]" />
+          <Link href="/" className="inline-block mb-[5vh] md:mb-[2vh] md:mt-[2vh] md:ml-[11vw] ml-[10vw]">
+            <img src="/MovieLogo.png" alt="Movie Logo" className="w-[10vw] md:w-[10vw]" />
           </Link>
         </div>
         <div className="md:ml-[2vw]">
-          <h1 className="mt-[-15vh] text-center mx-[5vw] md:mx-0 text-[0.8vw]">
+          <h1 className="mt-[-2vh] text-center mx-[5vw] md:mx-0 text-[0.8vw]">
             Keeping track of your favorite movies and stay up to date with the
             latest releases <br /> across all platforms and theaters
           </h1>

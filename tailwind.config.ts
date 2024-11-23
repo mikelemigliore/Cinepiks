@@ -20,7 +20,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        buttonColor: "#2b2c2d",
+        buttonColor: "#2b2c2d", 
         customColor: "#181818",
         customColorCard: "#212121",
         customTextColor: "#9B9999",

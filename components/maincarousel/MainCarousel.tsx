@@ -129,7 +129,7 @@ function MainCarousel() {
         setActiveSlide={setActiveSlide} //setActiveSlide: Allows the carousel to update the active slide state
         totalSlides={totalSlides} //Provides the number of slides in the carousel.
       >
-        <CarouselContent className="transition-transform duration-75">
+        <CarouselContent>
           <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
             {/* Background Image as an absolutely positioned div */}
             <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">

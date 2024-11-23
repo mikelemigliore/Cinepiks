@@ -5,6 +5,17 @@ import { useState, useEffect, useRef } from "react";
 import TeaserCard from "./TeaserCard";
 import WatchListOpt from "./WatchListOpt";
 import WatchedOpt from "./WatchedOpt";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { GoDotFill, GoStarFill } from "react-icons/go";
+import { Button } from "../ui/button";
 
 interface MovieCardProps {
   imgUrl: string;
@@ -18,10 +29,13 @@ interface MovieCardProps {
   type?: string; // Define possible values
   watchlist?: boolean;
   watched?: boolean;
+  logInPage?: boolean;
+  imgBackdrop?:string
 }
 
 function MovieCard({
   imgUrl,
+  imgBackdrop,
   title,
   isPartialSlide,
   isLastThreeSlides,
@@ -31,6 +45,7 @@ function MovieCard({
   type,
   watchlist,
   watched,
+  logInPage,
 }: MovieCardProps) {
   const [expandCard, setExpandCard] = useState(false);
   //const [showContent, setShowContent] = useState(false);
@@ -69,7 +84,7 @@ function MovieCard({
       }, 1500);
     } else if (isDesktop && !list && !single && watchlist) {
       setWatchlistOptions(true);
-    }else if (isDesktop && !list && !single && !watchlist && watched) {
+    } else if (isDesktop && !list && !single && !watchlist && watched) {
       setWatchedOptions(true);
     }
   };
@@ -80,7 +95,7 @@ function MovieCard({
       hoveredRef.current = false;
       setExpandCard(false);
       setWatchlistOptions(false);
-      setWatchedOptions(false)
+      setWatchedOptions(false);
     }
   };
 
@@ -102,70 +117,174 @@ function MovieCard({
           isPartialSlide ? "opacity-50 pointer-events-none" : ""
         }`}
       >
-        <Link href={href} passHref>
-          <div
-            className="relative"
-            onClick={handleClick} // Handle click event for conditional navigation
-            // onMouseEnter={handleMouseEnter}
-            // onMouseLeave={handleMouseLeave}
-          >
-            {/* Poster Image */}
-            {list ? (
-              <img
-                src={imgUrl}
-                className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
-              />
-            ) : watchlist ? (
-              <WatchListOpt
-                src={imgUrl}
-                watchlistOptions={watchlistOptions}
-                type={type}
-              />
-            ) : watched ? (
-              <WatchedOpt
-                src={imgUrl}
-                watchedOptions={watchedOptions}
-                type={type}
-              />
-            ) : single ? (
-              <img
-                src={imgUrl}
-                className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                  watchlistOptions ? "opacity-25" : ""
-                }`}
-              />
-            ) : (
-              <img
-                src={imgUrl}
-                className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                  expandCard ? "opacity-0" : "opacity-100"
-                }`}
-              />
-            )}
+        {logInPage ? (
+          <Dialog>
+            <DialogTrigger className="focus:outline-none">
+              <div className="flex flex-col justify-start items-start">
+                <img
+                  src={imgUrl}
+                  className="w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+                />
+                <h1 className="pt-[1vw] pl-[0.5vw] text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                  {title}
+                </h1>
+              </div>
+            </DialogTrigger>
+            <DialogContent className=" md:w-[35vw] md:h-[33vw] bg-customColorCard rounded-full">
+                  <img className="w-full rounded-3xl" src={imgBackdrop} />
+                  <div
+                    className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                  />
+                  <div
+                    className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                  />
+                  
+                  <div className="ml-[1.5vw] mt-[-1.5vw]">
+                    <div className="flex justify-between relative z-[100]">
+                      <div>
+                        <div className="flex mt-[1vh]">
+                          <div className="text-[1.3vw] line-clamp-1">
+                            {title}
+                          </div>
+                        </div>
+                        <div className="text-[0.8vw] text-customTextColor flex">
+                          <span>Action</span>
+                          <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                          <span>Sci-fi</span>
+                          <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                          <span className="pr-[0.6vw]">Comedy</span>
+                          <span className="mx-[0.6vw] text-customTextColor font-bold">
+                            R
+                          </span>
+                          <span>2h 36m</span>
+                        </div>
+                      </div>
+                    </div>
 
-            {/* TeaserCard */}
+                    <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
+                      <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
+                        While scavenging the deep ends of a derelict space
+                        station, a group of young space colonists come face to
+                        face with the most terrifying life form in the universe.
+                        While scavenging the deep ends of a derelict space
+                        station, a group of young space While scavenging the
+                        deep ends of a derelict space station, a group of young
+                        space colonists come face to face with the most
+                        terrifying life form in the universe. While scavenging
+                        the deep ends of a derelict space station, a group of
+                        young space While scavenging the deep ends of a derelict
+                        space station, a group of young space colonists come
+                        face to face with the most terrifying life form in the
+                        universe. While scavenging the deep ends of a derelict
+                        space station, a group of young space While scavenging
+                        the deep ends of a derelict space station, a group of
+                        young space colonists come face to face with the most
+                        terrifying life form in the universe. While scavenging
+                        the deep ends of a derelict space station, a group of
+                        young space
+                      </div>
+                    </ScrollArea>
+                    <div className="flex justify-end mt-[1.5vw] mr-[1vw] space-x-[0.5vw]">
+                      <Link
+                        href="/homepage"
+                        className="flex justify-center items-center active:scale-95 md:w-[9vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-slate-300 hover:bg-opacity-20"
+                      >
+                        Continue As Guest
+                      </Link>
+                      <Link
+                        href="/singup"
+                        className="flex justify-center items-center active:scale-95 md:w-[6vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-white/70 hover:bg-white/90 text-black font-bold"
+                      >
+                        Sign Up
+                      </Link>
+                    </div>
+                  </div>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          // <Link href="" passHref>
+          //   <div
+          //     className="relative"
+          //     onClick={handleClick}
+          //   >
+          //     <img
+          //       src={imgUrl}
+          //       className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+          //         expandCard ? "opacity-0" : "opacity-100"
+          //       }`}
+          //     />
+          //   </div>
+          //   <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+          //     {title}
+          //   </h1>
+          // </Link>
+          <Link href={href} passHref>
             <div
-              className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
-                expandCard ? "opacity-100 z-10 cursor-default" : "opacity-0 z-0"
-              }`}
+              className="relative"
+              onClick={handleClick} // Handle click event for conditional navigation
+              // onMouseEnter={handleMouseEnter}
+              // onMouseLeave={handleMouseLeave}
             >
-              <TeaserCard
-                type={type}
-                href={href}
-                title={title}
-                imgUrl={imgUrl}
-                isLastThreeSlides={isLastThreeSlides}
-                isLastOne={isLastOne}
-                expandCard={expandCard}
-                //showContent={showContent}
-                isDesktop={isDesktop}
-              />
+              {/* Poster Image */}
+              {list ? (
+                <img
+                  src={imgUrl}
+                  className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                />
+              ) : watchlist ? (
+                <WatchListOpt
+                  src={imgUrl}
+                  watchlistOptions={watchlistOptions}
+                  type={type}
+                />
+              ) : watched ? (
+                <WatchedOpt
+                  src={imgUrl}
+                  watchedOptions={watchedOptions}
+                  type={type}
+                />
+              ) : single ? (
+                <img
+                  src={imgUrl}
+                  className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    watchlistOptions ? "opacity-25" : ""
+                  }`}
+                />
+              ) : (
+                <img
+                  src={imgUrl}
+                  className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    expandCard ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+              )}
+              <div>
+                <div
+                  className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
+                    expandCard
+                      ? "opacity-100 z-10 cursor-default"
+                      : "opacity-0 z-0"
+                  }`}
+                >
+                  <TeaserCard
+                    type={type}
+                    href={href}
+                    title={title}
+                    imgUrl={imgUrl}
+                    isLastThreeSlides={isLastThreeSlides}
+                    isLastOne={isLastOne}
+                    expandCard={expandCard}
+                    //showContent={showContent}
+                    isDesktop={isDesktop}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-            {title}
-          </h1>
-        </Link>
+            <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+              {title}
+            </h1>
+          </Link>
+        )}
       </Container>
     </div>
   );

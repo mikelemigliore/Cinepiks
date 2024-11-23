@@ -31,7 +31,7 @@ function Password() {
         {/* Search Input */}
         <input
           type={showPassword ? "text" : "password"}
-          className={`md:bg-backgroundButton md:h-[4.5vh] md:px-[1.5vw] md:rounded-full w-full pr-[2.5rem] ${
+          className={`bg-buttonColor md:h-[4.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full w-full pr-[2.5rem] ${
             showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
           }`}
           placeholder=""
@@ -39,13 +39,13 @@ function Password() {
           value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
         />
         <div
-          className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-backgroundButton pl-[0.5vw]"
+          className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
           onClick={togglePasswordVisibility}
         >
           {showPassword ? (
-            <AiOutlineEyeInvisible className="w-[1.3vw] h-[1.3vw]" />
+            <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
           ) : (
-            <AiOutlineEye className="w-[1.3vw] h-[1.3vw]" />
+            <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
           )}
         </div>
       </form>

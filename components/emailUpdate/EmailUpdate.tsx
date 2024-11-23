@@ -23,7 +23,7 @@ function EmailUpdate() {
         {/* Search Input */}
         <input
           type="text"
-          className={`md:bg-backgroundButton md:h-[4.5vh] md:px-[1.5vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
+          className={`bg-buttonColor md:h-[4.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
           placeholder="michele@hotmail.com"
         />
       </form>

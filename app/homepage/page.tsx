@@ -1,51 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import Link from "next/link";
-import { GoDotFill } from "react-icons/go";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
-import { Checkbox } from "@/components/ui/checkbox";
-import { FcGoogle } from "react-icons/fc";
-import ServicesSwiper from "@/components/carousel/ServicesSwiper";
+import MainCarousel from "@/components/maincarousel/MainCarousel";
+import React, { useState } from "react";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
+import ServicesSwiper from "@/components/carousel/ServicesSwiper";
+import GenresSwiper from "@/components/carousel/GenresSwiper";
+import BigCardSwiper from "@/components/carousel/BigCardSwiper";
 
-const services = [
-  { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
-  { id: 2, title: "Hulu", img: "/genresIcons/Hulu-Logo.wine.svg" },
-  {
-    id: 3,
-    title: "Prime Video",
-    img: "/genresIcons/Amazon_Prime_Video_logo.svg.png",
-  },
-  {
-    id: 4,
-    title: "Apple Tv",
-    img: "/genresIcons/apple-tv-plus-seeklogo.svg",
-  },
-  { id: 5, title: "Disney+", img: "/genresIcons/Disney+_2024.svg.png" },
-  { id: 6, title: "Max", img: "/genresIcons/20230413031451!Max_logo.svg" },
-  {
-    id: 7,
-    title: "Peacock",
-    img: "/genresIcons/NBCUniversal_Peacock_Logo.svg",
-  },
-  { id: 8, title: "Paramount+", img: "/genresIcons/paramount-seeklogo.svg" },
-  { id: 9, title: "Fandango", img: "/genresIcons/Fandango_logo14.png" },
-];
-
-const swiperTitles = [
-  { id: 1, title: "In Theaters" },
-  { id: 2, title: "Popular" },
-];
-
-function LoginIn() {
+function HomePage() {
+  // Define an array of movies with their title and poster URLs
   const items = [
     {
       id: 1,
@@ -556,243 +518,397 @@ function LoginIn() {
   const movies = items.filter((item) => item.type === "movie");
   const series = items.filter((item) => item.type === "series");
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [logInPage, setLogInPage] = useState(true);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const totalSlides = items.length; // Set the total number of slides
+  const services = [
+    { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
+    { id: 2, title: "Hulu", img: "/genresIcons/Hulu-Logo.wine.svg" },
+    {
+      id: 3,
+      title: "Prime Video",
+      img: "/genresIcons/Amazon_Prime_Video_logo.svg.png",
+    },
+    {
+      id: 4,
+      title: "Apple Tv",
+      img: "/genresIcons/apple-tv-plus-seeklogo.svg",
+    },
+    { id: 5, title: "Disney+", img: "/genresIcons/Disney+_2024.svg.png" },
+    { id: 6, title: "Max", img: "/genresIcons/20230413031451!Max_logo.svg" },
+    {
+      id: 7,
+      title: "Peacock",
+      img: "/genresIcons/NBCUniversal_Peacock_Logo.svg",
+    },
+    { id: 8, title: "Paramount+", img: "/genresIcons/paramount-seeklogo.svg" },
+    { id: 9, title: "Fandango", img: "/genresIcons/Fandango_logo14.png" },
+  ];
 
-  const togglePasswordVisibility = () => {
-    setShowPassword((prevState) => !prevState);
-  };
+  // const services = [
+  //   { id: 1, title: "Netflix"},
+  //   { id: 2, title: "Hulu"},
+  //   { id: 3, title: "Prime Video"},
+  //   { id: 4, title: "Apple Tv" },
+  //   { id: 5, title: "Disney+"},
+  //   { id: 6, title: "Max"},
+  //   { id: 7, title: "Peacock"},
+  //   { id: 8, title: "Paramount+" },
+  //   { id: 11, title: "Fandango"},
+  // ]
 
-  // Ref to store the timeout ID
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const swiperTitles = [
+    { id: 1, title: "In Theaters" },
+    { id: 2, title: "What's Popular" },
+    { id: 3, title: "Top Rated" },
+    { id: 4, title: "Coming Soon" },
+    { id: 5, title: "What's New" },
+    { id: 6, title: "Recommendation" },
+    { id: 7, title: "New On Netflix" },
+    { id: 8, title: "New On Hulu" },
+    { id: 9, title: "New On PrimeVideo" },
+    { id: 10, title: "Action and Adventure Movies" },
+    { id: 11, title: "Horror and Thriller Movies" },
+    { id: 12, title: "Popular Series" },
+    { id: 13, title: "Crime Series" },
+    { id: 14, title: "Documentaries" },
+  ];
 
-  const handleNext = useCallback(() => {
-    setActiveSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-  }, [totalSlides]);
+  const genres = [
+    {
+      id: 1,
+      title: "Action",
+      iconBlack: "/genresIcons/icons8-greek-helmet.svg",
+      iconWhite: "/genresIcons/icons8-greek-helmet-white.svg",
+    },
+    {
+      id: 2,
+      title: "Adventure",
+      iconBlack: "/genresIcons/icons8-worldwide-location.svg",
+      iconWhite: "/genresIcons/icons8-worldwide-location-white.svg",
+    },
+    {
+      id: 3,
+      title: "Animated",
+      iconBlack: "/genresIcons/icons8-animation.svg",
+      iconWhite: "/genresIcons/icons8-animation-white.svg",
+    },
+    {
+      id: 20,
+      title: "Award Winner",
+      iconBlack: "/genresIcons/icons8-award.svg",
+      iconWhite: "/genresIcons/icons8-award-white.svg",
+    },
+    {
+      id: 4,
+      title: "Comedy",
+      iconBlack: "/genresIcons/icons8-joker.svg",
+      iconWhite: "/genresIcons/icons8-joker-white.svg",
+    },
+    {
+      id: 5,
+      title: "Crime",
+      iconBlack: "/genresIcons/icons8-horror.svg",
+      iconWhite: "/genresIcons/icons8-horror-white.svg",
+    },
+    {
+      id: 6,
+      title: "Family",
+      iconBlack: "/genresIcons/icons8-family.svg",
+      iconWhite: "/genresIcons/icons8-family-white.svg",
+    },
+    {
+      id: 7,
+      title: "Fantasy",
+      iconBlack: "/genresIcons/icons8-witch's-hat.svg",
+      iconWhite: "/genresIcons/icons8-witch's-hat-white.svg",
+    },
+    {
+      id: 8,
+      title: "Sci-fi",
+      iconBlack: "/genresIcons/icons8-superman.svg",
+      iconWhite: "/genresIcons/icons8-superman-white.svg",
+    },
+    // { id: 8, title: "Sci-fi", iconBlack: "/genresIcons/icons8-stormtrooper.svg" , iconWhite:"/genresIcons/icons8-stormtrooper-white.svg" },
+    // { id: 9, title: "Drama", iconBlack: "/genresIcons/icons8-theatre-curtain.svg" , iconWhite:"/genresIcons/icons8-theatre-curtain-white.svg" },
+    {
+      id: 9,
+      title: "Drama",
+      iconBlack: "/genresIcons/icons8-venetian-mask.svg",
+      iconWhite: "/genresIcons/icons8-venetian-mask-white.svg",
+    },
+    {
+      id: 10,
+      title: "Horror",
+      iconBlack: "/genresIcons/icons8-scream.svg",
+      iconWhite: "/genresIcons/icons8-scream-white.svg",
+    },
+    {
+      id: 11,
+      title: "Thriller",
+      iconBlack: "/genresIcons/icons8-spy.svg",
+      iconWhite: "/genresIcons/icons8-spy-white.svg",
+    },
+    {
+      id: 12,
+      title: "Romance",
+      iconBlack: "/genresIcons/icons8-rose.svg",
+      iconWhite: "/genresIcons/icons8-rose-white.svg",
+    },
+    {
+      id: 13,
+      title: "History",
+      iconBlack: "/genresIcons/icons8-colosseum.svg",
+      iconWhite: "/genresIcons/icons8-colosseum-white.svg",
+    },
+    {
+      id: 14,
+      title: "Mystery",
+      iconBlack: "/genresIcons/icons8-anonymous-mask.svg",
+      iconWhite: "/genresIcons/icons8-anonymous-mask-white.svg",
+    },
+    {
+      id: 15,
+      title: "War",
+      iconBlack: "/genresIcons/icons8-cannon.svg",
+      iconWhite: "/genresIcons/icons8-cannon-white.svg",
+    },
+    {
+      id: 16,
+      title: "Western",
+      iconBlack: "/genresIcons/icons8-cow-skull.svg",
+      iconWhite: "/genresIcons/icons8-cow-skull-white.svg",
+    },
+    {
+      id: 17,
+      title: "Documentary",
+      iconBlack: "/genresIcons/icons8-documentary.svg",
+      iconWhite: "/genresIcons/icons8-documentary-white.svg",
+    },
+    {
+      id: 18,
+      title: "Music",
+      iconBlack: "/genresIcons/icons8-music.svg",
+      iconWhite: "/genresIcons/icons8-music-white.svg",
+    },
+    {
+      id: 19,
+      title: "Sport",
+      iconBlack: "/genresIcons/icons8-soccer-ball.svg",
+      iconWhite: "/genresIcons/icons8-soccer-ball-white.svg",
+    },
+  ];
 
-  const handlePrevious = () => {
-    setActiveSlide((prevSlide) =>
-      prevSlide - 1 < 0 ? totalSlides - 1 : prevSlide - 1
-    );
-  };
+  const itemBigCards = [
+    {
+      id: 1,
+      type: "movie",
+      title: "Alien",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
+    {
+      id: 2,
+      type: "movie",
+      title: "Spider-Man 3",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "The seemingly invincible Spider-Man goes up against an all-new crop of villains—including the shape-shifting Sandman. While Spider-Man’s superpowers are altered by an alien organism, his alter ego, Peter Parker, deals with nemesis Eddie Brock and also gets caught up in a love triangle.",
+    },
+    {
+      id: 3,
+      type: "movie",
+      title: "Avengers: Infinity War",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+    },
+    {
+      id: 4,
+      type: "movie",
+      title: "The Batman",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.",
+    },
+    {
+      id: 5,
+      type: "movie",
+      title: "Avatar:The Way of Water",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
+    {
+      id: 6,
+      type: "series",
+      title: "Breaking Bad",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/gc8PfyTqzqltKPW3X0cIVUGmagz.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
+    {
+      id: 7,
+      type: "series",
+      title: "The Penguin",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/56O2drADoJPtv9Z49jKZoBNyMc5.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "The seemingly invincible Spider-Man goes up against an all-new crop of villains—including the shape-shifting Sandman. While Spider-Man’s superpowers are altered by an alien organism, his alter ego, Peter Parker, deals with nemesis Eddie Brock and also gets caught up in a love triangle.",
+    },
+    {
+      id: 8,
+      type: "series",
+      title: "Dragon Ball Super",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/x0dLoNI0ce7GXIwGiMu0GrelxEv.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
+    },
+    {
+      id: 9,
+      type: "series",
+      title: "Loki",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/1pPcHpANG5mGtSYT7MA9QeYOKuK.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "In his second year of fighting crime, Batman uncovers corruption in Gotham City that connects to his own family while facing a serial killer known as the Riddler.",
+    },
+    {
+      id: 10,
+      type: "series",
+      title: "The Office",
+      imgUrl:
+        "https://image.tmdb.org/t/p/original/b7wyaeJGU2Q4ql7xZr52vdW5TKp.jpg",
+      genres1: "Action",
+      genres2: "Comedy",
+      genres3: "Drama",
+      rated: "R",
+      time: "2h 36m",
+      description:
+        "A listless Wade Wilson toils away in civilian life with his days as the morally flexible mercenary, Deadpool, behind him. But when his homeworld faces an existential threat, Wade must reluctantly suit-up again with an even more reluctant Wolverine.",
+    },
+  ];
 
-  // Reset timeout when manually navigating or auto-advancing
-  const resetTimeout = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(() => {
-      handleNext();
-    }, 10000); // Change every 10 seconds
-  };
+  const moviesBigCard = itemBigCards.filter((item) => item.type === "movie");
+  const seriesBigSeries = itemBigCards.filter((item) => item.type === "series");
 
-  useEffect(() => {
-    resetTimeout(); // Set or reset the timeout on activeSlide change
+  //   const [isLogged, setIsLogged] = useState(false);
 
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current); // Cleanup on unmount
-      }
-    };
-  }, [activeSlide, handleNext]);
+  //   const handleLoginIn = () =>{
+  //     setIsLogged(true)
+  //   }
 
   return (
-    <div>
-      <div className="flex">
-        <div className="w-[70vw] rounded-tr-custom rounded-br-custom overflow-hidden">
-          {/* The overflow-hidden property solved the issue because it ensures that any content (such as the CarouselContent, CarouselItem, or img elements) 
-      that extends outside the boundaries of the parent container (div.w-[70vw]) is clipped and confined within those boundaries. */}
-          <Carousel
-            activeSlide={activeSlide} //activeSlide: Keeps track of which slide is currently shown
-            totalSlides={totalSlides} //Provides the number of slides in the carousel.
-          >
-            <CarouselContent>
-              {/* className="transition-transform duration-75" */}
-              {items.map((item) => (
-                <CarouselItem className="relative w-full flex justify-center items-center ">
-                  <div className="relative">
-                    <img
-                      src={item.imgBackdrop}
-                      className="bg-cover bg-center md:bg-top bg-no-repeat"
-                    />
-                    <div className="absolute inset-0 flex flex-col justify-between ml-[7vw] my-[4vw]">
-                      <div>
-                        <h1 className="text-[1.7vw] font-semibold line-clamp-1">
-                          Out Now
-                        </h1>
-                      </div>
-                      <div>
-                        <h1 className="text-[2.5vw] font-semibold line-clamp-1">
-                          {item.title}
-                        </h1>
-                        <div className="text-[1vw] flex justify-start items-center">
-                          <span>Action</span>
-                          <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
-                          <span>Sci-fi</span>
-                          <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
-                          <span className="pr-[0.6vw]">Comedy</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious onClick={handlePrevious} className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50" />
-            <CarouselNext onClick={handleNext} className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50" />
-          </Carousel>
-        </div>
+    <div className="relative">
+      {/* {isLogged ? ( */}
+      <div>
+        <MainCarousel />
+        <div className="relative -mt-[26rem] md:-mt-[9rem]">
+          {swiperTitles.map((swiperTitle, index) => (
+            <div
+              key={swiperTitle.id}
+              className="relative left-0 my-12 right-0 z-40"
+            >
+              <MovieSwiper
+                medias={movies}
+                title={swiperTitle.title}
+                mediaType={"movie"}
+              />
+              {index === 3 && (
+                <div className="relative  left-0 right-0 my-16 z-40">
+                  <ServicesSwiper services={services} />
+                </div>
+              )}
 
-        <div className="mt-[3vw] ml-[8vw]">
-          <img
-            src="/MovieLogo.png"
-            alt="Movie Logo"
-            className="w-[8vw] m-[2vw]"
-          />
-          <div className="flex flex-col items-center">
-            <div className="space-y-[1vw]">
-              <h1 className="mb-[1vh] text-[1.2vw] font-bold">Log In</h1>
-              <div>
-                <form>
-                  <input
-                    type="text"
-                    className={`md:bg-transparent md:h-[4.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.7vw] border border-customTextColor`}
-                    placeholder="Enter email or username"
+              {index === 7 && (
+                <div className="relative left-0 right-0 my-16 z-40">
+                  <GenresSwiper genres={genres} />
+                </div>
+              )}
+
+              {index === 0 && (
+                <div className="relative left-0 right-0 my-16 z-40">
+                  <MovieSwiper
+                    medias={series}
+                    title={swiperTitle.title}
+                    mediaType={"series"}
                   />
-                </form>
-              </div>
-              <div>
-                <form className="flex relative">
-                  {/* Search Input */}
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className={`md:bg-transparent md:h-[4.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.7vw] border border-customTextColor ${
-                      showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                    }`}
-                    placeholder=""
-                    readOnly
-                    value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-                  />
-                  <div
-                    className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-customColor pl-[0.5vw]"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <AiOutlineEyeInvisible className="bg-customColor w-[1.3vw] h-[1.3vw]" />
-                    ) : (
-                      <AiOutlineEye className="bg-customColor w-[1.3vw] h-[1.3vw]" />
-                    )}
-                  </div>
-                </form>
-              </div>
-              <div>
-                <Button className=" font-bold rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
-                  Log In
-                </Button>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div>
-                  <div className="flex items-center">
-                    <Checkbox
-                      id="terms1"
-                      className="border border-white m-[0.5vw]"
-                    />
-                    <div>
-                      <label
-                        htmlFor="terms1"
-                        className="text-customTextColor text-[0.7vw] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        Remind Me
-                      </label>
-                    </div>
-                  </div>
                 </div>
-                <div className="pl-[1.5vw]">
-                  <Link
-                    href="/testpage"
-                    className="text-[0.7vw] font-medium leading-none text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
-                  >
-                    Forgot Password?
-                  </Link>
+              )}
+
+              {index === 1 && (
+                <div className="relative left-0 right-0 my-16 z-40">
+                  <BigCardSwiper itemBigCards={moviesBigCard} />
                 </div>
-              </div>
-              <div>
-                <Link href="/homepage">
-                  <Button className=" font-bold rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
-                    Continue As Guest
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex">
-                <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                <h1 className="flex mx-[1vw] mt-[0.5vw] text-[0.7vw]">Or</h1>
-                <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-              </div>
-              <div className="">
-                <Button className=" rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.7vw] bg-transparent hover:bg-white text-white/90 hover:text-black active:bg-white active:scale-95 border border-customTextColor">
-                  <FcGoogle className="w-[1.3vw] h-[1.3vw] ml-[-2vw] mr-[2vw]" />
-                  Continue with Google
-                </Button>
-              </div>
-              <div>
-                <Button className="rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.7vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor">
-                  <img
-                    src="/genresIcons/facebook.svg"
-                    className="w-[1.4vw] h-[1.4vw] ml-[-1vw] mr-[1.8vw] text-blue-500"
-                  />
-                  Continue with Facebook
-                </Button>
-              </div>
-              <div className="flex items-center space-x-2 ml-[3.5vw]">
-                <div>
-                  <h1 className="text-[0.7vw] font-medium leading-none text-customTextColor">
-                    Don't have one?
-                  </h1>
+              )}
+
+              {index === 11 && (
+                <div className="relative left-0 right-0 my-16 z-40">
+                  <BigCardSwiper itemBigCards={seriesBigSeries} />
+                  {/* <BigCardSwiper movies={movies}/> */}
                 </div>
-                <div>
-                  <Link
-                    href="/singup"
-                    className="text-[0.7vw] font-medium leading-none text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
-                  >
-                    Sign Up
-                  </Link>
-                </div>
-              </div>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
-      <div className="mt-[5vw]">
-        <ServicesSwiper logInPage={logInPage} services={services} />
-      </div>
-      <div className="mt-[2vw] mb-[4vw]">
-        <div
-          className={`ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.3vw] font-semibold`}
-        >
-          <h1>See What's Waiting for You</h1>
-
-          <div
-            className={`text-[2vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300`}
-          >
-            <h2>
-              Get a sneak peek at trending movies and series available to
-              explore.
-            </h2>
-          </div>
+      {/* ) : (
+        <div>
+          <LoginIn handleLoginIn={handleLoginIn} />
         </div>
-        {swiperTitles.map((swiperTitle) => (
-          <MovieSwiper
-            logInPage={logInPage}
-            medias={movies}
-            title={swiperTitle.title}
-            mediaType={"movie"}
-          />
-        ))}
-      </div>
+      )} */}
     </div>
   );
 }
 
-export default LoginIn;
+export default HomePage;
