@@ -18,7 +18,7 @@ function DeleteAccount() {
   };
   return (
     <div>
-      <h1 className="mb-[1vh] text-[0.9vw]">Delete Main Account</h1>
+      <h1 className="mb-[1vh] text-[0.9vw]">Delete Account</h1>
       <h2 className='text-customTextColor '>
         By deleting your account, all of your data and related profiles will be
         canceled and will be permanently lost.

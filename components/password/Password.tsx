@@ -31,7 +31,7 @@ function Password() {
         {/* Search Input */}
         <input
           type={showPassword ? "text" : "password"}
-          className={`bg-buttonColor md:h-[4.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full w-full pr-[2.5rem] ${
+          className={`bg-buttonColor md:h-[5.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full w-full pr-[2.5rem] ${
             showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
           }`}
           placeholder=""
@@ -62,7 +62,7 @@ function Password() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
                   placeholder="Search..."
                 />
               </form>
@@ -73,7 +73,7 @@ function Password() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
                   placeholder="Search..."
                 />
               </form>
@@ -84,7 +84,7 @@ function Password() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
                   placeholder="Search..."
                 />
               </form>

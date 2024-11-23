@@ -130,14 +130,12 @@ import React, { useState } from "react";
 //import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MdModeEditOutline } from "react-icons/md";
-
 import Password from "@/components/password/Password";
 import UsernameUpdate from "@/components/usernameUpdate/UsernameUpdate";
 import EmailUpdate from "@/components/emailUpdate/EmailUpdate";
 import DeleteAccount from "@/components/deleteAccount/DeleteAccount";
 import Link from "next/link";
 import ProfilePicture from "@/components/profilePicture/ProfilePicture";
-
 import ReactDOM from "react-dom";
 import Avatar from "react-avatar-edit";
 import {
@@ -148,6 +146,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { IoPersonSharp } from "react-icons/io5";
 
 function AccountPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -175,7 +174,7 @@ function AccountPage() {
       // Example: Call an API to update the user profile
       // await api.updateProfilePicture({ image: preview });
 
-      alert("Profile picture updated successfully!");
+      //alert("Profile picture updated successfully!");
     }
     setIsDialogOpen(false);
   };
@@ -189,8 +188,8 @@ function AccountPage() {
           {preview ? (
             <img src={preview} alt="Preview" className="w-[16vw]" />
           ) : (
-            <div className="w-[11vw] h-[11vw] bg-gray-200 flex items-center justify-center rounded-full">
-              <span>Image not available</span>
+            <div className="w-[11vw] h-[11vw] bg-buttonColor flex items-center justify-center rounded-full">
+              <IoPersonSharp className='w-[6vw] h-[6vw] text-customTextColor'/>
             </div>
           )}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

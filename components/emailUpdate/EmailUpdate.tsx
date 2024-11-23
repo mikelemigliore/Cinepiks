@@ -23,7 +23,7 @@ function EmailUpdate() {
         {/* Search Input */}
         <input
           type="text"
-          className={`bg-buttonColor md:h-[4.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
+          className={`bg-buttonColor md:h-[5.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
           placeholder="michele@hotmail.com"
         />
       </form>
@@ -40,7 +40,7 @@ function EmailUpdate() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
                   placeholder="Search..."
                 />
               </form>
@@ -51,7 +51,7 @@ function EmailUpdate() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
                   placeholder="Search..."
                 />
               </form>
@@ -62,7 +62,7 @@ function EmailUpdate() {
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[4.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
                   placeholder="Search..."
                 />
               </form>

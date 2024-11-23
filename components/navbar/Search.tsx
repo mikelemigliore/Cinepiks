@@ -14,23 +14,32 @@ function Search() {
 
   // Extract the page name from the pathname
   const pageName = pathname.split("/").pop() || "/"; // Fallback to '/' if on root
+  const query = inputRef.current?.value.trim();
 
   // Close search when clicking outside or navigating away from the /search page
   const containerRef = useOutsideClick(() => {
-    if (isOpen && (!inputRef.current || inputRef.current.value.trim() === "" || pageName !== 'search')) {
-      setIsOpen(false);
+    if (
+      isOpen && query
+    ) {
+      setIsOpen(true);
     }
   });
 
   // Toggle search field visibility
   const toggleSearch = () => {
-    setIsOpen(!isOpen);
-    router.push("/search");
+    if (!isOpen) {
+      setIsOpen(true);
+      inputRef.current?.focus();
+    } else if (inputRef.current?.value.trim()) {
+      router.push(`/search?q=${encodeURIComponent(inputRef.current.value.trim())}`);
+    }
+    //router.push("/search");
   };
 
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    router.push("/search");
     // Additional logic here if needed, e.g., search query processing
   };
 

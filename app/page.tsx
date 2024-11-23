@@ -609,7 +609,6 @@ function LoginIn() {
             totalSlides={totalSlides} //Provides the number of slides in the carousel.
           >
             <CarouselContent>
-              {/* className="transition-transform duration-75" */}
               {items.map((item) => (
                 <CarouselItem className="relative w-full flex justify-center items-center ">
                   <div className="relative">
@@ -640,12 +639,18 @@ function LoginIn() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious onClick={handlePrevious} className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50" />
-            <CarouselNext onClick={handleNext} className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50" />
+            <CarouselPrevious
+              onClick={handlePrevious}
+              className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
+            />
+            <CarouselNext
+              onClick={handleNext}
+              className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
+            />
           </Carousel>
         </div>
 
-        <div className="mt-[3vw] ml-[8vw]">
+        <div className="mt-[1vw] ml-[8vw]">
           <img
             src="/MovieLogo.png"
             alt="Movie Logo"
@@ -658,7 +663,7 @@ function LoginIn() {
                 <form>
                   <input
                     type="text"
-                    className={`md:bg-transparent md:h-[4.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.7vw] border border-customTextColor`}
+                    className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor`}
                     placeholder="Enter email or username"
                   />
                 </form>
@@ -668,7 +673,7 @@ function LoginIn() {
                   {/* Search Input */}
                   <input
                     type={showPassword ? "text" : "password"}
-                    className={`md:bg-transparent md:h-[4.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.7vw] border border-customTextColor ${
+                    className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
                       showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
                     }`}
                     placeholder=""
@@ -688,7 +693,7 @@ function LoginIn() {
                 </form>
               </div>
               <div>
-                <Button className=" font-bold rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                   Log In
                 </Button>
               </div>
@@ -711,7 +716,7 @@ function LoginIn() {
                 </div>
                 <div className="pl-[1.5vw]">
                   <Link
-                    href="/testpage"
+                    href="/"
                     className="text-[0.7vw] font-medium leading-none text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
                   >
                     Forgot Password?
@@ -720,7 +725,7 @@ function LoginIn() {
               </div>
               <div>
                 <Link href="/homepage">
-                  <Button className=" font-bold rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                  <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                     Continue As Guest
                   </Button>
                 </Link>
@@ -731,30 +736,30 @@ function LoginIn() {
                 <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
               </div>
               <div className="">
-                <Button className=" rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.7vw] bg-transparent hover:bg-white text-white/90 hover:text-black active:bg-white active:scale-95 border border-customTextColor">
-                  <FcGoogle className="w-[1.3vw] h-[1.3vw] ml-[-2vw] mr-[2vw]" />
+                <Button className=" rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-transparent hover:bg-white text-white/90 hover:text-black active:bg-white active:scale-95 border border-customTextColor">
+                  <FcGoogle className="w-[1.3vw] h-[1.3vw] ml-[-1vw] mr-[1vw]" />
                   Continue with Google
                 </Button>
               </div>
               <div>
-                <Button className="rounded-full md:h-[4.5vh] md:px-[1.5vw] w-[14vw] text-[0.7vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor">
+                <Button className="rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor">
                   <img
                     src="/genresIcons/facebook.svg"
-                    className="w-[1.4vw] h-[1.4vw] ml-[-1vw] mr-[1.8vw] text-blue-500"
+                    className="w-[1.4vw] h-[1.4vw]  mr-[1vw] text-blue-500"
                   />
                   Continue with Facebook
                 </Button>
               </div>
-              <div className="flex items-center space-x-2 ml-[3.5vw]">
+              <div className="flex items-center space-x-2 ml-[2.5vw]">
                 <div>
-                  <h1 className="text-[0.7vw] font-medium leading-none text-customTextColor">
+                  <h1 className="text-[0.8vw] font-medium leading-none text-customTextColor">
                     Don't have one?
                   </h1>
                 </div>
                 <div>
                   <Link
                     href="/singup"
-                    className="text-[0.7vw] font-medium leading-none text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
+                    className="text-[0.8vw] font-medium leading-none text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
                   >
                     Sign Up
                   </Link>

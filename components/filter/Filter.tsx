@@ -314,7 +314,7 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   onClick={() => handleFilterClick("availability", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.availability[item.tag]
-                      ? "bg-white/90 text-black font-semibold"
+                      ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
@@ -334,7 +334,7 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   onClick={() => handleFilterClick("genres", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.genres[item.tag]
-                      ? "bg-white/90 text-black font-semibold"
+                      ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
@@ -353,7 +353,7 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   onClick={() => handleFilterClick("platforms", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.platforms[item.tag]
-                      ? "bg-white/90 text-black font-semibold"
+                      ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
@@ -372,7 +372,7 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   onClick={() => handleFilterClick("ratings", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.ratings[item.tag]
-                      ? "bg-white/90 text-black font-semibold"
+                      ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
@@ -391,7 +391,7 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   onClick={() => handleFilterClick("runtime", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.runtime[item.tag]
-                      ? "bg-white/90 text-black font-semibold"
+                      ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
