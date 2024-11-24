@@ -32,6 +32,7 @@ const config: Config = {
         backgroundButton:"#3c3e3f",
         customDeleteButton: "#4f1212",
         hoveredCustomDeleteButton:"#990e0e",
+        ellipseColor:"#623908",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -72,6 +73,7 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
         custom: "19em",
+        customLogininPage:"100em",
         customMobile: "7em",
       },
     },

@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FcGoogle } from "react-icons/fc";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
+//import './globals/background.css';
 
 const services = [
   { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -585,7 +586,7 @@ function LoginIn() {
     }
     timeoutRef.current = setTimeout(() => {
       handleNext();
-    }, 10000); // Change every 10 seconds
+    }, 15000); // Change every 10 seconds
   };
 
   useEffect(() => {
@@ -599,7 +600,7 @@ function LoginIn() {
   }, [activeSlide, handleNext]);
 
   return (
-    <div>
+    <div className="">
       <div className="flex">
         <div className="w-[70vw] rounded-tr-custom rounded-br-custom overflow-hidden">
           {/* The overflow-hidden property solved the issue because it ensures that any content (such as the CarouselContent, CarouselItem, or img elements) 
@@ -769,7 +770,146 @@ function LoginIn() {
           </div>
         </div>
       </div>
-      <div className="mt-[5vw]">
+      <div className="flex justify-center items-center mt-[6vw]">
+        <div className="w-[90vw] h-[7vw] bg-customServicesColor rounded-3xl">
+          <div className="m-[1.5vw] flex justify-between items-center">
+            <div>
+              <h1 className="font-bold text-[1vw]">Disclaimer</h1>
+              <h2 className="text-[0.9vw] font-medium text-gray-300">
+                The following website is for informational purposes. This
+                website is not affiliated with or endorsed by Netflix, Hulu,
+                Amazon Prime, <br />
+                or any other streaming service. All trademarks and service marks
+                are the property of their respective owners.
+              </h2>
+            </div>
+            <div>
+              <Button className="font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                Discalimer
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="relative z-50">
+          <h1 className="text-[2vw] font-semibold w-full text-center mt-[6vw] mb-[6vw]">
+            What You'll Be Able To Do
+          </h1>
+          <div className="mt-[4vw]">
+            <div className="flex justify-center items-center space-x-[15vw]">
+              <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Compass.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">
+                    Explore Your Favorite Titles
+                  </h1>
+                  Search for movies and TV shows by title, genre, or platform.
+                  Use Filter and Sort to personalinze your search.
+                </div>
+              </div>{" "}
+              <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Star.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">
+                    Rate and Review Content
+                  </h1>
+                  Give a score using a star system to movies or TV shows you
+                  have watched.
+                </div>
+              </div>
+              <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Bookmark.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">
+                    Create Personalized Watchlist
+                  </h1>
+                  Add movies or TV shows to a watchlist, mark items as watched,
+                  and track viewing progress.
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-center items-center w-full space-x-[15vw] mt-[3vw]">
+              <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Stats.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">
+                    All The Info In One Place
+                  </h1>
+                  Explore trailer, cast, ratings,synopsis, reviews, and where to
+                  watch—all in one place.
+                </div>
+              </div>
+              <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Like.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">Like Your Favorites</h1>
+                  Show your love for movies and shows by liking them with a
+                  single click.
+                </div>
+              </div>
+              <div className="text-[0.9vw] font-medium  text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
+                <img src="/Camera.png" className="h-[6vw]"></img>
+                <div className="mt-[1vw]">
+                  <h1 className="font-bold text-[1vw] text-white">Track Entertainment</h1>
+                  Your go-to place for exploring movie and TV details, tracking
+                  what you love, and planning your next watch.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className=" flex justify-center items-center">
+          <img
+            src="/Ellipse2.png"
+            className="absolute w-[65vw] h-[65vw]  mt-[-30vw]"
+          ></img>
+        </div>
+        {/* <div className=" flex justify-center items-center">
+          <div className="absolute bg-ellipseColor w-[30vw] h-[30vw] rounded-full opacity-100 filter blur-[200px] mt-[-25vw]"></div>
+        </div> */}
+      </div>
+      <div className="flex justify-center mt-[10vw] w-full h-full rounded-3xl overflow-hidden ">
+        <img
+          src="/obliqueCollage.jpg"
+          className="relative w-[93vw] h-[30vw] rounded-3xl object-cover opacity-35 filter blur-[1px]"
+          alt="Oblique Collage"
+        />
+        <div className="absolute flex flex-col justify-center items-center w-[40vw] h-[30vw]">
+          <h1 className="text-[1.3vw] font-semibold">
+          Explore, Rate, and Track All Your Favorite Movies and Shows
+          </h1>
+          <h2 className="text-[0.9vw] pt-[2vh] pb-[2vh] font-medium text-center leading-[2]">
+            Discover, organize, and track your favorite movies and TV shows all
+            in one place! Create personalized watchlists, explore content by
+            genre or platform, and watch trailers directly on the site. Stay
+            updated with detailed reviews, ratings, and where to stream your
+            favorite titles. Your ultimate movie companion starts here!
+          </h2>
+          <div className="flex justify-center items-center mt-[3vh] mb-[3vh]">
+            <Link href="/singup">
+              <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                Sign Up Now
+              </Button>
+            </Link>
+            <h1 className="px-[1vw] font-bold">Or</h1>
+            <Link href="/homepage">
+              <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                Explore As Guest
+              </Button>
+            </Link>
+          </div>
+          <h2 className="text-[0.8vw] mt-[4vh] text-center">
+            non-affiliation disclaimer: The following website is for
+            informational purposes. This website is not affiliated with or
+            endorsed by Netflix, Hulu, Amazon Prime, or any other streaming
+            service. All trademarks and service marks are the property of their
+            respective owners.
+          </h2>
+        </div>
+      </div>
+
+      <div className="mt-[7vw]">
         <ServicesSwiper logInPage={logInPage} services={services} />
       </div>
       <div className="mt-[2vw] mb-[4vw]">

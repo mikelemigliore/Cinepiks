@@ -19,9 +19,9 @@ function Search() {
   // Close search when clicking outside or navigating away from the /search page
   const containerRef = useOutsideClick(() => {
     if (
-      isOpen && query
+      isOpen && !query
     ) {
-      setIsOpen(true);
+      setIsOpen(false);
     }
   });
 
