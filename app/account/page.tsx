@@ -119,12 +119,6 @@
 
 // export default AccountPage;
 
-
-
-
-
-
-
 "use client";
 import React, { useState } from "react";
 //import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -179,7 +173,6 @@ function AccountPage() {
     setIsDialogOpen(false);
   };
 
-
   return (
     <div className="">
       <div className="flex justify-between mx-[22vw] mt-[20vh] mb-[10vh]">
@@ -189,7 +182,7 @@ function AccountPage() {
             <img src={preview} alt="Preview" className="w-[16vw]" />
           ) : (
             <div className="w-[11vw] h-[11vw] bg-buttonColor flex items-center justify-center rounded-full">
-              <IoPersonSharp className='w-[6vw] h-[6vw] text-customTextColor'/>
+              <IoPersonSharp className="w-[6vw] h-[6vw] text-customTextColor" />
             </div>
           )}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -199,10 +192,10 @@ function AccountPage() {
               </h1>
               <div className="mt-[-2vw] flex items-center justify-center w-full h-full text-white">
                 {/* Dotted square container */}
-                <div className="relative w-[600px] h-[400px] flex items-center justify-center overflow-hidden rounded-3xl border-[0.15vw] border-solid hover:bg-white/5">
+                <div className="relative w-[600px] h-[350px] flex items-center justify-center overflow-hidden rounded-3xl border-[0.15vw] border-solid hover:bg-white/5 mb-[4vw]  mt-[4vw] mx-[2vw]">
                   <Avatar
                     width={600}
-                    height={400}
+                    height={350}
                     onCrop={onCrop}
                     onClose={onClose}
                     //onBeforeFileLoad={onBeforeFileLoad}

@@ -33,7 +33,7 @@ function SwiperNavButtons({ swiper, showButtons }: SwiperNavButtonsProps) {
   }, [swiper]);//The hook will run whenever the swiper dependency changes
 
   return (
-    <div>
+    <div className=''>
       {/* Conditionally render the right button if it's not the last slide */}
       {!isLast && showButtons && (
         <Button

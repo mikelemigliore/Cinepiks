@@ -19,8 +19,8 @@ function SignUp() {
   return (
     <div className='background'>
       <div className="w-full h-screen flex justify-center items-center">
-        <div className="md:w-[19vw] md:h-[31vw] bg-buttonColor pb-[4vw] rounded-3xl">
-          <div className="flex flex-col mt-[0.7vw] ml-[2vw] space-y-[3vh]">
+        <div className="w-[19vw] h-[32vw] bg-buttonColor pb-[4vw] rounded-3xl">
+          <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[3vh]">
             <h1 className="text-[1.5vw]">Sign Up</h1>
             <div>
               <h1 className="mb-[1vh]">Username</h1>

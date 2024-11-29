@@ -53,7 +53,7 @@ function Password() {
         <DialogTrigger className="mt-[1.5vh] px-[1vw] py-[0.5vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
           Update
         </DialogTrigger>
-        <DialogContent className="md:w-[19vw] md:h-[25vw] bg-buttonColor pb-[4vw]">
+        <DialogContent className="w-[19vw] h-[26vw] bg-buttonColor pb-[4vw]">
           <div className="flex flex-col mt-[1vw] ml-[2vw] space-y-[3vh]">
             <h1 className="text-[1vw]">Update Passowrd</h1>
             <div>

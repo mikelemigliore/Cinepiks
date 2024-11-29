@@ -106,6 +106,8 @@ function MovieCard({
     }
   };
 
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -122,7 +124,7 @@ function MovieCard({
             <DialogTrigger className="focus:outline-none">
               <div className="flex flex-col justify-start items-start">
                 <img
-                  src={imgUrl}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className="w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 />
                 <h1 className="pt-[1vw] pl-[0.5vw] text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
@@ -131,7 +133,7 @@ function MovieCard({
               </div>
             </DialogTrigger>
             <DialogContent className=" md:w-[35vw] md:h-[33vw] bg-customColorCard rounded-full">
-                  <img className="w-full rounded-3xl" src={imgBackdrop} />
+                  <img className="w-full rounded-3xl" src={`${BASE_IMAGE_URL}${imgBackdrop}`} />
                   <div
                     className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
                   />
