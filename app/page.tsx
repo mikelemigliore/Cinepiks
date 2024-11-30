@@ -531,7 +531,7 @@ import { getGenres, getLoginMainCarousel, getPopular, getUpcoming } from "./page
 interface ItemProp {
   backdrop_path: string | null; // `null` in case the path is missing
   title: string; // Other properties in your API response can be added here
-  genre_ids: any;
+  genre_ids: number[];
   poster_path: string | null;
 }
 
@@ -612,7 +612,7 @@ function LoginIn() {
 
   //Fetching data from the /pages/api/loginMainCarousel.ts
   useEffect(() => {
-    const fetchCarouselItems = async () => {
+    const fetchData = async () => {
       try {
         const response = await getLoginMainCarousel(); // Await the Promise
         const responseGenres = await getGenres();
@@ -633,7 +633,7 @@ function LoginIn() {
       }
     };
 
-    fetchCarouselItems(); // Call the async function
+    fetchData(); // Call the async function
   }, []);
 
   useEffect(() => {
@@ -988,19 +988,23 @@ function LoginIn() {
         </div>
         {/* {swiperTitles.map((swiperTitle) => ( */}
         <div>
-          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">Upcoming</h1>
+          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">Upcoming</h1>
           <MovieSwiper
             logInPage={logInPage}
             medias={inTheaters}
+            itemsGenres={itemsGenres}
+            //getGenreNames={getGenreNames}
             //title={swiperTitle.title}
             mediaType={"movie"}
           />
         </div>
         <div>
-          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">Popular</h1>
+          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">Popular</h1>
           <MovieSwiper
             logInPage={logInPage}
             medias={popularMovies}
+            itemsGenres={itemsGenres}
+            //getGenreNames={getGenreNames}
             //title={swiperTitle.title}
             mediaType={"movie"}
           />

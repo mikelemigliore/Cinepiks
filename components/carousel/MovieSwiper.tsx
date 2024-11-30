@@ -17,13 +17,24 @@ interface Props {
     poster_path: string;
     type: string;
     backdrop_path: string;
+    genre_ids: number[];
   }>;
   title?: string;
   mediaType?: "movie" | "series"; // this line was commented
   logInPage?: boolean;
+  itemsGenres?: Array<{
+    id: number;
+    name: string;
+  }>;
+  //getGenreNames: () => void;
 }
 
-function MovieSwiper({ medias = [], title, logInPage }: Props) {
+function MovieSwiper({
+  medias = [],
+  title,
+  logInPage,
+  itemsGenres = [],
+}: Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,15 +46,16 @@ function MovieSwiper({ medias = [], title, logInPage }: Props) {
       className="relative z-80" //bottom-[3rem]
     >
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
-        <h1>
-          {/* {title} */}
+        <h1 className='flex'>
+          <div>{title}</div>
           {logInPage ? (
             <div></div>
           ) : (
-            <Link href="/search">
-              <Button
-                variant="ghost"
-                className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
+            <div>
+              <Link href="/search">
+                <Button
+                  variant="ghost"
+                  className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -51,11 +63,12 @@ function MovieSwiper({ medias = [], title, logInPage }: Props) {
               : "opacity-100 md:opacity-0 md:-translate-x-10 md:invisible"
           }
         `}
-              >
-                View All
-                <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
-              </Button>
-            </Link>
+                >
+                  View All
+                  <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
+                </Button>
+              </Link>
+            </div>
           )}
         </h1>
       </div>
@@ -122,7 +135,11 @@ function MovieSwiper({ medias = [], title, logInPage }: Props) {
                     type={media.type}
                     imgBackdrop={media.backdrop_path}
                     imgUrl={media.poster_path}
+                    genre={media.genre_ids}
                     title={media.title}
+                    itemsGenres={itemsGenres}
+                    id={media.id}
+                    //getGenreNames={getGenreNames}
                     isPartialSlide={isPartialSlide}
                     isLastThreeSlides={isLastThreeSlides}
                     isLastOne={isLastOne}
@@ -137,7 +154,7 @@ function MovieSwiper({ medias = [], title, logInPage }: Props) {
         )}
 
         {/* Pass the swiper instance to the SwiperNavButtons allowing the navigation buttons inside that component to control the Swiper (e.g., move to the next or previous slide) */}
-        <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons}/>
+        <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
       </div>
     </div>
   );

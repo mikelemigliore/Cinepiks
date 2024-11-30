@@ -16,6 +16,10 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GoDotFill, GoStarFill } from "react-icons/go";
 import { Button } from "../ui/button";
+import {
+  getMovieCertification,
+  getMovieDetails,
+} from "@/app/pages/api/loginPage";
 
 interface MovieCardProps {
   imgUrl: string;
@@ -30,7 +34,20 @@ interface MovieCardProps {
   watchlist?: boolean;
   watched?: boolean;
   logInPage?: boolean;
-  imgBackdrop?:string
+  imgBackdrop?: string;
+  genre: number[];
+  itemsGenres: Array<{
+    id: number;
+    name: string;
+  }>;
+  id: number;
+
+  //getGenreNames: () => void;
+}
+
+interface Genre {
+  id: number;
+  name: string;
 }
 
 function MovieCard({
@@ -46,7 +63,15 @@ function MovieCard({
   watchlist,
   watched,
   logInPage,
-}: MovieCardProps) {
+  genre,
+  itemsGenres,
+  id,
+}: //getGenreNames,
+MovieCardProps) {
+  const [runtime, setRuntime] = useState();
+  const [description, setDescription] = useState();
+  const [certification, setCertification] = useState();
+  const [genres, setGenres] = useState<Genre[]>([]); // Explicit type for genres
   const [expandCard, setExpandCard] = useState(false);
   //const [showContent, setShowContent] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
@@ -60,6 +85,15 @@ function MovieCard({
   //   setActiveCard(true)
   // }
   const href = type === "movie" ? `/singlemovie` : `/singleseries`;
+
+  // const getGenreNames = (genreId: number, Genres: any[]) => {
+  //   const genre = Genres.find((g) => g.id === genreId); //The find() method searches the Genres array for an element matching the given condition (g.id === genreId).
+
+  //   return genre ? genre.name : "Unknown Genre";
+  //   //Without the check, the code assumes that find() will always return an object. When it doesn't (i.e.,
+  //   //the genreId isn't found in Genres), the code tries to access undefined.name.
+  //   //This results in the TypeError: Cannot read properties of undefined (reading 'name').
+  // };
 
   useEffect(() => {
     const handleResize = () => {
@@ -106,7 +140,44 @@ function MovieCard({
     }
   };
 
+  const formatRuntime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60); // Get the hours
+    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    return `${hours}h ${remainingMinutes}m`;
+  };
+
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getMovieDetails(id);
+        const responseCetification = await getMovieCertification(id);
+        const dataCertification = await responseCetification.json();
+        const data = await response.json();
+
+        // Find the US release dates and certification
+        const usRelease = dataCertification.results.find(
+          (item: any) => item.iso_3166_1 === "US"
+        );
+
+        console.log(data);
+        setRuntime(data.runtime);
+        setGenres(data.genres);
+        setDescription(data.overview);
+
+        if (usRelease) {
+          const usCertification =
+            usRelease.release_dates[0].certification || "Not Rated";
+          setCertification(usCertification);
+        }
+      } catch (error) {
+        console.error("Error fetching carousel items:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div
@@ -133,74 +204,65 @@ function MovieCard({
               </div>
             </DialogTrigger>
             <DialogContent className=" md:w-[35vw] md:h-[33vw] bg-customColorCard rounded-full">
-                  <img className="w-full rounded-3xl" src={`${BASE_IMAGE_URL}${imgBackdrop}`} />
-                  <div
-                    className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
-                  />
-                  <div
-                    className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
-                  />
-                  
-                  <div className="ml-[1.5vw] mt-[-1.5vw]">
-                    <div className="flex justify-between relative z-[100]">
-                      <div>
-                        <div className="flex mt-[1vh]">
-                          <div className="text-[1.3vw] line-clamp-1">
-                            {title}
-                          </div>
-                        </div>
-                        <div className="text-[0.8vw] text-customTextColor flex">
-                          <span>Action</span>
-                          <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
-                          <span>Sci-fi</span>
-                          <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
-                          <span className="pr-[0.6vw]">Comedy</span>
-                          <span className="mx-[0.6vw] text-customTextColor font-bold">
-                            R
-                          </span>
-                          <span>2h 36m</span>
-                        </div>
-                      </div>
-                    </div>
+              <img
+                className="w-full rounded-3xl"
+                src={`${BASE_IMAGE_URL}${imgBackdrop}`}
+              />
+              <div
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+              />
+              <div
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+              />
 
-                    <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
-                      <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
-                        While scavenging the deep ends of a derelict space
-                        station, a group of young space colonists come face to
-                        face with the most terrifying life form in the universe.
-                        While scavenging the deep ends of a derelict space
-                        station, a group of young space While scavenging the
-                        deep ends of a derelict space station, a group of young
-                        space colonists come face to face with the most
-                        terrifying life form in the universe. While scavenging
-                        the deep ends of a derelict space station, a group of
-                        young space While scavenging the deep ends of a derelict
-                        space station, a group of young space colonists come
-                        face to face with the most terrifying life form in the
-                        universe. While scavenging the deep ends of a derelict
-                        space station, a group of young space While scavenging
-                        the deep ends of a derelict space station, a group of
-                        young space colonists come face to face with the most
-                        terrifying life form in the universe. While scavenging
-                        the deep ends of a derelict space station, a group of
-                        young space
-                      </div>
-                    </ScrollArea>
-                    <div className="flex justify-end mt-[1.5vw] mr-[1vw] space-x-[0.5vw]">
-                      <Link
-                        href="/homepage"
-                        className="flex justify-center items-center active:scale-95 md:w-[9vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-slate-300 hover:bg-opacity-20"
-                      >
-                        Continue As Guest
-                      </Link>
-                      <Link
-                        href="/singup"
-                        className="flex justify-center items-center active:scale-95 md:w-[6vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-white/70 hover:bg-white/90 text-black font-bold"
-                      >
-                        Sign Up
-                      </Link>
+              <div className="ml-[1.5vw] mt-[-1.5vw]">
+                <div className="flex justify-between relative z-[100]">
+                  <div>
+                    <div className="flex mt-[1vh]">
+                      <div className="text-[1.3vw] line-clamp-1">{title}</div>
+                    </div>
+                    <div className="text-[0.8vw] text-customTextColor flex">
+                      <span>{genres[0]?.name || ""}</span>
+                      <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                      <span>{genres[1]?.name || ""}</span>
+                      {genres[2]?.name ? (
+                        <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                      ) : (
+                        <div></div>
+                      )}
+                      <span className="pr-[0.6vw]">
+                        {genres[2]?.name || ""}
+                      </span>
+                      <span className="mx-[0.6vw] text-customTextColor font-bold">
+                        {certification}
+                      </span>
+                      <span>
+                        {runtime !== undefined ? formatRuntime(runtime) : "N/A"}
+                      </span>
                     </div>
                   </div>
+                </div>
+
+                <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
+                  <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
+                    {description}
+                  </div>
+                </ScrollArea>
+                <div className="flex justify-end mt-[1.5vw] mr-[1vw] space-x-[0.5vw]">
+                  <Link
+                    href="/homepage"
+                    className="flex justify-center items-center active:scale-95 md:w-[9vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-slate-300 hover:bg-opacity-20"
+                  >
+                    Continue As Guest
+                  </Link>
+                  <Link
+                    href="/singup"
+                    className="flex justify-center items-center active:scale-95 md:w-[6vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-white/70 hover:bg-white/90 text-black font-bold"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              </div>
             </DialogContent>
           </Dialog>
         ) : (
@@ -230,31 +292,31 @@ function MovieCard({
               {/* Poster Image */}
               {list ? (
                 <img
-                  src={imgUrl}
+                src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
                 />
               ) : watchlist ? (
                 <WatchListOpt
-                  src={imgUrl}
+                src={`${BASE_IMAGE_URL}${imgUrl}`}
                   watchlistOptions={watchlistOptions}
                   type={type}
                 />
               ) : watched ? (
                 <WatchedOpt
-                  src={imgUrl}
+                src={`${BASE_IMAGE_URL}${imgUrl}`}
                   watchedOptions={watchedOptions}
                   type={type}
                 />
               ) : single ? (
                 <img
-                  src={imgUrl}
+                src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     watchlistOptions ? "opacity-25" : ""
                   }`}
                 />
               ) : (
                 <img
-                  src={imgUrl}
+                src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     expandCard ? "opacity-0" : "opacity-100"
                   }`}

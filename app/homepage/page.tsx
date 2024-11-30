@@ -1,522 +1,20 @@
 "use client";
 import MainCarousel from "@/components/maincarousel/MainCarousel";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import GenresSwiper from "@/components/carousel/GenresSwiper";
 import BigCardSwiper from "@/components/carousel/BigCardSwiper";
+import { getNewReleases, getNowPlaying, getPopular, getTrending, getUpcoming } from "../pages/api/homePage";
 
 function HomePage() {
   // Define an array of movies with their title and poster URLs
-  const items = [
-    {
-      id: 1,
-      title: "Deadpool & Wolverine",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 2,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 3,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 4,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 5,
-      title: "Avatar: The Way of Water",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 6,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 7,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 8,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 9,
-      title: "Deadpool & Wolverine",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 10,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 11,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 12,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 13,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 14,
-      title: "Avatar: The Way of Water",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 15,
-      title: "Deadpool & Wolverine",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 16,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 17,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 18,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 19,
-      title: "Avatar: The Way of Water",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 20,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 21,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 22,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 23,
-      title: "Deadpool & Wolverine",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 24,
-      title: "Spider-Man",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 25,
-      title: "Avengers",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 26,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 27,
-      title: "Batman",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 28,
-      title: "Avatar: The Way of Water",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-      type: "movie",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 29,
-      title: "The Penguin",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 30,
-      title: "Breaking Bad",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 31,
-      title: "The Office",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 32,
-      title: "Dragon Ball Super",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 33,
-      title: "The Last Of Us",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 34,
-      title: "Loki",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 35,
-      title: "Better Call Saul",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 36,
-      title: "Invincible",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 37,
-      title: "The Boys",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 38,
-      title: "Shougun",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 39,
-      title: "Baki",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 40,
-      title: "The Sopranos",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 41,
-      title: "Peaky Blinders",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 42,
-      title: "Rick and Morty",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/gdIrmf2DdY5mgN6ycVP0XlzKzbE.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 43,
-      title: "Drake and Josh",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/udCvGctktHvvf8w51XyTPfcmzDa.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 44,
-      title: "Moon Knight",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/YksR65as1ppF2N48TJAh2PLamX.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 45,
-      title: "The Penguin",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 46,
-      title: "Breaking Bad",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 47,
-      title: "The Office",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 48,
-      title: "Dragon Ball Super",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 49,
-      title: "The Last Of Us",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 50,
-      title: "Loki",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 51,
-      title: "Better Call Saul",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-    {
-      id: 52,
-      title: "Invincible",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/vQszsOCuIKQguZGWutjuxVDJpwh.jpg",
-    },
-    {
-      id: 53,
-      title: "The Boys",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/mDfJG3LC3Dqb67AZ52x3Z0jU0uB.jpg",
-    },
-    {
-      id: 54,
-      title: "Shougun",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/tRS6jvPM9qPrrnx2KRp3ew96Yot.jpg",
-    },
-    {
-      id: 55,
-      title: "Baki",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/wMMyNUjyvy4U68nrrMkwLwg3GU3.jpg",
-    },
-    {
-      id: 56,
-      title: "The Sopranos",
-      imgUrl:
-        "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-      type: "series",
-      imgBackdrop:
-        "https://image.tmdb.org/t/p/original/6vn6K9oX82i6E86ZiHVxqVEMQqP.jpg",
-    },
-  ];
-
-  const movies = items.filter((item) => item.type === "movie");
-  const series = items.filter((item) => item.type === "series");
+  const [bigCard, setBigCard] = useState(true);
+  const [inTheaters, setInTheaters] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [nowPlaying, setNowPlaying] = useState([])
+  const [trending, setTrending] = useState([])
+  const [newReleases, setNewReleases] = useState([])
 
   const services = [
     { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -554,12 +52,12 @@ function HomePage() {
   //   { id: 11, title: "Fandango"},
   // ]
 
-  const swiperTitles = [
-    { id: 1, title: "In Theaters" },
+  const swiperTitle = [
+    { id: 1, title: "Upcoming Movies" },
     { id: 2, title: "What's Popular" },
-    { id: 3, title: "Top Rated" },
-    { id: 4, title: "Coming Soon" },
-    { id: 5, title: "What's New" },
+    { id: 3, title: "Now Playing" },
+    { id: 4, title: "Trending" }, 
+    { id: 5, title: "What's New" }, 
     { id: 6, title: "Recommendation" },
     { id: 7, title: "New On Netflix" },
     { id: 8, title: "New On Hulu" },
@@ -848,23 +346,167 @@ function HomePage() {
   //     setIsLogged(true)
   //   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //const responseGenres = await getGenres();
+        const responsePopular= await getPopular();
+        const responseInTheaters= await getUpcoming();
+        const responseNowPlaying = await getNowPlaying()
+        const responseTrending = await getTrending();
+        const responseNewReleases = await getNewReleases();
+        //const dataGenres = await responseGenres.json();
+        const dataPopular = await responsePopular.json();
+        const dataInTheaters = await responseInTheaters.json();
+        const dataNowPlaying = await responseNowPlaying.json();
+        const dataTrending = await responseTrending.json()
+        const dataNewReleases = await responseNewReleases.json()
+       // console.log(dataPopular);
+
+        //setItemsGenres(dataGenres.genres);
+        setPopularMovies(dataPopular.results)
+        setInTheaters(dataInTheaters.results)
+        setNowPlaying(dataNowPlaying.results)
+        setTrending(dataTrending.results)
+        setNewReleases(dataNewReleases.results)
+      } catch (error) {
+        console.error("Error fetching carousel items:", error);
+      }
+    };
+
+    fetchData(); // Call the async function
+  }, []);
+
   return (
     <div className="relative">
       {/* {isLogged ? ( */}
       <div>
         <MainCarousel />
         <div className="relative -mt-[26rem] md:-mt-[9rem]">
-          {swiperTitles.map((swiperTitle, index) => (
-            <div
-              key={swiperTitle.id}
-              className="relative left-0 my-12 right-0 z-40"
-            >
-              <MovieSwiper
+          {/* {swiperTitles.map((swiperTitle, index) => ( */}
+          <div
+            //key={swiperTitle.id}
+            className="relative left-0 my-12 right-0 z-40"
+          >
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[0].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={popularMovies}
+              title={swiperTitle[1].title}
+              mediaType={"movie"}
+            />
+
+            <div className="relative left-0 right-0 my-16 z-40">
+              <BigCardSwiper itemBigCards={moviesBigCard} />
+            </div>
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={nowPlaying}
+              title={swiperTitle[2].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={trending}
+              title={swiperTitle[3].title}
+              mediaType={"movie"}
+            />
+            <div className="relative  left-0 right-0 my-16 z-40">
+              <ServicesSwiper services={services} />
+            </div>
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={newReleases}
+              title={swiperTitle[4].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[5].title}
+              mediaType={"movie"}
+            />
+
+            <div className="relative left-0 right-0 my-16 z-40">
+              <GenresSwiper genres={genres} />
+            </div>
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[6].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[7].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[8].title}
+              mediaType={"movie"}
+            />
+
+            <div className="relative left-0 right-0 my-16 z-40">
+              <BigCardSwiper itemBigCards={moviesBigCard} />
+            </div>
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[9].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[10].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[11].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[12].title}
+              mediaType={"movie"}
+            />
+
+            <MovieSwiper
+              //itemsGenres={itemsGenres}
+              medias={inTheaters}
+              title={swiperTitle[13].title}
+              mediaType={"movie"}
+            />
+            {/* <MovieSwiper
                 medias={movies}
                 title={swiperTitle.title}
                 mediaType={"movie"}
-              />
-              {index === 3 && (
+              /> */}
+
+            {/* {index === 3 && (
                 <div className="relative  left-0 right-0 my-16 z-40">
                   <ServicesSwiper services={services} />
                 </div>
@@ -879,10 +521,16 @@ function HomePage() {
               {index === 0 && (
                 <div className="relative left-0 right-0 my-16 z-40">
                   <MovieSwiper
+                    //itemsGenres={itemsGenres}
+                    medias={inTheaters}
+                    title={swiperTitle.title}
+                    mediaType={"movie"}
+                  />
+                  {/* <MovieSwiper
                     medias={series}
                     title={swiperTitle.title}
                     mediaType={"series"}
-                  />
+                  /> 
                 </div>
               )}
 
@@ -895,11 +543,10 @@ function HomePage() {
               {index === 11 && (
                 <div className="relative left-0 right-0 my-16 z-40">
                   <BigCardSwiper itemBigCards={seriesBigSeries} />
-                  {/* <BigCardSwiper movies={movies}/> */}
                 </div>
-              )}
-            </div>
-          ))}
+              )} */}
+          </div>
+          {/* ))} */}
         </div>
       </div>
       {/* ) : (
