@@ -5,16 +5,25 @@ import MovieSwiper from "@/components/carousel/MovieSwiper";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import GenresSwiper from "@/components/carousel/GenresSwiper";
 import BigCardSwiper from "@/components/carousel/BigCardSwiper";
-import { getNewReleases, getNowPlaying, getPopular, getTrending, getUpcoming } from "../pages/api/homePage";
+import {
+  getNewReleases,
+  getNowPlaying,
+  getPopular,
+  getTrending,
+  getTrendingSeries,
+  getUpcoming,
+} from "../pages/api/homePage";
 
 function HomePage() {
   // Define an array of movies with their title and poster URLs
   const [bigCard, setBigCard] = useState(true);
   const [inTheaters, setInTheaters] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
-  const [nowPlaying, setNowPlaying] = useState([])
-  const [trending, setTrending] = useState([])
-  const [newReleases, setNewReleases] = useState([])
+  const [nowPlaying, setNowPlaying] = useState([]);
+  const [trending, setTrending] = useState([]);
+  const [newReleases, setNewReleases] = useState([]);
+  const [trendingSeries, setTrendingSeries] = useState([]);
+  const [tmdbId, setTmdbId] = useState([]);
 
   const services = [
     { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -53,12 +62,12 @@ function HomePage() {
   // ]
 
   const swiperTitle = [
-    { id: 1, title: "Upcoming Movies" },
+    { id: 1, title: "Upcoming" },
     { id: 2, title: "What's Popular" },
     { id: 3, title: "Now Playing" },
-    { id: 4, title: "Trending" }, 
-    { id: 5, title: "What's New" }, 
-    { id: 6, title: "Recommendation" },
+    { id: 4, title: "Trending Movies" },
+    { id: 5, title: "What's New Series" },
+    { id: 6, title: "Trending Series" },
     { id: 7, title: "New On Netflix" },
     { id: 8, title: "New On Hulu" },
     { id: 9, title: "New On PrimeVideo" },
@@ -350,25 +359,41 @@ function HomePage() {
     const fetchData = async () => {
       try {
         //const responseGenres = await getGenres();
-        const responsePopular= await getPopular();
-        const responseInTheaters= await getUpcoming();
-        const responseNowPlaying = await getNowPlaying()
+        const responsePopular = await getPopular();
+        const responseInTheaters = await getUpcoming();
+        const responseNowPlaying = await getNowPlaying();
         const responseTrending = await getTrending();
         const responseNewReleases = await getNewReleases();
+        const responseTrendingSeries = await getTrendingSeries();
         //const dataGenres = await responseGenres.json();
         const dataPopular = await responsePopular.json();
         const dataInTheaters = await responseInTheaters.json();
         const dataNowPlaying = await responseNowPlaying.json();
-        const dataTrending = await responseTrending.json()
-        const dataNewReleases = await responseNewReleases.json()
-       // console.log(dataPopular);
+        const dataTrending = await responseTrending.json();
+        const dataNewReleases = await responseNewReleases.json();
+        const dataTrendingSeries = await responseTrendingSeries.json();
+        //console.log(dataTrendingSeries.shows[0].tmdbId);
 
         //setItemsGenres(dataGenres.genres);
-        setPopularMovies(dataPopular.results)
-        setInTheaters(dataInTheaters.results)
-        setNowPlaying(dataNowPlaying.results)
-        setTrending(dataTrending.results)
-        setNewReleases(dataNewReleases.results)
+
+        console.log(dataNewReleases);
+        console.log(dataTrendingSeries);
+        
+        setPopularMovies(dataPopular.results);
+        setInTheaters(dataInTheaters.results);
+        setNowPlaying(dataNowPlaying.results);
+        setTrending(dataTrending.results);
+        setNewReleases(dataNewReleases.results);
+        setTrendingSeries(dataTrendingSeries);
+
+        // // Extract numeric tmdbId values
+        // const ids = dataTrendingSeries.shows.map((item:any) => {
+        //   return parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
+        // });
+        // //console.log(ids);
+        
+        // setTmdbId(ids); // Save IDs in state
+
       } catch (error) {
         console.error("Error fetching carousel items:", error);
       }
@@ -376,6 +401,20 @@ function HomePage() {
 
     fetchData(); // Call the async function
   }, []);
+
+
+  // function normalizeMediaData(mediaArray, keyMapping) {
+  //   return mediaArray.map((media) => {
+  //     const normalizedMedia = { ...media };
+  //     // Map `file_path` to `poster_path` if needed
+  //     if (keyMapping.file_path && media[keyMapping.file_path]) {
+  //       normalizedMedia.poster_path = media[keyMapping.file_path];
+  //     }
+  //     return normalizedMedia;
+  //   });
+  // }
+
+
 
   return (
     <div className="relative">
@@ -431,8 +470,8 @@ function HomePage() {
             />
 
             <MovieSwiper
-              //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={trendingSeries}
+              //image={trendingSeries}
               title={swiperTitle[5].title}
               mediaType={"movie"}
             />

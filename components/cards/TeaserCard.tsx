@@ -10,6 +10,7 @@ import YoutubePlayer from "./YoutubePlayer";
 import { GoMute, GoUnmute } from "react-icons/go";
 
 interface TeaserCardProps {
+  //image?:string
   title?: string;
   imgUrl: string;
   isLastThreeSlides?: boolean;
@@ -28,7 +29,8 @@ function TeaserCard({
   expandCard,
   isDesktop,
   href,
-  type
+  type,
+  //image
 }: TeaserCardProps) {
   //const [showContent, setShowContent] = useState(false);
   const [isAdded, setIsAdded] = useState(false);

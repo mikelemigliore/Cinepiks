@@ -4,21 +4,55 @@ import "swiper/css";
 import "swiper/css/navigation";
 import MovieCard from "../cards/MovieCard";
 import SwiperNavButtons from "@/utils/swiperButtons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css/pagination"; // Import Swiper pagination styles
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
+// type MediaRapid = {
+//   itemType: "show"; // Fixed value
+//   showType: "movie" | "series"; // Can be "movie" or "series"
+//   id: string; // Unique ID as a string
+//   imdbId: string; // Optional IMDb ID
+//   tmdbId: string; // Optional TMDb ID
+//   title: string; // Title of the movie or series
+//   originalTitle?: string; // Optional original title
+//   overview: string; // Brief description
+//   releaseYear: number; // Year of release
+//   genres: string[]; // List of genres
+//   directors: string[]; // Optional list of directors
+//   cast: string[]; // Optional list of cast members
+//   rating: number; // Optional rating (e.g., percentage)
+//   imageSet: {
+//     verticalPoster: {
+//       w240: string;
+//       w360: string;
+//       w480: string;
+//       w600: string;
+//       w720: string;
+//     }; // URL for poster image
+//     horizontalBackdrop: string[]; // URL for backdrop image
+//   };
+//   // streamingOptions?: {
+//   //   [platform: string]: string; // Key-value pair for platform and URL
+//   // };
+// };
+
 interface Props {
-  medias: Array<{
+  //tmdbId?:number[];
+  //image?: string[];
+  medias?: Array<{
     id: number;
+    //image: string;
     title: string;
+    name?: string;
     poster_path: string;
     type: string;
     backdrop_path: string;
     genre_ids: number[];
   }>;
+  //mediaRapid?: MediaRapid[];
   title?: string;
   mediaType?: "movie" | "series"; // this line was commented
   logInPage?: boolean;
@@ -34,10 +68,15 @@ function MovieSwiper({
   title,
   logInPage,
   itemsGenres = [],
-}: Props) {
+  //image = [],
+}: //tmdbId = []
+// mediaRapid = [],
+Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+
 
   return (
     <div
@@ -46,7 +85,7 @@ function MovieSwiper({
       className="relative z-80" //bottom-[3rem]
     >
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
-        <h1 className='flex'>
+        <h1 className="flex">
           <div>{title}</div>
           {logInPage ? (
             <div></div>
@@ -135,10 +174,13 @@ function MovieSwiper({
                     type={media.type}
                     imgBackdrop={media.backdrop_path}
                     imgUrl={media.poster_path}
+                    //image={image[0]}
                     genre={media.genre_ids}
                     title={media.title}
+                    name={media.name}
                     itemsGenres={itemsGenres}
                     id={media.id}
+                    //tmdbId={tmdbId}
                     //getGenreNames={getGenreNames}
                     isPartialSlide={isPartialSlide}
                     isLastThreeSlides={isLastThreeSlides}

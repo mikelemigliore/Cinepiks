@@ -20,10 +20,14 @@ import {
   getMovieCertification,
   getMovieDetails,
 } from "@/app/pages/api/loginPage";
+//import { getImage } from "@/app/pages/api/homePage";
 
 interface MovieCardProps {
+  //tmdbId: number[];
+  //image?:string;
   imgUrl: string;
   title?: string;
+  name?: string;
   className?: string; // Optional className prop
   isPartialSlide?: boolean; // Optional prop to indicate if it's a partial slide
   isLastThreeSlides?: boolean;
@@ -66,6 +70,9 @@ function MovieCard({
   genre,
   itemsGenres,
   id,
+  name,
+  //image
+  //tmdbId = [],
 }: //getGenreNames,
 MovieCardProps) {
   const [runtime, setRuntime] = useState();
@@ -77,6 +84,7 @@ MovieCardProps) {
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
   const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
   const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
+  //const [image, setImage] = useState([]);
   //const [hovered, setHovered] = useState(false);
   const hoveredRef = useRef(false);
   //const [activeCard, setActiveCard] = useState<string | null>(null); // Track active card
@@ -95,6 +103,15 @@ MovieCardProps) {
   //   //This results in the TypeError: Cannot read properties of undefined (reading 'name').
   // };
 
+
+  // useEffect(() => {
+  //   if (image) {
+  //     console.log(image);
+  //   } 
+  // }, []);
+
+
+  
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
@@ -153,6 +170,25 @@ MovieCardProps) {
       try {
         const response = await getMovieDetails(id);
         const responseCetification = await getMovieCertification(id);
+
+        // Fetch all images using Promise.all
+        // if (tmdbId) {
+        //   tmdbId.map(async (id) => {
+        //     const responseImage = await getImage(id);
+        //     const dataImage = await responseImage.json();
+
+        //     const englishPosters = dataImage.posters.filter(
+        //       (poster: any) => poster.iso_639_1 === "en"
+        //     );
+
+        //     const filePaths = englishPosters.map(
+        //       (poster: any) => poster.file_path
+        //     );
+
+        //     setImage(filePaths[0]);
+        //   });
+        // }
+
         const dataCertification = await responseCetification.json();
         const data = await response.json();
 
@@ -161,7 +197,7 @@ MovieCardProps) {
           (item: any) => item.iso_3166_1 === "US"
         );
 
-        console.log(data);
+        //console.log(data);
         setRuntime(data.runtime);
         setGenres(data.genres);
         setDescription(data.overview);
@@ -292,31 +328,31 @@ MovieCardProps) {
               {/* Poster Image */}
               {list ? (
                 <img
-                src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
                 />
               ) : watchlist ? (
                 <WatchListOpt
-                src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   watchlistOptions={watchlistOptions}
                   type={type}
                 />
               ) : watched ? (
                 <WatchedOpt
-                src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   watchedOptions={watchedOptions}
                   type={type}
                 />
               ) : single ? (
                 <img
-                src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     watchlistOptions ? "opacity-25" : ""
                   }`}
                 />
               ) : (
                 <img
-                src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     expandCard ? "opacity-0" : "opacity-100"
                   }`}
@@ -345,7 +381,7 @@ MovieCardProps) {
               </div>
             </div>
             <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-              {title}
+              {title || name}
             </h1>
           </Link>
         )}
