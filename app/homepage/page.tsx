@@ -6,9 +6,16 @@ import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import GenresSwiper from "@/components/carousel/GenresSwiper";
 import BigCardSwiper from "@/components/carousel/BigCardSwiper";
 import {
+  getAction,
+  getAdventure,
+  getHorror,
+  getNewOnHulu,
+  getNewOnNetflix,
+  getNewOnPrime,
   getNewReleases,
   getNowPlaying,
   getPopular,
+  getThriller,
   getTrending,
   getTrendingSeries,
   getUpcoming,
@@ -23,6 +30,13 @@ function HomePage() {
   const [trending, setTrending] = useState([]);
   const [newReleases, setNewReleases] = useState([]);
   const [trendingSeries, setTrendingSeries] = useState([]);
+  const [newOnNetflix, setNewOnNetflix] = useState([]);
+  const [newOnHulu, setNewOnHulu] = useState([]);
+  const [newOnPrime, setNewOnPrime] = useState([]);
+  const [action, setAction] = useState([]);
+  const [adventure, setAdventure] = useState([]);
+  const [horror, setHorror] = useState([]);
+  const [thriller, setThriller] = useState([]);
   const [tmdbId, setTmdbId] = useState([]);
 
   const services = [
@@ -71,11 +85,11 @@ function HomePage() {
     { id: 7, title: "New On Netflix" },
     { id: 8, title: "New On Hulu" },
     { id: 9, title: "New On PrimeVideo" },
-    { id: 10, title: "Action and Adventure Movies" },
-    { id: 11, title: "Horror and Thriller Movies" },
-    { id: 12, title: "Popular Series" },
-    { id: 13, title: "Crime Series" },
-    { id: 14, title: "Documentaries" },
+    { id: 10, title: "Action" },
+    { id: 11, title: "Adventure" },
+    { id: 12, title: "Horror" },
+    { id: 13, title: "Thriller" },
+    { id: 14, title: "Crime Series" },
   ];
 
   const genres = [
@@ -365,35 +379,55 @@ function HomePage() {
         const responseTrending = await getTrending();
         const responseNewReleases = await getNewReleases();
         const responseTrendingSeries = await getTrendingSeries();
-        //const dataGenres = await responseGenres.json();
+        const responseNewOnNetflix = await getNewOnNetflix();
+        const responseNewOnHulu = await getNewOnHulu();
+        const responseNewOnPrime = await getNewOnPrime();
+        const responseAction = await getAction();
+        const responseAdventure = await getAdventure();
+        const responseHorror = await getHorror();
+        const responseThriller = await getThriller();
+
         const dataPopular = await responsePopular.json();
         const dataInTheaters = await responseInTheaters.json();
         const dataNowPlaying = await responseNowPlaying.json();
         const dataTrending = await responseTrending.json();
         const dataNewReleases = await responseNewReleases.json();
         const dataTrendingSeries = await responseTrendingSeries.json();
+        const dataNewOnNetflix = await responseNewOnNetflix.json();
+        const dataNewOnHulu = await responseNewOnHulu.json();
+        const dataNewOnPrime = await responseNewOnPrime.json();
+        const dataAction = await responseAction.json();
+        const dataAdventure = await responseAdventure.json();
+        const dataHorror = await responseHorror.json();
+        const dataThriller = await responseThriller.json();
         //console.log(dataTrendingSeries.shows[0].tmdbId);
 
         //setItemsGenres(dataGenres.genres);
 
-        console.log(dataNewReleases);
-        console.log(dataTrendingSeries);
-        
-        setPopularMovies(dataPopular.results);
+        // console.log(dataNewReleases);
+        // console.log(dataTrendingSeries);
+
+        setPopularMovies(dataPopular);
         setInTheaters(dataInTheaters.results);
         setNowPlaying(dataNowPlaying.results);
         setTrending(dataTrending.results);
         setNewReleases(dataNewReleases.results);
         setTrendingSeries(dataTrendingSeries);
+        setNewOnNetflix(dataNewOnNetflix);
+        setNewOnHulu(dataNewOnHulu);
+        setNewOnPrime(dataNewOnPrime);
+        setAction(dataAction.results);
+        setAdventure(dataAdventure.results);
+        setHorror(dataHorror);
+        setThriller(dataThriller.results);
 
         // // Extract numeric tmdbId values
         // const ids = dataTrendingSeries.shows.map((item:any) => {
         //   return parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
         // });
         // //console.log(ids);
-        
-        // setTmdbId(ids); // Save IDs in state
 
+        // setTmdbId(ids); // Save IDs in state
       } catch (error) {
         console.error("Error fetching carousel items:", error);
       }
@@ -401,7 +435,6 @@ function HomePage() {
 
     fetchData(); // Call the async function
   }, []);
-
 
   // function normalizeMediaData(mediaArray, keyMapping) {
   //   return mediaArray.map((media) => {
@@ -413,8 +446,6 @@ function HomePage() {
   //     return normalizedMedia;
   //   });
   // }
-
-
 
   return (
     <div className="relative">
@@ -471,7 +502,6 @@ function HomePage() {
 
             <MovieSwiper
               medias={trendingSeries}
-              //image={trendingSeries}
               title={swiperTitle[5].title}
               mediaType={"movie"}
             />
@@ -482,21 +512,21 @@ function HomePage() {
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={newOnNetflix}
               title={swiperTitle[6].title}
               mediaType={"movie"}
             />
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={newOnHulu}
               title={swiperTitle[7].title}
               mediaType={"movie"}
             />
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={newOnPrime}
               title={swiperTitle[8].title}
               mediaType={"movie"}
             />
@@ -507,31 +537,32 @@ function HomePage() {
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={action}
               title={swiperTitle[9].title}
               mediaType={"movie"}
             />
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={adventure}
               title={swiperTitle[10].title}
               mediaType={"movie"}
             />
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={horror}
               title={swiperTitle[11].title}
               mediaType={"movie"}
             />
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
-              medias={inTheaters}
+              medias={thriller}
               title={swiperTitle[12].title}
               mediaType={"movie"}
             />
+
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
@@ -539,6 +570,7 @@ function HomePage() {
               title={swiperTitle[13].title}
               mediaType={"movie"}
             />
+
             {/* <MovieSwiper
                 medias={movies}
                 title={swiperTitle.title}
