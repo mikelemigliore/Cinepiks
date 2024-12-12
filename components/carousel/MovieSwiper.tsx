@@ -48,13 +48,13 @@ interface Props {
     title: string;
     name?: string;
     poster_path: string;
-    type: string;
+    showType: string;
     backdrop_path: string;
     genre_ids: number[];
   }>;
   //mediaRapid?: MediaRapid[];
   title?: string;
-  mediaType?: "movie" | "series"; // this line was commented
+  mediaType: string; // this line was commented
   logInPage?: boolean;
   itemsGenres?: Array<{
     id: number;
@@ -68,15 +68,14 @@ function MovieSwiper({
   title,
   logInPage,
   itemsGenres = [],
-  //image = [],
-}: //tmdbId = []
+  mediaType,
+}: //image = [],
+//tmdbId = []
 // mediaRapid = [],
 Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-
-
 
   return (
     <div
@@ -171,7 +170,8 @@ Props) {
                 <SwiperSlide className="pb-[8vh]" key={media.id}>
                   <MovieCard
                     logInPage={logInPage}
-                    type={media.type}
+                    type={mediaType}
+                    // type={media.showType}
                     imgBackdrop={media.backdrop_path}
                     imgUrl={media.poster_path}
                     //image={image[0]}

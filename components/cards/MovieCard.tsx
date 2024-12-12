@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 import {
   getMovieCertification,
   getMovieDetails,
+  getSeriesDetails,
 } from "@/app/pages/api/loginPage";
 //import { getImage } from "@/app/pages/api/homePage";
 
@@ -34,7 +35,7 @@ interface MovieCardProps {
   isLastOne?: boolean;
   list?: boolean;
   single?: boolean;
-  type?: string; // Define possible values
+  type: string; // Define possible values
   watchlist?: boolean;
   watched?: boolean;
   logInPage?: boolean;
@@ -45,6 +46,7 @@ interface MovieCardProps {
     name: string;
   }>;
   id: number;
+  mediaType?: string;
 
   //getGenreNames: () => void;
 }
@@ -71,11 +73,12 @@ function MovieCard({
   itemsGenres,
   id,
   name,
-  //image
-  //tmdbId = [],
-}: //getGenreNames,
+}: //image
+//tmdbId = [],
+//getGenreNames,
 MovieCardProps) {
   const [runtime, setRuntime] = useState();
+  const [season, setSeasons] = useState();
   const [description, setDescription] = useState();
   const [certification, setCertification] = useState();
   const [genres, setGenres] = useState<Genre[]>([]); // Explicit type for genres
@@ -103,15 +106,12 @@ MovieCardProps) {
   //   //This results in the TypeError: Cannot read properties of undefined (reading 'name').
   // };
 
-
   // useEffect(() => {
   //   if (image) {
   //     console.log(image);
-  //   } 
+  //   }
   // }, []);
 
-
-  
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
@@ -165,47 +165,55 @@ MovieCardProps) {
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getMovieDetails(id);
-        const responseCetification = await getMovieCertification(id);
 
-        // Fetch all images using Promise.all
-        // if (tmdbId) {
-        //   tmdbId.map(async (id) => {
-        //     const responseImage = await getImage(id);
-        //     const dataImage = await responseImage.json();
+        const mediaType = type === "movie" ? "movie" : "tv";
 
-        //     const englishPosters = dataImage.posters.filter(
-        //       (poster: any) => poster.iso_639_1 === "en"
-        //     );
+        if (mediaType === "movie") {
 
-        //     const filePaths = englishPosters.map(
-        //       (poster: any) => poster.file_path
-        //     );
+          const response = await getMovieDetails(id, mediaType);
+          const data = await response.json();
+          const responseCetification = await getMovieCertification(
+            id,
+            mediaType
+          );
+          const dataCertification = await responseCetification.json();
 
-        //     setImage(filePaths[0]);
-        //   });
-        // }
+          // Find the US release dates and certification
+          const usRelease = dataCertification.results.find(
+            (item: any) => item.iso_3166_1 === "US"
+          );
 
-        const dataCertification = await responseCetification.json();
-        const data = await response.json();
+          //console.log(data.genres);
 
-        // Find the US release dates and certification
-        const usRelease = dataCertification.results.find(
-          (item: any) => item.iso_3166_1 === "US"
-        );
+          //console.log(data);
+          //console.log(data.runtime);
+          setRuntime(data.runtime);
+          setGenres(data.genres);
+          setDescription(data.overview);
 
-        //console.log(data);
-        setRuntime(data.runtime);
-        setGenres(data.genres);
-        setDescription(data.overview);
+          if (usRelease) {
+            const usCertification =
+              usRelease.release_dates[0].certification || "Not Rated";
+            setCertification(usCertification);
+          }
+        } else {
 
-        if (usRelease) {
-          const usCertification =
-            usRelease.release_dates[0].certification || "Not Rated";
-          setCertification(usCertification);
+          const response = await getSeriesDetails(id, mediaType);
+          const data = await response.json();
+
+          //console.log(data.genres);
+
+          //console.log(data);
+          //console.log(data.number_of_seasons);
+
+          setSeasons(data.number_of_seasons);
+          setGenres(data.genres);
+          setDescription(data.overview);
+
         }
       } catch (error) {
         console.error("Error fetching carousel items:", error);
@@ -214,6 +222,8 @@ MovieCardProps) {
 
     fetchData();
   }, []);
+
+
 
   return (
     <div
@@ -370,12 +380,18 @@ MovieCardProps) {
                     type={type}
                     href={href}
                     title={title}
+                    name={name}
                     imgUrl={imgUrl}
+                    imgBackdrop={imgBackdrop}
+                    genres={genres}
+                    runtime={runtime}
+                    season={season}
                     isLastThreeSlides={isLastThreeSlides}
                     isLastOne={isLastOne}
                     expandCard={expandCard}
                     //showContent={showContent}
                     isDesktop={isDesktop}
+                    id={id}
                   />
                 </div>
               </div>

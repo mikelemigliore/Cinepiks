@@ -451,7 +451,7 @@ function HomePage() {
     <div className="relative">
       {/* {isLogged ? ( */}
       <div>
-        <MainCarousel />
+        <MainCarousel medias={inTheaters}/>
         <div className="relative -mt-[26rem] md:-mt-[9rem]">
           {/* {swiperTitles.map((swiperTitle, index) => ( */}
           <div
@@ -473,8 +473,10 @@ function HomePage() {
             />
 
             <div className="relative left-0 right-0 my-16 z-40">
-              <BigCardSwiper itemBigCards={moviesBigCard} />
+              <BigCardSwiper itemBigCards={popularMovies} mediaType={"movie"}/>
             </div>
+
+            {/* itemBigCards={moviesBigCard} */}
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
@@ -497,13 +499,13 @@ function HomePage() {
               //itemsGenres={itemsGenres}
               medias={newReleases}
               title={swiperTitle[4].title}
-              mediaType={"movie"}
+              mediaType={"series"}
             />
 
             <MovieSwiper
               medias={trendingSeries}
               title={swiperTitle[5].title}
-              mediaType={"movie"}
+              mediaType={"series"}
             />
 
             <div className="relative left-0 right-0 my-16 z-40">
@@ -531,9 +533,9 @@ function HomePage() {
               mediaType={"movie"}
             />
 
-            <div className="relative left-0 right-0 my-16 z-40">
+            {/* <div className="relative left-0 right-0 my-16 z-40">
               <BigCardSwiper itemBigCards={moviesBigCard} />
-            </div>
+            </div> */}
 
             <MovieSwiper
               //itemsGenres={itemsGenres}
@@ -563,13 +565,15 @@ function HomePage() {
               mediaType={"movie"}
             />
 
-
-            <MovieSwiper
-              //itemsGenres={itemsGenres}
+            
+            
+            {/* <MovieSwiper
               medias={inTheaters}
               title={swiperTitle[13].title}
               mediaType={"movie"}
-            />
+            /> */}
+
+
 
             {/* <MovieSwiper
                 medias={movies}

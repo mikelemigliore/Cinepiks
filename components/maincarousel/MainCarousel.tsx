@@ -17,12 +17,43 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import Link from "next/link";
+import { getTeaserMovieVideo } from "@/app/pages/api/homePage";
 
-function MainCarousel() {
+interface Props {
+  //tmdbId?:number[];
+  //image?: string[];
+  medias: Array<{
+    id: number;
+    //image: string;
+    title: string;
+    name?: string;
+    poster_path: string;
+    showType: string;
+    backdrop_path: string;
+    genre_ids: number[];
+  }>;
+  //mediaRapid?: MediaRapid[];
+  title?: string;
+  logInPage?: boolean;
+  itemsGenres?: Array<{
+    id: number;
+    name: string;
+  }>;
+  //getGenreNames: () => void;
+}
+
+function MainCarousel({
+  medias = [],
+  title,
+  logInPage,
+  itemsGenres = [],
+}: //image = [],
+//tmdbId = []
+// mediaRapid = [],
+Props) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isCarouselPlaying, setIsCarouselPlaying] = useState(true);
-  const [videoKey, setVideoKey] = useState("6ZfuNTqbHE8"); // infinity war
-  const [videoKey2, setVideoKey2] = useState("a8Gx8wiNbs8"); // avatar
+  const [videoKey, setVideoKey] = useState(); // infinity war
   const [unmute, setUnmute] = useState(false);
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
@@ -117,6 +148,26 @@ function MainCarousel() {
     }
   }, [isCarouselPlaying, handleNext]); // Depend on isCarouselPlaying and handleNext
   // customColor
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseTrailer = await getTeaserMovieVideo(medias[0].id);
+        const dataTrailer = await responseTrailer.json();
+
+        console.log(dataTrailer.key);
+
+        setVideoKey(dataTrailer.key);
+      } catch (error) {
+        console.error("Error fetching carousel items:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
   return (
     <div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[5vh] top-[25vh] z-20 md:h-[15vh] md:top-[90vh] md:z-40" />
@@ -130,214 +181,106 @@ function MainCarousel() {
         totalSlides={totalSlides} //Provides the number of slides in the carousel.
       >
         <CarouselContent>
-          <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
-            {/* Background Image as an absolutely positioned div */}
-            <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">
-              {activeSlide === 0 && isCarouselPlaying && isDesktop ? (
-                <YoutubePlayerMainCaroisel
-                  isCarouselPlaying={isCarouselPlaying}
-                  VideoEnd={handleVideoEnd}
-                  videoKey={videoKey}
-                  unmute={unmute}
-                  pause={pause}
-                  reload={reload}
-                  handleReload={handleReload}
-                  handleStarted={handleStarted}
-                  src={
-                    "https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
-                  }
-                />
-              ) : (
-                <img
-                  src="https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
-                  className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
-                />
+          {medias.slice(0, 10).map((media, index) => (
+            <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
+              {/* Background Image as an absolutely positioned div */}
+              <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">
+                {activeSlide === 0 && isCarouselPlaying && isDesktop ? (
+                  <YoutubePlayerMainCaroisel
+                    isCarouselPlaying={isCarouselPlaying}
+                    VideoEnd={handleVideoEnd}
+                    videoKey={videoKey}
+                    unmute={unmute}
+                    pause={pause}
+                    reload={reload}
+                    handleReload={handleReload}
+                    handleStarted={handleStarted}
+                    src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
+                  />
+                ) : (
+                  <img
+                    src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
+                    className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
+                  />
+                )}
+              </div>
+
+              {/* Try and add video here */}
+
+              <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full" />
+              {started && (
+                <div className="ml-[77vw] mt-[50vh] z-50">
+                  <Button
+                    onClick={() => setUnmute(!unmute)}
+                    className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
+                  >
+                    {unmute ? (
+                      <GoUnmute className="w-[2vw] h-[2vw]" />
+                    ) : (
+                      <div>
+                        <GoMute className="w-[2vw] h-[2vw]" />
+                      </div>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => setPause(!pause)}
+                    className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
+                  >
+                    {pause ? (
+                      <CiPlay1 className="w-[2vw] h-[2vw]" />
+                    ) : (
+                      <div>
+                        <CiPause1 className="w-[2vw] h-[2vw]" />
+                      </div>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => setReload(true)}
+                    className="w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
+                  >
+                    <MdOutlineReplay className="w-[2vw] h-[2vw]" />
+                  </Button>
+                </div>
               )}
-            </div>
 
-            {/* Try and add video here */}
-
-            <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full" />
-            {started && (
-              <div className="ml-[77vw] mt-[50vh] z-50">
-                <Button
-                  onClick={() => setUnmute(!unmute)}
-                  className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  {unmute ? (
-                    <GoUnmute className="w-[2vw] h-[2vw]" />
-                  ) : (
-                    <div>
-                      <GoMute className="w-[2vw] h-[2vw]" />
-                    </div>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setPause(!pause)}
-                  className="mr-3 w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  {pause ? (
-                    <CiPlay1 className="w-[2vw] h-[2vw]" />
-                  ) : (
-                    <div>
-                      <CiPause1 className="w-[2vw] h-[2vw]" />
-                    </div>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setReload(true)}
-                  className="w-[4.5vw] h-[4.5vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  <MdOutlineReplay className="w-[2vw] h-[2vw]" />
-                </Button>
-              </div>
-            )}
-
-            <div>
-              <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-sm md:text-lg">
-                Release Date: 12/09/2024
-              </h1>
-              <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-                Alien: Romulus
-              </h1>
-              <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
-                <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
-                  While scavenging the deep ends of a derelict space station, a
-                  group of young space colonists come face to face with the most
-                  terrifying life form in the universe. While scavenging the
-                  deep ends of a derelict space station, a group of young space
-                  colonists come face.
+              <div>
+                <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-sm md:text-lg">
+                  Release Date: 12/09/2024
                 </h1>
-              </div>
-
-              <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
-                <div className="mb-4 md:mb-0">
-                  <Link href="/singlemovie">
-                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                      View
-                      <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
-                    </Button>
-                  </Link>
-                </div>
-                <div>
-                  <Link href="/watchlist">
-                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                      Watchlist
-                      <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </CarouselItem>
-          <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
-            {/* Background Image as an absolutely positioned div */}
-            <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">
-              {activeSlide === 1 && isCarouselPlaying && isDesktop ? (
-                <YoutubePlayerMainCaroisel
-                  isCarouselPlaying={isCarouselPlaying}
-                  VideoEnd={handleVideoEnd}
-                  videoKey={videoKey2}
-                  unmute={unmute}
-                  pause={pause}
-                  reload={reload}
-                  handleReload={handleReload}
-                  handleStarted={handleStarted}
-                  src={
-                    "https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
-                  }
-                />
-              ) : (
-                <img
-                  src="https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
-                  className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
-                />
-              )}
-            </div>
-
-            {/* Try and add video here */}
-
-            <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full" />
-            {started && (
-              <div className="ml-[77vw] mt-[50vh] z-50">
-                <Button
-                  onClick={() => setUnmute(!unmute)}
-                  className="mr-3 w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  {unmute ? (
-                    <GoUnmute className="w-[2vw] h-[2vw]" />
-                  ) : (
-                    <div>
-                      <GoMute className="w-[2vw] h-[2vw]" />
-                    </div>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setPause(!pause)}
-                  className="mr-3 w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  {pause ? (
-                    <CiPlay1 className="w-[2vw] h-[2vw] max-w-8 max-h-8" />
-                  ) : (
-                    <div>
-                      <CiPause1 className="w-[2vw] h-[2vw] max-w-8 max-h-8" />
-                    </div>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => setReload(true)}
-                  className="w-[10vw] h-[10vw] max-w-[5rem] max-h-[5rem] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
-                >
-                  <MdOutlineReplay className="w-[2vw] h-[2vw] max-w-9 max-h-9" />
-                </Button>
-              </div>
-            )}
-
-            <div>
-              <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-[1vw]">
-                Release Date: 12/09/2024
-              </h1>
-              <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-                Alien: Romulus
-              </h1>
-              <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
-                <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
-                  While scavenging the deep ends of a derelict space station, a
-                  group of young space colonists come face to face with the most
-                  terrifying life form in the universe. While scavenging the
-                  deep ends of a derelict space station, a group of young space
-                  colonists come face.
+                <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                  Alien: Romulus
                 </h1>
-              </div>
+                <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
+                  <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
+                    While scavenging the deep ends of a derelict space station,
+                    a group of young space colonists come face to face with the
+                    most terrifying life form in the universe. While scavenging
+                    the deep ends of a derelict space station, a group of young
+                    space colonists come face.
+                  </h1>
+                </div>
 
-              <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
-                <div className="mb-4 md:mb-0">
-                  <Link href="/singlemovie">
-                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                      View
-                      <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
-                    </Button>
-                  </Link>
-                </div>
-                <div>
-                  <Link href="/watchlist">
-                    <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                      Watchlist
-                      <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
-                    </Button>
-                  </Link>
+                <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
+                  <div className="mb-4 md:mb-0">
+                    <Link href="/singlemovie">
+                      <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                        View
+                        <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
+                      </Button>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link href="/watchlist">
+                      <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                        Watchlist
+                        <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CarouselItem>
-          <CarouselItem className="flex justify-center">3</CarouselItem>
-          <CarouselItem className="flex justify-center">4</CarouselItem>
-          <CarouselItem className="flex justify-center">5</CarouselItem>
-          <CarouselItem className="flex justify-center">6</CarouselItem>
-          <CarouselItem className="flex justify-center">7</CarouselItem>
-          <CarouselItem className="flex justify-center">8</CarouselItem>
-          <CarouselItem className="flex justify-center">9</CarouselItem>
-          <CarouselItem className="flex justify-center">10</CarouselItem>
+            </CarouselItem>
+          ))}
         </CarouselContent>
 
         {/* Position the dots at the bottom center of the carousel */}

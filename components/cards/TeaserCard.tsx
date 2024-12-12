@@ -8,37 +8,59 @@ import { SlArrowRight } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import YoutubePlayer from "./YoutubePlayer";
 import { GoMute, GoUnmute } from "react-icons/go";
+import {
+  getTeaserMovieVideo,
+  getTeaserSeriesVideo,
+  //getTrailerVideo,
+} from "@/app/pages/api/homePage";
+
+interface Genre {
+  id: number;
+  name: string;
+}
 
 interface TeaserCardProps {
   //image?:string
   title?: string;
+  name?: string;
   imgUrl: string;
+  imgBackdrop?: string;
+  genres: Genre[];
+  runtime?: number;
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   expandCard?: boolean;
   isDesktop?: boolean;
   href: string;
   type?: string; // Define possible values
+  season?: number;
+  id: number;
 }
 
 function TeaserCard({
   title,
   imgUrl,
+  imgBackdrop,
   isLastThreeSlides,
   isLastOne,
   expandCard,
   isDesktop,
   href,
   type,
-  //image
-}: TeaserCardProps) {
+  genres,
+  runtime,
+  season,
+  name,
+  id,
+}: //image
+TeaserCardProps) {
   //const [showContent, setShowContent] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
-  const [videoKey, setVideoKey] = useState("TcMBFSGVi1c");
+  const [videoKey, setVideoKey] = useState();
   const [unmute, setUnmute] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // To manage hover delay
@@ -64,6 +86,7 @@ function TeaserCard({
     }
   };
 
+
   // useEffect(() => {
   //   const handleResize = () => {
   //     setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
@@ -78,9 +101,54 @@ function TeaserCard({
   //   return () => window.removeEventListener("resize", handleResize);
   // }, []);
 
+
+
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const mediaType = type === "movie" ? "movie" : "tv";
+
+        if (mediaType === "movie") {
+          const response = await getTeaserMovieVideo(id);
+          const data = await response.json();
+
+          //console.log(data.key);
+
+          //setVideoKey(data.key);
+
+          //if (data && data.key) {
+            //console.log(`Teaser key found: ${data.key}`);
+            setVideoKey(data.key);
+          // } else {
+          //   console.log("Teaser key not found in the response:", data);
+          // }
+
+        } else {
+          const response = await getTeaserSeriesVideo(id);
+          const data = await response.json();
+
+          //setVideoKey(data.key);
+
+          //if (data && data.key) {
+            setVideoKey(data.key);
+          // } else {
+          //   console.log("Teaser key not found in the response:", data);
+          // }
+        }
+      } catch (error) {
+        console.error("Error fetching carousel items:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
 
   const handleMouseEnter = () => {
     //if (isDesktop) {
@@ -92,6 +160,7 @@ function TeaserCard({
     }, 300); // 300ms delay to stabilize hover
     //}
   };
+
 
   const handleMouseLeave = () => {
     // Only reset states on hover leave if it's a desktop view
@@ -110,6 +179,14 @@ function TeaserCard({
   if (!isClient) {
     return null; // Don't render anything during SSR
   }
+
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  const formatRuntime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60); // Get the hours
+    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    return `${hours}h ${remainingMinutes}m`;
+  };
 
   return (
     <div>
@@ -145,7 +222,7 @@ function TeaserCard({
           >
             {/* Poster / Video */}
             <div>
-              {expandCard && isPlaying && isDesktop ? (
+              {expandCard && isPlaying && isDesktop && videoKey ? (
                 <div className="relative w-full h-full pb-[56.25%] overflow-hidden rounded-t-3xl">
                   <YoutubePlayer
                     isPlaying={isPlaying}
@@ -153,11 +230,13 @@ function TeaserCard({
                     videoKey={videoKey}
                     unmute={unmute}
                     VideoEnd={handleVideoEnd}
+                    imgBackdrop={imgBackdrop}
+                    //id={id}
                   />
                 </div>
               ) : (
                 <img
-                  src="https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1ef8oIt.jpg"
+                  src={`${BASE_IMAGE_URL}${imgBackdrop}`}
                   alt={title}
                   className={`md:rounded-t-3xl w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 noselect`}
                 />
@@ -188,35 +267,42 @@ function TeaserCard({
             >
               <div className="flex justify-between">
                 {type === "movie" ? (
-                                 <div>
-                  <h1 className="font-bold text-[1vw] m-[0.5vh]">{title}</h1>
-                  <h2 className="m-[1vh] text-customTextColor font-bold pt-[1.5vh] text-[0.7vw]">
-                    2h 3m
-                  </h2>
-                  <h2 className="flex justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
-                    Action
-                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
-                    Sci-fi
-                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
-                    Comedy
-                  </h2>
-                </div> 
-                ):(
                   <div>
-                  <h1 className="font-bold text-[1vw] m-[0.5vh]">{title}</h1>
-                  <h2 className="m-[1vh] text-customTextColor font-bold text-[0.7vw]">
-                    Seasons: 3
-                  </h2>
-                  <h2 className="flex justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
-                    Action
-                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
-                    Sci-fi
-                    <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
-                    Comedy
-                  </h2>
-                </div>
+                    <h1 className="font-bold text-[1vw] m-[0.5vh] overflow-hidden overflow-ellipsis line-clamp-1">
+                      {title}
+                    </h1>
+                    <h2 className="m-[1vh] text-customTextColor font-bold pt-[1.5vh] text-[0.7vw]">
+                      <span>
+                        {runtime !== undefined ? formatRuntime(runtime) : "N/A"}
+                      </span>
+                    </h2>
+                    <h2 className="flex justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                      <span>{genres[0]?.name || ""}</span>
+                      <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
+                      <span>{genres[1]?.name || ""}</span>
+                      <GoDotFill
+                        className={`bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full ${
+                          genres[2]?.name ? "" : "hidden"
+                        }`}
+                      />
+                      <span>{genres[2]?.name || ""}</span>
+                    </h2>
+                  </div>
+                ) : (
+                  <div>
+                    <h1 className="font-bold text-[1vw] m-[0.5vh]">{name}</h1>
+                    <h2 className="m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                      <span>Seasons: {season}</span>
+                    </h2>
+                    <h2 className="flex flex-wrap justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                      <span>{genres[0]?.name || ""}</span>
+                      <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
+                      <span>{genres[1]?.name || ""}</span>
+                      {/* <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
+                      <span>{genres[2]?.name || ""}</span> */}
+                    </h2>
+                  </div>
                 )}
-
 
                 <div className="">
                   <div className="space-x-[0.5vw]">

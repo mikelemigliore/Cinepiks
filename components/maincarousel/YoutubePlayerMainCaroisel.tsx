@@ -11,7 +11,7 @@ declare global {
 interface YoutubePlayerProps {
   unmute: boolean;
   isCarouselPlaying: boolean;
-  videoKey: string;
+  videoKey?: string;
   VideoEnd: () => void;
   pause: boolean;
   reload:boolean

@@ -7,7 +7,7 @@ export async function getUpcoming() {
     const response = await fetch(url);
     const data = await response.json();
 
-    console.log(data);
+    //console.log(data);
 
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
@@ -108,7 +108,7 @@ export async function getTrendingSeries() {
       (movie: any) => movie.original_language === "en"
     );
 
-    console.log(filteredData);
+    //console.log(filteredData);
 
     return new Response(JSON.stringify(filteredData), { status: 200 });
   } catch {
@@ -118,40 +118,61 @@ export async function getTrendingSeries() {
   }
 }
 
+//This only has movies, so I need to make other calls if i want to include other swiperes of series
+
 export async function getNewOnNetflix() {
-  const url =
-    "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&catalogs=netflix&show_type=movie&rating_min=60";
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
-      "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-    },
-  };
+  // const url =
+  //   "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=netflix&rating_min=60"; //show_type=movie
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
+  //     "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+  //   },
+  // };
 
   try {
     const response = await fetch(url, options);
+
+    console.log("API Response Status:", response.status);
+
     const data = await response.json();
 
     const items = data.shows;
 
+    //console.log(items);
+
     // Fetch and normalize image data
     const normalizedItems = await Promise.all(
       items.map(async (item: any) => {
-        const id = parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
-        const responseImage = await getTmdbInfo(id);
-        const dataImage = await responseImage.json();
+        try {
+          //const mediaType = item.showType;
+          //console.log(mediaType);
 
-        // Find the first English poster and normalize it to `poster_path`
-        const poster = dataImage.find((img: any) => img.file_path) || {};
-        return {
-          ...item, //If you remove ...item and write the return statement like this: The returned object will only have the poster_path property. All the other properties from item (like title, tmdbId, release_date, etc.) will be missing in the final object.
-          poster_path: poster.file_path || null, // Normalize `file_path` to `poster_path`, so renaming file_path to poster_path while keeping all the other properties from the original item intact.
-        };
+          const id = parseInt(item.tmdbId.split("/")[1], 10);
+          const responseImage = await getTmdbInfo(id);
+          const dataImage = await responseImage.json();
+          //console.log("Image Data:", dataImage);
+
+          const poster = dataImage.find((img: any) => img.file_path) || {};
+          return {
+            ...item,
+            poster_path: poster.file_path || null,
+          };
+        } catch (error) {
+          console.error(`Error normalizing item ${item.tmdbId}:`, error);
+          return null; // Or handle as needed
+        }
       })
     );
 
-    return new Response(JSON.stringify(normalizedItems), { status: 200 });
+    const validItems = normalizedItems.filter(
+      (media) => media !== null && media !== undefined
+    );
+
+    //console.log("validItems Netflix:", validItems);
+
+    return new Response(JSON.stringify(validItems), { status: 200 });
   } catch (error) {
     console.error("Error in getTrendingSeries:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -182,15 +203,15 @@ export async function getTmdbInfo(id: number) {
 }
 
 export async function getNewOnHulu() {
-  const url =
-    "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&catalogs=hulu&show_type=movie&rating_min=60";
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
-      "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-    },
-  };
+  // const url =
+  //   "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=hulu&rating_min=60"; //show_type=movie
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
+  //     "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+  //   },
+  // };
 
   try {
     const response = await fetch(url, options);
@@ -201,20 +222,32 @@ export async function getNewOnHulu() {
     // Fetch and normalize image data
     const normalizedItems = await Promise.all(
       items.map(async (item: any) => {
-        const id = parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
-        const responseImage = await getTmdbInfo(id);
-        const dataImage = await responseImage.json();
+        try {
+          //const mediaType = item.showType;
+          const id = parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
+          const responseImage = await getTmdbInfo(id);
+          const dataImage = await responseImage.json();
 
-        // Find the first English poster and normalize it to `poster_path`
-        const poster = dataImage.find((img: any) => img.file_path) || {};
-        return {
-          ...item, //If you remove ...item and write the return statement like this: The returned object will only have the poster_path property. All the other properties from item (like title, tmdbId, release_date, etc.) will be missing in the final object.
-          poster_path: poster.file_path || null, // Normalize `file_path` to `poster_path`, so renaming file_path to poster_path while keeping all the other properties from the original item intact.
-        };
+          // Find the first English poster and normalize it to `poster_path`
+          const poster = dataImage.find((img: any) => img.file_path) || {};
+          return {
+            ...item, //If you remove ...item and write the return statement like this: The returned object will only have the poster_path property. All the other properties from item (like title, tmdbId, release_date, etc.) will be missing in the final object.
+            poster_path: poster.file_path || null, // Normalize `file_path` to `poster_path`, so renaming file_path to poster_path while keeping all the other properties from the original item intact.
+          };
+        } catch (error) {
+          console.error(`Error normalizing item ${item.tmdbId}:`, error);
+          return null; // Or handle as needed
+        }
       })
     );
 
-    return new Response(JSON.stringify(normalizedItems), { status: 200 });
+    const validItems = normalizedItems.filter(
+      (media) => media !== null && media !== undefined
+    );
+
+    // console.log("validItems Hulu:", validItems);
+
+    return new Response(JSON.stringify(validItems), { status: 200 });
   } catch (error) {
     console.error("Error in getTrendingSeries:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -224,15 +257,15 @@ export async function getNewOnHulu() {
 }
 
 export async function getNewOnPrime() {
-  const url =
-    "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&catalogs=prime&show_type=movie&rating_min=60";
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
-      "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-    },
-  };
+  // const url =
+  //   "https://streaming-availability.p.rapidapi.com/shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=prime&rating_min=60"; //show_type=movie
+  // const options = {
+  //   method: "GET",
+  //   headers: {
+  //     "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
+  //     "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+  //   },
+  // };
 
   try {
     const response = await fetch(url, options);
@@ -243,20 +276,32 @@ export async function getNewOnPrime() {
     // Fetch and normalize image data
     const normalizedItems = await Promise.all(
       items.map(async (item: any) => {
-        const id = parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
-        const responseImage = await getTmdbInfo(id);
-        const dataImage = await responseImage.json();
+        try {
+          //const mediaType = item.showType;
+          const id = parseInt(item.tmdbId.split("/")[1], 10); // Convert to number
+          const responseImage = await getTmdbInfo(id);
+          const dataImage = await responseImage.json();
 
-        // Find the first English poster and normalize it to `poster_path`
-        const poster = dataImage.find((img: any) => img.file_path) || {};
-        return {
-          ...item, //If you remove ...item and write the return statement like this: The returned object will only have the poster_path property. All the other properties from item (like title, tmdbId, release_date, etc.) will be missing in the final object.
-          poster_path: poster.file_path || null, // Normalize `file_path` to `poster_path`, so renaming file_path to poster_path while keeping all the other properties from the original item intact.
-        };
+          // Find the first English poster and normalize it to `poster_path`
+          const poster = dataImage.find((img: any) => img.file_path) || {};
+          return {
+            ...item, //If you remove ...item and write the return statement like this: The returned object will only have the poster_path property. All the other properties from item (like title, tmdbId, release_date, etc.) will be missing in the final object.
+            poster_path: poster.file_path || null, // Normalize `file_path` to `poster_path`, so renaming file_path to poster_path while keeping all the other properties from the original item intact.
+          };
+        } catch (error) {
+          console.error(`Error normalizing item ${item.tmdbId}:`, error);
+          return null; // Or handle as needed
+        }
       })
     );
 
-    return new Response(JSON.stringify(normalizedItems), { status: 200 });
+    const validItems = normalizedItems.filter(
+      (media) => media !== null && media !== undefined
+    );
+
+    // console.log("validItems Prime:", validItems);
+
+    return new Response(JSON.stringify(validItems), { status: 200 });
   } catch (error) {
     console.error("Error in getTrendingSeries:", error);
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -348,3 +393,105 @@ export async function getThriller() {
   }
 }
 
+export async function getTeaserMovieVideo(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data);
+
+    // Filter teasers
+    let teasers = data.results.filter(
+      (item: any) => item.type === "Teaser" && item.official === true
+    );
+
+    // If no Teasers, fallback to Trailers
+    if (teasers.length === 0) {
+      teasers = data.results.filter(
+        (item: any) => item.type === "Trailer" && item.official === true
+      );
+    }
+
+    //console.log(teasers);
+
+    // Sort by published_at date in ascending order
+    const sortedTeasers = teasers.sort(
+      (a: any, b: any) =>
+        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+    );
+
+    // Get the first teaser released
+    const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+    //console.log(firstTeaser);
+
+    return new Response(JSON.stringify(firstTeaser), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+
+
+export async function getTeaserSeriesVideo(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data);
+
+    // Filter teasers
+    const trailers = data.results.filter(
+      (item: any) => item.type === "Trailer" && item.official === true
+    );
+
+    // Sort by published_at date in ascending order
+    const sortedTeasers = trailers.sort(
+      (a: any, b: any) =>
+        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+    );
+
+    // Get the first teaser released
+    const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+    //console.log(firstTeaser);
+
+    return new Response(JSON.stringify(firstTeaser), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+export async function getRatings(id: string) {
+  const url = `https://film-show-ratings.p.rapidapi.com/item/?id=${id}`;
+  const options = {
+    method: "GET",
+    headers: {
+      "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
+      "x-rapidapi-host": "film-show-ratings.p.rapidapi.com",
+    },
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    //console.log(data);
+
+    return new Response(JSON.stringify(data), { status: 200 });
+  } catch (error) {
+    console.error(error);
+  }
+}
