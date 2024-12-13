@@ -102,16 +102,20 @@ function BigCard({
             const dataRatings = await ratingsResponse.json();
 
             setRottenTomatoesAudience(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                ?.rating || null
             );
             //console.log("Rotten Tomatoes Audience Score:", dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating);
-            
+
             setRottenTomatoesCritics(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                ?.rating || null
             );
             //console.log("Rotten Tomatoes Critics Score:", dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating);
-            
-            setIMDb(dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+
+            setIMDb(
+              dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
+            );
             //console.log("IMDb Score:", dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating);
             // setRottenTomatoesAudience(
             //   dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
@@ -246,46 +250,57 @@ function BigCard({
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="text-customTextColor text-sm md:text-[0.9vw]">
                   <span>Rotten&nbsp;Tomatoes</span>
-                  <div className="flex items-center">
-                    <div className="flex items-center mt-[1.5vh]">
-                      {rottenTomatoesAudience && (
-                        <img
-                          className="w-[3vw] h-[3vh]"
-                          src={`/genresIcons/${
-                            rottenTomatoesAudience >= 60
-                              ? "Rotten_Tomatoes_positive_audience.svg"
-                              : "Rotten_Tomatoes_negative_audience.svg"
-                          }`}
-                          alt="Rotten Tomatoes Icon"
-                        />
-                      )}
-                      <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold pr-[2.5vw]">
-                        {rottenTomatoesAudience !== null
-                          ? `${rottenTomatoesAudience}%`
-                          : "N/A"}
-                      </span>
+                  <div className="flex items-center space-x-[2.5vw]">
+                    {/* <div className="flex items-center mt-[1.5vh]"> */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center mt-[1.5vh]">
+                        {rottenTomatoesCritics && (
+                          <img
+                            className="w-[3vw] h-[3vh]"
+                            src={`/genresIcons/${
+                              rottenTomatoesCritics >= 60
+                                ? "Rotten_Tomatoes_Critics_Positive.svg"
+                                : "icons8-rotten-tomatoes.svg"
+                            }`}
+                            alt="Rotten Tomatoes Icon"
+                          />
+                        )}
+                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
+                          {rottenTomatoesCritics !== null
+                            ? `${rottenTomatoesCritics}%`
+                            : "N/A"}
+                        </span>
+                      </div>
+                      <h1 className="text-[0.7vw] mt-[0.5vw]">Critics</h1>
                     </div>
-                    <div className="flex items-center mt-[1.5vh]">
-                      {rottenTomatoesCritics && (
-                        <img
-                          className="w-[3vw] h-[3vh]"
-                          src={`/genresIcons/${
-                            rottenTomatoesCritics >= 60
-                              ? "Rotten_Tomatoes_Critics_Positive.svg"
-                              : "icons8-rotten-tomatoes.svg"
-                          }`}
-                          alt="Rotten Tomatoes Icon"
-                        />
-                      )}
-                      <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
-                        {rottenTomatoesCritics !== null
-                          ? `${rottenTomatoesCritics}%`
-                          : "N/A"}
-                      </span>
+                    {/* </div> */}
+                    {/* <div className="flex items-center mt-[1.5vh]"> */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center mt-[1.5vh]">
+                        {rottenTomatoesAudience && (
+                          <img
+                            className="w-[3vw] h-[3vh]"
+                            src={`/genresIcons/${
+                              rottenTomatoesAudience >= 60
+                                ? "Rotten_Tomatoes_positive_audience.svg"
+                                : "Rotten_Tomatoes_negative_audience.svg"
+                            }`}
+                            alt="Rotten Tomatoes Icon"
+                          />
+                        )}
+                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold pr-[2.5vw]">
+                          {rottenTomatoesAudience !== null
+                            ? `${rottenTomatoesAudience}%`
+                            : "N/A"}
+                        </span>
+                      </div>
+
+                      <h1 className="text-[0.7vw] mt-[0.5vw]">Audience</h1>
                     </div>
+                    {/* </div> */}
                   </div>
                 </div>
-                <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[0.9vw] md:ml-[4vw]">
+                <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[0.9vw] md:ml-[1vw]">
                   iMDB
                   <div className="flex items-center">
                     <div className="flex items-center">

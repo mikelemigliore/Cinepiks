@@ -495,3 +495,45 @@ export async function getRatings(id: string) {
     console.error(error);
   }
 }
+
+
+
+
+export async function getTrailerMovieVideo(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data);
+
+    // If no Teasers, fallback to Trailers
+
+      const trailers = data.results.filter(
+        (item: any) => item.type === "Trailer" && item.official === true
+      );
+
+
+    //console.log(teasers);
+
+    // Sort by published_at date in ascending order
+    const sortedTrailer = trailers.sort(
+      (a: any, b: any) =>
+        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+    );
+
+    // Get the first teaser released
+    const firstTrailer = sortedTrailer.length > 0 ? sortedTrailer[0] : null;
+
+    //console.log(firstTrailer);
+
+
+    return new Response(JSON.stringify(firstTrailer), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}

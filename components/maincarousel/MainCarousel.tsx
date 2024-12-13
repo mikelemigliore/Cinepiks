@@ -17,7 +17,43 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import Link from "next/link";
-import { getTeaserMovieVideo } from "@/app/pages/api/homePage";
+import {
+  getTeaserMovieVideo,
+  getTrailerMovieVideo,
+} from "@/app/pages/api/homePage";
+
+// const Trailers = [
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+//   {
+//     trailerId: "6ZfuNTqbHE8",
+//   },
+// ];
 
 interface Props {
   //tmdbId?:number[];
@@ -31,6 +67,9 @@ interface Props {
     showType: string;
     backdrop_path: string;
     genre_ids: number[];
+    videoKey?: string;
+    release_date?: string;
+    overview?: string;
   }>;
   //mediaRapid?: MediaRapid[];
   title?: string;
@@ -53,7 +92,7 @@ function MainCarousel({
 Props) {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isCarouselPlaying, setIsCarouselPlaying] = useState(true);
-  const [videoKey, setVideoKey] = useState(); // infinity war
+  //const [videoKey, setVideoKey] = useState<string[]>([]);
   const [unmute, setUnmute] = useState(false);
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
@@ -149,22 +188,50 @@ Props) {
   }, [isCarouselPlaying, handleNext]); // Depend on isCarouselPlaying and handleNext
   // customColor
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const responseTrailer = await getTeaserMovieVideo(medias[0].id);
-        const dataTrailer = await responseTrailer.json();
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Fetch trailers for all media items
+  //       const promises = medias.map(async (media) => {
+  //         const responseTrailer = await getTrailerMovieVideo(media.id);
+  //         const dataTrailer = await responseTrailer.json();
+  //         //console.log(dataTrailer.key);
+  //         if(dataTrailer){
+  //           return dataTrailer.key; // Assuming the API returns a `key` for the trailer
+  //         }else{
+  //           return "6ZfuNTqbHE8"
+  //         }
 
-        console.log(dataTrailer.key);
+  //       });
 
-        setVideoKey(dataTrailer.key);
-      } catch (error) {
-        console.error("Error fetching carousel items:", error);
-      }
-    };
+  //       //console.log(promises);
 
-    fetchData();
-  }, []);
+  //       // Wait for all fetch requests to complete
+  //       const keys = await Promise.all(promises);
+
+  //       //console.log(keys);
+
+  //       // Update the video keys state
+  //       setVideoKey(keys);
+  //     } catch (error) {
+  //       console.error("Error fetching carousel items:", error);
+  //     }
+  //   };
+
+  //   if (medias.length > 0) {
+  //     fetchData();
+  //   }
+  // }, [medias]);
+
+  const formatDate = (date: string | undefined) => {
+    if (date) {
+      const [year, month, day] = date.split("-");
+      const formattedDate = `${month}/${day}/${year}`;
+      return formattedDate;
+    }else {
+      return "Not Available"
+    }
+  };
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -185,22 +252,24 @@ Props) {
             <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
               {/* Background Image as an absolutely positioned div */}
               <div className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:w-screen md:h-screen mt-[4rem] md:mt-0">
-                {activeSlide === 0 && isCarouselPlaying && isDesktop ? (
+                {activeSlide === index && isCarouselPlaying && isDesktop ? (
                   <YoutubePlayerMainCaroisel
                     isCarouselPlaying={isCarouselPlaying}
                     VideoEnd={handleVideoEnd}
-                    videoKey={videoKey}
+                    videoKey={media.videoKey}
                     unmute={unmute}
                     pause={pause}
                     reload={reload}
                     handleReload={handleReload}
                     handleStarted={handleStarted}
                     src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
+                    // "https://image.tmdb.org/t/p/original/v2c7jHSvgXj0BYZ10MYUe9ugTHx.jpg"
+                    // {`${BASE_IMAGE_URL}${medias[0].backdrop_path}`}
                   />
                 ) : (
                   <img
                     src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
-                    className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[110vh] w-full"
+                    className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[120vh] w-full"
                   />
                 )}
               </div>
@@ -245,18 +314,14 @@ Props) {
 
               <div>
                 <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-sm md:text-lg">
-                  Release Date: 12/09/2024
+                  Release Date: {formatDate(media.release_date)}
                 </h1>
                 <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-                  Alien: Romulus
+                  {media.title}
                 </h1>
-                <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw]">
-                  <h1 className="hidden md:block text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
-                    While scavenging the deep ends of a derelict space station,
-                    a group of young space colonists come face to face with the
-                    most terrifying life form in the universe. While scavenging
-                    the deep ends of a derelict space station, a group of young
-                    space colonists come face.
+                <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw] mt-[0.4vw]">
+                  <h1 className="hidden text-white text-[1vw] overflow-hidden overflow-ellipsis md:line-clamp-4">
+                    {media.overview}
                   </h1>
                 </div>
 
