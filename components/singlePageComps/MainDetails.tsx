@@ -1,58 +1,32 @@
 "use client";
 import { useState } from "react";
-import EpisodeCard from "@/components/cards/EpisodeCard";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import CarouselEpisode from "@/components/carousel/CarouselEpisode";
-import { Progress } from "@/components/ui/progress";
 import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
-import { CiPause1, CiPlay1 } from "react-icons/ci";
-import { FaExpand, FaFacebook, FaLink, FaPlay } from "react-icons/fa";
-import { Rings } from "react-loader-spinner";
-import { FiMinimize } from "react-icons/fi";
-import { GoDotFill, GoMute, GoUnmute } from "react-icons/go";
-import { MdOutlineReplay } from "react-icons/md";
+import { FaFacebook, FaLink, FaPlay } from "react-icons/fa";
+import { GoDotFill } from "react-icons/go";
 import MovieCard from "@/components/cards/MovieCard";
 import { IoCheckmark } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { AiFillInstagram, AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
-import HowToWatchCard from "@/components/cards/HowToWatchCard";
-import Tags from "@/components/tags/Tags";
-import Reviews from "@/components/reviews/Reviews";
-import MoreInfo from "@/components/moreinfo/MoreInfo";
-import CastSwiper from "@/components/carousel/CastSwiper";
-import MoreLikeThisSwiper from "@/components/carousel/MoreLikeThisSwiper";
-import RecomendationSwiper from "@/components/carousel/RecommendationSwiper";
-import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import StarRating from "@/components/starRating/StarRating";
-import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
+import {
+  getDirector,
+  getMovieCertification,
+  getMovieDetails,
+  getRatings,
+  getSocials,
+} from "@/app/pages/api/singleMoviePage";
 
-// const movie = [
-//     {
-//       id: 1,
-//       title: "Dragon Ball Super",
-//       imgUrl:
-//         "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-//     },
-//   ];
+
 
 interface SeriesProp {
   id: number;
@@ -60,49 +34,174 @@ interface SeriesProp {
   imgUrl: string;
 }
 
+interface GenresProp {
+  id: number;
+  name: string;
+}
+
+interface SocialsProp {
+  id: number;
+  imdb_id: string;
+  wikidata_id: string;
+  facebook_id: string;
+  instagram_id: string;
+  twitter_id: string;
+}
+
+interface CastProp {
+  character: string;
+  id: number;
+  name: string;
+  picture: string;
+}
+
 interface MainDetailsProps {
-  //imgUrl: string;
-  title?: string;
+  id: number;
+  title: string;
   className?: string; // Optional className prop
   isPartialSlide?: boolean; // Optional prop to indicate if it's a partial slide
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   list?: boolean;
-  single?: boolean;
-  type?: string; // Define possible values
-  //id: number;
   media: SeriesProp[];
-  handleAdded: (movieId: number) => void;
-  handleLike: (movieId: number) => void;
-  isAdded:any;
-  isLiked:any
   handlePlay: () => void;
   videoKey: string;
   handleReload: () => void;
   handleEnd: () => void;
   setIsLoading: (loading: boolean) => void;
-  isListView?: boolean;
-  value: number | null;
-  handleValue: (newValue: number | null) => void;
+  imdbId?: number;
+  cast?: CastProp[];
 }
 
 function MainDetails({
+  id,
   videoKey,
-  type,
-  single,
   media,
-  handleAdded,
-  handleLike,
-  isAdded,
   handlePlay,
   handleReload,
   handleEnd,
   setIsLoading,
-  isListView,
-  value,
-  handleValue,
-  isLiked
+  title,
+  imdbId,
+  cast = [],
 }: MainDetailsProps) {
+  const [poster, setPoster] = useState();
+  const [genres, setGenres] = useState<GenresProp[]>([]);
+  const [certification, setCertification] = useState("");
+  const [runtime, setRuntime] = useState();
+  const [description, setDescription] = useState("");
+  const [rottenTomatoesAudience, setRottenTomatoesAudience] = useState();
+  const [rottenTomatoesCritics, setRottenTomatoesCritics] = useState();
+  const [imdb, setIMDb] = useState();
+  const [tmdbScore, setTMDbScore] = useState();
+  const [socials, setSocials] = useState<SocialsProp>();
+  const [homepage, setHomePage] = useState();
+  const [director, setDirector] = useState();
+  const [single, setSinglemovie] = useState(true);
+  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
+  const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
+  const [isListView, setIsListView] = useState(true);
+  const [value, setValue] = React.useState<number | null>(0);
+  const type = "movie";
+
+  const handleAdded = (movieId: number) => {
+    setIsAdded((prevAdded) => ({
+      ...prevAdded,
+      [movieId]: !prevAdded[movieId], // Toggle the like state for the specific movie
+    }));
+  };
+
+  const handleLike = (movieId: number) => {
+    setIsLiked((prevLiked) => ({
+      ...prevLiked,
+      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
+    }));
+  };
+
+  const handleValue = (newValue: number | null) => {
+    if (newValue !== null) {
+      setValue(newValue);
+    } else {
+      setValue(0);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getMovieDetails(id);
+        const responseCertification = await getMovieCertification(id);
+        const responseSocials = await getSocials(id);
+        const responseDirector = await getDirector(id);
+
+        const data = await response.json();
+        const dataCertification = await responseCertification.json();
+        const dataSocials = await responseSocials.json();
+        const dataDirector = await responseDirector.json();
+
+        // Find the US release dates and certification
+        const usRelease = dataCertification.results.find(
+          (item: any) => item.iso_3166_1 === "US"
+        );
+
+        if (usRelease) {
+          const usCertification =
+            usRelease.release_dates[0].certification || "Not Rated";
+          setCertification(usCertification);
+        }
+
+        setPoster(data.poster_path);
+        setGenres(data.genres);
+        setRuntime(data.runtime);
+        setDescription(data.overview);
+        setTMDbScore(data.vote_average || null);
+        setSocials(dataSocials || null);
+        setHomePage(data.homepage);
+        setDirector(dataDirector);
+
+        if (data.imdb_id) {
+          const ratingsResponse = await getRatings(data.imdb_id);
+          if (ratingsResponse) {
+            const dataRatings = await ratingsResponse.json();
+
+            setRottenTomatoesAudience(
+              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                ?.rating || null
+            );
+
+            setRottenTomatoesCritics(
+              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                ?.rating || null
+            );
+
+            setIMDb(
+              dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  const formatRuntime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60); // Get the hours
+    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    return `${hours}h ${remainingMinutes}m`;
+  };
+
+  const formatTitle = (title: string): string => {
+    return title
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^a-z0-9\s]/g, "") // Remove special characters (non-alphanumeric except spaces)
+      .replace(/\s+/g, "_"); // Replace spaces with underscores
+  };
+
   return (
     <div
       className={`flex w-full ml-[1vw] transition-transform duration-700 justify-center`}
@@ -110,36 +209,34 @@ function MainDetails({
     >
       <MovieCard
         type={type}
-        imgUrl={media[0].imgUrl}
-        //title={movie.title}
-        //isLastOne={isLastOne}
+        imgUrl={`${BASE_IMAGE_URL}${poster}`}
         single={single}
+        id={id}
       />
       <div className="flex">
         <div className="flex flex-col pl-[3vw]">
           {/* Movie info here */}
-          <h2 className="text-[2vw] font-bold">{media[0].title}</h2>
+          <h2 className="text-[2vw] font-bold">{title}</h2>
           <div className="text-center">
             <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.9vw]">
-              <span>Action</span>
+              <span>{genres[0]?.name || "Undefined"}</span>
               <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
-              <span>Sci-fi</span>
+              <span>{genres[1]?.name || "Undefined"}</span>
               <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
-              <span className="pr-[0.6vw]">Comedy</span>
-              <span className="mx-[0.6vw] text-customTextColor font-bold">
-                R
+              <span className="pr-[0.6vw]">
+                {genres[2]?.name || "Undefined"}
               </span>
               <span className="mx-[0.6vw] text-customTextColor font-bold">
-                2h 3m
+                {certification}
+              </span>
+              <span className="mx-[0.6vw] text-customTextColor font-bold">
+                {runtime ? formatRuntime(runtime) : "N/A"}
               </span>
             </div>
           </div>
           <div>
             <p className="mt-[1vh] text-white text-base md:text-[1vw]  max-w-[23rem] md:max-w-[33vw] line-clamp-4 leading-[2] md:leading-[2]">
-              While scavenging the deep ends of a derelict space station, a
-              group of young space colonists come face to face with the most
-              terrifying life form in the universe. While scavenging the deep
-              ends of a derelict space station, a group of young space
+              {description}
             </p>
           </div>
 
@@ -203,59 +300,120 @@ function MainDetails({
             <div className="w-full flex justify-between items-start mt-[1.7vh] hidden md:block">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="text-customTextColor text-sm md:text-[1vw]">
-                  <span>Rotten&nbsp;Tomatoes</span>
-                  <div className="flex items-center">
-                    <div className="flex items-center mt-[1.5vh]">
-                      <img
-                        className="w-[3vw] h-[3vh]"
-                        src="/genresIcons/icons8-rotten-tomatoes.svg"
-                        alt="Rotten Tomatoes Icon"
-                      />
-                      <span className="ml-[0.5vw] text-[1vw] text-white text-bold pr-[2.5vw]">
-                        80%
-                      </span>
+                  <Link
+                    href={`https://www.rottentomatoes.com/m/${formatTitle(
+                      title
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>Rotten&nbsp;Tomatoes</span>
+                    <div className="flex items-center space-x-[2.5vw]">
+                      <div className="flex flex-col">
+                        <div className="flex items-center mt-[1.5vh]">
+                          {rottenTomatoesCritics && (
+                            <img
+                              className="w-[3vw] h-[3vh]"
+                              src={`/genresIcons/${
+                                rottenTomatoesCritics >= 60
+                                  ? "Rotten_Tomatoes_Critics_Positive.svg"
+                                  : "icons8-rotten-tomatoes.svg"
+                              }`}
+                              alt="Rotten Tomatoes Icon"
+                            />
+                          )}
+                          <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
+                            {rottenTomatoesCritics !== null
+                              ? `${rottenTomatoesCritics}%`
+                              : "N/A"}
+                          </span>
+                        </div>
+                        <h1
+                          className={`text-[0.7vw] ${
+                            rottenTomatoesCritics === null
+                              ? "mb-[-0.5vw] mt-[0.5vw]"
+                              : "mt-[0.5vw]"
+                          }`}
+                        >
+                          Critics
+                        </h1>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center mt-[1.5vh]">
+                          {rottenTomatoesAudience && (
+                            <img
+                              className="w-[3vw] h-[3vh]"
+                              src={`/genresIcons/${
+                                rottenTomatoesAudience >= 60
+                                  ? "Rotten_Tomatoes_positive_audience.svg"
+                                  : "Rotten_Tomatoes_negative_audience.svg"
+                              }`}
+                              alt="Rotten Tomatoes Icon"
+                            />
+                          )}
+                          <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold pr-[2.5vw]">
+                            {rottenTomatoesAudience !== null
+                              ? `${rottenTomatoesAudience}%`
+                              : "N/A"}
+                          </span>
+                        </div>
+
+                        <h1
+                          className={`text-[0.7vw] ${
+                            rottenTomatoesAudience === null
+                              ? "mb-[-0.5vw] mt-[0.5vw]"
+                              : "mt-[0.5vw]"
+                          }`}
+                        >
+                          Audience
+                        </h1>
+                      </div>
                     </div>
-                    <div className="flex items-center mt-[1.5vh]">
-                      <img
-                        className="w-[3vw] h-[3vh]"
-                        src="/genresIcons/icons8-rotten-tomatoes.svg"
-                        alt="Rotten Tomatoes Icon"
-                      />
-                      <span className="ml-[0.5vw] text-[1vw] text-white text-bold">
-                        80%
-                      </span>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
-                <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[1vw] md:ml-[4vw]">
-                  iMDB
-                  <div className="flex items-center">
+                <Link
+                  href={`https://www.imdb.com/title/${imdbId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[1vw] md:ml-[1vw]">
+                    iMDB
                     <div className="flex items-center">
-                      <img
-                        className="w-[2.4vw]"
-                        src="/genresIcons/icons8-imdb.svg"
-                        alt="Rotten Tomatoes Icon"
-                      />
-                      <span className="ml-[0.5vw] text-[1vw] text-white text-bold">
-                        80%
-                      </span>
+                      <div className="flex items-center">
+                        <img
+                          className="w-[2.4vw]"
+                          src="/genresIcons/icons8-imdb.svg"
+                          alt="Rotten Tomatoes Icon"
+                        />
+                        <span className="ml-[0.5vw] text-[0.9vw] text-white text-bold">
+                          {imdb !== null ? imdb : "N/A"}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
                 <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[1vw] md:ml-[5vw]">
-                  Popularity
-                  <div className="flex items-center mt-[0.8vh]">
-                    <div className="flex items-center">
-                      <img
-                        className="w-[3vw] h-[3vh]"
-                        src="/genresIcons/5c2d24739a206a1df3d19e60c801c494 1.svg"
-                        alt="Popularity"
-                      />
-                      <span className="ml-[0.5vw] text-[1vw] text-white text-bold pr-[1vw]">
-                        80%
-                      </span>
+                  <Link
+                    href={`https://www.themoviedb.org/movie/${id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Popularity
+                    <div className="flex items-center mt-[0.8vh]">
+                      <div className="flex items-center">
+                        <img
+                          className="w-[3vw] h-[3vh]"
+                          src="/genresIcons/5c2d24739a206a1df3d19e60c801c494 1.svg"
+                          alt="Popularity"
+                        />
+                        <span className="ml-[0.5vw] text-[1vw] text-white text-bold pr-[1vw]">
+                          {tmdbScore
+                            ? Math.round(tmdbScore * 10) / 10
+                            : "Undefined"}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -276,7 +434,7 @@ function MainDetails({
               <div className="flex items-end text-[1vw] mt-[1vh]">
                 <img
                   className="mr-[0.5vw] w-[1.7vw] h-[1.7vw]"
-                  src="genresIcons/icons8-star.svg"
+                  src="/genresIcons/icons8-star.svg"
                 />{" "}
                 {value ? value : "--"} / 5<div></div>
               </div>
@@ -284,46 +442,54 @@ function MainDetails({
           </div>
           <div>
             <h2 className="text-[1vw]">Director</h2>
-            <span className="text-[1vw] text-customTextColor">
-              Fede Alvarez
-            </span>
+            <span className="text-[1vw] text-customTextColor">{director}</span>
           </div>
           <div>
             <h2 className="text-[1vw]">Starring</h2>
             <span className="text-[1vw] text-customTextColor">
-              Cailee Spaeny,
+              {cast[0]?.name},
               <br />
-              David Jonsson,
+              {cast[1]?.name},
               <br />
-              Archie Renax
+              {cast[2]?.name}
             </span>
           </div>
           <div>
             <h2 className="text-[1vw] mb-[1vh]">Socials</h2>
             <div className="text-customTextColor flex">
               <Link
-                href="https://venom.movie/"
+                href={homepage ? homepage : "N/A"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaLink className="w-[1.5vw] h-[1.5vw] mr-[0.5vw]" />
               </Link>
               <Link
-                href="https://www.facebook.com/VenomMovie"
+                href={`${
+                  socials
+                    ? `https://www.facebook.com/${socials.facebook_id}`
+                    : `N/A`
+                }`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaFacebook className="w-[1.5vw] h-[1.5vw] mr-[0.5vw]" />
               </Link>
               <Link
-                href="https://x.com/VenomMovie"
+                href={`${
+                  socials ? `https://x.com/${socials.twitter_id}` : `N/A`
+                }`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaXTwitter className="w-[1.5vw] h-[1.5vw] mr-[0.5vw]" />
               </Link>
               <Link
-                href="https://www.instagram.com/venommovie/"
+                href={`${
+                  socials
+                    ? `https://www.instagram.com/${socials.instagram_id}`
+                    : `N/A`
+                }`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

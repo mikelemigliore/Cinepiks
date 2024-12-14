@@ -21,11 +21,8 @@ import {
   getMovieDetails,
   getSeriesDetails,
 } from "@/app/pages/api/loginPage";
-//import { getImage } from "@/app/pages/api/homePage";
 
 interface MovieCardProps {
-  //tmdbId: number[];
-  //image?:string;
   imgUrl: string;
   title?: string;
   name?: string;
@@ -35,20 +32,18 @@ interface MovieCardProps {
   isLastOne?: boolean;
   list?: boolean;
   single?: boolean;
-  type: string; // Define possible values
+  type?: string; // Define possible values
   watchlist?: boolean;
   watched?: boolean;
   logInPage?: boolean;
   imgBackdrop?: string;
-  genre: number[];
-  itemsGenres: Array<{
+  genre?: number[];
+  itemsGenres?: Array<{
     id: number;
     name: string;
   }>;
   id: number;
   mediaType?: string;
-
-  //getGenreNames: () => void;
 }
 
 interface Genre {
@@ -73,9 +68,7 @@ function MovieCard({
   itemsGenres,
   id,
   name,
-}: //image
-//tmdbId = [],
-//getGenreNames,
+}: 
 MovieCardProps) {
   const [runtime, setRuntime] = useState();
   const [season, setSeasons] = useState();
@@ -83,34 +76,14 @@ MovieCardProps) {
   const [certification, setCertification] = useState();
   const [genres, setGenres] = useState<Genre[]>([]); // Explicit type for genres
   const [expandCard, setExpandCard] = useState(false);
-  //const [showContent, setShowContent] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
   const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
   const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
-  //const [image, setImage] = useState([]);
-  //const [hovered, setHovered] = useState(false);
   const hoveredRef = useRef(false);
-  //const [activeCard, setActiveCard] = useState<string | null>(null); // Track active card
 
-  // const handleActiveCard = () =>{
-  //   setActiveCard(true)
-  // }
   const href = type === "movie" ? `/singlemovie` : `/singleseries`;
 
-  // const getGenreNames = (genreId: number, Genres: any[]) => {
-  //   const genre = Genres.find((g) => g.id === genreId); //The find() method searches the Genres array for an element matching the given condition (g.id === genreId).
 
-  //   return genre ? genre.name : "Unknown Genre";
-  //   //Without the check, the code assumes that find() will always return an object. When it doesn't (i.e.,
-  //   //the genreId isn't found in Genres), the code tries to access undefined.name.
-  //   //This results in the TypeError: Cannot read properties of undefined (reading 'name').
-  // };
-
-  // useEffect(() => {
-  //   if (image) {
-  //     console.log(image);
-  //   }
-  // }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -312,28 +285,10 @@ MovieCardProps) {
             </DialogContent>
           </Dialog>
         ) : (
-          // <Link href="" passHref>
-          //   <div
-          //     className="relative"
-          //     onClick={handleClick}
-          //   >
-          //     <img
-          //       src={imgUrl}
-          //       className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-          //         expandCard ? "opacity-0" : "opacity-100"
-          //       }`}
-          //     />
-          //   </div>
-          //   <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-          //     {title}
-          //   </h1>
-          // </Link>
-          <Link href={href} passHref>
+          <Link href={`${href}/${id}`} passHref>
             <div
               className="relative"
               onClick={handleClick} // Handle click event for conditional navigation
-              // onMouseEnter={handleMouseEnter}
-              // onMouseLeave={handleMouseLeave}
             >
               {/* Poster Image */}
               {list ? (

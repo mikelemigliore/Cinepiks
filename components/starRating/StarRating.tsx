@@ -48,7 +48,7 @@ function StarRating({ title, value, handleValue }: StarRatingProp) {
         <DialogContent className="md:w-[25vw] md:h-[16vw] bg-buttonColor flex flex-col items-center justify-center pb-[4vw]">
           <img
             className="w-[4.5vw] h-[4.5vw] mt-[2vw]"
-            src="genresIcons/icons8-star.svg"
+            src="/genresIcons/icons8-star.svg"
           />
           <div className='font-bold text-[1.2vw]'>{title}</div>
           <Rating

@@ -116,18 +116,6 @@ function BigCard({
             setIMDb(
               dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
             );
-            //console.log("IMDb Score:", dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating);
-            // setRottenTomatoesAudience(
-            //   dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
-            //     ?.rating || null
-            // );
-            // setRottenTomatoesCritics(
-            //   dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
-            //     ?.rating || null
-            // );
-            // setIMDb(
-            //   dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
-            // );
           }
         }
       } catch (error) {

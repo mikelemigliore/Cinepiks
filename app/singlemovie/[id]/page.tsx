@@ -1,6 +1,6 @@
-
 "use client";
 import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import HowToWatchCard from "@/components/cards/HowToWatchCard";
 import Tags from "@/components/tags/Tags";
 import Reviews from "@/components/reviews/Reviews";
@@ -11,6 +11,12 @@ import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import React from "react";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
+import {
+  getCast,
+  getMovieDetails,
+  getTrailerMovieVideo,
+} from "@/app/pages/api/singleMoviePage";
+import Link from "next/link";
 
 const movie = [
   {
@@ -22,76 +28,49 @@ const movie = [
 ];
 
 function SingleMoviePage() {
-  const [videoKey4, setVideoKey4] = useState("__2bjWbetsA"); // Alien
+  const [videoKey, setVideoKey] = useState(""); 
+  const [backdrop, setBackdrop] = useState();
+  const [title, setTitle] = useState("");
+  const [imdbId, setImdbId] = useState();
+  const [cast, setCast] = useState([]);
   const [autoplay, setAutoplay] = useState(true);
   const [play, setPlay] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [isLoading, setIsLoading] = useState(true); 
   const [unmute, setUnmute] = useState(false);
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
-  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
   const [isTrailer, setIsTrailer] = useState(false);
-  const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
-  const [singlemovie, setSinglemovie] = useState(true);
-  const [isListView, setIsListView] = useState(true);
   const [reviews, setReviews] = useState(true);
-  const [value, setValue] = React.useState<number | null>(0);
-  const type = "movie";
 
-  const handleValue = (newValue: number | null) => {
-    if (newValue !== null) {
-      setValue(newValue);
-    } else {
-      setValue(0);
-    }
-  };
+  const params = useParams();
+  const { id } = params;
+  const Id = Number(id);
 
-  // Fetch call to TMDB to get the data I need for cast section, excellent example
-  const [cast, setCast] = useState([]);
-  const movieId = 580489; // Example movie ID for Venom
 
   useEffect(() => {
-    const fetchCast = async () => {
-      const API_KEY = "1fc54b7ab4fb46412074eec75b746280"; // Add your TMDb API key
-      const url = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`;
+    const fetchData = async () => {
       try {
-        const response = await fetch(url);
+        const response = await getMovieDetails(Id);
+        const responseTrailer = await getTrailerMovieVideo(Id);
+        const responseCast = await getCast(Id);
         const data = await response.json();
-        const formattedCast = data.cast.map(
-          (member: {
-            id: any;
-            name: any;
-            character: any;
-            profile_path: any;
-          }) => ({
-            id: member.id,
-            name: member.name,
-            character: member.character,
-            picture: `https://image.tmdb.org/t/p/w500${member.profile_path}`,
-          })
-        );
-        setCast(formattedCast);
+        const dataTrailer = await responseTrailer.json();
+        const dataCast = await responseCast.json();
+
+        setBackdrop(data.backdrop_path);
+        setTitle(data.title);
+        setVideoKey(dataTrailer.key);
+        setImdbId(data.imdb_id || null);
+        setCast(dataCast);
+
       } catch (error) {
-        console.error("Failed to fetch cast:", error);
+        console.error("Failed to fetch:", error);
       }
     };
 
-    fetchCast();
+    fetchData();
   }, []);
 
-  const handleAdded = (movieId: number) => {
-    setIsAdded((prevAdded) => ({
-      ...prevAdded,
-      [movieId]: !prevAdded[movieId], // Toggle the like state for the specific movie
-    }));
-  };
-
-  const handleLike = (movieId: number) => {
-    setIsLiked((prevLiked) => ({
-      ...prevLiked,
-      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
-    }));
-  };
 
   const handlePlay = () => {
     setPlay(true);
@@ -113,13 +92,21 @@ function SingleMoviePage() {
     setPause(false);
   };
 
-
   const handleUnmute = () => {
-    setUnmute(!unmute)
+    setUnmute(!unmute);
   };
 
   const handleSetRelaod = () => {
-    setReload(!reload)
+    setReload(!reload);
+  };
+
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  const formatTitle = (title: string): string => {
+    return title
+      .toLowerCase() // Convert to lowercase
+      .replace(/[^a-z0-9\s]/g, "") // Remove special characters (non-alphanumeric except spaces)
+      .replace(/\s+/g, "_"); // Replace spaces with underscores
   };
 
   return (
@@ -133,44 +120,66 @@ function SingleMoviePage() {
         handleReload={handleReload}
         handleEnd={handleEnd}
         autoplay={autoplay}
-        videoKey={videoKey4}
+        videoKey={videoKey}
         setIsLoading={setIsLoading}
-        src={
-          "https://image.tmdb.org/t/p/original/legcV9yeL4i1HxPMrCn7FCEbrOW.jpg"
-        }
+        src={`${BASE_IMAGE_URL}${backdrop}`}
         isLoading={isLoading}
         handleUnmute={handleUnmute}
         handlePause={handlePause}
         handleSetRelaod={handleSetRelaod}
       />
-      {/* <div className="min-h-screen mb-[50vw] "> */}
       <div className="min-h-screen mb-[110vw] ">
         <div
-          // className={`flex justify-center w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
-          //   play ? "translate-y-[7vw]" : ""
-          // }`}
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
           }`}
         >
           <div className="flex flex-col">
-          <MainDetails
+            <MainDetails
+              id={Id}
               media={movie}
-              type={type}
-              single={singlemovie}
-              handleAdded={handleAdded}
-              handleLike={handleLike}
-              isAdded={isAdded}
+              title={title}
+              imdbId={imdbId}
+              cast={cast}
               handlePlay={handlePlay}
-              videoKey={videoKey4}
+              videoKey={videoKey}
               setIsLoading={setIsLoading}
               handleReload={handleReload}
               handleEnd={handleEnd}
-              isListView={isListView}
-              value={value}
-              handleValue={handleValue}
-              isLiked={isLiked}
             />
+            <div className="flex gap-[4vw] mt-[3vw] h-[4vw] w-full justify-start ml-[14vw]">
+              <div className="h-[2vw]">
+                <div className="text-[1vw]">Ratings Websites</div>
+                <div className="flex mb-[2vh] mt-[1vh]">
+                  <Link
+                    href={`https://www.rottentomatoes.com/m/${formatTitle(
+                      title
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                  >
+                    Rotten Tomatoes
+                  </Link>
+                  <Link
+                    href={`https://www.imdb.com/title/${imdbId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                  >
+                    IMDb
+                  </Link>
+                  <Link
+                    href={`https://www.themoviedb.org/movie/${Id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                  >
+                    TMDb
+                  </Link>
+                </div>
+              </div>
+            </div>
             <div className="flex gap-[4vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
               <div className="h-[2vw]">
                 <div className="text-[1vw]">How To Watch</div>

@@ -81,6 +81,9 @@ function SinglePageMainTrailer({
 }: SinglePageMainTrailerProp) {
 
 
+  
+
+
   return (
     <div className={`w-full h-[47.5vw] relative`}>
       <YoutubeTrailerPlayer
