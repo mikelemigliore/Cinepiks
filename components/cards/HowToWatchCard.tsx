@@ -1,139 +1,200 @@
-import React from "react";
-//import PerfectScrollbar from "react-perfect-scrollbar";
+import React, { useEffect, useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "../ui/button";
-import { AiFillLike } from "react-icons/ai";
 import { CiPlay1 } from "react-icons/ci";
 import Link from "next/link";
+import { getWatchProviders } from "@/app/pages/api/singleMoviePage";
+
 
 const howtowatch = [
   {
-    id: 1,
-    logo: "/genresIcons/Netflix_Symbol_RGB.png",
-    platform: "Netflix",
-    size: "h-[4vw] w-[3vw]",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.netflix.com/browse",
-  },
-  {
     id: 2,
-    logo: "/genresIcons/hulu-Green-digital.png",
-    size: "h-[3vw] w-[2.5vw]",  // Custom size for Netflix logo
-    platform: "Hulu",
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.hulu.com/hub/home",
-  },
-  {
-    id: 3,
-    logo: "/genresIcons/pngaaa.com-650580.png",
-    platform: "AppleTv",
-    size: "h-[3vw] w-[2.5vw]",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
+    provider_name: "Apple TV",
     link: "https://tv.apple.com/",
   },
   {
-    id: 4,
-    platform: "Peacock",
-    logo: "/genresIcons/Peacock-Emblem.png",
-    size: "h-full w-full bg-white",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.peacocktv.com/watch/home?orig_ref=https://www.google.com/",
-  },
-  {
-    id: 5,
-    platform: "Prime Video",
-    logo: "/genresIcons/Amazon_Prime_Video_logo.svg.png",
-    size: "h-full w-full bg-white border-white border-4",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.primevideo.com/offers/nonprimehomepage/ref=dv_web_force_root",
-  },
-  {
-    id: 6,
-    platform: "Disney+",
-    logo: "/genresIcons/Disney+_2024.svg.png",
-    size: "h-full w-[22vw] bg-white border-white border-4",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.disneyplus.com/",
-  },
-  {
-    id: 7,
-    platform: "Paramount+",
-    logo: "/genresIcons/paramount-seeklogo.svg",
-    size: "h-full w-[15vw] bg-white border-white border-4",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.paramountplus.com/?ds_rl=1289065&ftag=PPM-02-10aeg8j&vndid=google$null$null$paramount%20plu&gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUvkLMlmJK0rxcC08-BUlnfWf-WLEVNaU4fDTQHM7c-GEiet0c7dUu8aAsLPEALw_wcB&gclsrc=aw.ds",
+    id: 3,
+    provider_name: "Google Play Movies",
+    link: "https://play.google.com/store/movies",
   },
   {
     id: 8,
-    platform: "Max",
-    logo: "/genresIcons/20230413031451!Max_logo.svg",
-    size: "h-full w-[22vw] bg-white border-white border-4",  // Custom size for Netflix logo
-    rated: "R",
-    runtime: "2h 36m",
-    link: "https://www.max.com/",
+    provider_name: "Netflix",
+    link: "https://www.netflix.com/",
+  },
+  {
+    id: 10,
+    provider_name: "Amazon Prime Video",
+    link: "https://www.primevideo.com/offers/nonprimehomepage/ref=dv_web_force_root",
+  },
+  {
+    id: 68,
+    provider_name: "Microsoft Store",
+    link: "https://www.microsoft.com/store/movies-and-tv",
+  },
+  {
+    id: 192,
+    provider_name: "YouTube",
+    link: "https://www.youtube.com/movies",
+  },
+  {
+    id: 7,
+    provider_name: "Fandango At Home",
+    link: "https://www.fandangonow.com/",
+  },
+  {
+    id: 337,
+    provider_name: "Vudu",
+    link: "https://www.vudu.com/",
+  },
+  {
+    id: 447,
+    provider_name: "Redbox",
+    link: "https://www.redbox.com/",
+  },
+  {
+    id: 350,
+    provider_name: "Disney+",
+    link: "https://www.disneyplus.com/",
+  },
+  {
+    id: 381,
+    provider_name: "Hulu",
+    link: "https://www.hulu.com/",
   },
 ];
 
-function HowToWatchCard() {
+interface SelectedFilterProp {
+  all: boolean;
+  buy: boolean;
+  rent: boolean;
+  subscription: boolean;
+}
+
+interface HowToWatchProp {
+  id: number;
+  selectedFilters: SelectedFilterProp;
+}
+
+interface WatchToBuyProp {
+  display_priority: number;
+  logo_path: string;
+  provider_id: number;
+  provider_name: string;
+}
+
+function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
+  const [watchToBuy, setWatchToBuy] = useState<WatchToBuyProp[]>([]);
+  const [watchToRent, setWatchToRent] = useState<WatchToBuyProp[]>([]);
+  const [watchToStream, setWatchToStream] = useState<WatchToBuyProp[]>([]);
+  const [allServices, setAllServices] = useState<WatchToBuyProp[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getWatchProviders(id);
+        const data = await response.json();
+        if (data) {
+          const combinedServices = [
+            ...(data.flatrate || []),
+            ...(data.rent || []),
+            ...(data.buy || []),
+          ];
+          setAllServices(combinedServices);
+          setWatchToBuy(data.buy || []);
+          setWatchToRent(data.rent || []);
+          setWatchToStream(data.flatrate || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  const findProviderLink = (providerId: number) => {
+    const provider = howtowatch.find((item) => item.id === providerId);
+    return provider ? provider.link : "https://www.justwatch.com/";
+  };
+
+  const getFilteredServices = () => {
+    if (selectedFilters.all) {
+      // Remove duplicates based on provider_id
+      const allServicesNoRepeat = Array.from(
+        new Map(allServices.map((item) => [item.provider_id, item])).values()
+      );
+      return allServicesNoRepeat;
+    } else if (selectedFilters.buy) {
+      return watchToBuy;
+    } else if (selectedFilters.rent) {
+      return watchToRent;
+    } else if (selectedFilters.subscription) {
+      return watchToStream;
+    }
+    return [];
+  };
+
   return (
     <ScrollArea className="h-[21.5vw]">
-      <div>
-        {howtowatch.map((howtowatchItem) => (
-          <div
-            key={howtowatchItem.id}
-            className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]"
-          >
-            <div className="flex h-full items-center gap-x-[1vw] mx-[1vw]">
-              <div className="w-[18vw] h-[3.3vw] bg-black rounded-[1vw] flex items-center justify-center">
-                {howtowatchItem.logo && (
-                  <img
-                    src={howtowatchItem.logo}
-                    alt={`${howtowatchItem.platform} logo`}
-                    className={`${howtowatchItem.size} object-contain rounded-[1vw]`}
-                  />
-                )}
-              </div>
-              <div className="w-full text-start text-[0.9vw]">
-                Platform
-                <div className="text-customTextColor text-[0.9vw]">
-                  {howtowatchItem.platform}
+      {getFilteredServices().length > 0 ? (
+        <div>
+          {getFilteredServices().map((watchItem) => (
+            <div
+              key={watchItem.provider_id}
+              className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]"
+            >
+              <div className="flex h-full items-center gap-x-[1vw] mx-[1vw]">
+                <div className="w-[18vw] h-[3.3vw] bg-black rounded-[1vw] flex items-center justify-center">
+                  {watchItem.logo_path && (
+                    <img
+                      src={`${BASE_IMAGE_URL}${watchItem.logo_path}`}
+                      alt={`${watchItem.provider_name} logo`}
+                      className={`h-[3.5vw] w-[3.5vw] border-buttonColor border-2 object-contain rounded-[1vw]`}
+                    />
+                  )}
                 </div>
-              </div>
-              <div className="w-full text-start text-[0.9vw]">
-                Rated
-                <div className="text-customTextColor text-[0.9vw]">
-                  {howtowatchItem.rated}
+                <div className="w-full text-start text-[0.9vw]">
+                  Platform
+                  <div className="text-customTextColor text-[0.9vw] line-clamp-1">
+                    {watchItem.provider_name}
+                  </div>
                 </div>
-              </div>
-              <div className="w-full text-start text-[0.9vw]">
-                Runtime
-                <div className="text-customTextColor text-[0.9vw]">
-                  {howtowatchItem.runtime}
+                <div className="w-full text-start text-[0.9vw]">
+                  Rated
+                  <div className="text-customTextColor text-[0.9vw]">
+                    {/* {howtowatchItem.rated} */}
+                  </div>
                 </div>
-              </div>
-              <div className="flex h-full items-center">
-                <Link
-                  href={howtowatchItem.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button className="flex justify-center items-center h-10 w-28 md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                    Watch
-                    <CiPlay1 className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
-                  </Button>
-                </Link>
+                <div className="w-full text-start text-[0.9vw]">
+                  Runtime
+                  <div className="text-customTextColor text-[0.9vw]">
+                    {/* {howtowatchItem.runtime} */}
+                  </div>
+                </div>
+                <div className="flex h-full items-center">
+                  <Link
+                    href={`${findProviderLink(watchItem.provider_id)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button className="flex justify-center items-center h-10 w-28 md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                      Watch
+                      <CiPlay1 className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]">
+          <h1>Not Available</h1>
+        </div>
+      )}
     </ScrollArea>
   );
 }

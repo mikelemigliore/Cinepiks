@@ -7,7 +7,7 @@ export async function getMovieDetails(id: number) {
     const response = await fetch(url);
     const data = await response.json();
 
-    console.log(data);
+    //console.log(data);
 
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
@@ -142,11 +142,45 @@ export async function getDirector(id: number) {
     const response = await fetch(url);
     const data = await response.json();
 
-
     const director = data.crew.filter((item: any) => item.job === "Director");
 
-
     return new Response(JSON.stringify(director[0].name), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+export async function getWatchProviders(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/${id}/watch/providers?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    return new Response(JSON.stringify(data.results.US), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+
+export async function getReviews(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data.results);
+    
+
+    return new Response(JSON.stringify(data.results), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,

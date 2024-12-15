@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import HowToWatchCard from "@/components/cards/HowToWatchCard";
-import Tags from "@/components/tags/Tags";
+import TagsHowToWatch from "@/components/tags/TagsHowToWatch";
 import Reviews from "@/components/reviews/Reviews";
 import MoreInfo from "@/components/moreinfo/MoreInfo";
 import CastSwiper from "@/components/carousel/CastSwiper";
@@ -14,9 +14,11 @@ import MainDetails from "@/components/singlePageComps/MainDetails";
 import {
   getCast,
   getMovieDetails,
+  getReviews,
   getTrailerMovieVideo,
 } from "@/app/pages/api/singleMoviePage";
 import Link from "next/link";
+import TagsHighToLow from "@/components/tags/TagsHighToLow";
 
 const movie = [
   {
@@ -27,50 +29,85 @@ const movie = [
   },
 ];
 
+type FilterKey = "all" | "buy" | "rent" | "subscription";
+//type SortedKey = "hightolow" | "lowtohigh";
+
 function SingleMoviePage() {
-  const [videoKey, setVideoKey] = useState(""); 
+  const [videoKey, setVideoKey] = useState("");
   const [backdrop, setBackdrop] = useState();
   const [title, setTitle] = useState("");
   const [imdbId, setImdbId] = useState();
   const [cast, setCast] = useState([]);
   const [autoplay, setAutoplay] = useState(true);
   const [play, setPlay] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [unmute, setUnmute] = useState(false);
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTrailer, setIsTrailer] = useState(false);
-  const [reviews, setReviews] = useState(true);
+  //const [reviews, setReviews] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState({
+    all: true,
+    buy: false,
+    rent: false,
+    subscription: false,
+  });
+  //   const [selectedSorted, setSelectedSorted] = useState({
+  // hightolow:true,
+  // lowtohigh:false,
+  //   })
+  const [hightolow, setHightolow] = useState(true);
+  const [lowtohigh, setLowtohigh] = useState(false);
+  //const [reviews, setReviews] = useState([]);
+
+  const toggleFilter = (filter: FilterKey) => {
+    setSelectedFilters((prev) => ({
+      all: filter === "all",
+      buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
+      rent: filter === "rent",
+      subscription: filter === "subscription",
+    }));
+  };
+
+  // const toggleSorted = (filter: FilterKey) => {
+  //   setSelectedFilters((prev) => ({
+  //     all: filter === "all",
+  //     buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
+  //     rent: filter === "rent",
+  //     subscription: filter === "subscription",
+  //   }));
+  // };
 
   const params = useParams();
   const { id } = params;
   const Id = Number(id);
 
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getMovieDetails(Id);
-        const responseTrailer = await getTrailerMovieVideo(Id);
-        const responseCast = await getCast(Id);
-        const data = await response.json();
-        const dataTrailer = await responseTrailer.json();
-        const dataCast = await responseCast.json();
+    if (Id) {
+      const fetchData = async () => {
+        try {
+          const response = await getMovieDetails(Id);
+          const responseTrailer = await getTrailerMovieVideo(Id);
+          const responseCast = await getCast(Id);
+          //const responseReviews = await getReviews(Id)
+          const data = await response.json();
+          const dataTrailer = await responseTrailer.json();
+          const dataCast = await responseCast.json();
+          //const dataReviews = await responseReviews.json()
 
-        setBackdrop(data.backdrop_path);
-        setTitle(data.title);
-        setVideoKey(dataTrailer.key);
-        setImdbId(data.imdb_id || null);
-        setCast(dataCast);
-
-      } catch (error) {
-        console.error("Failed to fetch:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+          setBackdrop(data.backdrop_path);
+          setTitle(data.title);
+          setVideoKey(dataTrailer.key);
+          setImdbId(data.imdb_id || null);
+          setCast(dataCast);
+          //setReviews(dataReviews)
+        } catch (error) {
+          console.error("Failed to fetch:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [Id]);
 
   const handlePlay = () => {
     setPlay(true);
@@ -98,6 +135,16 @@ function SingleMoviePage() {
 
   const handleSetRelaod = () => {
     setReload(!reload);
+  };
+
+  const handleHightolow = () => {
+    setHightolow(true);
+    setLowtohigh(false);
+  };
+
+  const handleLowtohigh = () => {
+    setLowtohigh(true);
+    setHightolow(false);
   };
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
@@ -184,19 +231,31 @@ function SingleMoviePage() {
               <div className="h-[2vw]">
                 <div className="text-[1vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
-                  <Tags />
+                  <TagsHowToWatch
+                    selectedFilters={selectedFilters}
+                    toggleFilter={toggleFilter}
+                  />
                 </div>
                 <div className="w-full">
-                  <HowToWatchCard />
+                  <HowToWatchCard id={Id} selectedFilters={selectedFilters} />
                 </div>
               </div>
               <div className="h-[2vw]">
                 <div className="text-[1vw]">Reviews</div>
                 <div className="my-[1vh] mb-[2vh]">
-                  <Tags reviews={reviews} />
+                  <TagsHighToLow
+                    hightolow={hightolow}
+                    lowtohigh={lowtohigh}
+                    handleHightolow={handleHightolow}
+                    handleLowtohigh={handleLowtohigh}
+                  />
                 </div>
                 <div className="w-full h-[22vw]">
-                  <Reviews />
+                  <Reviews
+                    id={Id}
+                    hightolow={hightolow}
+                    lowtohigh={lowtohigh}
+                  />
                 </div>
               </div>
             </div>

@@ -34,7 +34,7 @@ import { AiFillInstagram, AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import HowToWatchCard from "@/components/cards/HowToWatchCard";
-import Tags from "@/components/tags/Tags";
+import Tags from "@/components/tags/TagsHowToWatch";
 import Reviews from "@/components/reviews/Reviews";
 import MoreInfo from "@/components/moreinfo/MoreInfo";
 import CastSwiper from "@/components/carousel/CastSwiper";
@@ -56,10 +56,10 @@ interface SinglePageMainTrailerProp {
   handleEnd: () => void;
   unmute?: boolean;
   isListView?: boolean;
-  isLoading?:boolean
-  handleUnmute:()=>void
-  handlePause:()=>void
-  handleSetRelaod:()=>void
+  isLoading?: boolean;
+  handleUnmute: () => void;
+  handlePause: () => void;
+  handleSetRelaod: () => void;
 }
 
 function SinglePageMainTrailer({
@@ -77,13 +77,8 @@ function SinglePageMainTrailer({
   isLoading,
   handleUnmute,
   handlePause,
-  handleSetRelaod
+  handleSetRelaod,
 }: SinglePageMainTrailerProp) {
-
-
-  
-
-
   return (
     <div className={`w-full h-[47.5vw] relative`}>
       <YoutubeTrailerPlayer

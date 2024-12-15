@@ -257,7 +257,7 @@ function HomePage() {
             }
           })
         );
-        console.log(updatedInTheaters);
+        //console.log(updatedInTheaters);
         
         setInTheaters(updatedInTheaters);
 
