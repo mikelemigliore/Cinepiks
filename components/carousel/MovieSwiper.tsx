@@ -10,34 +10,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
-// type MediaRapid = {
-//   itemType: "show"; // Fixed value
-//   showType: "movie" | "series"; // Can be "movie" or "series"
-//   id: string; // Unique ID as a string
-//   imdbId: string; // Optional IMDb ID
-//   tmdbId: string; // Optional TMDb ID
-//   title: string; // Title of the movie or series
-//   originalTitle?: string; // Optional original title
-//   overview: string; // Brief description
-//   releaseYear: number; // Year of release
-//   genres: string[]; // List of genres
-//   directors: string[]; // Optional list of directors
-//   cast: string[]; // Optional list of cast members
-//   rating: number; // Optional rating (e.g., percentage)
-//   imageSet: {
-//     verticalPoster: {
-//       w240: string;
-//       w360: string;
-//       w480: string;
-//       w600: string;
-//       w720: string;
-//     }; // URL for poster image
-//     horizontalBackdrop: string[]; // URL for backdrop image
-//   };
-//   // streamingOptions?: {
-//   //   [platform: string]: string; // Key-value pair for platform and URL
-//   // };
-// };
 
 interface Props {
   //tmdbId?:number[];

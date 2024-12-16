@@ -3,8 +3,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "../ui/button";
 import { CiPlay1 } from "react-icons/ci";
 import Link from "next/link";
-import { getWatchProviders } from "@/app/pages/api/singleMoviePage";
-
+import {
+  getMovieCertification,
+  getMovieDetails,
+  getWatchProviders,
+} from "@/app/pages/api/singleMoviePage";
 
 const howtowatch = [
   {
@@ -88,12 +91,30 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
   const [watchToRent, setWatchToRent] = useState<WatchToBuyProp[]>([]);
   const [watchToStream, setWatchToStream] = useState<WatchToBuyProp[]>([]);
   const [allServices, setAllServices] = useState<WatchToBuyProp[]>([]);
+  const [certification, setCertification] = useState("");
+  const [runtime, setRuntime] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getWatchProviders(id);
+        const responseCertification = await getMovieCertification(id);
+        const responseInfo = await getMovieDetails(id);
         const data = await response.json();
+        const dataCertification = await responseCertification.json();
+        const dataInfo = await responseInfo.json();
+
+        // Find the US release dates and certification
+        const usRelease = dataCertification.results.find(
+          (item: any) => item.iso_3166_1 === "US"
+        );
+
+        if (usRelease) {
+          const usCertification =
+            usRelease.release_dates[0].certification || "Not Rated";
+          setCertification(usCertification);
+        }
+
         if (data) {
           const combinedServices = [
             ...(data.flatrate || []),
@@ -104,6 +125,7 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
           setWatchToBuy(data.buy || []);
           setWatchToRent(data.rent || []);
           setWatchToStream(data.flatrate || []);
+          setRuntime(dataInfo.runtime);
         }
       } catch (error) {
         console.error("Failed to fetch:", error);
@@ -137,6 +159,12 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
     return [];
   };
 
+  const formatRuntime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60); // Get the hours
+    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    return `${hours}h ${remainingMinutes}m`;
+  };
+
   return (
     <ScrollArea className="h-[21.5vw]">
       {getFilteredServices().length > 0 ? (
@@ -165,13 +193,13 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
                 <div className="w-full text-start text-[0.9vw]">
                   Rated
                   <div className="text-customTextColor text-[0.9vw]">
-                    {/* {howtowatchItem.rated} */}
+                    {certification}
                   </div>
                 </div>
                 <div className="w-full text-start text-[0.9vw]">
                   Runtime
                   <div className="text-customTextColor text-[0.9vw]">
-                    {/* {howtowatchItem.runtime} */}
+                    {runtime ? formatRuntime(runtime) : "N/A"}
                   </div>
                 </div>
                 <div className="flex h-full items-center">

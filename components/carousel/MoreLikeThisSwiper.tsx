@@ -1,183 +1,90 @@
-import React from 'react'
-import MovieSwiper from './MovieSwiper'
 
-const movies = [
-  {
-    id: 1,
-    title: "Deadpool & Wolverine",
-    imgUrl: "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-    type: "movie",
-  },
-  {
-    id: 2,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 3,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 4,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 5,
-    title: "Avatar:The Way of Water",
-    imgUrl: "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-    type: "movie",
-  },
-  {
-    id: 6,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 7,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 8,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 9,
-    title: "Deadpool & Wolverine",
-    imgUrl: "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-    type: "movie",
-  },
-  {
-    id: 10,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 11,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 12,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 13,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 14,
-    title: "Avatar:The Way of Water",
-    imgUrl: "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-    type: "movie",
-  },
-  {
-    id: 15,
-    title: "Deadpool & Wolverine",
-    imgUrl: "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-    type: "movie",
-  },
-  {
-    id: 16,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 17,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 18,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 19,
-    title: "Avatar:The Way of Water",
-    imgUrl: "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-    type: "movie",
-  },
-  {
-    id: 20,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 21,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 22,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 23,
-    title: "Deadpool & Wolverine",
-    imgUrl: "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-    type: "movie",
-  },
-  {
-    id: 24,
-    title: "Spider-Man",
-    imgUrl: "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-    type: "movie",
-  },
-  {
-    id: 25,
-    title: "Avengers",
-    imgUrl: "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-    type: "movie",
-  },
-  {
-    id: 26,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 27,
-    title: "Batman",
-    imgUrl: "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    type: "movie",
-  },
-  {
-    id: 28,
-    title: "Avatar:The Way of Water",
-    imgUrl: "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-    type: "movie",
-  },
-];
+import React, { useEffect, useState } from "react";
+import MovieSwiper from "./MovieSwiper";
+import {
+  getCollection,
+  getMovieDetails,
+  getSimilarMovies,
+} from "@/app/pages/api/singleMoviePage";
 
-const title = "More Like This"
+const title = "More Like This";
 
-function MoreLikeThisSwiper() {
-  return (
-    <div><MovieSwiper  medias={movies} title={title}/></div>
-  )
+interface MoreLikeThisSwiperProp {
+  mediaType: string;
+  id: number;
 }
 
-export default MoreLikeThisSwiper
+function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
+  const [collection, setCollection] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [wholeCollection, setWholeCollection] = useState([]);
+  const [genres, setGenres] = useState([]);
+
+  // Fetch movie details and collection
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await getMovieDetails(id);
+          const data = await response.json();
+
+          // Set genres from movie details
+          setGenres(data.genres || []);
+
+          // Fetch collection if it exists
+          if (data.belongs_to_collection) {
+            const responseCollection = await getCollection(
+              data.belongs_to_collection.id
+            );
+            const dataCollection = await responseCollection.json();
+
+            // Filter out the current movie ID
+            const updatedCollection = dataCollection.parts.filter(
+              (item: any) => item.id !== id
+            );
+
+            setCollection(updatedCollection);
+          } else {
+            setCollection([]); // Explicitly set an empty collection if none exists
+          }
+        } catch (error) {
+          console.error("Failed to fetch movie details or collection:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
+
+  // Fetch similar movies whenever genres are updated
+  useEffect(() => {
+    if (genres.length > 0) {
+      const fetchSimilarMovies = async () => {
+        try {
+          const responseSimilarMovies = await getSimilarMovies(genres);
+          const dataSimilarMovies = await responseSimilarMovies.json();
+          setSimilarMovies(dataSimilarMovies);
+        } catch (error) {
+          console.error("Failed to fetch similar movies:", error);
+        }
+      };
+      fetchSimilarMovies();
+    }
+  }, [genres]);
+
+  // Combine collection and similarMovies whenever either changes
+  useEffect(() => {
+    setWholeCollection([...collection, ...similarMovies]);
+  }, [collection, similarMovies]);
+
+  return (
+    <div>
+      <MovieSwiper
+        medias={wholeCollection}
+        title={title}
+        mediaType={mediaType}
+      />
+    </div>
+  );
+}
+
+export default MoreLikeThisSwiper;

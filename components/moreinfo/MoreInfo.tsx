@@ -1,34 +1,100 @@
-import React from 'react'
+import { getMovieDetails } from "@/app/pages/api/singleMoviePage";
+import React, { useEffect, useState } from "react";
 
-function MoreInfo() {
-  return (
-    <div className='flex justify-between items-center mx-[4vw] h-full mt-[0.5vw]'>
-        <div>
-            <div className="text-[0.9vw]">Release</div>
-            <div className="text-customTextColor text-[0.9vw]">08/16/2024</div>
-        </div>
-        <div>
-            <div className="text-[0.9vw]">Genres</div>
-            <div className="text-customTextColor text-[0.9vw]">Action,Scifi,Comedy</div>
-        </div>
-        <div>
-            <div className="text-[0.9vw]">Origins</div>
-            <div className="text-customTextColor text-[0.9vw]">United States</div>
-        </div>
-        <div>
-            <div className="text-[0.9vw]">Languages</div>
-            <div className="text-customTextColor text-[0.9vw]">English</div>
-        </div>
-        <div>
-            <div className="text-[0.9vw]">Budget</div>
-            <div className="text-customTextColor text-[0.9vw]">$180,000,000</div>
-        </div>
-        <div>
-            <div className="text-[0.9vw]">Box Office</div>
-            <div className="text-customTextColor text-[0.9vw]">$285,885,980</div>
-        </div>
-    </div>
-  )
+interface MoreInfoProp {
+  id: number;
 }
 
-export default MoreInfo
+interface GenresProp {
+  id: number;
+  name: string;
+}
+
+function MoreInfo({ id }: MoreInfoProp) {
+  const [releaseDate, setReleaseDate] = useState<string | undefined>();
+  const [genres, setGenres] = useState<GenresProp[]>([]);
+  const [origins, setOrigins] = useState<string | undefined>();
+  const [language, setLanguage] = useState<string | undefined>();
+  const [budget, setBudget] = useState<string | undefined>();
+  const [boxOffice, setBoxOffice] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await getMovieDetails(id);
+          const data = await response.json();
+
+          const displayNames = new Intl.DisplayNames(["en"], {
+            type: "region",
+          });
+          const languageDisplayNames = new Intl.DisplayNames(["en"], {
+            type: "language",
+          });
+
+          // For Country Names
+          const countryName = displayNames.of(data.origin_country[0]); // Converts "US" to "United States"
+
+          // For Language Names
+          const languageName = languageDisplayNames.of(data.original_language); // Converts "en" to "English"
+
+          setReleaseDate(data.release_date);
+          setGenres(data.genres);
+          setOrigins(countryName);
+          setLanguage(languageName);
+          setBudget(data.budget === 0 ? " N/A" : data.budget.toLocaleString());
+          setBoxOffice(data.revenue === 0 ? " N/A" : data.revenue.toLocaleString());
+        } catch (error) {
+          console.error("Failed to fetch:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
+
+  const formatDate = (date: string | undefined) => {
+    if (date) {
+      const [year, month, day] = date.split("-");
+      return `${month}/${day}/${year}`;
+    }
+    return "Not Available";
+  };
+
+  return (
+    <div className="flex justify-between items-center mx-[4vw] h-full mt-[0.5vw]">
+      <div>
+        <div className="text-[0.9vw]">Release</div>
+        <div className="text-customTextColor text-[0.9vw]">
+          {formatDate(releaseDate)}
+        </div>
+      </div>
+      <div>
+        <div className="text-[0.9vw]">Genres</div>
+        <div className="text-customTextColor text-[0.9vw]">
+          {genres
+            .slice(0, 3)
+            .map((genre) => genre.name)
+            .join(", ")}
+        </div>
+      </div>
+      <div>
+        <div className="text-[0.9vw]">Origins</div>
+        <div className="text-customTextColor text-[0.9vw]">{origins}</div>
+      </div>
+      <div>
+        <div className="text-[0.9vw]">Languages</div>
+        <div className="text-customTextColor text-[0.9vw]">{language}</div>
+      </div>
+      <div>
+        <div className="text-[0.9vw]">Budget</div>
+        <div className="text-customTextColor text-[0.9vw]">{`$${budget}`}</div>
+      </div>
+      <div>
+        <div className="text-[0.9vw]">Box Office</div>
+        <div className="text-customTextColor text-[0.9vw]">{`$${boxOffice}`}</div>
+      </div>
+    </div>
+  );
+}
+
+export default MoreInfo;

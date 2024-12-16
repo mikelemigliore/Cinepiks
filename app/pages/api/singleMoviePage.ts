@@ -167,9 +167,6 @@ export async function getWatchProviders(id: number) {
   }
 }
 
-
-
-
 export async function getReviews(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
   const url = `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${apiKey}`;
@@ -178,9 +175,67 @@ export async function getReviews(id: number) {
     const data = await response.json();
 
     //console.log(data.results);
-    
 
     return new Response(JSON.stringify(data.results), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+export async function getCollection(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/collection/${id}?api_key=${apiKey}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data);
+
+    return new Response(JSON.stringify(data), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+export async function getSimilarMovies(genres: any[]) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+
+  // Build the `with_genres` parameter dynamically
+  const genreIds = genres
+    .slice(0, 2)
+    .map((genre) => genre.id)
+    .join(",");
+
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=en-US&region=US&vote_count.gte=100&vote_average.gte=7&sort_by=popularity.desc&with_genres=${genreIds}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    return new Response(JSON.stringify(data.results), { status: 200 });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+export async function getRecommendation(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  const url = `https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${apiKey}&language=en-US&page=1&region=US&sort_by=primary_release_date.desc`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    //console.log(data);
+
+    return new Response(JSON.stringify(data), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,

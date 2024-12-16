@@ -14,7 +14,6 @@ import MainDetails from "@/components/singlePageComps/MainDetails";
 import {
   getCast,
   getMovieDetails,
-  getReviews,
   getTrailerMovieVideo,
 } from "@/app/pages/api/singleMoviePage";
 import Link from "next/link";
@@ -52,13 +51,8 @@ function SingleMoviePage() {
     rent: false,
     subscription: false,
   });
-  //   const [selectedSorted, setSelectedSorted] = useState({
-  // hightolow:true,
-  // lowtohigh:false,
-  //   })
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
-  //const [reviews, setReviews] = useState([]);
 
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
@@ -69,14 +63,6 @@ function SingleMoviePage() {
     }));
   };
 
-  // const toggleSorted = (filter: FilterKey) => {
-  //   setSelectedFilters((prev) => ({
-  //     all: filter === "all",
-  //     buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
-  //     rent: filter === "rent",
-  //     subscription: filter === "subscription",
-  //   }));
-  // };
 
   const params = useParams();
   const { id } = params;
@@ -89,18 +75,15 @@ function SingleMoviePage() {
           const response = await getMovieDetails(Id);
           const responseTrailer = await getTrailerMovieVideo(Id);
           const responseCast = await getCast(Id);
-          //const responseReviews = await getReviews(Id)
           const data = await response.json();
           const dataTrailer = await responseTrailer.json();
           const dataCast = await responseCast.json();
-          //const dataReviews = await responseReviews.json()
 
           setBackdrop(data.backdrop_path);
           setTitle(data.title);
           setVideoKey(dataTrailer.key);
           setImdbId(data.imdb_id || null);
           setCast(dataCast);
-          //setReviews(dataReviews)
         } catch (error) {
           console.error("Failed to fetch:", error);
         }
@@ -158,23 +141,23 @@ function SingleMoviePage() {
 
   return (
     <div>
-      <SinglePageMainTrailer
-        handlePlay={handlePlay}
-        play={play}
-        unmute={unmute}
-        pause={pause}
-        reload={reload}
-        handleReload={handleReload}
-        handleEnd={handleEnd}
-        autoplay={autoplay}
-        videoKey={videoKey}
-        setIsLoading={setIsLoading}
-        src={`${BASE_IMAGE_URL}${backdrop}`}
-        isLoading={isLoading}
-        handleUnmute={handleUnmute}
-        handlePause={handlePause}
-        handleSetRelaod={handleSetRelaod}
-      />
+        <SinglePageMainTrailer
+          handlePlay={handlePlay}
+          play={play}
+          unmute={unmute}
+          pause={pause}
+          reload={reload}
+          handleReload={handleReload}
+          handleEnd={handleEnd}
+          autoplay={autoplay}
+          videoKey={videoKey}
+          setIsLoading={setIsLoading}
+          src={`${BASE_IMAGE_URL}${backdrop}`}
+          isLoading={isLoading}
+          handleUnmute={handleUnmute}
+          handlePause={handlePause}
+          handleSetRelaod={handleSetRelaod}
+        />
       <div className="min-h-screen mb-[110vw] ">
         <div
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
@@ -261,7 +244,7 @@ function SingleMoviePage() {
             </div>
             <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[14vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
-              <MoreInfo />
+              <MoreInfo id={Id} />
             </div>
             {/* <div className="mt-[6vw] max-w-[50vw]"> */}
             <div className="mt-[4vw] max-w-[75vw] ml-[14vw]">
@@ -271,11 +254,15 @@ function SingleMoviePage() {
             <div className="max-w-[75vw] ml-[15vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
             <div className="mt-[6vw]">
               {/* mx-auto max-w-full */}
-              <MoreLikeThisSwiper />
+              <MoreLikeThisSwiper
+                //collection={wholeCollection}
+                id={Id}
+                mediaType={"movie"}
+              />
             </div>
             <div>
               {/* mx-auto max-w-full */}
-              <RecommendationSwiper />
+              <RecommendationSwiper id={Id} mediaType={"movie"} />
             </div>
           </div>
         </div>
