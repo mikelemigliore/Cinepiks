@@ -351,7 +351,7 @@ MovieCardProps) {
                 </div>
               </div>
             </div>
-            <h1 className="pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+            <h1 className="w-[12vw] pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
               {title || name}
             </h1>
           </Link>

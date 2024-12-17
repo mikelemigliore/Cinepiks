@@ -43,6 +43,9 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+const href = mediaType === "movie" ? "singlemovie" : "singleseries"
+
   return (
     <div
       onMouseEnter={() => setShowButtons(true)}
@@ -161,6 +164,7 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
                   // time={itemBigCard.time}
                   //description={itemBigCard.description}
                   mediaType={mediaType}
+                  href={href}
                 />
               </SwiperSlide>
             );

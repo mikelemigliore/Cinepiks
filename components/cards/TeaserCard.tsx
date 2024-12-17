@@ -341,7 +341,7 @@ TeaserCardProps) {
                         </Button>
                       </Link>
                     ) : (
-                      <Link href={`/singleseries`}>
+                      <Link href={`${href}/${id}`}>
                         <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
                           View
                           <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />

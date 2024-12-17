@@ -28,6 +28,7 @@ interface BigCardProps {
   isPartialSlide: boolean;
   isLastOne: boolean;
   mediaType: string;
+  href: string;
   //genres: Genre[];
 }
 
@@ -41,6 +42,7 @@ function BigCard({
   isLastOne,
   id,
   mediaType,
+  href,
 }: BigCardProps) {
   const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -198,7 +200,7 @@ function BigCard({
 
         {/* Right Side: Movie Info */}
         <div className="flex flex-col justify-center items-center ml-[1vw]">
-          <div className="text-4xl md:text-[2.5vw] font-semibold text-center line-clamp-1">
+          <div className=" w-[27vw] text-4xl md:text-[2.5vw] font-semibold text-center line-clamp-1">
             {title}
           </div>
 
@@ -325,8 +327,8 @@ function BigCard({
           </div>
 
           <div className="flex justify-center md:justify-start mt-[2rem] md:mt-[6vh]">
-            <Link href="/singlemovie">
-              <Button className="h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+            <Link href={`/${href}/${id}`}>
+              <Button className="h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                 View
                 <SlArrowRight className="w-[2vw] h-[2vh] ml-6 md:ml-[2vw]" />
               </Button>
@@ -334,8 +336,8 @@ function BigCard({
 
             <Button
               onClick={() => setIsAdded(!isAdded)}
-              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500${
-                isAdded ? "bg-white/90 text-black font-bold" : ""
+              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+                isAdded ? "bg-white/90 text-black" : ""
               }`}
             >
               Watchlist
@@ -348,7 +350,7 @@ function BigCard({
 
             <Button
               onClick={() => setIsLiked(!isLiked)}
-              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""
               }`}
             >

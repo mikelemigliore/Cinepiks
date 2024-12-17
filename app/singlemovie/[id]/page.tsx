@@ -35,7 +35,7 @@ function SingleMoviePage() {
   const [videoKey, setVideoKey] = useState("");
   const [backdrop, setBackdrop] = useState();
   const [title, setTitle] = useState("");
-  const [imdbId, setImdbId] = useState();
+  const [imdbId, setImdbId] = useState("");
   const [cast, setCast] = useState([]);
   const [autoplay, setAutoplay] = useState(true);
   const [play, setPlay] = useState(false);
@@ -53,6 +53,7 @@ function SingleMoviePage() {
   });
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
+  const type = "movie";
 
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
@@ -62,7 +63,6 @@ function SingleMoviePage() {
       subscription: filter === "subscription",
     }));
   };
-
 
   const params = useParams();
   const { id } = params;
@@ -78,6 +78,8 @@ function SingleMoviePage() {
           const data = await response.json();
           const dataTrailer = await responseTrailer.json();
           const dataCast = await responseCast.json();
+
+          //console.log(data.imdb_id);
 
           setBackdrop(data.backdrop_path);
           setTitle(data.title);
@@ -141,23 +143,23 @@ function SingleMoviePage() {
 
   return (
     <div>
-        <SinglePageMainTrailer
-          handlePlay={handlePlay}
-          play={play}
-          unmute={unmute}
-          pause={pause}
-          reload={reload}
-          handleReload={handleReload}
-          handleEnd={handleEnd}
-          autoplay={autoplay}
-          videoKey={videoKey}
-          setIsLoading={setIsLoading}
-          src={`${BASE_IMAGE_URL}${backdrop}`}
-          isLoading={isLoading}
-          handleUnmute={handleUnmute}
-          handlePause={handlePause}
-          handleSetRelaod={handleSetRelaod}
-        />
+      <SinglePageMainTrailer
+        handlePlay={handlePlay}
+        play={play}
+        unmute={unmute}
+        pause={pause}
+        reload={reload}
+        handleReload={handleReload}
+        handleEnd={handleEnd}
+        autoplay={autoplay}
+        videoKey={videoKey}
+        setIsLoading={setIsLoading}
+        src={`${BASE_IMAGE_URL}${backdrop}`}
+        isLoading={isLoading}
+        handleUnmute={handleUnmute}
+        handlePause={handlePause}
+        handleSetRelaod={handleSetRelaod}
+      />
       <div className="min-h-screen mb-[110vw] ">
         <div
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
@@ -168,6 +170,7 @@ function SingleMoviePage() {
             <MainDetails
               id={Id}
               media={movie}
+              type={type}
               title={title}
               imdbId={imdbId}
               cast={cast}

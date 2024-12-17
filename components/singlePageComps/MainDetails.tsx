@@ -9,11 +9,7 @@ import { GoDotFill } from "react-icons/go";
 import MovieCard from "@/components/cards/MovieCard";
 import { IoCheckmark } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AiFillInstagram, AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
@@ -25,8 +21,14 @@ import {
   getRatings,
   getSocials,
 } from "@/app/pages/api/singleMoviePage";
-
-
+import {
+  getImdbId,
+  getSeriesCertification,
+  getSeriesDetails,
+  getSeriesRatings,
+  getSeriesRuntime,
+  getSeriesSocials,
+} from "@/app/pages/api/singleSeriesPage";
 
 interface SeriesProp {
   id: number;
@@ -69,8 +71,10 @@ interface MainDetailsProps {
   handleReload: () => void;
   handleEnd: () => void;
   setIsLoading: (loading: boolean) => void;
-  imdbId?: number;
+  imdbId?: string;
   cast?: CastProp[];
+  type: string;
+  //single?:boolean
 }
 
 function MainDetails({
@@ -84,25 +88,28 @@ function MainDetails({
   title,
   imdbId,
   cast = [],
-}: MainDetailsProps) {
-  const [poster, setPoster] = useState();
+  type,
+}: //single
+MainDetailsProps) {
+  const [poster, setPoster] = useState<string>("");
   const [genres, setGenres] = useState<GenresProp[]>([]);
   const [certification, setCertification] = useState("");
-  const [runtime, setRuntime] = useState();
+  const [runtime, setRuntime] = useState<number | null>(null);
   const [description, setDescription] = useState("");
   const [rottenTomatoesAudience, setRottenTomatoesAudience] = useState();
   const [rottenTomatoesCritics, setRottenTomatoesCritics] = useState();
   const [imdb, setIMDb] = useState();
   const [tmdbScore, setTMDbScore] = useState();
   const [socials, setSocials] = useState<SocialsProp>();
-  const [homepage, setHomePage] = useState();
+  const [homepage, setHomePage] = useState<string | null>(null);
   const [director, setDirector] = useState();
-  const [single, setSinglemovie] = useState(true);
+  const [single, setSingleMedia] = useState(true);
   const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
   const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
   const [isListView, setIsListView] = useState(true);
   const [value, setValue] = React.useState<number | null>(0);
-  const type = "movie";
+  const [imdbIdSeries, setImdbIdSeries] = useState("");
+  //const type = "movie";
 
   const handleAdded = (movieId: number) => {
     setIsAdded((prevAdded) => ({
@@ -127,72 +134,287 @@ function MainDetails({
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       try {
-        const response = await getMovieDetails(id);
-        const responseCertification = await getMovieCertification(id);
-        const responseSocials = await getSocials(id);
-        const responseDirector = await getDirector(id);
+        if (type === "movie") {
+          const response = await getMovieDetails(id);
+          const responseCertification = await getMovieCertification(id);
+          const responseSocials = await getSocials(id);
+          const responseDirector = await getDirector(id);
 
-        const data = await response.json();
-        const dataCertification = await responseCertification.json();
-        const dataSocials = await responseSocials.json();
-        const dataDirector = await responseDirector.json();
+          const data = await response.json();
+          const dataCertification = await responseCertification.json();
+          const dataSocials = await responseSocials.json();
+          const dataDirector = await responseDirector.json();
 
-        // Find the US release dates and certification
-        const usRelease = dataCertification.results.find(
-          (item: any) => item.iso_3166_1 === "US"
-        );
+          const usRelease = dataCertification?.results?.find(
+            (item: any) => item.iso_3166_1 === "US"
+          );
 
-        if (usRelease) {
-          const usCertification =
-            usRelease.release_dates[0].certification || "Not Rated";
-          setCertification(usCertification);
-        }
+          if (isMounted) {
+            setPoster(data?.poster_path || "");
+            setGenres(data?.genres || []);
+            setRuntime(data?.runtime || "N/A");
+            setDescription(data?.overview || "No description available");
+            setTMDbScore(data?.vote_average || null);
+            setSocials(dataSocials || {});
+            setHomePage(data?.homepage || "");
+            setDirector(dataDirector);
 
-        setPoster(data.poster_path);
-        setGenres(data.genres);
-        setRuntime(data.runtime);
-        setDescription(data.overview);
-        setTMDbScore(data.vote_average || null);
-        setSocials(dataSocials || null);
-        setHomePage(data.homepage);
-        setDirector(dataDirector);
+            if (data.imdb_id) {
+              const ratingsResponse = await getRatings(data.imdb_id);
+              if (ratingsResponse) {
+                const dataRatings = await ratingsResponse.json();
 
-        if (data.imdb_id) {
-          const ratingsResponse = await getRatings(data.imdb_id);
-          if (ratingsResponse) {
-            const dataRatings = await ratingsResponse.json();
+                console.log(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                    ?.rating
+                );
 
-            setRottenTomatoesAudience(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
-                ?.rating || null
-            );
+                console.log(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                    ?.rating
+                );
+                console.log(
+                  dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating
+                );
 
-            setRottenTomatoesCritics(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
-                ?.rating || null
-            );
+                setRottenTomatoesAudience(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                    ?.rating || null
+                );
+                setRottenTomatoesCritics(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                    ?.rating || null
+                );
+                setIMDb(
+                  dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating ||
+                    null
+                );
+              }
+            }
+          }
+        } else {
+          const responseImdbId = await getImdbId(id);
+          const response = await getSeriesDetails(id);
+          const responseCertification = await getSeriesCertification(id);
+          const responseSocials = await getSeriesSocials(id);
+          const responseSeriesRuntime = await getSeriesRuntime(id);
 
-            setIMDb(
-              dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
-            );
+          const dataImdbId = await responseImdbId.json();
+          const data = await response.json();
+          const dataCertification = await responseCertification.json();
+          const dataSocials = await responseSocials.json();
+          const dataRuntime = await responseSeriesRuntime.json();
+
+          if (isMounted) {
+            setImdbIdSeries(dataImdbId || "");
+            setCertification(dataCertification || "Not Rated");
+            setPoster(data?.poster_path || "");
+            setGenres(data?.genres || []);
+            setRuntime(dataRuntime || "N/A");
+            setDescription(data?.overview || "No description available");
+            setTMDbScore(data?.vote_average || null);
+            setSocials(dataSocials || {});
+            setHomePage(data?.homepage || "");
+            setDirector(data?.created_by?.[0]?.name || "N/A");
+
+            if (dataImdbId) {
+              const ratingsResponse = await getSeriesRatings(dataImdbId);
+              if (ratingsResponse) {
+                const dataRatings = await ratingsResponse.json();
+
+                console.log(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                    ?.rating
+                );
+
+                console.log(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                    ?.rating
+                );
+                console.log(
+                  dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating
+                );
+
+                setRottenTomatoesAudience(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+                    ?.rating
+                );
+                setRottenTomatoesCritics(
+                  dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+                    ?.rating
+                );
+                setIMDb(
+                  dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating
+                );
+              }
+            }
           }
         }
       } catch (error) {
-        console.error("Failed to fetch:", error);
+        console.error("Failed to fetch data:", error);
+        //if (isMounted) setError("Failed to load details.");
       }
     };
 
     fetchData();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, type]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (type === "movie") {
+  //       try {
+  //         const response = await getMovieDetails(id);
+  //         const responseCertification = await getMovieCertification(id);
+  //         const responseSocials = await getSocials(id);
+  //         const responseDirector = await getDirector(id);
+
+  //         const data = await response.json();
+  //         const dataCertification = await responseCertification.json();
+  //         const dataSocials = await responseSocials.json();
+  //         const dataDirector = await responseDirector.json();
+
+  //         // Find the US release dates and certification
+  //         const usRelease = dataCertification.results.find(
+  //           (item: any) => item.iso_3166_1 === "US"
+  //         );
+
+  //         if (usRelease) {
+  //           const usCertification =
+  //             usRelease.release_dates[0].certification || "Not Rated";
+  //           setCertification(usCertification);
+  //         }
+
+  //         //console.log(data.imdb_id);
+
+  //         setPoster(data.poster_path);
+  //         setGenres(data.genres);
+  //         setRuntime(data.runtime);
+  //         setDescription(data.overview);
+  //         setTMDbScore(data.vote_average || null);
+  //         setSocials(dataSocials || null);
+  //         setHomePage(data.homepage);
+  //         setDirector(dataDirector);
+
+  //         if (data.imdb_id) {
+  //           const ratingsResponse = await getRatings(data.imdb_id);
+  //           if (ratingsResponse) {
+  //             const dataRatings = await ratingsResponse.json();
+
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+  //                 ?.rating
+  //             );
+
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+  //                 ?.rating
+  //             );
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating
+  //             );
+
+  //             setRottenTomatoesAudience(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+  //                 ?.rating || null
+  //             );
+
+  //             setRottenTomatoesCritics(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+  //                 ?.rating || null
+  //             );
+
+  //             setIMDb(
+  //               dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
+  //             );
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     } else {
+  //       try {
+  //         const responseImdbId = await getImdbId(id);
+  //         const response = await getSeriesDetails(id);
+  //         const responseCertification = await getSeriesCertification(id);
+  //         const responseSocials = await getSeriesSocials(id);
+  //         const responseSeriesRuntime = await getSeriesRuntime(id);
+
+  //         const dataImdbId = await responseImdbId.json();
+  //         const data = await response.json();
+  //         const dataCertification = await responseCertification.json();
+  //         const dataSocials = await responseSocials.json();
+  //         const dataRuntime = await responseSeriesRuntime.json();
+
+  //         console.log(dataImdbId);
+
+  //         setImdbIdSeries(dataImdbId || null);
+  //         setCertification(dataCertification);
+  //         setPoster(data.poster_path);
+  //         setGenres(data.genres);
+  //         setRuntime(dataRuntime || "N/A");
+  //         setDescription(data.overview);
+  //         setTMDbScore(data.vote_average || null);
+  //         setSocials(dataSocials || null);
+  //         setHomePage(data.homepage);
+  //         setDirector(data.created_by[0].name);
+
+  //         if (dataImdbId) {
+  //           //console.log(dataImdbId);
+  //           const ratingsResponse = await getSeriesRatings(dataImdbId);
+  //           if (ratingsResponse) {
+  //             const dataRatings = await ratingsResponse.json();
+
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+  //                 ?.rating
+  //             );
+
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+  //                 ?.rating
+  //             );
+  //             console.log(
+  //               dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating
+  //             );
+
+  //             setRottenTomatoesAudience(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
+  //                 ?.rating || null
+  //             );
+
+  //             setRottenTomatoesCritics(
+  //               dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
+  //                 ?.rating || null
+  //             );
+
+  //             setIMDb(
+  //               dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
+  //             );
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
   const formatRuntime = (minutes: number): string => {
     const hours = Math.floor(minutes / 60); // Get the hours
     const remainingMinutes = minutes % 60; // Get the remaining minutes
-    return `${hours}h ${remainingMinutes}m`;
+    return hours ? `${hours}h ${remainingMinutes}m` : `${remainingMinutes}m`;
   };
 
   const formatTitle = (title: string): string => {
@@ -216,7 +438,9 @@ function MainDetails({
       <div className="flex">
         <div className="flex flex-col pl-[3vw]">
           {/* Movie info here */}
-          <h2 className="text-[2vw] font-bold">{title}</h2>
+          <h2 className="w-[34vw]  text-[2vw] font-bold line-clamp-1">
+            {title}
+          </h2>
           <div className="text-center">
             <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.9vw]">
               <span>{genres[0]?.name || "Undefined"}</span>
@@ -230,7 +454,13 @@ function MainDetails({
                 {certification}
               </span>
               <span className="mx-[0.6vw] text-customTextColor font-bold">
-                {runtime ? formatRuntime(runtime) : "N/A"}
+                {type === "series"
+                  ? runtime
+                    ? `Average per episode: ${formatRuntime(runtime)}`
+                    : "N/A"
+                  : runtime
+                  ? formatRuntime(runtime)
+                  : "N/A"}
               </span>
             </div>
           </div>

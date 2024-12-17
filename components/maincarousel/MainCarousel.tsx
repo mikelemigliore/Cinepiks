@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import YoutubePlayerMainCaroisel from "./YoutubePlayerMainCaroisel";
 import { GoMute, GoUnmute } from "react-icons/go";
 import { CiPlay1, CiPause1 } from "react-icons/ci";
-import { IoReloadSharp } from "react-icons/io5";
+import { IoCheckmark, IoReloadSharp } from "react-icons/io5";
 import { MdOutlineReplay } from "react-icons/md";
 
 // Import the necessary components
@@ -17,43 +17,6 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import Link from "next/link";
-import {
-  getTeaserMovieVideo,
-  getTrailerMovieVideo,
-} from "@/app/pages/api/homePage";
-
-// const Trailers = [
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-//   {
-//     trailerId: "6ZfuNTqbHE8",
-//   },
-// ];
 
 interface Props {
   //tmdbId?:number[];
@@ -98,6 +61,7 @@ Props) {
   const [reload, setReload] = useState(false);
   const [started, setStarted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
+  const [isAdded, setIsAdded] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -131,6 +95,10 @@ Props) {
     setIsCarouselPlaying(false); // Set the video to start playing
     setUnmute(false);
     setStarted(false);
+  };
+
+  const handleAdded = (added: boolean) => {
+    setIsAdded((prevAdded) => !prevAdded);
   };
 
   // Ensure video restarts when slide changes (for both next and prev)
@@ -186,50 +154,14 @@ Props) {
       return () => clearTimeout(timeoutId); // Clear timeout if effect runs again or component unmounts
     }
   }, [isCarouselPlaying, handleNext]); // Depend on isCarouselPlaying and handleNext
-  // customColor
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       // Fetch trailers for all media items
-  //       const promises = medias.map(async (media) => {
-  //         const responseTrailer = await getTrailerMovieVideo(media.id);
-  //         const dataTrailer = await responseTrailer.json();
-  //         //console.log(dataTrailer.key);
-  //         if(dataTrailer){
-  //           return dataTrailer.key; // Assuming the API returns a `key` for the trailer
-  //         }else{
-  //           return "6ZfuNTqbHE8"
-  //         }
-
-  //       });
-
-  //       //console.log(promises);
-
-  //       // Wait for all fetch requests to complete
-  //       const keys = await Promise.all(promises);
-
-  //       //console.log(keys);
-
-  //       // Update the video keys state
-  //       setVideoKey(keys);
-  //     } catch (error) {
-  //       console.error("Error fetching carousel items:", error);
-  //     }
-  //   };
-
-  //   if (medias.length > 0) {
-  //     fetchData();
-  //   }
-  // }, [medias]);
 
   const formatDate = (date: string | undefined) => {
     if (date) {
       const [year, month, day] = date.split("-");
       const formattedDate = `${month}/${day}/${year}`;
       return formattedDate;
-    }else {
-      return "Not Available"
+    } else {
+      return "Not Available";
     }
   };
 
@@ -327,20 +259,27 @@ Props) {
 
                 <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
                   <div className="mb-4 md:mb-0">
-                    <Link href="/singlemovie">
-                      <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                    <Link href={`/singlemovie/${media.id}`}>
+                      <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                         View
                         <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
                       </Button>
                     </Link>
                   </div>
                   <div>
-                    <Link href="/watchlist">
-                      <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                        Watchlist
+                    <Button
+                      onClick={() => handleAdded(isAdded)}
+                      className={`h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+                        isAdded ? "bg-white/90 text-black" : ""
+                      }`}
+                    >
+                      Watchlist
+                      {isAdded ? (
+                        <IoCheckmark className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                      ) : (
                         <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
-                      </Button>
-                    </Link>
+                      )}
+                    </Button>
                   </div>
                 </div>
               </div>
