@@ -7,6 +7,21 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import SwiperNavButtons from "@/utils/swiperButtons";
 
+interface ItemsBigCardsProp {
+  id: number;
+  type?: string;
+  //image: string;
+  title: string;
+  name?: string;
+  poster_path: string;
+  showType: string;
+  backdrop_path: string;
+  genre_ids: number[];
+  // rated: string;
+  // time: string;
+  description: string;
+}
+
 interface BigCardProps {
   // itemBigCards: Array<{
   //   id: number;
@@ -21,20 +36,7 @@ interface BigCardProps {
   //   description: string;
   // }>;
 
-  itemBigCards: Array<{
-    id: number;
-    type?: string;
-    //image: string;
-    title: string;
-    name?: string;
-    poster_path: string;
-    showType: string;
-    backdrop_path: string;
-    genre_ids: number[];
-    // rated: string;
-    // time: string;
-    description: string;
-  }>;
+  itemBigCards: ItemsBigCardsProp[];
 
   mediaType: string; // this line was commented
 }

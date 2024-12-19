@@ -71,7 +71,13 @@ export async function getSeriesCertification(id: number) {
   }
 }
 
+
+
+
+
+
 export async function getSeriesRatings(id: string) {
+
   const url = `https://film-show-ratings.p.rapidapi.com/item/?id=${id}`;
   const options = {
     method: "GET",
@@ -92,6 +98,10 @@ export async function getSeriesRatings(id: string) {
     console.error(error);
   }
 }
+
+
+
+
 
 export async function getSeriesSocials(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;

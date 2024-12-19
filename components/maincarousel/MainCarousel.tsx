@@ -18,22 +18,24 @@ import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import Link from "next/link";
 
+interface MediaProp{
+  id: number;
+  //image: string;
+  title: string;
+  name?: string;
+  poster_path: string;
+  showType: string;
+  backdrop_path: string;
+  genre_ids: number[];
+  videoKey?: string;
+  release_date?: string;
+  overview?: string;
+}
+
 interface Props {
   //tmdbId?:number[];
   //image?: string[];
-  medias: Array<{
-    id: number;
-    //image: string;
-    title: string;
-    name?: string;
-    poster_path: string;
-    showType: string;
-    backdrop_path: string;
-    genre_ids: number[];
-    videoKey?: string;
-    release_date?: string;
-    overview?: string;
-  }>;
+  medias: MediaProp[];
   //mediaRapid?: MediaRapid[];
   title?: string;
   logInPage?: boolean;
