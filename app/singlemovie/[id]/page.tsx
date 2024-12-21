@@ -11,13 +11,13 @@ import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import React from "react";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
-import {
-  getCast,
-  getMovieDetails,
-  getTrailerMovieVideo,
-} from "@/app/pages/api/singleMoviePage";
 import Link from "next/link";
 import TagsHighToLow from "@/components/tags/TagsHighToLow";
+import {
+  useGetMovieDetailsQuery,
+  useGetMovieTrailerQuery,
+  useGetMovieCastQuery,
+} from "@/app/features/homepage/movies/moviedetailsSlice";
 
 const movie = [
   {
@@ -68,31 +68,53 @@ function SingleMoviePage() {
   const { id } = params;
   const Id = Number(id);
 
+  const { data: movieDetails } = useGetMovieDetailsQuery(Id || 0);
+
+  const { data: movieTrailer } = useGetMovieTrailerQuery(Id || 0);
+
+  const { data: movieCast } = useGetMovieCastQuery(Id || 0);
+
   useEffect(() => {
-    if (Id) {
-      const fetchData = async () => {
-        try {
-          const response = await getMovieDetails(Id);
-          const responseTrailer = await getTrailerMovieVideo(Id);
-          const responseCast = await getCast(Id);
-          const data = await response.json();
-          const dataTrailer = await responseTrailer.json();
-          const dataCast = await responseCast.json();
-
-          //console.log(data.imdb_id);
-
-          setBackdrop(data.backdrop_path);
-          setTitle(data.title);
-          setVideoKey(dataTrailer.key);
-          setImdbId(data.imdb_id || null);
-          setCast(dataCast);
-        } catch (error) {
-          console.error("Failed to fetch:", error);
-        }
-      };
-      fetchData();
+    if (movieDetails) {
+      setBackdrop(movieDetails.backdrop_path);
+      setTitle(movieDetails.title);
+      setImdbId(movieDetails.imdb_id || null);
     }
-  }, [Id]);
+
+    if (movieTrailer) {
+      setVideoKey(movieTrailer.key);
+    }
+
+    if (movieCast) {
+      setCast(movieCast);
+    }
+  }, [Id, movieDetails, movieTrailer]);
+
+  // useEffect(() => {
+  //   if (Id) {
+  //     const fetchData = async () => {
+  //       try {
+  //const response = await getMovieDetails(Id);
+  //const responseTrailer = await getTrailerMovieVideo(Id);
+  //const responseCast = await getCast(Id);
+  //const data = await response.json();
+  //const dataTrailer = await responseTrailer.json();
+  //const dataCast = await responseCast.json();
+
+  //console.log(data.imdb_id);
+
+  //setBackdrop(data.backdrop_path);
+  //setTitle(data.title);
+  //setVideoKey(dataTrailer.key);
+  //setImdbId(data.imdb_id || null);
+  //setCast(dataCast);
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [Id]);
 
   const handlePlay = () => {
     setPlay(true);

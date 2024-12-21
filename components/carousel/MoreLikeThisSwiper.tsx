@@ -7,6 +7,8 @@ import {
   getSimilarMovies,
 } from "@/app/pages/api/singleMoviePage";
 
+
+
 const title = "More Like This";
 
 interface MoreLikeThisSwiperProp {
@@ -55,6 +57,7 @@ function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
     }
   }, [id]);
 
+
   // Fetch similar movies whenever genres are updated
   useEffect(() => {
     if (genres.length > 0) {
@@ -71,6 +74,8 @@ function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
     }
   }, [genres]);
 
+
+  
   // Combine collection and similarMovies whenever either changes
   useEffect(() => {
     setWholeCollection([...collection, ...similarMovies]);
@@ -88,3 +93,70 @@ function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
 }
 
 export default MoreLikeThisSwiper;
+
+
+
+
+
+
+
+
+
+
+
+//I tried this option with redux query but the sequels do not apper in order in the MovieSwiper, so I kept the above code 
+
+// import React, { useEffect, useState } from "react";
+// import MovieSwiper from "./MovieSwiper";
+// import {
+//   useGetMovieDetailsQuery,
+//   useGetMovieCollectionQuery,
+//   useGetMovieSimilarQuery,
+// } from "@/app/features/homepage/movies/moviedetailsSlice";
+
+// const title = "More Like This";
+
+// interface MoreLikeThisSwiperProp {
+//   mediaType: string;
+//   id: number;
+// }
+
+// function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
+//   const [collection, setCollection] = useState<any[]>([]);
+//   const [similarMovies, setSimilarMovies] = useState<any[]>([]);
+//   const [wholeCollection, setWholeCollection] = useState<any[]>([]);
+
+//   const { data: moviedetails } = useGetMovieDetailsQuery(id || 0);
+
+//   const { data: movieCollection } = useGetMovieCollectionQuery(
+//     moviedetails?.belongs_to_collection?.id || 0
+//   );
+
+//   const { data: movieSimilar } = useGetMovieSimilarQuery(
+//     moviedetails?.genres || []
+//   );
+
+//   console.log(movieCollection);
+  
+
+//   useEffect(() => {
+//     setCollection(movieCollection || []);
+//     setSimilarMovies(Array.isArray(movieSimilar) ? movieSimilar : []);
+//   }, [movieCollection, movieSimilar]);
+
+//   useEffect(() => {
+//     setWholeCollection([...collection, ...similarMovies]);
+//   }, [collection, similarMovies]);
+
+//   return (
+//     <div>
+//       <MovieSwiper
+//         medias={wholeCollection}
+//         title={title}
+//         mediaType={mediaType}
+//       />
+//     </div>
+//   );
+// }
+
+// export default MoreLikeThisSwiper;

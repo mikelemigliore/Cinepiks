@@ -608,22 +608,13 @@ import { AiFillInstagram, AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import StarRating from "@/components/starRating/StarRating";
+import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
 import {
-  getDirector,
-  getMovieCertification,
-  getMovieDetails,
-  getRatings,
-  getSocials,
-} from "@/app/pages/api/singleMoviePage";
-import {
-  getImdbId,
-  getSeriesCertification,
-  getSeriesDetails,
-  getSeriesRatings,
-  getSeriesRuntime,
-  getSeriesSocials,
-} from "@/app/pages/api/singleSeriesPage";
-import { useGetRatingsQuery } from "@/app/features/ratingSlice";
+  useGetMovieDetailsQuery,
+  useGetMovieCertificationQuery,
+  useGetSocialsQuery,
+  useGetDirectorQuery,
+} from "@/app/features/homepage/movies/moviedetailsSlice";
 
 interface SeriesProp {
   id: number;
@@ -669,11 +660,10 @@ interface MainDetailsProps {
   imdbId?: string;
   cast?: CastProp[];
   type: string;
-  //single?:boolean
 }
 
 interface ImdbIdProp {
-rating:number
+  rating: number;
 }
 
 function MainDetails({
@@ -690,17 +680,9 @@ function MainDetails({
   type,
 }: //single
 MainDetailsProps) {
-  const [imdb, setIMDb] = useState();
-  //const [imdbIdMovie, setImdbId] = useState();
-  const {
-    data:rating,
-    error,
-    isLoading,
-    isFetching,
-  } = useGetRatingsQuery(imdbId || '');
-  //const rating: ImdbIdProp = data;
   const [rottenTomatoesAudience, setRottenTomatoesAudience] = useState();
   const [rottenTomatoesCritics, setRottenTomatoesCritics] = useState();
+  const [imdb, setIMDb] = useState();
   const [poster, setPoster] = useState<string>("");
   const [genres, setGenres] = useState<GenresProp[]>([]);
   const [certification, setCertification] = useState("");
@@ -717,42 +699,51 @@ MainDetailsProps) {
   const [value, setValue] = React.useState<number | null>(0);
   const [imdbIdSeries, setImdbIdSeries] = useState("");
 
-  if (isFetching) {
-    console.log("Fetching Rating new data...");
-  } else {
-    console.log("Using cached Rating data...");
-  }
+  
+  const { data: rating } = useGetRatingsQuery(imdbId || "");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await getMovieDetails(id);
-  //       const data = await response.json();
+  const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
 
-  //       setImdbId(data.imdb_id || undefined);
-  //     } catch (err) {
-  //       console.error("Error fetching movie details:", err);
-  //     }
-  //   };
+  const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
 
-  //   fetchData();
-  // }, [id]);
+  const { data: movieSocials } = useGetSocialsQuery(id || 0);
+
+  const { data: movieDirector } = useGetDirectorQuery(id || 0);
+
 
   useEffect(() => {
-    if (!rating) return;
 
-    setRottenTomatoesAudience(
-      rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
-    );
-    setRottenTomatoesCritics(
-      rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
-    );
-    setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
-  }, [ rating]);
+    if (movieDetails) {
+      setPoster(movieDetails?.poster_path || "");
+      setGenres(movieDetails?.genres || []);
+      setRuntime(movieDetails?.runtime || "N/A");
+      setDescription(movieDetails?.overview || "No description available");
+      setTMDbScore(movieDetails?.vote_average || null);
+      setHomePage(movieDetails?.homepage || "");
+    }
 
-  if (isLoading) return <div>Loading ratings...</div>;
-  if (error) return <div>Error fetching ratings.</div>;
-  //const type = "movie";
+    if (movieCertification) {
+      setCertification(movieCertification);
+    }
+
+    if (rating) {
+      setRottenTomatoesAudience(
+        rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+      );
+      setRottenTomatoesCritics(
+        rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+      );
+      setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+    }
+
+    if (movieSocials) {
+      setSocials(movieSocials || {});
+    }
+
+    if (movieDirector) {
+      setDirector(movieDirector || {});
+    }
+  }, [movieDetails, rating]);
 
 
 
@@ -777,64 +768,6 @@ MainDetailsProps) {
       setValue(0);
     }
   };
-
-  // useEffect(() => {
-  //   //let isMounted = true;
-
-  //   const fetchData = async () => {
-  //     try {
-  //       if (type === "movie") {
-  //         const response = await getMovieDetails(id);
-  //         const responseCertification = await getMovieCertification(id);
-  //         const responseSocials = await getSocials(id);
-  //         const responseDirector = await getDirector(id);
-
-  //         const data = await response.json();
-  //         const dataCertification = await responseCertification.json();
-  //         const dataSocials = await responseSocials.json();
-  //         const dataDirector = await responseDirector.json();
-
-  //         const usRelease = dataCertification?.results?.find(
-  //           (item: any) => item.iso_3166_1 === "US"
-  //         );
-
-  //           setPoster(data?.poster_path || "");
-  //           setGenres(data?.genres || []);
-  //           setRuntime(data?.runtime || "N/A");
-  //           setDescription(data?.overview || "No description available");
-  //           setTMDbScore(data?.vote_average || null);
-  //           setSocials(dataSocials || {});
-  //           setHomePage(data?.homepage || "");
-  //           setDirector(dataDirector);
-  //           setImdbId(data.imdb_id || "");
-
-  //           // if (data.imdb_id) {
-  //           //   const ratingsResponse = await getRatings(data.imdb_id);
-  //           //   if (ratingsResponse) {
-  //           //     const dataRatings = await ratingsResponse.json();
-
-  //           //     setRottenTomatoesAudience(
-  //           //       dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
-  //           //         ?.rating || null
-  //           //     );
-  //           //     setRottenTomatoesCritics(
-  //           //       dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
-  //           //         ?.rating || null
-  //           //     );
-  //           //     setIMDb(
-  //           //       dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating ||
-  //           //         null
-  //           //     );
-  //           //   }
-  //           // }
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [id]);
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 

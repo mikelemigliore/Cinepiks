@@ -143,9 +143,9 @@ function Reviews({ id, hightolow, lowtohigh }: ReviewsProp) {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                   </div>
-                  <div className="flex w-full justify-between gap-x-[19vw]">
+                  <div className="flex w-[29vw] justify-between">
                     <div className="flex flex-col">
-                      <div>{reviewsItem.author_details.username}</div>
+                      <div className='line-clamp-1'>{reviewsItem.author_details.username}</div>
                       <div className="text-[0.7vw] text-customTextColor">
                         {formatDate(reviewsItem.created_at)}
                       </div>

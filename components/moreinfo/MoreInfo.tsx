@@ -1,4 +1,5 @@
-import { getMovieDetails } from "@/app/pages/api/singleMoviePage";
+import { useGetMovieDetailsQuery } from "@/app/features/homepage/movies/moviedetailsSlice";
+//import { getMovieDetails } from "@/app/pages/api/singleMoviePage";
 import React, { useEffect, useState } from "react";
 
 interface MoreInfoProp {
@@ -18,39 +19,72 @@ function MoreInfo({ id }: MoreInfoProp) {
   const [budget, setBudget] = useState<string | undefined>();
   const [boxOffice, setBoxOffice] = useState<string | undefined>();
 
+  const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
+
   useEffect(() => {
-    if (id) {
-      const fetchData = async () => {
-        try {
-          const response = await getMovieDetails(id);
-          const data = await response.json();
 
-          const displayNames = new Intl.DisplayNames(["en"], {
-            type: "region",
-          });
-          const languageDisplayNames = new Intl.DisplayNames(["en"], {
-            type: "language",
-          });
+    const displayNames = new Intl.DisplayNames(["en"], {
+      type: "region",
+    });
+    const languageDisplayNames = new Intl.DisplayNames(["en"], {
+      type: "language",
+    });
 
-          // For Country Names
-          const countryName = displayNames.of(data.origin_country[0]); // Converts "US" to "United States"
+    if (movieDetails) {
+      // For Country Names
+      const countryName = displayNames.of(movieDetails.origin_country[0]); // Converts "US" to "United States"
 
-          // For Language Names
-          const languageName = languageDisplayNames.of(data.original_language); // Converts "en" to "English"
+      // For Language Names
+      const languageName = languageDisplayNames.of(movieDetails.original_language); // Converts "en" to "English"
+      
 
-          setReleaseDate(data.release_date);
-          setGenres(data.genres);
-          setOrigins(countryName);
-          setLanguage(languageName);
-          setBudget(data.budget === 0 ? " N/A" : data.budget.toLocaleString());
-          setBoxOffice(data.revenue === 0 ? " N/A" : data.revenue.toLocaleString());
-        } catch (error) {
-          console.error("Failed to fetch:", error);
-        }
-      };
-      fetchData();
+      setGenres(movieDetails?.genres || []);
+      setReleaseDate(movieDetails.release_date);
+      setGenres(movieDetails.genres);
+      setOrigins(countryName);
+      setLanguage(languageName);
+      setBudget(movieDetails.budget === 0 ? " N/A" : movieDetails.budget.toLocaleString());
+      setBoxOffice(
+        movieDetails.revenue === 0 ? " N/A" : movieDetails.revenue.toLocaleString()
+      );
     }
-  }, [id]);
+  }, [id , movieDetails]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     const fetchData = async () => {
+  //       try {
+  //         const response = await getMovieDetails(id);
+  //         const data = await response.json();
+
+  //         const displayNames = new Intl.DisplayNames(["en"], {
+  //           type: "region",
+  //         });
+  //         const languageDisplayNames = new Intl.DisplayNames(["en"], {
+  //           type: "language",
+  //         });
+
+  //         // For Country Names
+  //         const countryName = displayNames.of(data.origin_country[0]); // Converts "US" to "United States"
+
+  //         // For Language Names
+  //         const languageName = languageDisplayNames.of(data.original_language); // Converts "en" to "English"
+
+  //         setReleaseDate(data.release_date);
+  //         setGenres(data.genres);
+  //         setOrigins(countryName);
+  //         setLanguage(languageName);
+  //         setBudget(data.budget === 0 ? " N/A" : data.budget.toLocaleString());
+  //         setBoxOffice(
+  //           data.revenue === 0 ? " N/A" : data.revenue.toLocaleString()
+  //         );
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [id]);
 
   const formatDate = (date: string | undefined) => {
     if (date) {

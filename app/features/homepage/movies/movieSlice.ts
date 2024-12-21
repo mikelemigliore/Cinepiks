@@ -39,12 +39,34 @@ const horrorGenreCode = 27;
 const animationGenreCode = 16;
 const thrillerGenreCode = 53;
 
+
+// Function to format a Date object as 'YYYY-MM-DD'
+function formatDate(date:any) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Calculate min_date (current date)
+const today = new Date();
+const min_date = formatDate(today);
+
+// Calculate max_date (e.g., 30 days from today)
+const daysToAdd = 60;
+const max_date = formatDate(new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000));
+
+// console.log(min_date);
+// console.log(max_date);
+
+
+
 export const movieApi = createApi({
   reducerPath: "movieApi",
   baseQuery: fetchBaseQuery({ baseUrl: `https://api.themoviedb.org/3/` }),
   endpoints: (builder) => ({
     getUpcoming: builder.query<MediaProp[], void>({
-      query: () => `movie/upcoming?api_key=${apiKey}&region=US`,
+      query: () => `discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=2|3`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (response: any) => {

@@ -12,6 +12,11 @@ import {
   getMovieDetails,
 } from "@/app/pages/api/loginPage";
 import { getRatings } from "@/app/pages/api/homePage";
+import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
+import {
+  useGetMovieCertificationQuery,
+  useGetMovieDetailsQuery,
+} from "@/app/features/homepage/movies/moviedetailsSlice";
 
 interface Genre {
   id: number;
@@ -62,130 +67,54 @@ function BigCard({
   const [imdb, setIMDb] = useState<number | null>(null);
   const [tmdbScore, setTMDbScore] = useState<number | null>(null);
 
+
+  
+  const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
+
+  const { data: rating } = useGetRatingsQuery(imdbId || "");
+
+  const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
+
+
+
+  useEffect(() => {
+    if (movieDetails) {
+      setGenres(movieDetails?.genres || []);
+      setRuntime(movieDetails?.runtime || "N/A");
+      setDescription(movieDetails?.overview || "No description available");
+      setTMDbScore(movieDetails?.vote_average || null);
+      setImdbId(movieDetails.imdb_id || null);
+      setTitle(movieDetails.original_title || movieDetails.name || "Unknown Title");
+      setImage(movieDetails.backdrop_path || null);
+    }
+
+    if (movieCertification) {
+      setCertification(movieCertification);
+    }
+
+    if (rating) {
+      setRottenTomatoesAudience(
+        rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+      );
+      setRottenTomatoesCritics(
+        rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+      );
+      setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+    }
+  }, [rating, movieDetails]);
+
+
+
   const formatRuntime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60); // Get the hours
-    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    const hours = Math.floor(minutes / 60); 
+    const remainingMinutes = minutes % 60; 
     return `${hours}h ${remainingMinutes}m`;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const detailsPromise = getMovieDetails(id, mediaType);
-        const certificationPromise = getMovieCertification(id, mediaType);
-        const [detailsResponse, certificationResponse] = await Promise.all([
-          detailsPromise,
-          certificationPromise,
-        ]);
 
-        const data = await detailsResponse.json();
-        const dataCertification = await certificationResponse.json();
 
-        const usRelease = dataCertification.results.find(
-          (item: any) => item.iso_3166_1 === "US"
-        );
-        if (usRelease) {
-          const usCertification =
-            usRelease.release_dates[0]?.certification || "Not Rated";
-          setCertification(usCertification);
-        }
-
-        setGenres(data.genres || []);
-        setTitle(data.original_title || data.name || "Unknown Title");
-        setImage(data.backdrop_path || null);
-        setRuntime(data.runtime || 0);
-        setDescription(data.overview || "No description available.");
-        setTMDbScore(data.vote_average || null);
-        setImdbId(data.imdb_id || null);
-
-        if (data.imdb_id) {
-          const ratingsResponse = await getRatings(data.imdb_id);
-          if (ratingsResponse) {
-            const dataRatings = await ratingsResponse.json();
-
-            setRottenTomatoesAudience(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience
-                ?.rating || null
-            );
-            //console.log("Rotten Tomatoes Audience Score:", dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating);
-
-            setRottenTomatoesCritics(
-              dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics
-                ?.rating || null
-            );
-            //console.log("Rotten Tomatoes Critics Score:", dataRatings?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating);
-
-            setIMDb(
-              dataRatings?.result?.ratings?.["IMDb"]?.audience?.rating || null
-            );
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching movie details or ratings:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await getMovieDetails(id, mediaType);
-  //       const data = await response.json();
-
-  //       const responseCetification = await getMovieCertification(id, mediaType);
-  //       const dataCertification = await responseCetification.json();
-  //       // Find the US release dates and certification
-  //       const usRelease = dataCertification.results.find(
-  //         (item: any) => item.iso_3166_1 === "US"
-  //       );
-
-  //       if (usRelease) {
-  //         const usCertification =
-  //           usRelease.release_dates[0].certification || "Not Rated";
-  //         setCertification(usCertification);
-  //       }
-
-  //       console.log(data);
-
-  //       setGenres(data.genres);
-  //       setTitle(data.original_title);
-  //       setImage(data.backdrop_path);
-  //       setRuntime(data.runtime);
-  //       setDescription(data.overview);
-  //       setTMDbScore(data.vote_average);
-  //       setImdbId(data.imdb_id);
-
-  //       //if (data.imdb_id) {
-  //       const responseRatings = await getRatings(data.imdb_id);
-  //       //if (responseRatings) {
-  //       const dataRatings = await responseRatings.json();
-
-  //       setRottenTomatoesAudience(
-  //         dataRatings.result.ratings["Rotten Tomatoes"].audience.rating
-  //       );
-  //       setRottenTomatoesCritics(
-  //         dataRatings.result.ratings["Rotten Tomatoes"].critics.rating
-  //       );
-  //       setIMDb(dataRatings.result.ratings["IMDb"].audience.rating);
-  //       //}
-  //       //}
-  //     } catch (error) {
-  //       console.error("Error fetching carousel items:", error);
-  //     }
-  //   };
-
-  //   fetchData(); // Call the async function
-  // }, []);
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
-
-  // const getGenreNames = (genreId: number, Genres: any[]) => {
-  //   const genre = Genres.find((g) => g.id === genreId);
-
-  //   return genre ? genre.name : "Unknown Genre";
-  // };
 
   return (
     <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[80vw] md:w-[90vw] h-[80vh] md:h-[71vh] rounded-3xl shadow-2xl">

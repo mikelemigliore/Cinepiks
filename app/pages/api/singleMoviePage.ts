@@ -17,34 +17,34 @@ export async function getMovieDetails(id: number) {
   }
 }
 
-export async function getTrailerMovieVideo(id: number) {
-  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
+// export async function getTrailerMovieVideo(id: number) {
+//   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+//   const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
 
-    const trailers = data.results.filter(
-      (item: any) => item.type === "Trailer" && item.official === true
-    );
+//     const trailers = data.results.filter(
+//       (item: any) => item.type === "Trailer" && item.official === true
+//     );
 
-    // Sort by published_at date in ascending order
-    const sortedTrailer = trailers.sort(
-      (a: any, b: any) =>
-        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
-    );
+//     // Sort by published_at date in ascending order
+//     const sortedTrailer = trailers.sort(
+//       (a: any, b: any) =>
+//         new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+//     );
 
-    // Get the first trailer released
-    const firstTrailer = sortedTrailer.length > 0 ? sortedTrailer[0] : null;
+//     // Get the first trailer released
+//     const firstTrailer = sortedTrailer.length > 0 ? sortedTrailer[0] : null;
 
-    return new Response(JSON.stringify(firstTrailer), { status: 200 });
-  } catch {
-    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
-      status: 500,
-    });
-  }
-}
+//     return new Response(JSON.stringify(firstTrailer), { status: 200 });
+//   } catch {
+//     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+//       status: 500,
+//     });
+//   }
+// }
 
 export async function getMovieCertification(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
