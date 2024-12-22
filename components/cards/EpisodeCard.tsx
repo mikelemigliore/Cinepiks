@@ -22,6 +22,8 @@ interface EpisodeCardProp {
   img: string;
   watched: boolean;
   onWatch: () => void;
+  description: string;
+  date:string
 }
 
 function EpisodeCard({
@@ -32,8 +34,48 @@ function EpisodeCard({
   img,
   onWatch,
   watched,
+  description,
+  date
 }: EpisodeCardProp) {
   // const [watched, setWatched] = useState(false);
+
+
+  const formatDate = (date: string | undefined) => {
+    if (date) {
+      // Extract only the date part (before the 'T')
+      const datePart = date.split("T")[0];
+      const [year, month, day] = datePart.split("-");
+
+      // Lookup table for month names
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      // Convert the month number to a month name
+      const monthName = monthNames[parseInt(month, 10) - 1];
+
+      // Remove leading zeros from the day
+      const formattedDay = parseInt(day, 10);
+
+      // Format the final string
+      const formattedDate = `${monthName} ${formattedDay}, ${year}`;
+      return formattedDate;
+    } else {
+      return "Not Available";
+    }
+  };
+
 
   return (
     <div className=" relative w-[18vw] h-[17vw] rounded-2xl">
@@ -82,7 +124,7 @@ function EpisodeCard({
                       <div className="text-[1.3vw] line-clamp-1">{title}</div>
                     </div>
                     <div className="text-[0.8vw] text-customTextColor flex">
-                      <div className="mr-[1.5vw]">Octorber 4, 2005</div>
+                      <div className="mr-[1.5vw]">{formatDate(date)}</div>
                       <div>{duration}</div>
                     </div>
                   </div>
@@ -95,23 +137,7 @@ function EpisodeCard({
 
                 <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
                   <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
-                    While scavenging the deep ends of a derelict space station,
-                    a group of young space colonists come face to face with the
-                    most terrifying life form in the universe. While scavenging
-                    the deep ends of a derelict space station, a group of young
-                    space While scavenging the deep ends of a derelict space
-                    station, a group of young space colonists come face to face
-                    with the most terrifying life form in the universe. While
-                    scavenging the deep ends of a derelict space station, a
-                    group of young space While scavenging the deep ends of a
-                    derelict space station, a group of young space colonists
-                    come face to face with the most terrifying life form in the
-                    universe. While scavenging the deep ends of a derelict space
-                    station, a group of young space While scavenging the deep
-                    ends of a derelict space station, a group of young space
-                    colonists come face to face with the most terrifying life
-                    form in the universe. While scavenging the deep ends of a
-                    derelict space station, a group of young space
+                    {description}
                   </div>
                 </ScrollArea>
               </div>
@@ -122,10 +148,7 @@ function EpisodeCard({
       <div className="text-[0.7vw] text-customTextColor">{duration}</div>
       <p className="mt-[0.5vh] text-white text-[0.8vw]  max-w-[23rem] md:max-w-[17vw] line-clamp-2">
         {" "}
-        While scavenging the deep ends of a derelict space station, a group of
-        young space colonists come face to face with the most terrifying life
-        form in the universe. While scavenging the deep ends of a derelict space
-        station, a group of young space
+        {description}
       </p>
     </div>
   );

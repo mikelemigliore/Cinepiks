@@ -15,6 +15,8 @@ interface Episode {
   duration: string;
   score: string;
   img: string;
+  description: string;
+  date:string
 }
 
 interface SwiperEpisodeProps {
@@ -28,7 +30,6 @@ function CarouselEpisode({
   watchedEpisodes,
   onEpisodeWatched,
 }: SwiperEpisodeProps) {
-
   return (
     <div>
       <div className="">
@@ -39,17 +40,20 @@ function CarouselEpisode({
         >
           <CarouselContent>
             {episodes.map((episodesItem) => (
-              <CarouselItem 
-              key={episodesItem.id}
-              className="basis-1/4 md:basis-1/4">
+              <CarouselItem
+                key={episodesItem.id}
+                className="basis-1/4 md:basis-1/4"
+              >
                 <EpisodeCard
-                  watched={watchedEpisodes[episodesItem.episode] || false}  //This line checks if the current episode (indicated by episodesItem.episode) is marked as watched in the watchedEpisodes state.
-                  onWatch={() => onEpisodeWatched(episodesItem.episode)}  // is called with episodesItem.episode as an argument. This function presumably toggles the watched status of the specified episode.
+                  watched={watchedEpisodes[episodesItem.episode] || false} //This line checks if the current episode (indicated by episodesItem.episode) is marked as watched in the watchedEpisodes state.
+                  onWatch={() => onEpisodeWatched(episodesItem.episode)} // is called with episodesItem.episode as an argument. This function presumably toggles the watched status of the specified episode.
                   episodeNumber={episodesItem.episode}
                   img={episodesItem.img}
                   title={episodesItem.title}
                   duration={episodesItem.duration}
                   score={episodesItem.score}
+                  description={episodesItem.description}
+                  date={episodesItem.date}
                 />
               </CarouselItem>
             ))}

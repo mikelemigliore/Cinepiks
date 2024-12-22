@@ -53,6 +53,8 @@ interface Episode {
   duration: string;
   score: string;
   img: string;
+  description: string;
+  date:string
 }
 
 interface SeasonsProp {

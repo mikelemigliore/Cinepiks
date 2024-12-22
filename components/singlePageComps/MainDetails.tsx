@@ -1063,7 +1063,7 @@ MainDetailsProps) {
               <div className="flex">
                 <div className=" text-[1vw]">Your Score</div>
                 <StarRating
-                  title={media[0].title}
+                  title={title}
                   value={value}
                   handleValue={handleValue}
                 />

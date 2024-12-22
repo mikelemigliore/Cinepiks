@@ -166,6 +166,16 @@ export const seriesApi = createApi({
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
+    getSeriesEpisodes: builder.query({
+      query: ({Id, selectedSeason}:{Id:number, selectedSeason:number})  => `tv/${Id}/season/${selectedSeason}?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse:(response:any)=>{
+        //console.log(response.episodes);
+        
+        return response.episodes;
+      }
+    }),
   }),
 });
 
@@ -179,5 +189,6 @@ export const {
   useGetImdbIdQuery,
   useGetSeriesCertificationQuery,
   useGetSeriesRuntimeQuery,
-  useGetSeriesSocialsQuery
+  useGetSeriesSocialsQuery,
+  useGetSeriesEpisodesQuery
 } = seriesApi;
