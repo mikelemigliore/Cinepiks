@@ -16,7 +16,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FcGoogle } from "react-icons/fc";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
-import { getGenres, getLoginMainCarousel, getPopular, getUpcoming } from "./pages/api/loginPage";
+//import { getGenres, getLoginMainCarousel, getPopular, getUpcoming } from "./pages/api/loginPage";
+import { useGetNowPlayingQuery } from "./features/homepage/movies/movieSlice";
+import { useGetGenresQuery, useGetUpcomingQuery, useGetPopularQuery } from "./features/loginpage/loginSlice";
 //import './globals/background.css';
 
 interface ItemProp {
@@ -56,7 +58,7 @@ const swiperTitles = [
 ];
 
 function LoginIn() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<ItemProp[]>([]);
   const [itemsGenres, setItemsGenres] = useState([]);
   const [inTheaters, setInTheaters] = useState([]);
   const [popularMovies, setPopularMovies] = useState([]);
@@ -65,6 +67,39 @@ function LoginIn() {
   const [activeSlide, setActiveSlide] = useState(0);
   const totalSlides = items.length; // Set the total number of slides
 
+
+  const {data: loginmainCaraseul} = useGetNowPlayingQuery() 
+
+  const {data: genres} = useGetGenresQuery({})
+
+  const {data: moviesUpcoming} = useGetUpcomingQuery({})
+
+  const {data: moviesPopular} = useGetPopularQuery({})
+
+
+  useEffect(()=>{
+    if(loginmainCaraseul){
+      setItems(loginmainCaraseul);
+    }
+
+    if(genres){
+      setItemsGenres(genres.genres)
+    }
+
+    if(moviesUpcoming){
+      setInTheaters(moviesUpcoming.results)
+    }
+
+    if(moviesPopular){
+      setPopularMovies(moviesPopular.results)
+    }
+
+  },[loginmainCaraseul, moviesUpcoming, moviesPopular])
+
+
+
+
+  
   const getGenreNames = (genreId: number, Genres: any[]) => {
     const genre = Genres.find((g) => g.id === genreId); //The find() method searches the Genres array for an element matching the given condition (g.id === genreId).
 
@@ -102,30 +137,30 @@ function LoginIn() {
   };
 
   //Fetching data from the /pages/api/loginMainCarousel.ts
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getLoginMainCarousel(); // Await the Promise
-        const responseGenres = await getGenres();
-        const responsePopular= await getPopular();
-        const responseInTheaters= await getUpcoming();
-        const data = await response.json(); // Extract JSON data
-        const dataGenres = await responseGenres.json();
-        const dataPopular = await responsePopular.json();
-        const dataInTheaters = await responseInTheaters.json();
-       // console.log(dataPopular);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await getLoginMainCarousel(); // Await the Promise
+  //       const responseGenres = await getGenres();
+  //       const responsePopular= await getPopular();
+  //       const responseInTheaters= await getUpcoming();
+  //       const data = await response.json(); // Extract JSON data
+  //       const dataGenres = await responseGenres.json();
+  //       const dataPopular = await responsePopular.json();
+  //       const dataInTheaters = await responseInTheaters.json();
+  //      // console.log(dataPopular);
 
-        setItems(data.results); // Update state with the resolved data
-        setItemsGenres(dataGenres.genres);
-        setPopularMovies(dataPopular.results)
-        setInTheaters(dataInTheaters.results)
-      } catch (error) {
-        console.error("Error fetching carousel items:", error);
-      }
-    };
+  //       setItems(data.results); // Update state with the resolved data
+  //       setItemsGenres(dataGenres.genres);
+  //       setPopularMovies(dataPopular.results)
+  //       setInTheaters(dataInTheaters.results)
+  //     } catch (error) {
+  //       console.error("Error fetching carousel items:", error);
+  //     }
+  //   };
 
-    fetchData(); // Call the async function
-  }, []);
+  //   fetchData(); // Call the async function
+  // }, []);
 
   useEffect(() => {
     resetTimeout(); // Set or reset the timeout on activeSlide change

@@ -16,11 +16,17 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GoDotFill, GoStarFill } from "react-icons/go";
 import { Button } from "../ui/button";
+// import {
+//   getMovieCertification,
+//   getMovieDetails,
+//   getSeriesDetails,
+// } from "@/app/pages/api/loginPage";
 import {
-  getMovieCertification,
-  getMovieDetails,
-  getSeriesDetails,
-} from "@/app/pages/api/loginPage";
+  useGetDetailsTeaserCardQuery,
+  useGetMovieCertificationQuery,
+} from "@/app/features/homepage/movies/moviedetailsSlice";
+
+import { useGetSeriesDetailsTeaserCardQuery } from "@/app/features/homepage/series/seriesSlice";
 
 interface MovieCardProps {
   imgUrl: string;
@@ -68,8 +74,7 @@ function MovieCard({
   itemsGenres,
   id,
   name,
-}: 
-MovieCardProps) {
+}: MovieCardProps) {
   const [runtime, setRuntime] = useState();
   const [season, setSeasons] = useState();
   const [description, setDescription] = useState();
@@ -83,6 +88,43 @@ MovieCardProps) {
 
   const href = type === "movie" ? `/singlemovie` : `/singleseries`;
 
+  const mediaType = type === "movie" ? "movie" : "tv";
+
+  const { data: movieDetails } = useGetDetailsTeaserCardQuery({
+    id,
+    media: mediaType,
+  });
+
+  const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
+
+  const { data: seriesDetails } = useGetSeriesDetailsTeaserCardQuery({
+    id,
+    media: mediaType,
+  });
+
+  //const { data: movieTrailer } = useGetMovieTrailerQuery(Id || 0);
+
+  //const { data: movieCast } = useGetMovieCastQuery(Id || 0);
+
+  useEffect(() => {
+    if (mediaType === "movie") {
+      if (movieDetails) {
+        setRuntime(movieDetails.runtime);
+        setGenres(movieDetails.genres);
+        setDescription(movieDetails.overview);
+      }
+
+      if (movieCertification) {
+        setCertification(movieCertification);
+      }
+    } else if (mediaType === "tv") {
+      if (seriesDetails) {
+        setSeasons(seriesDetails.number_of_seasons);
+        setGenres(seriesDetails.genres);
+        setDescription(seriesDetails.overview);
+      }
+    }
+  }, [movieDetails, seriesDetails]);
 
 
   useEffect(() => {
@@ -138,65 +180,58 @@ MovieCardProps) {
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const mediaType = type === "movie" ? "movie" : "tv";
 
-        const mediaType = type === "movie" ? "movie" : "tv";
+  //       if (mediaType === "movie") {
+  //         const response = await getMovieDetails(id, mediaType);
+  //         const data = await response.json();
+  //         const responseCetification = await getMovieCertification(
+  //           id,
+  //           mediaType
+  //         );
+  //         const dataCertification = await responseCetification.json();
 
-        if (mediaType === "movie") {
+  //         // Find the US release dates and certification
+  //         const usRelease = dataCertification.results.find(
+  //           (item: any) => item.iso_3166_1 === "US"
+  //         );
 
-          const response = await getMovieDetails(id, mediaType);
-          const data = await response.json();
-          const responseCetification = await getMovieCertification(
-            id,
-            mediaType
-          );
-          const dataCertification = await responseCetification.json();
+  //         //console.log(data.genres);
 
-          // Find the US release dates and certification
-          const usRelease = dataCertification.results.find(
-            (item: any) => item.iso_3166_1 === "US"
-          );
+  //         //console.log(data);
+  //         //console.log(data.runtime);
+  //         setRuntime(data.runtime);
+  //         setGenres(data.genres);
+  //         setDescription(data.overview);
 
-          //console.log(data.genres);
+  //         if (usRelease) {
+  //           const usCertification =
+  //             usRelease.release_dates[0].certification || "Not Rated";
+  //           setCertification(usCertification);
+  //         }
+  //       } else {
+  //         const response = await getSeriesDetails(id, mediaType);
+  //         const data = await response.json();
 
-          //console.log(data);
-          //console.log(data.runtime);
-          setRuntime(data.runtime);
-          setGenres(data.genres);
-          setDescription(data.overview);
+  //         //console.log(data.genres);
 
-          if (usRelease) {
-            const usCertification =
-              usRelease.release_dates[0].certification || "Not Rated";
-            setCertification(usCertification);
-          }
-        } else {
+  //         //console.log(data);
+  //         //console.log(data.number_of_seasons);
 
-          const response = await getSeriesDetails(id, mediaType);
-          const data = await response.json();
+  //         setSeasons(data.number_of_seasons);
+  //         setGenres(data.genres);
+  //         setDescription(data.overview);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching carousel items:", error);
+  //     }
+  //   };
 
-          //console.log(data.genres);
-
-          //console.log(data);
-          //console.log(data.number_of_seasons);
-
-          setSeasons(data.number_of_seasons);
-          setGenres(data.genres);
-          setDescription(data.overview);
-
-        }
-      } catch (error) {
-        console.error("Error fetching carousel items:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-
+  //   fetchData();
+  // }, []);
 
   return (
     <div

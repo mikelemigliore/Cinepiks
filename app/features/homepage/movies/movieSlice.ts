@@ -39,12 +39,11 @@ const horrorGenreCode = 27;
 const animationGenreCode = 16;
 const thrillerGenreCode = 53;
 
-
 // Function to format a Date object as 'YYYY-MM-DD'
-function formatDate(date:any) {
+function formatDate(date: any) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -54,19 +53,20 @@ const min_date = formatDate(today);
 
 // Calculate max_date (e.g., 30 days from today)
 const daysToAdd = 60;
-const max_date = formatDate(new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000));
+const max_date = formatDate(
+  new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000)
+);
 
 // console.log(min_date);
 // console.log(max_date);
-
-
 
 export const movieApi = createApi({
   reducerPath: "movieApi",
   baseQuery: fetchBaseQuery({ baseUrl: `https://api.themoviedb.org/3/` }),
   endpoints: (builder) => ({
     getUpcoming: builder.query<MediaProp[], void>({
-      query: () => `discover/movie?api_key=${apiKey}&language=en-US&sort_by=popularity.desc&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=2|3`,
+      query: () =>
+        `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=2|3`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (response: any) => {
@@ -106,7 +106,9 @@ export const movieApi = createApi({
       },
     }),
     getNowPlaying: builder.query<MediaProp[], void>({
-      query: () => `movie/now_playing?api_key=${apiKey}&region=US`,
+      //movie/now_playing?api_key=${apiKey}&region=US
+      
+      query: () => `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -187,6 +189,58 @@ export const movieApi = createApi({
         return results;
       },
     }),
+    getTeaserMovieVideo: builder.query({
+      query: (id: number) => `movie/${id}/videos?api_key=${apiKey}`,
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        // Filter teasers
+        let teasers = response.results.filter(
+          (item: any) => item.type === "Teaser" && item.official === true
+        );
+
+        // If no Teasers, fallback to Trailers
+        if (teasers.length === 0) {
+          teasers = response.results.filter(
+            (item: any) => item.type === "Trailer" && item.official === true
+          );
+        }
+
+        // Sort by published_at date in ascending order
+        const sortedTeasers = teasers.sort(
+          (a: any, b: any) =>
+            new Date(a.published_at).getTime() -
+            new Date(b.published_at).getTime()
+        );
+
+        // Get the first teaser released
+        const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+
+        return firstTeaser;
+      },
+    }),
+    getTeaserSeriesVideo: builder.query({
+      query: (id: number) => `tv/${id}/videos?api_key=${apiKey}`,
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        // Filter teasers
+        const trailers = response.results.filter(
+          (item: any) => item.type === "Trailer" && item.official === true
+        );
+
+        // Sort by published_at date in ascending order
+        const sortedTeasers = trailers.sort(
+          (a: any, b: any) =>
+            new Date(a.published_at).getTime() -
+            new Date(b.published_at).getTime()
+        );
+
+        // Get the first teaser released
+        const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+        //console.log(firstTeaser);
+
+        return firstTeaser;
+      },
+    }),
   }),
 });
 
@@ -199,4 +253,6 @@ export const {
   useGetAdventureMoviesQuery,
   useGetHorrorMoviesQuery,
   useGetThrillerMoviesQuery,
+  useGetTeaserMovieVideoQuery,
+  useGetTeaserSeriesVideoQuery
 } = movieApi;

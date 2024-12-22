@@ -615,6 +615,13 @@ import {
   useGetSocialsQuery,
   useGetDirectorQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
+import {
+  useGetImdbIdQuery,
+  useGetSeriesCertificationQuery,
+  useGetSeriesDetailsQuery,
+  useGetSeriesRuntimeQuery,
+  useGetSeriesSocialsQuery,
+} from "@/app/features/homepage/series/seriesSlice";
 
 interface SeriesProp {
   id: number;
@@ -699,7 +706,6 @@ MainDetailsProps) {
   const [value, setValue] = React.useState<number | null>(0);
   const [imdbIdSeries, setImdbIdSeries] = useState("");
 
-  
   const { data: rating } = useGetRatingsQuery(imdbId || "");
 
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
@@ -710,41 +716,83 @@ MainDetailsProps) {
 
   const { data: movieDirector } = useGetDirectorQuery(id || 0);
 
+  //const { data: seriesImdbId } = useGetImdbIdQuery(id || 0);
+
+  const { data: seriesDetails } = useGetSeriesDetailsQuery(id || 0);
+
+  const { data: seriesCertification } = useGetSeriesCertificationQuery(id || 0);
+
+  const { data: seriesRuntime } = useGetSeriesRuntimeQuery(id || 0);
+
+  const { data: seriesSocials } = useGetSeriesSocialsQuery(id || 0);
 
   useEffect(() => {
+    if (type === "movie") {
+      if (movieDetails) {
+        setPoster(movieDetails?.poster_path || "");
+        setGenres(movieDetails?.genres || []);
+        setRuntime(movieDetails?.runtime || "N/A");
+        setDescription(movieDetails?.overview || "No description available");
+        setTMDbScore(movieDetails?.vote_average || null);
+        setHomePage(movieDetails?.homepage || "");
+      }
 
-    if (movieDetails) {
-      setPoster(movieDetails?.poster_path || "");
-      setGenres(movieDetails?.genres || []);
-      setRuntime(movieDetails?.runtime || "N/A");
-      setDescription(movieDetails?.overview || "No description available");
-      setTMDbScore(movieDetails?.vote_average || null);
-      setHomePage(movieDetails?.homepage || "");
+      if (movieCertification) {
+        setCertification(movieCertification);
+      }
+
+      if (rating) {
+        setRottenTomatoesAudience(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+        );
+        setRottenTomatoesCritics(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+        );
+        setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+      }
+
+      if (movieSocials) {
+        setSocials(movieSocials || {});
+      }
+
+      if (movieDirector) {
+        setDirector(movieDirector || {});
+      }
+    } else {
+
+      if (seriesDetails) {
+        setPoster(seriesDetails?.poster_path || "");
+        setGenres(seriesDetails?.genres || []);
+        setDescription(seriesDetails?.overview || "No description available");
+        setTMDbScore(seriesDetails?.vote_average || null);
+        setHomePage(seriesDetails?.homepage || "");
+        setDirector(seriesDetails?.created_by?.[0]?.name || "N/A");
+      }
+
+      if (seriesCertification) {
+        setCertification(seriesCertification || "Not Rated");
+      }
+
+      if (seriesRuntime) {
+        setRuntime(seriesRuntime || null);
+      }
+
+      if (seriesSocials) {
+        setSocials(seriesSocials || {});
+      }
+
+      if (rating) {
+        setRottenTomatoesAudience(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+        );
+        setRottenTomatoesCritics(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+        );
+        setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+      }
     }
 
-    if (movieCertification) {
-      setCertification(movieCertification);
-    }
-
-    if (rating) {
-      setRottenTomatoesAudience(
-        rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
-      );
-      setRottenTomatoesCritics(
-        rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
-      );
-      setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
-    }
-
-    if (movieSocials) {
-      setSocials(movieSocials || {});
-    }
-
-    if (movieDirector) {
-      setDirector(movieDirector || {});
-    }
-  }, [movieDetails, rating]);
-
+  }, [movieDetails, rating, seriesDetails, seriesCertification, seriesRuntime, seriesSocials]);
 
 
   const handleAdded = (movieId: number) => {

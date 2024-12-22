@@ -142,9 +142,9 @@ Props) {
     setTimeout(() => setIsTransitioning(false), 500); // Reset after 500ms
   }, [totalSlides, isTransitioning]);
 
-  useEffect(() => {
-    console.log("Current activeSlide:", activeSlide);
-  }, [activeSlide]);
+  // useEffect(() => {
+  //   console.log("Current activeSlide:", activeSlide);
+  // }, [activeSlide]);
 
   useEffect(() => {
     // Only run this effect when isCarouselPlaying becomes false (after video ends)

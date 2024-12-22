@@ -4,6 +4,7 @@ import { ratingsApi } from "./ratingsSlice";
 import { seriesApi } from "./homepage/series/seriesSlice";
 import { StreamingServicesApi } from "./homepage/movies/moviesStreamServiceSlice";
 import { movieDetailsApi } from "./homepage/movies/moviedetailsSlice";
+import { loginApi } from "./loginpage/loginSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +21,8 @@ export const store = configureStore({
     [seriesApi.reducerPath]: seriesApi.reducer,
     [StreamingServicesApi.reducerPath]: StreamingServicesApi.reducer,
     [ratingsApi.reducerPath]: ratingsApi.reducer,
-    [movieDetailsApi.reducerPath]:movieDetailsApi.reducer
+    [movieDetailsApi.reducerPath]:movieDetailsApi.reducer,
+    [loginApi.reducerPath]:loginApi.reducer,
   },
   middleware: (
     getDefaultMiddleware //This is a function provided by Redux Toolkit that includes default middleware like redux-thunk (uses for async code) for handling asynchronous actions.Middleware for serializable state checks and more.
@@ -30,6 +32,6 @@ export const store = configureStore({
       .concat(seriesApi.middleware)
       .concat(StreamingServicesApi.middleware)
       .concat(ratingsApi.middleware)
-      .concat(movieDetailsApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
+      .concat(movieDetailsApi.middleware)
+      .concat(loginApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
 });
-``;

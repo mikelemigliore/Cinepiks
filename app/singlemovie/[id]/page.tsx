@@ -88,7 +88,7 @@ function SingleMoviePage() {
     if (movieCast) {
       setCast(movieCast);
     }
-  }, [Id, movieDetails, movieTrailer]);
+  }, [Id, movieDetails, movieTrailer, movieCast]);
 
   // useEffect(() => {
   //   if (Id) {

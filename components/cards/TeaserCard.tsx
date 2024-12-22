@@ -9,10 +9,12 @@ import { IoCheckmark } from "react-icons/io5";
 import YoutubePlayer from "./YoutubePlayer";
 import { GoMute, GoUnmute } from "react-icons/go";
 import {
-  getTeaserMovieVideo,
-  getTeaserSeriesVideo,
+  //getTeaserMovieVideo,
+  //getTeaserSeriesVideo,
   //getTrailerVideo,
 } from "@/app/pages/api/homePage";
+
+import { useGetTeaserMovieVideoQuery, useGetTeaserSeriesVideoQuery } from "@/app/features/homepage/movies/movieSlice";
 
 interface Genre {
   id: number;
@@ -69,6 +71,20 @@ TeaserCardProps) {
 
   //const activeCardRef = useRef<string | null>(null); // To track the currently active card
 
+  const { data: videoTeaserMovie } = useGetTeaserMovieVideoQuery(id);
+
+  const { data: videoTeaserSeries } = useGetTeaserSeriesVideoQuery(id);
+
+  useEffect(() => {
+    const mediaType = type === "movie" ? "movie" : "tv";
+
+    if (mediaType === "movie" && videoTeaserMovie) {
+      setVideoKey(videoTeaserMovie?.key);
+    } else if (mediaType === "tv" && videoTeaserSeries){
+      setVideoKey(videoTeaserSeries?.key)
+    }
+  }, [videoTeaserMovie,videoTeaserSeries]);
+
   const handleTouchStart = () => {
     // Set a timeout for detecting long press
     const timeout = setTimeout(() => {
@@ -86,69 +102,35 @@ TeaserCardProps) {
     }
   };
 
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
-  //   };
-
-  //   handleResize(); // Check the initial screen size
-
-  //   // Add event listener to update on window resize
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Clean up the event listener on unmount
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
-
-
-
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const mediaType = type === "movie" ? "movie" : "tv";
 
+  //       if (mediaType === "movie") {
+  //         const response = await getTeaserMovieVideo(id);
+  //         const data = await response.json();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const mediaType = type === "movie" ? "movie" : "tv";
+  //           setVideoKey(data.key);
 
-        if (mediaType === "movie") {
-          const response = await getTeaserMovieVideo(id);
-          const data = await response.json();
+  //       } else {
+  //         const response = await getTeaserSeriesVideo(id);
+  //         const data = await response.json();
 
-          //console.log(data.key);
+  //           setVideoKey(data.key);
 
-          //setVideoKey(data.key);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching carousel items:", error);
+  //     }
+  //   };
 
-          //if (data && data.key) {
-            //console.log(`Teaser key found: ${data.key}`);
-            setVideoKey(data.key);
-          // } else {
-          //   console.log("Teaser key not found in the response:", data);
-          // }
-
-        } else {
-          const response = await getTeaserSeriesVideo(id);
-          const data = await response.json();
-
-          //setVideoKey(data.key);
-
-          //if (data && data.key) {
-            setVideoKey(data.key);
-          // } else {
-          //   console.log("Teaser key not found in the response:", data);
-          // }
-        }
-      } catch (error) {
-        console.error("Error fetching carousel items:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  //   fetchData();
+  // }, []);
 
   const handleMouseEnter = () => {
     //if (isDesktop) {
@@ -160,7 +142,6 @@ TeaserCardProps) {
     }, 300); // 300ms delay to stabilize hover
     //}
   };
-
 
   const handleMouseLeave = () => {
     // Only reset states on hover leave if it's a desktop view

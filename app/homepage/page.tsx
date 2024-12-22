@@ -6,7 +6,7 @@ import MovieSwiper from "@/components/carousel/MovieSwiper";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import GenresSwiper from "@/components/carousel/GenresSwiper";
 import BigCardSwiper from "@/components/carousel/BigCardSwiper";
-import {
+//import {
   //getAction,
   //getAdventure,
   //getHorror,
@@ -17,11 +17,11 @@ import {
   //getNowPlaying,
   //getPopular,
   //getThriller,
-  getTrailerMovieVideo,
+  //getTrailerMovieVideo,
   //getTrending,
   //getTrendingSeries,
   //getUpcoming,
-} from "../pages/api/homePage";
+//} from "../pages/api/homePage";
 import {
   useGetUpcomingQuery,
   useGetPopularQuery,

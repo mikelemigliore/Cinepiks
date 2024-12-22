@@ -389,102 +389,102 @@ export async function getTmdbInfo(id: number) {
 //   }
 // }
 
-export async function getTeaserMovieVideo(id: number) {
-  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
+// export async function getTeaserMovieVideo(id: number) {
+//   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+//   const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${apiKey}`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
 
-    //console.log(data);
+//     //console.log(data);
 
-    // Filter teasers
-    let teasers = data.results.filter(
-      (item: any) => item.type === "Teaser" && item.official === true
-    );
+//     // Filter teasers
+//     let teasers = data.results.filter(
+//       (item: any) => item.type === "Teaser" && item.official === true
+//     );
 
-    // If no Teasers, fallback to Trailers
-    if (teasers.length === 0) {
-      teasers = data.results.filter(
-        (item: any) => item.type === "Trailer" && item.official === true
-      );
-    }
+//     // If no Teasers, fallback to Trailers
+//     if (teasers.length === 0) {
+//       teasers = data.results.filter(
+//         (item: any) => item.type === "Trailer" && item.official === true
+//       );
+//     }
 
-    //console.log(teasers);
+//     //console.log(teasers);
 
-    // Sort by published_at date in ascending order
-    const sortedTeasers = teasers.sort(
-      (a: any, b: any) =>
-        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
-    );
+//     // Sort by published_at date in ascending order
+//     const sortedTeasers = teasers.sort(
+//       (a: any, b: any) =>
+//         new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+//     );
 
-    // Get the first teaser released
-    const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
-    //console.log(firstTeaser);
+//     // Get the first teaser released
+//     const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+//     //console.log(firstTeaser);
 
-    return new Response(JSON.stringify(firstTeaser), { status: 200 });
-  } catch {
-    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
-      status: 500,
-    });
-  }
-}
+//     return new Response(JSON.stringify(firstTeaser), { status: 200 });
+//   } catch {
+//     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+//       status: 500,
+//     });
+//   }
+// }
 
-export async function getTeaserSeriesVideo(id: number) {
-  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const url = `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${apiKey}`;
+// export async function getTeaserSeriesVideo(id: number) {
+//   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+//   const url = `https://api.themoviedb.org/3/tv/${id}/videos?api_key=${apiKey}`;
 
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
+//   try {
+//     const response = await fetch(url);
+//     const data = await response.json();
 
-    //console.log(data);
+//     //console.log(data);
 
-    // Filter teasers
-    const trailers = data.results.filter(
-      (item: any) => item.type === "Trailer" && item.official === true
-    );
+//     // Filter teasers
+//     const trailers = data.results.filter(
+//       (item: any) => item.type === "Trailer" && item.official === true
+//     );
 
-    // Sort by published_at date in ascending order
-    const sortedTeasers = trailers.sort(
-      (a: any, b: any) =>
-        new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
-    );
+//     // Sort by published_at date in ascending order
+//     const sortedTeasers = trailers.sort(
+//       (a: any, b: any) =>
+//         new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
+//     );
 
-    // Get the first teaser released
-    const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
-    //console.log(firstTeaser);
+//     // Get the first teaser released
+//     const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
+//     //console.log(firstTeaser);
 
-    return new Response(JSON.stringify(firstTeaser), { status: 200 });
-  } catch {
-    return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
-      status: 500,
-    });
-  }
-}
+//     return new Response(JSON.stringify(firstTeaser), { status: 200 });
+//   } catch {
+//     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
+//       status: 500,
+//     });
+//   }
+// }
 
-export async function getRatings(id: string) {
-  const url = `https://film-show-ratings.p.rapidapi.com/item/?id=${id}`;
-  const options = {
-    method: "GET",
-    headers: {
-      "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
-      "x-rapidapi-host": "film-show-ratings.p.rapidapi.com",
-    },
-  };
+// export async function getRatings(id: string) {
+//   const url = `https://film-show-ratings.p.rapidapi.com/item/?id=${id}`;
+//   const options = {
+//     method: "GET",
+//     headers: {
+//       "x-rapidapi-key": "fea68af338mshcbba231507b945ap1efc48jsn1fb59f860ffb",
+//       "x-rapidapi-host": "film-show-ratings.p.rapidapi.com",
+//     },
+//   };
 
-  try {
-    const response = await fetch(url, options);
-    const data = await response.json();
+//   try {
+//     const response = await fetch(url, options);
+//     const data = await response.json();
 
-    //console.log(data);
+//     //console.log(data);
 
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    console.error(error);
-  }
-}
+//     return new Response(JSON.stringify(data), { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 export async function getTrailerMovieVideo(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;

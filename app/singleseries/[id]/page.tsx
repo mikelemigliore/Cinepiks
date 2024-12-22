@@ -6,12 +6,18 @@ import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTr
 import MainDetails from "@/components/singlePageComps/MainDetails";
 import SeriesTracker from "@/components/singlePageComps/SeriesTracker";
 import { useParams } from "next/navigation";
+// import {
+//   getCast,
+//   getImdbId,
+//   getSeriesDetails,
+//   getTrailerSeriesVideo,
+// } from "@/app/pages/api/singleSeriesPage";
 import {
-  getCast,
-  getImdbId,
-  getSeriesDetails,
-  getTrailerSeriesVideo,
-} from "@/app/pages/api/singleSeriesPage";
+  useGetSeriesDetailsQuery,
+  useGetTrailerSeriesVideoQuery,
+  useGetSeriesCastQuery,
+  useGetImdbIdQuery,
+} from "@/app/features/homepage/series/seriesSlice";
 
 const seasons = [
   {
@@ -231,13 +237,6 @@ function SingleSeriesPage() {
   const [cast, setCast] = useState([]);
   //const [imdbIdSeries, setImdbIdSeries] = useState("");
 
-  const handleValue = (newValue: number | null) => {
-    if (newValue !== null) {
-      setValue(newValue);
-    } else {
-      setValue(0);
-    }
-  };
 
   // Fetch call to TMDB to get the data I need for cast section, excellent example
   //const [cast, setCast] = useState([]);
@@ -247,72 +246,81 @@ function SingleSeriesPage() {
   const { id } = params;
   const Id = Number(id);
 
+  const { data: seriesDetails } = useGetSeriesDetailsQuery(Id);
+
+  const { data: seriesTrailer } = useGetTrailerSeriesVideoQuery(Id);
+
+  const { data: seriesCast } = useGetSeriesCastQuery(Id);
+
+  const { data: seriesId } = useGetImdbIdQuery(Id);
+
   useEffect(() => {
-    if (Id) {
-      const fetchData = async () => {
-        try {
-          const response = await getSeriesDetails(Id);
-          const responseTrailer = await getTrailerSeriesVideo(Id);
-          const responseCast = await getCast(Id);
-          const responseImdbId = await getImdbId(Id);
-          const data = await response.json();
-          const dataTrailer = await responseTrailer.json();
-          const dataCast = await responseCast.json();
-          const dataImdbId = await responseImdbId.json();
 
-          // console.log(data.backdrop_path);
-          // console.log(data.name);
-          // console.log(dataTrailer.key);
-          // console.log(dataImdbId);
-          // console.log(dataCast);
-          
-          //console.log(dataImdbId);
-          
-          //setImdbIdSeries(dataImdbId || null);
-          setBackdrop(data.backdrop_path);
-          setTitle(data.name);
-          setVideoKey(dataTrailer.key);
-          setImdbId(dataImdbId || null);
-          setCast(dataCast);
-
-
-          
-        } catch (error) {
-          console.error("Failed to fetch:", error);
-        }
-      };
-      fetchData();
+    if(seriesDetails){
+      console.log(seriesDetails?.backdrop_path);
+      
+      setBackdrop(seriesDetails?.backdrop_path);
+      setTitle(seriesDetails?.name);
     }
-  }, [Id]);
+
+    if(seriesTrailer){
+      setVideoKey(seriesTrailer?.key);
+    }
+
+    if(seriesId){
+      setImdbId(seriesId);
+    }
+
+    if(seriesCast){
+      setCast(seriesCast);
+    }
+
+  }, [Id, seriesDetails, seriesTrailer, seriesId, seriesCast]);
+
 
   // useEffect(() => {
-  //   const fetchCast = async () => {
-  //     const API_KEY = "1fc54b7ab4fb46412074eec75b746280"; // Add your TMDb API key
-  //     const url = `https://api.themoviedb.org/3/movie/${seriesId}/credits?api_key=${API_KEY}`;
-  //     try {
-  //       const response = await fetch(url);
-  //       const data = await response.json();
-  //       const formattedCast = data.cast.map(
-  //         (member: {
-  //           id: any;
-  //           name: any;
-  //           character: any;
-  //           profile_path: any;
-  //         }) => ({
-  //           id: member.id,
-  //           name: member.name,
-  //           character: member.character,
-  //           picture: `https://image.tmdb.org/t/p/w500${member.profile_path}`,
-  //         })
-  //       );
-  //       setCast(formattedCast);
-  //     } catch (error) {
-  //       console.error("Failed to fetch cast:", error);
-  //     }
-  //   };
+  //   if (Id) {
+  //     const fetchData = async () => {
+  //       try {
+  //         const response = await getSeriesDetails(Id);
+  //         const responseTrailer = await getTrailerSeriesVideo(Id);
+  //         const responseCast = await getCast(Id);
+  //         const responseImdbId = await getImdbId(Id);
+  //         const data = await response.json();
+  //         const dataTrailer = await responseTrailer.json();
+  //         const dataCast = await responseCast.json();
+  //         const dataImdbId = await responseImdbId.json();
 
-  //   fetchCast();
-  // }, []);
+  //         // console.log(data.backdrop_path);
+  //         // console.log(data.name);
+  //         // console.log(dataTrailer.key);
+  //         // console.log(dataImdbId);
+  //         // console.log(dataCast);
+
+  //         //console.log(dataImdbId);
+
+  //         //setImdbIdSeries(dataImdbId || null);
+  //         setBackdrop(data.backdrop_path);
+  //         setTitle(data.name);
+  //         setVideoKey(dataTrailer.key);
+  //         setImdbId(dataImdbId || null);
+  //         setCast(dataCast);
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [Id]);
+
+
+  const handleValue = (newValue: number | null) => {
+    if (newValue !== null) {
+      setValue(newValue);
+    } else {
+      setValue(0);
+    }
+  };
 
   const handleAdded = (movieId: number) => {
     setIsAdded((prevAdded) => ({

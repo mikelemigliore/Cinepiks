@@ -97,12 +97,6 @@ export const movieDetailsApi = createApi({
       query: (id: number) => `collection/${id}?api_key=${apiKey}`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
-      transformResponse: (id: number, response: any) => {
-        const updatedCollection = response.parts.filter(
-          (item: any) => item.id !== id
-        );
-        return updatedCollection;
-      },
     }),
     getMovieSimilar: builder.query({
       query: (genres: any[]) => {
@@ -116,8 +110,55 @@ export const movieDetailsApi = createApi({
       },
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
+      // transformResponse: (response: any) => {
+      //   const data = response.results;
+      //   return data;
+      // },
+    }),
+    getMovieRecommendation: builder.query({
+      query: (id: number) =>
+        `movie/${id}/recommendations?api_key=${apiKey}&language=en-US&page=1&region=US&sort_by=primary_release_date.desc`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+    }),
+    getMovieRecommendationFallBack: builder.query({
+      query: () => `movie/now_playing?api_key=${apiKey}&region=US`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+    }),
+    getDetailsTeaserCard: builder.query({
+      query: ({ id, media }: { id: number; media: "movie" | "tv" }) =>
+        `${media}/${id}?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+    }),
+    getHowToWatch: builder.query({
+      query: (id: number) => `movie/${id}/watch/providers?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        const data = response.results.US;
+        // const combinedServices = [
+        //   ...(data.flatrate || []),
+        //   ...(data.rent || []),
+        //   ...(data.buy || []),
+        // ];
+
+        return data;
+      },
+    }),
+    getMovieReview: builder.query({
+      query: (id: number) => `movie/${id}/reviews?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const data = response.results;
+        // const combinedServices = [
+        //   ...(data.flatrate || []),
+        //   ...(data.rent || []),
+        //   ...(data.buy || []),
+        // ];
+
         return data;
       },
     }),
@@ -133,4 +174,9 @@ export const {
   useGetMovieCastQuery,
   useGetMovieCollectionQuery,
   useGetMovieSimilarQuery,
+  useGetMovieRecommendationFallBackQuery,
+  useGetMovieRecommendationQuery,
+  useGetDetailsTeaserCardQuery,
+  useGetHowToWatchQuery,
+  useGetMovieReviewQuery
 } = movieDetailsApi;

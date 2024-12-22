@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { getReviews } from "@/app/pages/api/singleMoviePage";
+import { useGetMovieReviewQuery } from "@/app/features/homepage/movies/moviedetailsSlice";
 
 interface ReviewsProp {
   id: number;
@@ -40,43 +41,73 @@ function Reviews({ id, hightolow, lowtohigh }: ReviewsProp) {
   //const [hightToLow, setHighToLow] = useState<ReviewStyleProp[]>([])
   const [lowToHigh, setLowToHigh] = useState<ReviewStyleProp[]>([]);
 
+  const { data: movieReviews } = useGetMovieReviewQuery(id);
+
   useEffect(() => {
-    if (id) {
-      const fetchData = async () => {
-        try {
-          const responseReviews = await getReviews(id);
-          const dataReviews = await responseReviews.json();
+    if (movieReviews) {
+      // Ensure rating is parsed as a number
+      const parsedReviews = movieReviews.map((review: any) => ({
+        ...review,
+        author_details: {
+          ...review.author_details,
+          rating: Number(review.author_details.rating),
+        },
+      }));
 
-          // Ensure rating is parsed as a number
-          const parsedReviews = dataReviews.map((review: any) => ({
-            ...review,
-            author_details: {
-              ...review.author_details,
-              rating: Number(review.author_details.rating),
-            },
-          }));
+      // Sort reviews from high to low by rating
+      const sortedReviews = [...parsedReviews].sort(
+        (a: ReviewStyleProp, b: ReviewStyleProp) =>
+          b.author_details.rating - a.author_details.rating
+      );
 
-          // Sort reviews from high to low by rating
-          const sortedReviews = [...parsedReviews].sort(
-            (a: ReviewStyleProp, b: ReviewStyleProp) =>
-              b.author_details.rating - a.author_details.rating
-          );
+      // Sort reviews from low to high by rating
+      const sortedLowToHigh = [...parsedReviews].sort(
+        (a: ReviewStyleProp, b: ReviewStyleProp) =>
+          a.author_details.rating - b.author_details.rating
+      );
 
-          // Sort reviews from low to high by rating
-          const sortedLowToHigh = [...parsedReviews].sort(
-            (a: ReviewStyleProp, b: ReviewStyleProp) =>
-              a.author_details.rating - b.author_details.rating
-          );
-
-          setReviews(sortedReviews);
-          setLowToHigh(sortedLowToHigh);
-        } catch (error) {
-          console.error("Failed to fetch:", error);
-        }
-      };
-      fetchData();
+      setReviews(sortedReviews);
+      setLowToHigh(sortedLowToHigh);
     }
-  }, [id]);
+  }, [id, movieReviews]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     const fetchData = async () => {
+  //       try {
+  //         const responseReviews = await getReviews(id);
+  //         const dataReviews = await responseReviews.json();
+
+  //         // Ensure rating is parsed as a number
+  //         const parsedReviews = dataReviews.map((review: any) => ({
+  //           ...review,
+  //           author_details: {
+  //             ...review.author_details,
+  //             rating: Number(review.author_details.rating),
+  //           },
+  //         }));
+
+  //         // Sort reviews from high to low by rating
+  //         const sortedReviews = [...parsedReviews].sort(
+  //           (a: ReviewStyleProp, b: ReviewStyleProp) =>
+  //             b.author_details.rating - a.author_details.rating
+  //         );
+
+  //         // Sort reviews from low to high by rating
+  //         const sortedLowToHigh = [...parsedReviews].sort(
+  //           (a: ReviewStyleProp, b: ReviewStyleProp) =>
+  //             a.author_details.rating - b.author_details.rating
+  //         );
+
+  //         setReviews(sortedReviews);
+  //         setLowToHigh(sortedLowToHigh);
+  //       } catch (error) {
+  //         console.error("Failed to fetch:", error);
+  //       }
+  //     };
+  //     fetchData();
+  //   }
+  // }, [id]);
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -145,7 +176,9 @@ function Reviews({ id, hightolow, lowtohigh }: ReviewsProp) {
                   </div>
                   <div className="flex w-[29vw] justify-between">
                     <div className="flex flex-col">
-                      <div className='line-clamp-1'>{reviewsItem.author_details.username}</div>
+                      <div className="line-clamp-1">
+                        {reviewsItem.author_details.username}
+                      </div>
                       <div className="text-[0.7vw] text-customTextColor">
                         {formatDate(reviewsItem.created_at)}
                       </div>

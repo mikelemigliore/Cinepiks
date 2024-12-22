@@ -6,12 +6,12 @@ import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import { IoCheckmark } from "react-icons/io5";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import {
-  getGenres,
-  getMovieCertification,
-  getMovieDetails,
-} from "@/app/pages/api/loginPage";
-import { getRatings } from "@/app/pages/api/homePage";
+// import {
+//   getGenres,
+//   getMovieCertification,
+//   getMovieDetails,
+// } from "@/app/pages/api/loginPage";
+// import { getRatings } from "@/app/pages/api/homePage";
 import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
 import {
   useGetMovieCertificationQuery,
