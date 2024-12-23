@@ -33,8 +33,8 @@ interface ListViewProp {
   watchlist?: boolean;
   watched?: boolean;
   value?: number | null; //This was commented out
-  //handleValue: (newValue: number | null) => void;  //This was commented out
-  //mediaType?: string; // Indicates the type of content
+  handleValue: (newValue: number | null) => void;  //This was commented out
+  mediaType?: string; // Indicates the type of content
 }
 
 function ListView({
@@ -109,6 +109,7 @@ ListViewProp) {
                 //title={movie.title}
                 isLastOne={isLastOne}
                 list={list}
+                id={media.id}
               />
               <div className="flex">
                 <div className="flex flex-col pl-[3vw]">

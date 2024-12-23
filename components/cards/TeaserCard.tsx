@@ -62,7 +62,7 @@ TeaserCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
-  const [videoKey, setVideoKey] = useState();
+  const [videoKey, setVideoKey] = useState<string>();
   const [unmute, setUnmute] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // To manage hover delay
@@ -71,17 +71,20 @@ TeaserCardProps) {
 
   //const activeCardRef = useRef<string | null>(null); // To track the currently active card
 
+const mediaType = type === "movie" ? "movie" : "tv";
+
+
   const { data: videoTeaserMovie } = useGetTeaserMovieVideoQuery(id);
 
   const { data: videoTeaserSeries } = useGetTeaserSeriesVideoQuery(id);
 
   useEffect(() => {
-    const mediaType = type === "movie" ? "movie" : "tv";
-
     if (mediaType === "movie" && videoTeaserMovie) {
       setVideoKey(videoTeaserMovie?.key);
     } else if (mediaType === "tv" && videoTeaserSeries){
       setVideoKey(videoTeaserSeries?.key)
+    } else {
+      setVideoKey("6ZfuNTqbHE8");
     }
   }, [videoTeaserMovie,videoTeaserSeries]);
 
