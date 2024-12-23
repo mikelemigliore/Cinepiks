@@ -167,14 +167,78 @@ export const seriesApi = createApi({
       keepUnusedDataFor: time,
     }),
     getSeriesEpisodes: builder.query({
-      query: ({Id, selectedSeason}:{Id:number, selectedSeason:number})  => `tv/${Id}/season/${selectedSeason}?api_key=${apiKey}`,
+      query: ({ Id, selectedSeason }: { Id: number; selectedSeason: number }) =>
+        `tv/${Id}/season/${selectedSeason}?api_key=${apiKey}`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
-      transformResponse:(response:any)=>{
+      transformResponse: (response: any) => {
         //console.log(response.episodes);
-        
+
         return response.episodes;
-      }
+      },
+    }),
+    getHowToWatchSeries: builder.query({
+      query: (id: number) => `tv/${id}/watch/providers?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        const data = response.results.US;
+        // const combinedServices = [
+        //   ...(data.flatrate || []),
+        //   ...(data.rent || []),
+        //   ...(data.buy || []),
+        // ];
+
+        return data;
+      },
+    }),
+    getSeriesReview: builder.query({
+      query: (id: number) => `tv/${id}/reviews?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        const data = response.results;
+        // const combinedServices = [
+        //   ...(data.flatrate || []),
+        //   ...(data.rent || []),
+        //   ...(data.buy || []),
+        // ];
+
+        return data;
+      },
+    }),
+    getSeriesCollection: builder.query({
+      query: (id: number) => `collection/${id}?api_key=${apiKey}`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+    }),
+    getSeriesSimilar: builder.query({
+      query: (genres: any[]) => {
+        // Extract genre IDs and join them
+        const genreIds = genres
+          .slice(0, 2) // Adjust slice based on your logic
+          .map((genre) => genre.id)
+          .join(",");
+
+        return `discover/tv?api_key=${apiKey}&language=en-US&region=US&vote_count.gte=100&vote_average.gte=7&sort_by=popularity.desc&with_genres=${genreIds}`;
+      },
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      // transformResponse: (response: any) => {
+      //   const data = response.results;
+      //   return data;
+      // },
+    }),
+    getSeriesRecommendation: builder.query({
+      query: (id: number) =>
+        `tv/${id}/recommendations?api_key=${apiKey}&language=en-US&page=1&region=US&sort_by=primary_release_date.desc`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+    }),
+    getSeriesRecommendationFallBack: builder.query({
+      query: () => `tv/now_playing?api_key=${apiKey}&region=US`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
     }),
   }),
 });
@@ -190,5 +254,11 @@ export const {
   useGetSeriesCertificationQuery,
   useGetSeriesRuntimeQuery,
   useGetSeriesSocialsQuery,
-  useGetSeriesEpisodesQuery
+  useGetSeriesEpisodesQuery,
+  useGetHowToWatchSeriesQuery,
+  useGetSeriesReviewQuery,
+  useGetSeriesCollectionQuery,
+  useGetSeriesSimilarQuery,
+  useGetSeriesRecommendationQuery,
+  useGetSeriesRecommendationFallBackQuery
 } = seriesApi;

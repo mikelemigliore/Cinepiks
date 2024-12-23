@@ -4,15 +4,21 @@ import { Button } from "../ui/button";
 import { CiPlay1 } from "react-icons/ci";
 import Link from "next/link";
 //import {
-  //getMovieCertification,
-  //getMovieDetails,
-  //getWatchProviders,
+//getMovieCertification,
+//getMovieDetails,
+//getWatchProviders,
 //} from "@/app/pages/api/singleMoviePage";
 import {
   useGetMovieCertificationQuery,
   useGetMovieDetailsQuery,
   useGetHowToWatchQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
+import {
+  useGetHowToWatchSeriesQuery,
+  useGetSeriesCertificationQuery,
+  useGetSeriesDetailsQuery,
+  useGetSeriesRuntimeQuery,
+} from "@/app/features/homepage/series/seriesSlice";
 
 const howtowatch = [
   {
@@ -82,6 +88,7 @@ interface SelectedFilterProp {
 interface HowToWatchProp {
   id: number;
   selectedFilters: SelectedFilterProp;
+  type: string;
 }
 
 interface WatchToBuyProp {
@@ -91,13 +98,13 @@ interface WatchToBuyProp {
   provider_name: string;
 }
 
-function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
+function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
   const [watchToBuy, setWatchToBuy] = useState<WatchToBuyProp[]>([]);
   const [watchToRent, setWatchToRent] = useState<WatchToBuyProp[]>([]);
   const [watchToStream, setWatchToStream] = useState<WatchToBuyProp[]>([]);
   const [allServices, setAllServices] = useState<WatchToBuyProp[]>([]);
   const [certification, setCertification] = useState("");
-  const [runtime, setRuntime] = useState();
+  const [runtime, setRuntime] = useState<number>();
 
   const { data: movieProvider } = useGetHowToWatchQuery(id || 0);
 
@@ -105,72 +112,68 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
 
   const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
 
-  useEffect(() => {
-    if (movieDetails) {
-      setRuntime(movieDetails?.runtime);
-    }
+  const { data: seriesProvider } = useGetHowToWatchSeriesQuery(id || 0);
 
-    if (movieCertification) {
+  const { data: seriesDetails } = useGetSeriesDetailsQuery(id || 0);
+
+  const { data: seriesCertification } = useGetSeriesCertificationQuery(id || 0);
+
+  const { data: seriesRuntime } = useGetSeriesRuntimeQuery(id || 0);
+
+  useEffect(() => {
+    if (type === "movie") {
+      if (movieDetails) {
+        setRuntime(movieDetails?.runtime);
+      }
+
+      if (movieCertification) {
         setCertification(movieCertification);
       } else {
         setCertification("Not Rated");
       }
 
-    
-    if (movieProvider) {
-      const combinedServices = [
-        ...(movieProvider?.flatrate || []),
-        ...(movieProvider?.rent || []),
-        ...(movieProvider?.buy || []),
-      ];
-      setAllServices(combinedServices);
-      setWatchToBuy(movieProvider?.buy || []);
-      setWatchToRent(movieProvider?.rent || []);
-      setWatchToStream(movieProvider?.flatrate || []);
+      if (movieProvider) {
+        const combinedServices = [
+          ...(movieProvider?.flatrate || []),
+          ...(movieProvider?.rent || []),
+          ...(movieProvider?.buy || []),
+        ];
+        setAllServices(combinedServices);
+        setWatchToBuy(movieProvider?.buy || []);
+        setWatchToRent(movieProvider?.rent || []);
+        setWatchToStream(movieProvider?.flatrate || []);
+      }
+    } else if (type === "series") {
+      if (seriesRuntime) {
+        setRuntime(seriesRuntime);
+      }
+
+      if (seriesCertification) {
+        setCertification(seriesCertification);
+      } else {
+        setCertification("Not Rated");
+      }
+
+      if (seriesProvider) {
+        const combinedServices = [
+          ...(seriesProvider?.flatrate || []),
+          ...(seriesProvider?.rent || []),
+          ...(seriesProvider?.buy || []),
+        ];
+        setAllServices(combinedServices);
+        setWatchToBuy(seriesProvider?.buy || []);
+        setWatchToRent(seriesProvider?.rent || []);
+        setWatchToStream(seriesProvider?.flatrate || []);
+      }
     }
-
-  }, [movieDetails, movieProvider, movieCertification]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await getWatchProviders(id);
-  //       const responseCertification = await getMovieCertification(id);
-  //       const responseInfo = await getMovieDetails(id);
-  //       const data = await response.json();
-  //       const dataCertification = await responseCertification.json();
-  //       const dataInfo = await responseInfo.json();
-
-  //       // Find the US release dates and certification
-  //       const usRelease = dataCertification.results.find(
-  //         (item: any) => item.iso_3166_1 === "US"
-  //       );
-
-  //       if (usRelease) {
-  //         const usCertification =
-  //           usRelease.release_dates[0].certification || "Not Rated";
-  //         setCertification(usCertification);
-  //       }
-
-  //       if (data) {
-  //         const combinedServices = [
-  //           ...(data.flatrate || []),
-  //           ...(data.rent || []),
-  //           ...(data.buy || []),
-  //         ];
-  //         setAllServices(combinedServices);
-  //         setWatchToBuy(data.buy || []);
-  //         setWatchToRent(data.rent || []);
-  //         setWatchToStream(data.flatrate || []);
-  //         setRuntime(dataInfo.runtime);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  }, [
+    movieDetails,
+    movieProvider,
+    movieCertification,
+    seriesProvider,
+    seriesDetails,
+    seriesCertification,
+  ]);
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -197,9 +200,17 @@ function HowToWatchCard({ id, selectedFilters }: HowToWatchProp) {
   };
 
   const formatRuntime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60); // Get the hours
-    const remainingMinutes = minutes % 60; // Get the remaining minutes
-    return `${hours}h ${remainingMinutes}m`;
+    if (type === "movie") {
+      const hours = Math.floor(minutes / 60); // Get the hours
+      const remainingMinutes = minutes % 60; // Get the remaining minutes
+      return `${hours}h ${remainingMinutes}m`;
+    } else if (type === "series") {
+      const hours = Math.floor(minutes / 60); // Get the hours
+      const remainingMinutes = minutes % 60; // Get the remaining minutes
+      return hours ? `Average: ${hours}h ${remainingMinutes}m` : `Average: ${remainingMinutes}m`;
+    } else {
+      return "N/A";
+    }
   };
 
   return (

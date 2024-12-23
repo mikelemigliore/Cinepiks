@@ -245,7 +245,7 @@ function SingleMoviePage() {
                   />
                 </div>
                 <div className="w-full">
-                  <HowToWatchCard id={Id} selectedFilters={selectedFilters} />
+                  <HowToWatchCard id={Id} selectedFilters={selectedFilters} type={type}/>
                 </div>
               </div>
               <div className="h-[2vw]">
@@ -263,13 +263,14 @@ function SingleMoviePage() {
                     id={Id}
                     hightolow={hightolow}
                     lowtohigh={lowtohigh}
+                    type={type}
                   />
                 </div>
               </div>
             </div>
             <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[14vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
-              <MoreInfo id={Id} />
+              <MoreInfo id={Id} type={type}/>
             </div>
             {/* <div className="mt-[6vw] max-w-[50vw]"> */}
             <div className="mt-[4vw] max-w-[75vw] ml-[14vw]">

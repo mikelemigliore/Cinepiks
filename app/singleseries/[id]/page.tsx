@@ -1,186 +1,3 @@
-// const seasons = [
-//   {
-//     season: 1,
-//     episodes: [
-//       {
-//         id: "s1e1",
-//         episode: 1,
-//         title:
-//           "How Dare You Do That to My Bulma! Vegeta's Metamorphosis of Fury!?",
-//         duration: "58 min",
-//         score: "96%",
-//         img: "https://image.tmdb.org/t/p/original/6BFIhumOY0SGhyHLFOiiowSKrAZ.jpg",
-//       },
-//       {
-//         id: "s1e2",
-//         episode: 2,
-//         title: "Goku Makes an Entrance! A Last Chance from Lord Beerus?",
-//         duration: "48 min",
-//         score: "88%",
-//         img: "https://image.tmdb.org/t/p/original/yjNrQ5SuNrrlIBQZ1ZG0qsOrFX5.jpg",
-//       },
-//       {
-//         id: "s1e3",
-//         episode: 3,
-//         title:
-//           "Thanks for Waiting, Lord Beerus! A Super Saiyan God is Born at Last! ",
-//         duration: "48 min",
-//         score: "90%",
-//         img: "https://image.tmdb.org/t/p/original/dtPbhwpbZcjLOahkKj2QXkeaUyd.jpg",
-//       },
-//       {
-//         id: "s1e4",
-//         episode: 4,
-//         title: "Show Us, Goku! The Power of a Super Saiyan God!",
-//         duration: "47 min",
-//         score: "86%",
-//         img: "https://image.tmdb.org/t/p/original/cyAEMV5X4N6cp5PTlqvAI8CBBrW.jpg",
-//       },
-//       {
-//         id: "s1e5",
-//         episode: 5,
-//         title: "Let's Keep Going, Lord Beerus! The Battle of Gods!",
-//         duration: "48 min",
-//         score: "87%",
-//         img: "https://image.tmdb.org/t/p/original/icjxZcyrPmDBcdO7jZWzLluxvzE.jpg",
-//       },
-//       {
-//         id: "s1e6",
-//         episode: 6,
-//         title:
-//           "The Universe Will Shatter? Clash! Destroyer vs. Super Saiyan God! ",
-//         duration: "48 min",
-//         score: "94%",
-//         img: "https://image.tmdb.org/t/p/original/9lpPjLqQFIzPyH0s1YFFOdCCRhZ.jpg",
-//       },
-//       {
-//         id: "s1e7",
-//         episode: 7,
-//         title: "Goku, Surpass Super Saiyan God!",
-//         duration: "47 min",
-//         score: "91%",
-//         img: "https://image.tmdb.org/t/p/original/fm8QV94N0JZajClb6AFli6N43vZ.jpg",
-//       },
-//     ],
-//   },
-//   {
-//     season: 2,
-//     episodes: [
-//       {
-//         id: "s2e1",
-//         episode: 1,
-//         title: "Revenge 'F'! A Cunning Trap is Set?",
-//         duration: "47 min",
-//         score: "92%",
-//         img: "https://image.tmdb.org/t/p/original/5Gc7Ood1kqq0eyGy4tPLziTTOAp.jpg",
-//       },
-//       {
-//         id: "s2e2",
-//         episode: 2,
-//         title: "Frieza and Frost! A Mutual Malevolence? ",
-//         duration: "47 min",
-//         score: "94%",
-//         img: "https://image.tmdb.org/t/p/original/qIEksVI5MxE594r0WCvPYeZiZW8.jpg",
-//       },
-//       {
-//         id: "s2e3",
-//         episode: 3,
-//         title:
-//           "The Mightiest Enemy Zeroes in on Goku! Launch the Knockout Spirit Bomb Now!",
-//         duration: "47 min",
-//         score: "89%",
-//         img: "https://image.tmdb.org/t/p/original/wFzggt1QbQz4R40kUc9G1d1fzPP.jpg",
-//       },
-//       {
-//         id: "s2e4",
-//         episode: 4,
-//         title: "Goku Enkindled! The Awakened One's New Ultra Instinct!",
-//         duration: "47 min",
-//         score: "88%",
-//         img: "https://image.tmdb.org/t/p/original/3Ztdp4838lSsJcpeY09SLH0IOnE.jpg",
-//       },
-//       {
-//         id: "s2e5",
-//         episode: 5,
-//         title: "An Extra-Dimensional Ultimate Battle! Hit vs. Jiren!",
-//         duration: "47 min",
-//         score: "89%",
-//         img: "https://image.tmdb.org/t/p/original/dNHs7L1tjpchqzg5k9scd45BDM4.jpg",
-//       },
-//       {
-//         id: "s2e6",
-//         episode: 6,
-//         title: "A Saiyan Oath! Vegeta's Resolve!",
-//         duration: "47 min",
-//         score: "95%",
-//         img: "https://image.tmdb.org/t/p/original/cLRUObQtJlgaVfkkZzDExxWWLmJ.jpg",
-//       },
-//       {
-//         id: "s2e7",
-//         episode: 7,
-//         title: "With Great Joy! The Fighting Freak Saiyans' Battle Rejoined! ",
-//         duration: "47 min",
-//         score: "92%",
-//         img: "https://image.tmdb.org/t/p/original/uUHMCt0zYCR6fvEWD9gtVX69cxc.jpg",
-//       },
-//       {
-//         id: "s2e8",
-//         episode: 8,
-//         title: "Bloodcurdling! The Explosive Birth of a New Super Warrior!",
-//         duration: "47 min",
-//         score: "97%",
-//         img: "https://image.tmdb.org/t/p/original/dRapGRLPhmYbRngHVwjFKe9h6Bj.jpg",
-//       },
-//       {
-//         id: "s2e9",
-//         episode: 9,
-//         title: "Goku vs. Kefla! Super Saiyan Blue Beaten?",
-//         duration: "47 min",
-//         score: "96%",
-//         img: "https://image.tmdb.org/t/p/original/pRGvQP4Q96Sk8c46gloVQuB1jkD.jpg",
-//       },
-//       {
-//         id: "s2e10",
-//         episode: 10,
-//         title:
-//           "A Perfect Survival Strategy! The 3rd Universe's Menacing Assassin!",
-//         duration: "47 min",
-//         score: "91%",
-//         img: "https://image.tmdb.org/t/p/original/ucQOHxMVheMrfbL5eYYZNU52kam.jpg",
-//       },
-//       {
-//         id: "s2e11",
-//         episode: 11,
-//         title:
-//           "All-Out War! The Ultimate Four-Fold Union vs. the 7th Universe's Total Offensive! ",
-//         duration: "47 min",
-//         score: "94%",
-//         img: "https://image.tmdb.org/t/p/original/jpaZjRxvJztKqjasRSrT4qgwd0T.jpg",
-//       },
-//       {
-//         id: "s2e12",
-//         episode: 12,
-//         title: "Body, Soul and Power Unleashed! Goku and Vegeta!",
-//         duration: "47 min",
-//         score: "94%",
-//         img: "https://image.tmdb.org/t/p/original/AnB9kXVVTyhVEwsadU5jOf1iPN5.jpg",
-//       },
-//       {
-//         id: "s2e13",
-//         episode: 13,
-//         title:
-//           "The Greatest Showdown of All Time! The Ultimate Survival Battle!",
-//         duration: "47 min",
-//         score: "95%",
-//         img: "https://image.tmdb.org/t/p/original/6DOEwWxgMUkrgEcZEC2HNba73CQ.jpg",
-//       },
-//     ],
-//   },
-// ];
-
-
-
-
 "use client";
 import { useState } from "react";
 import React from "react";
@@ -189,12 +6,6 @@ import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTr
 import MainDetails from "@/components/singlePageComps/MainDetails";
 import SeriesTracker from "@/components/singlePageComps/SeriesTracker";
 import { useParams } from "next/navigation";
-// import {
-//   getCast,
-//   getImdbId,
-//   getSeriesDetails,
-//   getTrailerSeriesVideo,
-// } from "@/app/pages/api/singleSeriesPage";
 import {
   useGetSeriesDetailsQuery,
   useGetTrailerSeriesVideoQuery,
@@ -202,7 +13,14 @@ import {
   useGetImdbIdQuery,
   useGetSeriesEpisodesQuery,
 } from "@/app/features/homepage/series/seriesSlice";
-
+import TagsHowToWatch from "@/components/tags/TagsHowToWatch";
+import HowToWatchCard from "@/components/cards/HowToWatchCard";
+import TagsHighToLow from "@/components/tags/TagsHighToLow";
+import Reviews from "@/components/reviews/Reviews";
+import MoreInfo from "@/components/moreinfo/MoreInfo";
+import CastSwiper from "@/components/carousel/CastSwiper";
+import MoreLikeThisSwiper from "@/components/carousel/MoreLikeThisSwiper";
+import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 
 const series = [
   {
@@ -213,9 +31,6 @@ const series = [
   },
 ];
 
-
-
-
 interface Episode {
   id: string;
   episode: number;
@@ -223,8 +38,8 @@ interface Episode {
   duration: string;
   score: string;
   img: string;
-  description:string
-  date:string
+  description: string;
+  date: string;
 }
 
 interface Season {
@@ -235,6 +50,7 @@ interface Season {
   episodes: Episode[];
 }
 
+type FilterKey = "all" | "buy" | "rent" | "subscription";
 
 function SingleSeriesPage() {
   const [selectedSeason, setSelectedSeason] = useState<number>(1); // Start with season 1
@@ -266,6 +82,23 @@ function SingleSeriesPage() {
   const [seasons, setSeason] = useState<Season[]>([]);
   const [seasonsReal, setSeasonReal] = useState([]);
   const [seasonEp, setSeasonEp] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    all: true,
+    buy: false,
+    rent: false,
+    subscription: false,
+  });
+  const [hightolow, setHightolow] = useState(true);
+  const [lowtohigh, setLowtohigh] = useState(false);
+
+  const toggleFilter = (filter: FilterKey) => {
+    setSelectedFilters((prev) => ({
+      all: filter === "all",
+      buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
+      rent: filter === "rent",
+      subscription: filter === "subscription",
+    }));
+  };
 
   // Fetch call to TMDB to get the data I need for cast section, excellent example
   //const [cast, setCast] = useState([]);
@@ -284,16 +117,21 @@ function SingleSeriesPage() {
   const { data: seriesCast } = useGetSeriesCastQuery(Id);
 
   const { data: seriesId } = useGetImdbIdQuery(Id);
-  
-  const { data: seasonsData } = useGetSeriesEpisodesQuery({Id , selectedSeason});
+
+  const { data: seasonsData } = useGetSeriesEpisodesQuery({
+    Id,
+    selectedSeason,
+  });
 
   useEffect(() => {
     if (seriesDetails) {
-      //console.log(seriesDetails?.seasons);
-
       setBackdrop(seriesDetails?.backdrop_path);
       setTitle(seriesDetails?.name);
-      setSeasonReal(seriesDetails?.seasons);
+
+      const filteredSeasons = seriesDetails?.seasons.filter((season: any) => {
+        return season.season_number > 0;
+      });
+      setSeasonReal(filteredSeasons);
     }
 
     if (seriesTrailer) {
@@ -309,23 +147,19 @@ function SingleSeriesPage() {
     }
 
     if (seasonsData) {
-      console.log(seasonsData);
-
       setSeasonEp(seasonsData);
     }
   }, [Id, seriesDetails, seriesTrailer, seriesId, seriesCast, seasonsData]);
 
-
-
   useEffect(() => {
     if (seasonsReal && seasonEp && selectedSeason) {
       // Combine the data dynamically
-      const combinedSeasons = seasonsReal.map((season:any) => ({
+      const combinedSeasons = seasonsReal.map((season: any) => ({
         season: season.season_number,
         name: season.name,
         poster: `https://image.tmdb.org/t/p/original${season.poster_path}`,
         voteAverage: season.vote_average,
-        episodes: seasonEp.map((episode:any) => ({
+        episodes: seasonEp.map((episode: any) => ({
           id: `s${season.season_number}e${episode.episode_number}`,
           episode: episode.episode_number,
           title: episode.name,
@@ -333,18 +167,14 @@ function SingleSeriesPage() {
           score: `${Math.round(episode.vote_average * 10)}%`,
           img: `https://image.tmdb.org/t/p/original${episode.still_path}`,
           description: episode.overview,
-          date: episode.air_date
+          date: episode.air_date,
         })),
       }));
       //console.log(combinedSeasons);
-      
-      setSeason(combinedSeasons)
-      
+
+      setSeason(combinedSeasons);
     }
   }, [seasonsReal, seasonEp, selectedSeason]);
-
-
-
 
   const handleValue = (newValue: number | null) => {
     if (newValue !== null) {
@@ -396,6 +226,16 @@ function SingleSeriesPage() {
     setUnmute(!unmute);
   };
 
+  const handleHightolow = () => {
+    setHightolow(true);
+    setLowtohigh(false);
+  };
+
+  const handleLowtohigh = () => {
+    setLowtohigh(true);
+    setHightolow(false);
+  };
+
   const handleEpisodeWatched = (episodeNumber: number) => {
     setWatchedEpisodes((prevWatched) => ({
       //Calls setWatchedEpisodes, the function that updates the watchedEpisodes state.
@@ -443,9 +283,6 @@ function SingleSeriesPage() {
       />
       <div className="min-h-screen mb-[135vw] ">
         <div
-          // className={`flex justify-center w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
-          //   play ? "translate-y-[7vw]" : ""
-          // }`}
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
           }`}
@@ -473,40 +310,61 @@ function SingleSeriesPage() {
               watchedEpisodes={watchedEpisodes}
               onEpisodeWatched={handleEpisodeWatched}
             />
-            {/* <div className="flex gap-[6vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
+            <div className="flex gap-[6vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
               <div className="h-[2vw]">
                 <div className="text-[1vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
-                  <Tags />
+                  <TagsHowToWatch
+                    selectedFilters={selectedFilters}
+                    toggleFilter={toggleFilter}
+                  />
                 </div>
                 <div className="w-full">
-                  <HowToWatchCard />
+                  <HowToWatchCard
+                    id={Id}
+                    selectedFilters={selectedFilters}
+                    type={type}
+                  />
                 </div>
               </div>
               <div className="h-[2vw]">
                 <div className="text-[1vw]">Reviews</div>
                 <div className="my-[1vh] mb-[2vh]">
-                  <Tags reviews={reviews} />
+                  <TagsHighToLow
+                    hightolow={hightolow}
+                    lowtohigh={lowtohigh}
+                    handleHightolow={handleHightolow}
+                    handleLowtohigh={handleLowtohigh}
+                  />
                 </div>
                 <div className="w-full h-[22vw]">
-                  <Reviews />
+                  <Reviews
+                    id={Id}
+                    hightolow={hightolow}
+                    lowtohigh={lowtohigh}
+                    type={type}
+                  />
                 </div>
               </div>
-            </div> */}
-            {/* <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[76vw] ml-[13vw]">
+            </div>
+            <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[76vw] ml-[13vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
-              <MoreInfo />
+              <MoreInfo id={Id} type={type}/>
             </div>
             <div className="mt-[4vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
             <div className="max-w-[75vw] ml-[13vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
             <div className="mt-[6vw]">
-              <MoreLikeThisSwiper />
+            <MoreLikeThisSwiper
+                //collection={wholeCollection}
+                id={Id}
+                mediaType={"series"}
+              />
             </div>
             <div>
-              <RecommendationSwiper />
-            </div> */}
+            <RecommendationSwiper id={Id} mediaType={"series"} />
+            </div>
           </div>
         </div>
       </div>

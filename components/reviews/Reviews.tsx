@@ -12,11 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { getReviews } from "@/app/pages/api/singleMoviePage";
 import { useGetMovieReviewQuery } from "@/app/features/homepage/movies/moviedetailsSlice";
+import { useGetSeriesReviewQuery } from "@/app/features/homepage/series/seriesSlice";
 
 interface ReviewsProp {
   id: number;
   hightolow: boolean;
   lowtohigh: boolean;
+  type: string;
 }
 
 interface AuthorProp {
@@ -36,40 +38,70 @@ interface ReviewStyleProp {
   url: string;
 }
 
-function Reviews({ id, hightolow, lowtohigh }: ReviewsProp) {
+function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
   const [reviews, setReviews] = useState<ReviewStyleProp[]>([]);
   //const [hightToLow, setHighToLow] = useState<ReviewStyleProp[]>([])
   const [lowToHigh, setLowToHigh] = useState<ReviewStyleProp[]>([]);
 
   const { data: movieReviews } = useGetMovieReviewQuery(id);
 
+  const { data: seriesReviews } = useGetSeriesReviewQuery(id);
+
   useEffect(() => {
-    if (movieReviews) {
-      // Ensure rating is parsed as a number
-      const parsedReviews = movieReviews.map((review: any) => ({
-        ...review,
-        author_details: {
-          ...review.author_details,
-          rating: Number(review.author_details.rating),
-        },
-      }));
+    if (type === "movie") {
+      if (movieReviews) {
+        // Ensure rating is parsed as a number
+        const parsedReviews = movieReviews.map((review: any) => ({
+          ...review,
+          author_details: {
+            ...review.author_details,
+            rating: Number(review.author_details.rating),
+          },
+        }));
 
-      // Sort reviews from high to low by rating
-      const sortedReviews = [...parsedReviews].sort(
-        (a: ReviewStyleProp, b: ReviewStyleProp) =>
-          b.author_details.rating - a.author_details.rating
-      );
+        // Sort reviews from high to low by rating
+        const sortedReviews = [...parsedReviews].sort(
+          (a: ReviewStyleProp, b: ReviewStyleProp) =>
+            b.author_details.rating - a.author_details.rating
+        );
 
-      // Sort reviews from low to high by rating
-      const sortedLowToHigh = [...parsedReviews].sort(
-        (a: ReviewStyleProp, b: ReviewStyleProp) =>
-          a.author_details.rating - b.author_details.rating
-      );
+        // Sort reviews from low to high by rating
+        const sortedLowToHigh = [...parsedReviews].sort(
+          (a: ReviewStyleProp, b: ReviewStyleProp) =>
+            a.author_details.rating - b.author_details.rating
+        );
 
-      setReviews(sortedReviews);
-      setLowToHigh(sortedLowToHigh);
+        setReviews(sortedReviews);
+        setLowToHigh(sortedLowToHigh);
+      }
+    } else if (type === "series") {
+      if (seriesReviews) {
+        // Ensure rating is parsed as a number
+        const parsedReviews = seriesReviews.map((review: any) => ({
+          ...review,
+          author_details: {
+            ...review.author_details,
+            rating: Number(review.author_details.rating),
+          },
+        }));
+
+        // Sort reviews from high to low by rating
+        const sortedReviews = [...parsedReviews].sort(
+          (a: ReviewStyleProp, b: ReviewStyleProp) =>
+            b.author_details.rating - a.author_details.rating
+        );
+
+        // Sort reviews from low to high by rating
+        const sortedLowToHigh = [...parsedReviews].sort(
+          (a: ReviewStyleProp, b: ReviewStyleProp) =>
+            a.author_details.rating - b.author_details.rating
+        );
+
+        setReviews(sortedReviews);
+        setLowToHigh(sortedLowToHigh);
+      }
     }
-  }, [id, movieReviews]);
+  }, [id, movieReviews, seriesReviews]);
 
   // useEffect(() => {
   //   if (id) {

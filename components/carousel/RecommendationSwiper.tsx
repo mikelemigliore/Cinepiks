@@ -8,6 +8,10 @@ import {
   useGetMovieRecommendationFallBackQuery,
   useGetMovieRecommendationQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
+import {
+  useGetSeriesRecommendationFallBackQuery,
+  useGetSeriesRecommendationQuery,
+} from "@/app/features/homepage/series/seriesSlice";
 
 interface RecommendationSwiperProp {
   mediaType: string;
@@ -24,13 +28,31 @@ function RecommendationSwiper({ mediaType, id }: RecommendationSwiperProp) {
   const { data: movieRecommendationFallBack } =
     useGetMovieRecommendationFallBackQuery({});
 
+  const { data: seriesRecommendation } = useGetSeriesRecommendationQuery(id);
+
+  const { data: seriesRecommendationFallBack } =
+    useGetSeriesRecommendationFallBackQuery({});
+
   useEffect(() => {
-    if (movieRecommendation) {
-      setRecommendation(movieRecommendation?.results);
-    } else {
-      setRecommendation(movieRecommendationFallBack?.results);
+    if (mediaType === "movie") {
+      if (movieRecommendation) {
+        setRecommendation(movieRecommendation?.results);
+      } else {
+        setRecommendation(movieRecommendationFallBack?.results);
+      }
+    } else if (mediaType === "series") {
+      if (seriesRecommendation) {
+        setRecommendation(seriesRecommendation?.results);
+      } else {
+        setRecommendation(seriesRecommendationFallBack?.results);
+      }
     }
-  }, [movieRecommendation, movieRecommendationFallBack]);
+  }, [
+    movieRecommendation,
+    movieRecommendationFallBack,
+    seriesRecommendationFallBack,
+    seriesRecommendation,
+  ]);
 
   // useEffect(() => {
   //   if (id) {
