@@ -13,7 +13,8 @@ import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
 
 interface StarRatingProp {
-  title: string;
+  title?: string;
+  name?:string;
   value:number | null
   handleValue: (newValue: number | null) => void;
 }

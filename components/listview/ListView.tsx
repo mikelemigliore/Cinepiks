@@ -21,9 +21,11 @@ import StarRating from "../starRating/StarRating";
 
 interface Movie {
   id: number;
-  title: string;
-  imgUrl: string;
-  type: string; // Add type here to indicate the media type
+  title?: string;
+  poster_path: string;
+  media_type: string; // Add type here to indicate the media type
+  backdrop_path: string;
+  name?:string
 }
 
 interface ListViewProp {
@@ -104,8 +106,8 @@ ListViewProp) {
               //style={{ width: "12.6vw", height: "40vh" }}
             >
               <MovieCard
-                type={media.type}
-                imgUrl={media.imgUrl}
+                type={media.media_type}
+                imgUrl={media.poster_path}
                 //title={movie.title}
                 isLastOne={isLastOne}
                 list={list}
@@ -114,7 +116,7 @@ ListViewProp) {
               <div className="flex">
                 <div className="flex flex-col pl-[3vw]">
                   {/* Movie info here */}
-                  <h2 className="text-[1.5vw] font-bold">{media.title}</h2>
+                  <h2 className="text-[1.5vw] font-bold">{media.title || media.name}</h2>
                   <div className="text-center">
                     <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.7vw]">
                       <span>Action</span>
@@ -294,6 +296,7 @@ ListViewProp) {
                         <div className=" text-[1vw]">Your Score</div>
                         <StarRating
                           title={media.title}
+                          name={media.name}
                           value={scores[media.id] || null}
                           handleValue={(newValue) =>
                             handleScoreChange(media.id, newValue)

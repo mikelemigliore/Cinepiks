@@ -1,7 +1,7 @@
 //If you have a form or a button that requires user interaction and changes the UI based on the user's input,
 //you need to mark that component as a client component using "use client"
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
@@ -10,61 +10,73 @@ import Sort from "@/components/sort/Sort";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
 import { useSearchParams } from "next/navigation";
-import {
-  useGetAllQuery,
-  useGetMoviesQuery,
-  useGetSeriesQuery,
-} from "../features/search/searchSlice";
+import { useGetContentQuery } from "../features/search/searchSlice";
 import Link from "next/link";
 
 function SearchPage() {
   const searchParams = useSearchParams();
+  const typeQuery = searchParams.get("type");
+
   const [filter, setFilterd] = useState(false);
-  const [all, setAll] = useState(true);
-  const [movies, setMovies] = useState(false);
-  const [series, setSeries] = useState(false);
-  //const [documentary, setDocumentary] = useState(false);
+  const [all, setAll] = useState(false);
+  const [movies, setMovies] = useState(typeQuery === "movie" ? true : false);
+  const [series, setSeries] = useState(typeQuery === "series" ? true : false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [value, setValue] = React.useState<number | null>(0);
-  const [moviesItemSearch, setMoviesItemSearch] = useState([]);
-  const [seriesItemSearch, setSeriesItemSearch] = useState([]);
-  const [itemSearch, setItemSearch] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
+  const [ContentSearch, setContent] = useState<any[]>([]);
+  const [type, setType] = useState(typeQuery || "all"); // Current selected tag
+  const [loading, setLoading] = useState(true);
+  const [sortBy, setSortby] = useState<string>("popularity.desc");
 
-  const type = searchParams.get("type");
+  const handleSortBy = (newSort: string) => {
+    console.log(newSort);
+    setPage(1)
+    setContent([]);
+    console.log(newSort);
+    
+    setSortby(newSort);
+  };
 
-  const { data: movieSearch } = useGetMoviesQuery({});
-
-  const { data: seriesSearch } = useGetSeriesQuery({});
-
-  const { data: allSearch } = useGetAllQuery({});
+  const {
+    data: contentSearch,
+    isFetching,
+    isSuccess,
+  } = useGetContentQuery({ type, page, sortBy });
 
   useEffect(() => {
-    if (type === "movie") {
-      setMovies(true);
-      setSeries(false);
-      setAll(false);
-      //console.log(movieSearch);
+    if (isSuccess && contentSearch) {
+      console.log(contentSearch);
       
-      setMoviesItemSearch(movieSearch || []);
-    } else if (type === "series") {
-      setSeries(true);
-      setMovies(false);
-      setAll(false);
-      console.log(seriesSearch);
-      
-      setSeriesItemSearch(seriesSearch || []);
-    } else if (type === "all") {
-      setAll(true);
-      setMovies(false);
-      setSeries(false);
-      //console.log(allSearch);
-      setItemSearch(allSearch || []);
+      setContent((prev) => [...prev, ...contentSearch]);
     }
-  }, [type, movieSearch, seriesSearch, allSearch]);
+  }, [contentSearch]);
 
+  const debounce = (func: any, delay: any) => {
+    let timeout: string | number | NodeJS.Timeout | undefined;
+    return (...args: any) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
 
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleScroll = debounce(() => {
+    const thresholdPercentage = 40; // Trigger when user is within 40% of the bottom
+    const totalHeight = document.documentElement.offsetHeight;
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      totalHeight - (totalHeight * thresholdPercentage) / 100
+    ) {
+      setPage((prev) => prev + 1);
+    }
+  }, 300);
 
   const handleValue = (newValue: number | null) => {
     if (newValue !== null) {
@@ -74,42 +86,46 @@ function SearchPage() {
     }
   };
 
-  // useEffect(() => {
-  //   if (type === "movie") {
-  //     setMovies(true);
-  //     setSeries(false);
-  //     setAll(false);
-  //   } else if (type === "series") {
-  //     setSeries(true);
-  //     setMovies(false);
-  //     setAll(false);
-  //   }
-  // }, [searchParams]);
-
   const handleFilter = () => {
     setFilterd(!filter);
   };
 
-  const handleAll = () => {
-    setAll((prev) => !prev);
-    setMovies(false);
-    setSeries(false);
-    //setDocumentary(false);
+  const handleAll = (newType: string) => {
+    if (!movies && !series && all) {
+      return;
+    } else {
+      setAll((prev) => !prev);
+      setMovies(false);
+      setSeries(false);
+      setType(newType);
+      setPage(1); // Reset page when tag changes
+      setContent([]); // Clear previous movies
+    }
   };
 
-  const handleMovies = () => {
-    setMovies((prev) => !prev);
-    setSeries(false);
-    //if (!movies) setAll(false);
+  const handleMovies = (newType: string) => {
+    if (movies && !series && !all) {
+      return;
+    } else {
+      setMovies((prev) => !prev);
+      setSeries(false);
+      setType(newType);
+      setPage(1); // Reset page when tag changes
+      setContent([]); // Clear previous movies
+    }
   };
 
-
-  const handleSeries = () => {
-    setSeries((prev) => !prev);
-    setMovies(false);
-    //if (!series) setAll(false);
+  const handleSeries = (newType: string) => {
+    if (!movies && series && !all) {
+      return;
+    } else {
+      setSeries((prev) => !prev);
+      setMovies(false);
+      setType(newType);
+      setPage(1); // Reset page when tag changes
+      setContent([]); // Clear previous movies
+    }
   };
-
 
   // Set 'All' to true when none of the other categories are selected
   useEffect(() => {
@@ -168,7 +184,7 @@ function SearchPage() {
             </Button>
           </div>
           {/* Sort component */}
-          <Sort />
+          <Sort handleSortBy={handleSortBy} type={type}/>
         </div>
       </div>
 
@@ -188,7 +204,8 @@ function SearchPage() {
             <div className="flex transition-transform duration-700 ease-in-out">
               <Link href={{ pathname: "/search", query: { type: "all" } }}>
                 <Button
-                  onClick={handleAll}
+                  //key="all"
+                  onClick={() => handleAll("all")}
                   className={`w-[3vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     all ? "bg-white/90 text-black font-bold" : ""
                   }`}
@@ -198,7 +215,8 @@ function SearchPage() {
               </Link>
               <Link href={{ pathname: "/search", query: { type: "movie" } }}>
                 <Button
-                  onClick={handleMovies}
+                  //key="movie"
+                  onClick={() => handleMovies("movie")}
                   className={`w-[7vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     movies ? "bg-white/90 text-black font-bold" : ""
                   }`}
@@ -208,7 +226,8 @@ function SearchPage() {
               </Link>
               <Link href={{ pathname: "/search", query: { type: "series" } }}>
                 <Button
-                  onClick={handleSeries}
+                  //key="series"
+                  onClick={() => handleSeries("series")}
                   className={`w-[7vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     series ? "bg-white/90 text-black font-bold" : ""
                   }`}
@@ -216,91 +235,25 @@ function SearchPage() {
                   Series
                 </Button>
               </Link>
-
-              {/* <Button
-                onClick={handleDocumentary}
-                className={`w-[10vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[1vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                  documentary ? "bg-white/90 text-black font-bold" : ""
-                }`}
-              >
-                Documentary
-              </Button> */}
             </div>
-            {/* {grid ? (
-              <GridView
-                //mediaType={"movie"}
-                filter={filter}
-                moviesSearch={moviesItemSearch}
-              ></GridView>
-            ) : (
-              <ListView
-                //mediaType={"movie"}
-                filter={filter}
-                moviesSearch={moviesItemSearch}
-                list={list}
-              ></ListView>
-            )} */}
-
-            {movies && !series ? (
-              <div>
-                {grid ? (
-                  <GridView
-                    //mediaType={"movie"}
-                    filter={filter}
-                    mediaSearch={moviesItemSearch}
-                  ></GridView>
-                ) : (
-                  <ListView
-                    //mediaType={"movie"}
-                    filter={filter}
-                    mediaSearch={moviesItemSearch}
-                    list={list}
-                    value={value}
-                    handleValue={handleValue}
-                  ></ListView>
-                )}
-              </div>
-            ) : series && !movies ? (
-              <div>
-                {grid ? (
-                  <GridView
-                    //mediaType={"tv"}
-                    filter={filter}
-                    mediaSearch={seriesItemSearch}
-                  ></GridView>
-                ) : (
-                  <ListView
-                    //mediaType={"tv"}
-                    filter={filter}
-                    mediaSearch={seriesItemSearch}
-                    list={list}
-                    value={value}
-                    handleValue={handleValue}
-                  ></ListView>
-                )}
-              </div>
-            ) : !series && !movies ? (
-              <div>
-                {grid ? (
-                  <GridView
-                    //mediaType={"all"}
-                    filter={filter}
-                    mediaSearch={itemSearch}
-                  ></GridView>
-                ) : (
-                  <ListView
-                    //mediaType={"all"}
-                    filter={filter}
-                    mediaSearch={itemSearch}
-                    list={list}
-                    value={value}
-                    handleValue={handleValue}
-                  ></ListView>
-                )}
-              </div>
-            ) : (
-              <div>Not found</div>
-            )}
+            <div>
+              {grid ? (
+                <GridView
+                  //mediaType={"movie"}
+                  filter={filter}
+                  mediaSearch={ContentSearch}
+                ></GridView>
+              ) : (
+                <ListView
+                  //mediaType={"movie"}
+                  filter={filter}
+                  mediaSearch={ContentSearch}
+                  list={list}
+                  value={value}
+                  handleValue={handleValue}
+                ></ListView>
+              )}
+            </div>
           </div>
         </div>
       </div>
