@@ -1,5 +1,6 @@
 import React from "react";
 import MovieCard from "../cards/MovieCard";
+import Link from "next/link";
 
 interface Media {
   id: number;
@@ -7,7 +8,7 @@ interface Media {
   poster_path: string;
   media_type: string; // Add type here to indicate the media type
   backdrop_path: string;
-  name?:string
+  name?: string;
 }
 
 interface GridViewProp {
@@ -33,7 +34,9 @@ function GridView({
     >
       {mediaSearch?.map((media, index) => {
         const isLastOne = filter ? index === 5 : index === 6;
-        //console.log("Type", media);
+        //console.log("Type", media);\
+        
+        
 
         return (
           <div
@@ -41,18 +44,24 @@ function GridView({
             className={`m-[1vw] transition-transform duration-700 ml-[-0.2vw]`}
             //style={{ width: "12.6vw", height: "40vh" }}
           >
-            <MovieCard
-              watched={watched}
-              watchlist={watchlist}
-              type={media.media_type}
-              imgUrl={media.poster_path}
-              title={media.title}
-              name={media.name}
-              isLastOne={isLastOne}
-              id={media.id}
-              imgBackdrop={media.backdrop_path}
-              //mediaType={mediaType}
-            />
+            {/* <Link
+              href={{
+                pathname: `/singlemovie/${media.id}`, // Navigate to the single movie page
+                query: { mediaType: media.media_type }, // Optional: Include additional query params
+              }}
+            > */}
+              <MovieCard
+                watched={watched}
+                watchlist={watchlist}
+                type={media.media_type}
+                imgUrl={media.poster_path}
+                title={media.title}
+                name={media.name}
+                isLastOne={isLastOne}
+                id={media.id}
+                imgBackdrop={media.backdrop_path}
+              />
+            {/* </Link> */}
           </div>
         );
       })}

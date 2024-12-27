@@ -32,6 +32,43 @@ const max_date = formatDate(
 //   alphabetical: string,
 // }
 
+const pickGenres = (withFilterGenre: number[] | undefined) => {
+  if (withFilterGenre && withFilterGenre.length > 0) {
+    const genres = withFilterGenre.join(",");
+    console.log(genres);
+    
+    return `&with_genres=${genres}`;
+  } else {
+    return "";
+  }
+};
+
+const pickPlatform = (withFilterPlatform: number[] | undefined) => {
+  if (withFilterPlatform && withFilterPlatform.length > 0) {
+    // Join the platform IDs with commas
+    const platforms = withFilterPlatform.join(",");
+    console.log(platforms);
+    
+    return `&with_watch_providers=${platforms}&watch_region=US`;//add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
+  } else {
+    // Return an empty string if no platforms are provided
+    return "";
+  }
+};
+
+// const pickPlatform = (withFilterPlatform: number[] | undefined) => {
+//   if (withFilterPlatform && withFilterPlatform.length > 0) {
+//     let platforms;
+//     withFilterPlatform.map((item: any) => {
+//       platforms = `${item},`;
+//       console.log(platforms);
+//     });
+//     return `&with_watch_providers=${platforms}&watch_region=US`;
+//   } else {
+//     return "";
+//   }
+// };
+
 export const searchApi = createApi({
   reducerPath: "searchApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3" }),
@@ -41,19 +78,24 @@ export const searchApi = createApi({
         type,
         page,
         sortBy,
+        withFilterGenre,
+        withFilterPlatform,
       }: {
         type: string;
         page: number;
         sortBy: string;
+        withFilterGenre?: number[];
+        withFilterPlatform?: number[];
       }) => {
         const endpoints: Record<string, string> = {
           //Syntax: Record<KeyType, ValueType> is a utility type that allows you to create an object type
           //movie/popular?api_key=${apiKey}&region=US&language=en-US&page=${page}
-          movie: `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sortBy}&primary_release_date.lte=${min_date}&vote_count.gte=300&vote_average.gte=4`,
+          movie: `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sortBy}&primary_release_date.lte=${min_date}&vote_count.gte=300&vote_average.gte=4${pickGenres(
+            withFilterGenre)}${pickPlatform(withFilterPlatform)}`,
           series: `discover/tv?api_key=${apiKey}&region=US&sort_by=${sortBy}&vote_count.gte=100&vote_average.gte=7&page=${page}&primary_release_date.lte=${min_date}`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,
         };
-
+        //console.log(endpoints[type]);
         return (
           endpoints[type] || //The function attempts to find the URL for the specified type in the endpoints object.
           (() => {
@@ -66,7 +108,13 @@ export const searchApi = createApi({
       transformResponse: (
         response: any,
         meta: FetchBaseQueryMeta | undefined,
-        arg: { type: string; page: number; sortBy: string }
+        arg: {
+          type: string;
+          page: number;
+          sortBy: string;
+          withFilterGenre: number[];
+          withFilterPlatform: number[];
+        }
       ) => {
         const { type } = arg; // Access the type from the query arguments
         const { sortBy } = arg;
@@ -84,9 +132,9 @@ export const searchApi = createApi({
               : item.media_type, // it uses the existing media_type
         }));
 
-        const filteredData = newData.filter((item:any)=>{
-          return item.original_language !== "ko"
-        })
+        const filteredData = newData.filter((item: any) => {
+          return item.original_language !== "ko";
+        });
 
         if (type === "all") {
           const sorteData = filteredData.sort((a: any, b: any) => {
@@ -112,6 +160,8 @@ export const searchApi = createApi({
           });
           return sorteData;
         } else {
+          //console.log("Filtere",filteredData);
+          
           return filteredData;
         }
       },

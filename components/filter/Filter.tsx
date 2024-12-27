@@ -10,37 +10,36 @@ const availability = [
 ] as const;
 
 const genres = [
-  { id: 1, tag: "action" },
-  { id: 2, tag: "adventure" },
-  { id: 3, tag: "animated" },
-  { id: 4, tag: "awarded" },
-  { id: 5, tag: "comedy" },
-  { id: 6, tag: "crime" },
-  { id: 7, tag: "family" },
-  { id: 8, tag: "sciFi" },
-  { id: 9, tag: "drama" },
-  { id: 10, tag: "horror" },
-  { id: 11, tag: "thriller" },
-  { id: 12, tag: "romance" },
-  { id: 13, tag: "history" },
-  { id: 14, tag: "mystery" },
-  { id: 15, tag: "war" },
-  { id: 16, tag: "western" },
-  { id: 17, tag: "documentary" },
-  { id: 18, tag: "music" },
-  { id: 19, tag: "sport" },
+  { id: 28, tag: "action" },
+  { id: 12, tag: "adventure" },
+  { id: 16, tag: "animated" },
+  { id: 35, tag: "comedy" },
+  { id: 80, tag: "crime" },
+  { id: 10751, tag: "family" },
+  { id: 878, tag: "sciFi" }, // Science Fiction
+  { id: 18, tag: "drama" },
+  { id: 27, tag: "horror" },
+  { id: 53, tag: "thriller" },
+  { id: 10749, tag: "romance" },
+  { id: 36, tag: "history" },
+  { id: 9648, tag: "mystery" },
+  { id: 10752, tag: "war" },
+  { id: 37, tag: "western" },
+  { id: 99, tag: "documentary" },
+  { id: 10402, tag: "music" },
+  { id: 14, tag: "fantasy" },
 ] as const;
 
 const platforms = [
-  { id: 1, tag: "netflix" },
-  { id: 2, tag: "primeVideo" },
-  { id: 3, tag: "max" },
-  { id: 4, tag: "Peacock" },
-  { id: 5, tag: "Hulu" },
-  { id: 6, tag: "AppleTv" },
-  { id: 7, tag: "DisneyPlus" },
-  { id: 8, tag: "ParamountPlus" },
-  { id: 9, tag: "Fandango" },
+  { id: 8, tag: "netflix" },
+  { id: 119, tag: "primeVideo" },
+  { id: 384, tag: "max" },
+  { id: 387, tag: "Peacock" },
+  { id: 15, tag: "Hulu" },
+  { id: 350, tag: "AppleTv" },
+  { id: 337, tag: "DisneyPlus" },
+  { id: 531, tag: "ParamountPlus" },
+  { id: 279, tag: "Fandango" },
 ] as const;
 
 const ratings = [
@@ -56,7 +55,6 @@ const runtime = [
   { id: 3, tag: "MoreThan2hr" },
 ] as const;
 
-
 // Display name mapping
 const displayNames: { [key: string]: string } = {
   LessThan1h: "Less Than 1 Hour",
@@ -66,10 +64,8 @@ const displayNames: { [key: string]: string } = {
   primeVideo: "Prime Video",
   DisneyPlus: "Disney+",
   ParamountPlus: "Paramount+",
-  awarded: "Award Winners",
+  //awarded: "Award Winners",
 };
-
-
 
 // Dynamically infer types from arrays
 type GenresFilter = (typeof genres)[number]["tag"];
@@ -93,51 +89,65 @@ type FilterCategory =
 interface FilterProp {
   filter: boolean;
   handleFilter: () => void;
+  handleFilterParams: (
+    newFilter: number[],
+    newFilterPlatfrom: number[]
+  ) => void;
+  handleFilterClear: (newFilter: number[], newFilterPlatfrom: number[]) => void;
+  //listGenres: number[]
 }
 
 interface SelectedFilters {
   availability: Record<AvailabilityFilter, boolean>;
-  genres: Record<GenresFilter, boolean>;
-  platforms: Record<PlatformFilter, boolean>;
+  //genres: Record<GenresFilter, boolean>;
+  genres: Record<GenresFilter, { id: number; selected: boolean; tag: string }>;
+  platforms: Record<
+    PlatformFilter,
+    { id: number; selected: boolean; tag: string }
+  >;
   ratings: Record<RatingsFilter, boolean>;
   runtime: Record<RuntimeFilter, boolean>;
 }
-
-function Filter({ filter, handleFilter }: FilterProp) {
+//Next objective is to also add the states of the filter buttons in redux so that they don't disapper when going from single page back to grid view.
+function Filter({
+  filter,
+  handleFilter,
+  handleFilterParams,
+  handleFilterClear,
+}: FilterProp) {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     availability: { streaming: false, theaters: false, comingSoon: false },
     genres: {
-      action: false,
-      adventure: false,
-      animated: false,
-      awarded: false,
-      comedy: false,
-      crime: false,
-      family: false,
-      sciFi: false,
-      drama: false,
-      horror: false,
-      thriller: false,
-      romance: false,
-      history: false,
-      mystery: false,
-      war: false,
-      western: false,
-      documentary: false,
-      music: false,
-      sport: false,
+      action: { id: 28, selected: false, tag: "action" },
+      adventure: { id: 12, selected: false, tag: "adventure" },
+      animated: { id: 16, selected: false, tag: "animated" },
+      comedy: { id: 35, selected: false, tag: "comedy" },
+      crime: { id: 80, selected: false, tag: "crime" },
+      family: { id: 10751, selected: false, tag: "family" },
+      sciFi: { id: 878, selected: false, tag: "sciFi" },
+      drama: { id: 18, selected: false, tag: "drama" },
+      horror: { id: 27, selected: false, tag: "horror" },
+      thriller: { id: 53, selected: false, tag: "thriller" },
+      romance: { id: 10749, selected: false, tag: "romance" },
+      history: { id: 36, selected: false, tag: "history" },
+      mystery: { id: 9648, selected: false, tag: "mystery" },
+      war: { id: 10752, selected: false, tag: "war" },
+      western: { id: 37, selected: false, tag: "western" },
+      documentary: { id: 99, selected: false, tag: "documentary" },
+      music: { id: 10402, selected: false, tag: "music" },
+      fantasy: { id: 14, selected: false, tag: "fantasy" },
     },
 
     platforms: {
-      netflix: false,
-      primeVideo: false,
-      max: false,
-      Peacock: false,
-      Hulu: false,
-      AppleTv: false,
-      DisneyPlus: false,
-      ParamountPlus: false,
-      Fandango: false,
+      netflix: { id: 8, selected: false, tag: "netflix" },
+      primeVideo: { id: 119, selected: false, tag: "primeVideo" },
+      max: { id: 384, selected: false, tag: "max" },
+      Peacock: { id: 387, selected: false, tag: "Peacock" },
+      Hulu: { id: 15, selected: false, tag: "Hulu" },
+      AppleTv: { id: 350, selected: false, tag: "AppleTv" },
+      DisneyPlus: { id: 337, selected: false, tag: "DisneyPlus" },
+      ParamountPlus: { id: 531, selected: false, tag: "ParamountPlus" },
+      Fandango: { id: 279, selected: false, tag: "Fandango" },
     },
 
     ratings: {
@@ -167,41 +177,39 @@ function Filter({ filter, handleFilter }: FilterProp) {
     }
   }, [filter]);
 
-
   const handleClear = () => {
     setSelectedFilters({
       availability: { streaming: false, theaters: false, comingSoon: false },
       genres: {
-        action: false,
-        adventure: false,
-        animated: false,
-        awarded: false,
-        comedy: false,
-        crime: false,
-        family: false,
-        sciFi: false,
-        drama: false,
-        horror: false,
-        thriller: false,
-        romance: false,
-        history: false,
-        mystery: false,
-        war: false,
-        western: false,
-        documentary: false,
-        music: false,
-        sport: false,
+        action: { id: 28, selected: false, tag: "action" },
+        adventure: { id: 12, selected: false, tag: "adventure" },
+        animated: { id: 16, selected: false, tag: "animated" },
+        comedy: { id: 35, selected: false, tag: "comedy" },
+        crime: { id: 80, selected: false, tag: "crime" },
+        family: { id: 10751, selected: false, tag: "family" },
+        sciFi: { id: 878, selected: false, tag: "sciFi" },
+        drama: { id: 18, selected: false, tag: "drama" },
+        horror: { id: 27, selected: false, tag: "horror" },
+        thriller: { id: 53, selected: false, tag: "thriller" },
+        romance: { id: 10749, selected: false, tag: "romance" },
+        history: { id: 36, selected: false, tag: "history" },
+        mystery: { id: 9648, selected: false, tag: "mystery" },
+        war: { id: 10752, selected: false, tag: "war" },
+        western: { id: 37, selected: false, tag: "western" },
+        documentary: { id: 99, selected: false, tag: "documentary" },
+        music: { id: 10402, selected: false, tag: "music" },
+        fantasy: { id: 14, selected: false, tag: "fantasy" },
       },
       platforms: {
-        netflix: false,
-        primeVideo: false,
-        max: false,
-        Peacock: false,
-        Hulu: false,
-        AppleTv: false,
-        DisneyPlus: false,
-        ParamountPlus: false,
-        Fandango: false,
+        netflix: { id: 8, selected: false, tag: "netflix" },
+        primeVideo: { id: 119, selected: false, tag: "primeVideo" },
+        max: { id: 384, selected: false, tag: "max" },
+        Peacock: { id: 387, selected: false, tag: "Peacock" },
+        Hulu: { id: 15, selected: false, tag: "Hulu" },
+        AppleTv: { id: 350, selected: false, tag: "AppleTv" },
+        DisneyPlus: { id: 337, selected: false, tag: "DisneyPlus" },
+        ParamountPlus: { id: 531, selected: false, tag: "ParamountPlus" },
+        Fandango: { id: 279, selected: false, tag: "Fandango" },
       },
       ratings: {
         G: false,
@@ -215,6 +223,27 @@ function Filter({ filter, handleFilter }: FilterProp) {
         MoreThan2hr: false,
       },
     });
+  };
+
+  const handleClick = () => {
+    handleClear();
+    handleFilterClear([], []);
+  };
+
+  const handleClickParams = async () => {
+    const selectedGenreIds = Object.entries(selectedFilters.genres)
+      .filter(([_, value]) => value.selected) // Filter only selected genres
+      .map(([_, value]) => value.id); // Map to their IDs
+
+    const selectedPlatformIds = Object.entries(selectedFilters.platforms)
+      .filter(([_, value]) => value.selected) // Filter only selected genres
+      .map(([_, value]) => value.id); // Map to their IDs
+
+    console.log("Selected Genre IDs:", selectedGenreIds);
+    console.log("Selected Platforms Ids:", selectedPlatformIds);
+
+    // Pass the selectedGenreIds to handleFilterParams
+    handleFilterParams(selectedGenreIds, selectedPlatformIds);
   };
 
   // Type guard for narrowing down category-specific filter names
@@ -241,7 +270,10 @@ function Filter({ filter, handleFilter }: FilterProp) {
           ...prevState,
           genres: {
             ...prevState.genres,
-            [filterName]: !prevState.genres[filterName as GenresFilter],
+            [filterName]: {
+              ...prevState.genres[filterName as GenresFilter],
+              selected: !prevState.genres[filterName as GenresFilter].selected,
+            },
           },
         };
       } else if (
@@ -252,7 +284,10 @@ function Filter({ filter, handleFilter }: FilterProp) {
           ...prevState,
           platforms: {
             ...prevState.platforms,
-            [filterName]: !prevState.platforms[filterName as PlatformFilter],
+            [filterName]: {
+              ...prevState.platforms[filterName as PlatformFilter],
+              selected: !prevState.platforms[filterName as PlatformFilter].selected,
+            },
           },
         };
       } else if (category === "ratings" && filterName in prevState.ratings) {
@@ -278,9 +313,11 @@ function Filter({ filter, handleFilter }: FilterProp) {
 
   return (
     <div
-    className={`flex justify-end mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out -mt-[2vh] ${
-      filter ? "w-[17vw] h-full bg-customServicesColor rounded-[2vh] ml-[1vw]" : "ml-[2.5vw] w-[2vw] "
-    }`}
+      className={`flex justify-end mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out -mt-[2vh] ${
+        filter
+          ? "w-[17vw] h-full bg-customServicesColor rounded-[2vh] ml-[1vw]"
+          : "ml-[2.5vw] w-[2vw] "
+      }`}
     >
       <div className="w-full">
         <div className="flex justify-end">
@@ -318,7 +355,6 @@ function Filter({ filter, handleFilter }: FilterProp) {
                       : ""
                   }`}
                 >
-                  {/* you get a new string where the first letter is capitalized, and the rest of the string remains the same */}
                   {item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
                 </Button>
               ))}
@@ -333,12 +369,13 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   key={item.id}
                   onClick={() => handleFilterClick("genres", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                    selectedFilters.genres[item.tag]
+                    selectedFilters.genres[item.tag]?.selected
                       ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
-                  {displayNames[item.tag] || item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                  {displayNames[item.tag] ||
+                    item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
                 </Button>
               ))}
             </div>
@@ -352,12 +389,13 @@ function Filter({ filter, handleFilter }: FilterProp) {
                   key={item.id}
                   onClick={() => handleFilterClick("platforms", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                    selectedFilters.platforms[item.tag]
+                    selectedFilters.platforms[item.tag]?.selected
                       ? "bg-white/90 text-black"
                       : ""
                   }`}
                 >
-                  {displayNames[item.tag] || item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                  {displayNames[item.tag] ||
+                    item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
                 </Button>
               ))}
             </div>
@@ -376,7 +414,8 @@ function Filter({ filter, handleFilter }: FilterProp) {
                       : ""
                   }`}
                 >
-                  {displayNames[item.tag] || item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                  {displayNames[item.tag] ||
+                    item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
                 </Button>
               ))}
             </div>
@@ -395,15 +434,25 @@ function Filter({ filter, handleFilter }: FilterProp) {
                       : ""
                   }`}
                 >
-                  {displayNames[item.tag] || item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                  {displayNames[item.tag] ||
+                    item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
                 </Button>
               ))}
             </div>
-            <div className='flex justify-between mt-[3vh]'>
-              <Button onClick={handleClear} className="bg-transparent rounded-full p-[1.5vw] text-[1vw] m-[0.2vw] hover:bg-transparent">Clear</Button>
-              <Button className="bg-customColorCard rounded-full p-[1.5vw] text-[1vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95" >Apply</Button>
+            <div className="flex justify-between mt-[3vh]">
+              <Button
+                onClick={handleClick}
+                className="bg-transparent rounded-full p-[1.5vw] text-[1vw] m-[0.2vw] hover:bg-transparent"
+              >
+                Clear
+              </Button>
+              <Button
+                onClick={handleClickParams}
+                className="bg-customColorCard rounded-full p-[1.5vw] text-[1vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+              >
+                Apply
+              </Button>
             </div>
-
           </div>
         )}
       </div>

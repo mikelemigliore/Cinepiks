@@ -12,6 +12,18 @@ import ListView from "@/components/listview/ListView";
 import { useSearchParams } from "next/navigation";
 import { useGetContentQuery } from "../features/search/searchSlice";
 import Link from "next/link";
+//import { useDispatch } from "react-redux";
+//import { RootState } from "../features/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../features/store";
+import {
+  setType,
+  setPage,
+  setSortby,
+  setFilterGenre,
+  setFilterPlatform,
+  setContent,
+} from "../features/querySlice";
 
 function SearchPage() {
   const searchParams = useSearchParams();
@@ -25,34 +37,147 @@ function SearchPage() {
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [value, setValue] = React.useState<number | null>(0);
-  const [page, setPage] = useState(1);
-  const [ContentSearch, setContent] = useState<any[]>([]);
-  const [type, setType] = useState(typeQuery || "all"); // Current selected tag
+  //const [page, setPage] = useState(1);
+  //const [ContentSearch, setContent] = useState<any[]>([]);
+  //const [type, setType] = useState(typeQuery || "all"); // Current selected tag
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortby] = useState<string>("popularity.desc");
+  //const [sortBy, setSortby] = useState<string>("popularity.desc");
+  //const [withFilterGenre, setFilterGenre] = useState<number[]>();
+  //const [withFilterPlatform, setFilterPlatform] = useState<number[]>();
+
+  // Inside your component
+  const dispatch = useDispatch();
+
+  const type = useSelector((state: RootState) => state.query.type);
+  const page = useSelector((state: RootState) => state.query.page);
+  const sortBy = useSelector((state: RootState) => state.query.sortBy);
+  const withFilterGenre = useSelector(
+    (state: RootState) => state.query.withFilterGenre
+  );
+  const withFilterPlatform = useSelector(
+    (state: RootState) => state.query.withFilterPlatform
+  );
+  const ContentSearch = useSelector(
+    (state: RootState) => state.query.ContentSearch
+  );
+
+  // console.log("Type", type);
+  // console.log("Page", page);
+  // console.log("Sort", sortBy);
+  // console.log("Genre", withFilterGenre);
+  // console.log("Platform", withFilterPlatform);
+  //console.log("Content Search", ContentSearch);
+
+  // const handleScroll = debounce(() => {
+  //   dispatch(setPage(page + 1));
+  // }, 300);
+
+  useEffect(() => {
+    if (typeQuery) {
+      dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
+    } else {
+      dispatch(setType("all")); // Fallback to default if `typeQuery` is null
+    }
+
+  }, [typeQuery]);
+
+
+  // useEffect(() => {
+  //     // Dispatch updated genre and platform arrays
+  //     dispatch(setFilterGenre(withFilterGenre));
+  //     dispatch(setFilterPlatform(withFilterPlatform));
+  
+  // }, [withFilterGenre, withFilterPlatform]);
 
   const handleSortBy = (newSort: string) => {
-    console.log(newSort);
-    setPage(1)
-    setContent([]);
-    console.log(newSort);
-    
-    setSortby(newSort);
+    dispatch(setPage(1)); // Reset page
+    dispatch(setContent([]));
+    dispatch(setSortby(newSort)); // Update sortBy
   };
+
+  // const handleSortBy = (newSort: string) => {
+  //   //console.log(newSort);
+  //   setPage(1);
+  //   setContent([]);
+  //   //console.log(newSort);
+  //   setSortby(newSort);
+  // };
+
+  // const handleFilterParams = (
+  //   newFilter: number[],
+  //   newFilterPlatfrom: number[]
+  // ) => {
+  //   dispatch(setPage(1)); // Reset page
+  //   setContent([]);
+  //   setFilterGenre(newFilter);
+  //   setFilterPlatform(newFilterPlatfrom);
+  // };
+
+  const handleFilterParams = (
+    newGenreFilters: number[],
+    newPlatformFilters: number[]
+  ) => {
+    // console.log("New Genre Filters:", newGenreFilters);
+    // console.log("New Platform Filters:", newPlatformFilters);
+    dispatch(setPage(1)); // Reset page
+    dispatch(setContent([]));
+    dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
+    dispatch(setFilterPlatform(newPlatformFilters)); // Update platform filters
+  };
+
+  const handleFilterClear = (
+    newFilter: number[],
+    newFilterPlatfrom: number[]
+  ) => {
+    dispatch(setPage(1));
+    //dispatch(setContent([]));
+    dispatch(setFilterGenre([]));
+    dispatch(setFilterPlatform([]));
+  };
+
+  // console.log(sortBy);
+  // console.log(withFilterGenre);
+  // console.log(withFilterPlatform);
 
   const {
     data: contentSearch,
     isFetching,
     isSuccess,
-  } = useGetContentQuery({ type, page, sortBy });
+  } = useGetContentQuery({
+    type,
+    page,
+    sortBy,
+    withFilterGenre,
+    withFilterPlatform,
+  });
+
+  //console.log("Response: ",contentSearch);
 
   useEffect(() => {
     if (isSuccess && contentSearch) {
-      console.log(contentSearch);
-      
-      setContent((prev) => [...prev, ...contentSearch]);
+      //console.log(contentSearch);
+
+      //setContent([...prev, ...contentSearch]);
+      // Compute the new content
+      const updatedContent = [...ContentSearch, ...contentSearch];
+
+      // Dispatch the updated content
+      dispatch(setContent(updatedContent));
     }
   }, [contentSearch]);
+
+
+//   useEffect(() => {
+//     console.log("Current Page:", page);
+//     console.log("Fetched Content:", contentSearch);
+// }, [page, contentSearch]);
+
+  //   useEffect(() => {
+  //     if (isSuccess && contentSearch) {
+  //         const updatedContent = page === 1 ? contentSearch : [...ContentSearch, ...contentSearch];
+  //         dispatch(setContent(updatedContent));
+  //     }
+  // }, [contentSearch, page, dispatch]);
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -65,7 +190,7 @@ function SearchPage() {
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [page]);
 
   const handleScroll = debounce(() => {
     const thresholdPercentage = 40; // Trigger when user is within 40% of the bottom
@@ -74,7 +199,8 @@ function SearchPage() {
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       totalHeight - (totalHeight * thresholdPercentage) / 100
     ) {
-      setPage((prev) => prev + 1);
+      // setPage((prev:number) => prev + 1);
+      dispatch(setPage(page + 1));
     }
   }, 300);
 
@@ -97,9 +223,9 @@ function SearchPage() {
       setAll((prev) => !prev);
       setMovies(false);
       setSeries(false);
-      setType(newType);
-      setPage(1); // Reset page when tag changes
-      setContent([]); // Clear previous movies
+      dispatch(setType(newType));
+      dispatch(setPage(1)); // Reset page when tag changes
+      dispatch(setContent([])); // Clear previous movies
     }
   };
 
@@ -109,9 +235,9 @@ function SearchPage() {
     } else {
       setMovies((prev) => !prev);
       setSeries(false);
-      setType(newType);
-      setPage(1); // Reset page when tag changes
-      setContent([]); // Clear previous movies
+      dispatch(setType(newType));
+      dispatch(setPage(1)); // Reset page when tag changes
+      dispatch(setContent([])); // Clear previous movies
     }
   };
 
@@ -121,9 +247,9 @@ function SearchPage() {
     } else {
       setSeries((prev) => !prev);
       setMovies(false);
-      setType(newType);
-      setPage(1); // Reset page when tag changes
-      setContent([]); // Clear previous movies
+      dispatch(setType(newType));
+      dispatch(setPage(1)); // Reset page when tag changes
+      dispatch(setContent([])); // Clear previous movies
     }
   };
 
@@ -184,7 +310,7 @@ function SearchPage() {
             </Button>
           </div>
           {/* Sort component */}
-          <Sort handleSortBy={handleSortBy} type={type}/>
+          <Sort handleSortBy={handleSortBy} type={type} />
         </div>
       </div>
 
@@ -193,7 +319,12 @@ function SearchPage() {
           className={`flex justify-start mt-[-2vh] ${filter ? "mr-[2vw]" : ""}`}
         >
           {/* Filter component */}
-          <Filter handleFilter={handleFilter} filter={filter} />
+          <Filter
+            handleFilter={handleFilter}
+            filter={filter}
+            handleFilterParams={handleFilterParams}
+            handleFilterClear={handleFilterClear}
+          />
 
           {/* Apply the transition to the entire buttons and cards container */}
           <div

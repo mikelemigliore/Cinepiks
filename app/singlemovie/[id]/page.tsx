@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import HowToWatchCard from "@/components/cards/HowToWatchCard";
 import TagsHowToWatch from "@/components/tags/TagsHowToWatch";
 import Reviews from "@/components/reviews/Reviews";
@@ -65,8 +65,13 @@ function SingleMoviePage() {
   };
 
   const params = useParams();
+  const searchParams = useSearchParams();
+  const mediaType = searchParams.get("mediaType");
   const { id } = params;
   const Id = Number(id);
+
+  console.log("ID:", Id);
+  console.log("Media Type:", mediaType);
 
   const { data: movieDetails } = useGetMovieDetailsQuery(Id || 0);
 
@@ -245,7 +250,11 @@ function SingleMoviePage() {
                   />
                 </div>
                 <div className="w-full">
-                  <HowToWatchCard id={Id} selectedFilters={selectedFilters} type={type}/>
+                  <HowToWatchCard
+                    id={Id}
+                    selectedFilters={selectedFilters}
+                    type={type}
+                  />
                 </div>
               </div>
               <div className="h-[2vw]">
@@ -270,7 +279,7 @@ function SingleMoviePage() {
             </div>
             <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[14vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
-              <MoreInfo id={Id} type={type}/>
+              <MoreInfo id={Id} type={type} />
             </div>
             {/* <div className="mt-[6vw] max-w-[50vw]"> */}
             <div className="mt-[4vw] max-w-[75vw] ml-[14vw]">
