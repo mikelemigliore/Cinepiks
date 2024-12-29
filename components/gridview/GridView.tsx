@@ -33,8 +33,9 @@ function GridView({
       }`}
     >
       {mediaSearch?.map((media, index) => {
-        const isLastOne = filter ? index === 5 : index === 6;
-        //console.log("Type", media);\
+        const numColumns = filter ? 6 : 7;
+        //const isLastOne = filter ? index === 5 : index === 6;
+        const isLastOne = (index + 1) % numColumns === 0;
         
         
 

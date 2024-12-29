@@ -23,7 +23,10 @@ import {
   setFilterGenre,
   setFilterPlatform,
   setContent,
+  setAvailability,
+  setRuntime,
 } from "../features/querySlice";
+import _ from "lodash";
 
 function SearchPage() {
   const searchParams = useSearchParams();
@@ -60,6 +63,12 @@ function SearchPage() {
   const ContentSearch = useSelector(
     (state: RootState) => state.query.ContentSearch
   );
+  const withAvailability = useSelector(
+    (state: RootState) => state.query.withAvailability
+  );
+  const withRuntime = useSelector(
+    (state: RootState) => state.query.withRuntime
+  );
 
   // console.log("Type", type);
   // console.log("Page", page);
@@ -68,26 +77,14 @@ function SearchPage() {
   // console.log("Platform", withFilterPlatform);
   //console.log("Content Search", ContentSearch);
 
-  // const handleScroll = debounce(() => {
-  //   dispatch(setPage(page + 1));
-  // }, 300);
-
   useEffect(() => {
     if (typeQuery) {
       dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
+      dispatch(setFilterGenre([])); // Update genre filters
     } else {
       dispatch(setType("all")); // Fallback to default if `typeQuery` is null
     }
-
   }, [typeQuery]);
-
-
-  // useEffect(() => {
-  //     // Dispatch updated genre and platform arrays
-  //     dispatch(setFilterGenre(withFilterGenre));
-  //     dispatch(setFilterPlatform(withFilterPlatform));
-  
-  // }, [withFilterGenre, withFilterPlatform]);
 
   const handleSortBy = (newSort: string) => {
     dispatch(setPage(1)); // Reset page
@@ -95,27 +92,11 @@ function SearchPage() {
     dispatch(setSortby(newSort)); // Update sortBy
   };
 
-  // const handleSortBy = (newSort: string) => {
-  //   //console.log(newSort);
-  //   setPage(1);
-  //   setContent([]);
-  //   //console.log(newSort);
-  //   setSortby(newSort);
-  // };
-
-  // const handleFilterParams = (
-  //   newFilter: number[],
-  //   newFilterPlatfrom: number[]
-  // ) => {
-  //   dispatch(setPage(1)); // Reset page
-  //   setContent([]);
-  //   setFilterGenre(newFilter);
-  //   setFilterPlatform(newFilterPlatfrom);
-  // };
-
   const handleFilterParams = (
     newGenreFilters: number[],
-    newPlatformFilters: number[]
+    newPlatformFilters: number[],
+    newAvailability: string[],
+    newRuntime: number[]
   ) => {
     // console.log("New Genre Filters:", newGenreFilters);
     // console.log("New Platform Filters:", newPlatformFilters);
@@ -123,6 +104,8 @@ function SearchPage() {
     dispatch(setContent([]));
     dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
     dispatch(setFilterPlatform(newPlatformFilters)); // Update platform filters
+    dispatch(setAvailability(newAvailability));
+    dispatch(setRuntime(newRuntime));
   };
 
   const handleFilterClear = (
@@ -130,14 +113,13 @@ function SearchPage() {
     newFilterPlatfrom: number[]
   ) => {
     dispatch(setPage(1));
-    //dispatch(setContent([]));
+    dispatch(setSortby("popularity.desc"));
+    dispatch(setContent([ContentSearch]));
     dispatch(setFilterGenre([]));
     dispatch(setFilterPlatform([]));
+    dispatch(setAvailability([]));
+    dispatch(setRuntime([]));
   };
-
-  // console.log(sortBy);
-  // console.log(withFilterGenre);
-  // console.log(withFilterPlatform);
 
   const {
     data: contentSearch,
@@ -149,6 +131,8 @@ function SearchPage() {
     sortBy,
     withFilterGenre,
     withFilterPlatform,
+    withAvailability,
+    withRuntime,
   });
 
   //console.log("Response: ",contentSearch);
@@ -166,11 +150,10 @@ function SearchPage() {
     }
   }, [contentSearch]);
 
-
-//   useEffect(() => {
-//     console.log("Current Page:", page);
-//     console.log("Fetched Content:", contentSearch);
-// }, [page, contentSearch]);
+  //   useEffect(() => {
+  //     console.log("Current Page:", page);
+  //     console.log("Fetched Content:", contentSearch);
+  // }, [page, contentSearch]);
 
   //   useEffect(() => {
   //     if (isSuccess && contentSearch) {
@@ -324,6 +307,7 @@ function SearchPage() {
             filter={filter}
             handleFilterParams={handleFilterParams}
             handleFilterClear={handleFilterClear}
+            typeQuery={typeQuery}
           />
 
           {/* Apply the transition to the entire buttons and cards container */}
@@ -375,14 +359,45 @@ function SearchPage() {
                   mediaSearch={ContentSearch}
                 ></GridView>
               ) : (
-                <ListView
-                  //mediaType={"movie"}
-                  filter={filter}
-                  mediaSearch={ContentSearch}
-                  list={list}
-                  value={value}
-                  handleValue={handleValue}
-                ></ListView>
+                ContentSearch.map((media, index) =>
+                  //typeQuery === "movie" ? (
+                    <ListView
+                      id={media.id}
+                      key={index}
+                      filter={filter}
+                      media_type={media.media_type}
+                      poster_path={media.poster_path}
+                      title={media.title || media.name}
+                      //name={media.name ? media.name : ""}
+                      overview={media.overview}
+                      list={list}
+                      value={value}
+                      handleValue={handleValue}
+                    />
+                  //) 
+                  // : (
+                  //   <ListView
+                  //     id={media.id}
+                  //     key={index}
+                  //     filter={filter}
+                  //     media_type={media.media_type}
+                  //     poster_path={media.poster_path}
+                  //     name={media.name}
+                  //     overview={media.overview}
+                  //     list={list}
+                  //     value={value}
+                  //     handleValue={handleValue}
+                  //   />
+                  // )
+                )
+                // <ListView
+                //   key={index}
+                //   filter={filter}
+                //   mediaSearch={ContentSearch}
+                //   list={list}
+                //   value={value}
+                //   handleValue={handleValue}
+                // />
               )}
             </div>
           </div>

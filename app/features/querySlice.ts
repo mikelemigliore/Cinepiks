@@ -10,6 +10,8 @@ interface QueryState {
   withFilterGenre: number[];
   withFilterPlatform: number[];
   ContentSearch: any[];
+  withAvailability: any[];
+  withRuntime:any[]
 }
 
 const initialState: QueryState = {
@@ -18,7 +20,9 @@ const initialState: QueryState = {
   sortBy: "popularity.desc",
   withFilterGenre: [],
   withFilterPlatform: [],
-  ContentSearch:[]
+  ContentSearch: [],
+  withAvailability: [],
+  withRuntime:[]
 };
 
 const querySlice = createSlice({
@@ -41,21 +45,27 @@ const querySlice = createSlice({
       state.withFilterPlatform = action.payload;
     },
     setContent: (state, action: PayloadAction<any[]>) => {
-        // console.log("Previous ContentSearch:", state.ContentSearch);
-        // console.log("New Content:", action.payload);
-        state.ContentSearch = action.payload;
+      state.ContentSearch = action.payload;
+    },
+    setAvailability: (state, action: PayloadAction<any[]>) => {
+      state.withAvailability = action.payload;
+    },
+    setRuntime: (state, action: PayloadAction<any[]>) => {
+        state.withRuntime = action.payload;
       },
   },
 });
 
 export const {
-    setType,
-    setPage,
-    setSortby,
-    setFilterGenre,
-    setFilterPlatform,
-    setContent
-  } = querySlice.actions;
+  setType,
+  setPage,
+  setSortby,
+  setFilterGenre,
+  setFilterPlatform,
+  setContent,
+  setAvailability,
+  setRuntime
+} = querySlice.actions;
 
 // const { type, page, sortBy, withFilterGenre, withFilterPlatform } = useSelector(
 //     (state: RootState) => state.query

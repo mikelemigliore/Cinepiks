@@ -20,23 +20,28 @@ const today = new Date();
 const min_date = formatDate(today);
 
 // Calculate max_date (e.g., 30 days from today)
-const daysToAdd = 365;
+const daysToAdd = 60;
 const max_date = formatDate(
-  new Date(today.getTime() - daysToAdd * 24 * 60 * 60 * 1000)
+  new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000)
 );
 
-// interface SortBy {
-//   popularity: string,
-//   releaseDate: string,
-//   rating: string,
-//   alphabetical: string,
-// }
+// Calculate max_date (e.g., 30 days from today)
+const daysToSub = 14;
+const max_date_back = formatDate(
+  new Date(today.getTime() - daysToSub * 24 * 60 * 60 * 1000)
+);
+
+// Calculate max_date (e.g., 30 days from today)
+const days = 7;
+const min_date_future = formatDate(
+  new Date(today.getTime() + days * 24 * 60 * 60 * 1000)
+);
 
 const pickGenres = (withFilterGenre: number[] | undefined) => {
   if (withFilterGenre && withFilterGenre.length > 0) {
     const genres = withFilterGenre.join(",");
-    console.log(genres);
-    
+    //console.log(genres);
+
     return `&with_genres=${genres}`;
   } else {
     return "";
@@ -46,28 +51,54 @@ const pickGenres = (withFilterGenre: number[] | undefined) => {
 const pickPlatform = (withFilterPlatform: number[] | undefined) => {
   if (withFilterPlatform && withFilterPlatform.length > 0) {
     // Join the platform IDs with commas
-    const platforms = withFilterPlatform.join(",");
-    console.log(platforms);
-    
-    return `&with_watch_providers=${platforms}&watch_region=US`;//add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
+    const platforms = withFilterPlatform.join("|");
+    //console.log(platforms);
+
+    return `&with_watch_providers=${platforms}&watch_region=US`; //add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
   } else {
     // Return an empty string if no platforms are provided
     return "";
   }
 };
 
-// const pickPlatform = (withFilterPlatform: number[] | undefined) => {
-//   if (withFilterPlatform && withFilterPlatform.length > 0) {
-//     let platforms;
-//     withFilterPlatform.map((item: any) => {
-//       platforms = `${item},`;
-//       console.log(platforms);
-//     });
-//     return `&with_watch_providers=${platforms}&watch_region=US`;
-//   } else {
-//     return "";
-//   }
-// };
+const pickAvailability = (withAvailability: string[] | undefined) => {
+  if (withAvailability && withAvailability.length > 0) {
+    // Define the correct order
+    const order = ["2|3", "4"];
+
+    // Filter and order the availability array based on the predefined order
+    const orderedAvailability = order
+      .filter((key) => withAvailability.includes(key))
+      .join("|");
+    //console.log(orderedAvailability);
+
+    // Return the appropriate query string based on the ordered availability
+    if (orderedAvailability === "2|3") {
+      return `&region=US&with_release_type=${orderedAvailability}&release_date.gte=${max_date_back}&release_date.lte=${min_date}`;
+    } else if (orderedAvailability === "4") {
+      return `&region=US&with_release_type=${orderedAvailability}&release_date.lte=${min_date}`;
+    }
+  } else {
+    // Return an empty string if no platforms are provided
+    return "";
+  }
+};
+
+const pickRuntime = (withRuntime: number[] | undefined) => {
+  if (withRuntime && withRuntime.length > 0) {
+    // Return the appropriate query string based on the ordered availability
+    if (withRuntime.includes(90)) {
+      return `&region=US&with_runtime.lte=90`;
+    } else if (withRuntime.includes(120)) {
+      return `&region=US&with_runtime.gte=90&with_runtime.lte=120`;
+    } else if (withRuntime.includes(121)) {
+      return `&region=US&with_runtime.gte=125`;
+    }
+  } else {
+    // Return an empty string if no platforms are provided
+    return "";
+  }
+};
 
 export const searchApi = createApi({
   reducerPath: "searchApi",
@@ -80,19 +111,30 @@ export const searchApi = createApi({
         sortBy,
         withFilterGenre,
         withFilterPlatform,
+        withAvailability,
+        withRuntime,
       }: {
         type: string;
         page: number;
         sortBy: string;
         withFilterGenre?: number[];
         withFilterPlatform?: number[];
+        withAvailability?: string[];
+        withRuntime?: number[];
       }) => {
         const endpoints: Record<string, string> = {
           //Syntax: Record<KeyType, ValueType> is a utility type that allows you to create an object type
           //movie/popular?api_key=${apiKey}&region=US&language=en-US&page=${page}
-          movie: `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sortBy}&primary_release_date.lte=${min_date}&vote_count.gte=300&vote_average.gte=4${pickGenres(
-            withFilterGenre)}${pickPlatform(withFilterPlatform)}`,
-          series: `discover/tv?api_key=${apiKey}&region=US&sort_by=${sortBy}&vote_count.gte=100&vote_average.gte=7&page=${page}&primary_release_date.lte=${min_date}`,
+          movie: `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=${sortBy}${
+            withAvailability
+              ? ``
+              : `&primary_release_date.lte=${min_date}&vote_count.gte=300&vote_average.gte=4`
+          }${pickGenres(withFilterGenre)}${pickPlatform(
+            withFilterPlatform
+          )}${pickAvailability(withAvailability)}${pickRuntime(withRuntime)}`,
+          series: `discover/tv?api_key=${apiKey}&region=US&sort_by=${sortBy}&vote_count.gte=100&vote_average.gte=7&page=${page}&primary_release_date.lte=${min_date}${pickGenres(
+            withFilterGenre
+          )}${pickPlatform(withFilterPlatform)}`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,
         };
         //console.log(endpoints[type]);
@@ -114,6 +156,8 @@ export const searchApi = createApi({
           sortBy: string;
           withFilterGenre: number[];
           withFilterPlatform: number[];
+          withAvailability: string[];
+          withRuntime: number[];
         }
       ) => {
         const { type } = arg; // Access the type from the query arguments
@@ -161,7 +205,7 @@ export const searchApi = createApi({
           return sorteData;
         } else {
           //console.log("Filtere",filteredData);
-          
+
           return filteredData;
         }
       },
