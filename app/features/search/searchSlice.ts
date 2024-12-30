@@ -48,11 +48,14 @@ const pickGenres = (withFilterGenre: number[] | undefined) => {
   }
 };
 
-const pickPlatform = (withFilterPlatform: number[] | undefined) => {
+const pickPlatform = (withFilterPlatform: string[] | undefined) => {
   if (withFilterPlatform && withFilterPlatform.length > 0) {
     // Join the platform IDs with commas
+    //console.log(withFilterPlatform);
+    
     const platforms = withFilterPlatform.join("|");
-    //console.log(platforms);
+    //const platforms = withFilterPlatform.map(String).join("|");
+    console.log("PickPlatform",platforms);
 
     return `&with_watch_providers=${platforms}&watch_region=US`; //add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
   } else {
@@ -61,27 +64,39 @@ const pickPlatform = (withFilterPlatform: number[] | undefined) => {
   }
 };
 
-const pickAvailability = (withAvailability: string[] | undefined) => {
+interface Availability {
+  id: string;
+  tag: string;
+}
+
+
+const pickAvailability = (withAvailability: Availability[] | undefined) => {
   if (withAvailability && withAvailability.length > 0) {
-    // Define the correct order
     const order = ["2|3", "4"];
 
-    // Filter and order the availability array based on the predefined order
-    const orderedAvailability = order
-      .filter((key) => withAvailability.includes(key))
-      .join("|");
-    //console.log(orderedAvailability);
+    // Filter items that match the predefined order
+    const filteredItems = withAvailability.filter((item) =>
+      order.includes(`${item.id}`)
+    );
 
-    // Return the appropriate query string based on the ordered availability
-    if (orderedAvailability === "2|3") {
-      return `&region=US&with_release_type=${orderedAvailability}&release_date.gte=${max_date_back}&release_date.lte=${min_date}`;
-    } else if (orderedAvailability === "4") {
-      return `&region=US&with_release_type=${orderedAvailability}&release_date.lte=${min_date}`;
+    //console.log(filteredItems);
+    
+
+    // Separate logic for theaters and upcoming
+    const theatersItem = filteredItems.find((item) => item.tag === "inTheaters");
+    const upcomingItem = filteredItems.find((item) => item.tag === "upcoming");
+
+    if (theatersItem && theatersItem.id === "2|3") {
+      return `&region=US&with_release_type=${theatersItem.id}&release_date.gte=${max_date_back}&release_date.lte=${min_date}`;
+    } else if (upcomingItem && upcomingItem.id === "2|3") {
+      return `&region=US&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=${upcomingItem.id}`;
+    } else if (filteredItems.some((item) => item.id === "4")) {
+      return `&region=US&with_release_type=4&release_date.lte=${min_date}`;
     }
-  } else {
-    // Return an empty string if no platforms are provided
-    return "";
   }
+
+  // Return an empty string if no platforms are provided
+  return "";
 };
 
 const pickRuntime = (withRuntime: number[] | undefined) => {
@@ -118,8 +133,9 @@ export const searchApi = createApi({
         page: number;
         sortBy: string;
         withFilterGenre?: number[];
-        withFilterPlatform?: number[];
-        withAvailability?: string[];
+        withFilterPlatform?: string[];
+        //withAvailability?: string[];
+         withAvailability?: Availability[];
         withRuntime?: number[];
       }) => {
         const endpoints: Record<string, string> = {
@@ -155,8 +171,9 @@ export const searchApi = createApi({
           page: number;
           sortBy: string;
           withFilterGenre: number[];
-          withFilterPlatform: number[];
-          withAvailability: string[];
+          withFilterPlatform: string[];
+          //withAvailability: string[];
+          withAvailability: Availability[];
           withRuntime: number[];
         }
       ) => {
@@ -177,7 +194,7 @@ export const searchApi = createApi({
         }));
 
         const filteredData = newData.filter((item: any) => {
-          return item.original_language !== "ko";
+          return item.original_language !== "ko" && !!item.poster_path;
         });
 
         if (type === "all") {

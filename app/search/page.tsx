@@ -27,10 +27,33 @@ import {
   setRuntime,
 } from "../features/querySlice";
 import _ from "lodash";
+import {
+  useGetPopularQuery,
+  useGetTrendingQuery,
+  useGetUpcomingQuery,
+} from "../features/homepage/movies/movieSlice";
+import { skipToken } from "@reduxjs/toolkit/query";
+
+interface Availability {
+  id: string;
+  tag: string;
+}
 
 function SearchPage() {
   const searchParams = useSearchParams();
   const typeQuery = searchParams.get("type");
+  const typeContent = searchParams.get("customParam");
+  const typeService = searchParams.get("servicesParam");
+
+  //console.log("Beginning", typeService);
+  
+  const parsedTypeService = typeService
+    ? JSON.parse(typeService.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
+    : []; // Fallback if null or undefined
+  
+  //console.log("ParsedTypeService", parsedTypeService);
+
+  
 
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(false);
@@ -40,14 +63,7 @@ function SearchPage() {
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [value, setValue] = React.useState<number | null>(0);
-  //const [page, setPage] = useState(1);
-  //const [ContentSearch, setContent] = useState<any[]>([]);
-  //const [type, setType] = useState(typeQuery || "all"); // Current selected tag
   const [loading, setLoading] = useState(true);
-  //const [sortBy, setSortby] = useState<string>("popularity.desc");
-  //const [withFilterGenre, setFilterGenre] = useState<number[]>();
-  //const [withFilterPlatform, setFilterPlatform] = useState<number[]>();
-
   // Inside your component
   const dispatch = useDispatch();
 
@@ -77,6 +93,13 @@ function SearchPage() {
   // console.log("Platform", withFilterPlatform);
   //console.log("Content Search", ContentSearch);
 
+  // useEffect(() => {
+  //   if (typeContent === "upcoming") {
+  //     //dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
+  //     //dispatch(setFilterGenre([])); // Update genre filters
+  //   }
+  // }, [typeContent]);
+
   useEffect(() => {
     if (typeQuery) {
       dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
@@ -94,12 +117,13 @@ function SearchPage() {
 
   const handleFilterParams = (
     newGenreFilters: number[],
-    newPlatformFilters: number[],
-    newAvailability: string[],
+    newPlatformFilters: string[],
+    //newAvailability: string[],
+    newAvailability: Availability[],
     newRuntime: number[]
   ) => {
     // console.log("New Genre Filters:", newGenreFilters);
-    // console.log("New Platform Filters:", newPlatformFilters);
+    //console.log("newAvailability:", newAvailability);
     dispatch(setPage(1)); // Reset page
     dispatch(setContent([]));
     dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
@@ -110,7 +134,7 @@ function SearchPage() {
 
   const handleFilterClear = (
     newFilter: number[],
-    newFilterPlatfrom: number[]
+    newFilterPlatfrom: string[]
   ) => {
     dispatch(setPage(1));
     dispatch(setSortby("popularity.desc"));
@@ -125,42 +149,72 @@ function SearchPage() {
     data: contentSearch,
     isFetching,
     isSuccess,
-  } = useGetContentQuery({
-    type,
-    page,
-    sortBy,
-    withFilterGenre,
-    withFilterPlatform,
-    withAvailability,
-    withRuntime,
-  });
+  } = useGetContentQuery(
+    typeContent === "trendingMovies"
+      ? skipToken
+      : {
+          type,
+          page,
+          sortBy,
+          withFilterGenre,
+          withFilterPlatform,
+          withAvailability,
+          withRuntime,
+        }
+  );
 
-  //console.log("Response: ",contentSearch);
+  const { data: trending } = useGetTrendingQuery(
+    typeContent === "trendingMovies" ? { page } : skipToken
+  );
+
+  // const {
+  //   data: inTheaters,
+  //   isLoading: inTheatersLoading,
+  //   isError: inTheatersError,
+  //   isFetching: inTheatersFetching,
+  //   isSuccess: isInTheatersSuccess,
+  // } = useGetUpcomingQuery(typeContent === "upcoming" ? { page } : skipToken);
+
+  //const { data: popularMovies } = useGetPopularQuery(typeContent === "popularMovies" ? { page } : skipToken);
+
+  // useEffect(() => {
+  //   if (typeContent === "upcoming") {
+  //     handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
+  //   }
+  // }, [typeContent]);
+
+  // const getData = () => {
+  //   if (typeContent === "upcoming") {
+  //     handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
+  //   }
+  // };
 
   useEffect(() => {
-    if (isSuccess && contentSearch) {
-      //console.log(contentSearch);
+    //console.log("TypeContent", typeContent);
 
-      //setContent([...prev, ...contentSearch]);
-      // Compute the new content
-      const updatedContent = [...ContentSearch, ...contentSearch];
+    if (
+      (isSuccess && contentSearch) ||
+      (contentSearch && typeContent === "popularMovies")
+    ) {
+      const updateDate = [...ContentSearch, ...contentSearch];
+      dispatch(setContent(updateDate));
+    } else if (trending && typeContent === "trendingMovies") {
+      const updateDate = [...ContentSearch, ...trending];
+      dispatch(setContent(updateDate));
+    } else if (typeContent === "upcoming") {
+      handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
+    } else if (typeContent === "nowPlaying") {
+      handleFilterParams([], [], [{ id: "2|3", tag: "inTheaters" }], []);
+    } else if (parsedTypeService) {
+      //console.log("Into Effect",typeService);
 
-      // Dispatch the updated content
-      dispatch(setContent(updatedContent));
+      handleFilterParams([], parsedTypeService, [], []);
     }
-  }, [contentSearch]);
-
-  //   useEffect(() => {
-  //     console.log("Current Page:", page);
-  //     console.log("Fetched Content:", contentSearch);
-  // }, [page, contentSearch]);
-
-  //   useEffect(() => {
-  //     if (isSuccess && contentSearch) {
-  //         const updatedContent = page === 1 ? contentSearch : [...ContentSearch, ...contentSearch];
-  //         dispatch(setContent(updatedContent));
-  //     }
-  // }, [contentSearch, page, dispatch]);
+    // else if (typeContent === "upcoming") {
+    //   const updateDate = [...ContentSearch, ...trending];
+    //   dispatch(setContent(updateDate));
+    // }
+  }, [trending, contentSearch, typeContent]);
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -293,7 +347,11 @@ function SearchPage() {
             </Button>
           </div>
           {/* Sort component */}
-          <Sort handleSortBy={handleSortBy} type={type} />
+          <Sort
+            handleSortBy={handleSortBy}
+            type={type}
+            typeContent={typeContent}
+          />
         </div>
       </div>
 
@@ -308,6 +366,8 @@ function SearchPage() {
             handleFilterParams={handleFilterParams}
             handleFilterClear={handleFilterClear}
             typeQuery={typeQuery}
+            typeContent={typeContent}
+            typeService={parsedTypeService}
           />
 
           {/* Apply the transition to the entire buttons and cards container */}
@@ -354,13 +414,14 @@ function SearchPage() {
             <div>
               {grid ? (
                 <GridView
-                  //mediaType={"movie"}
+                  mediaType={typeQuery === "movie" ? "movie" : "tv"}
                   filter={filter}
                   mediaSearch={ContentSearch}
                 ></GridView>
               ) : (
-                ContentSearch.map((media, index) =>
-                  //typeQuery === "movie" ? (
+                ContentSearch.map(
+                  (media, index) => (
+                    //typeQuery === "movie" ? (
                     <ListView
                       id={media.id}
                       key={index}
@@ -368,13 +429,15 @@ function SearchPage() {
                       media_type={media.media_type}
                       poster_path={media.poster_path}
                       title={media.title || media.name}
+                      backdrop_path={media.backdrop_path}
                       //name={media.name ? media.name : ""}
                       overview={media.overview}
                       list={list}
                       value={value}
                       handleValue={handleValue}
                     />
-                  //) 
+                  )
+                  //)
                   // : (
                   //   <ListView
                   //     id={media.id}

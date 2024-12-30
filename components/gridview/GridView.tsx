@@ -6,9 +6,10 @@ interface Media {
   id: number;
   title?: string;
   poster_path: string;
-  media_type: string; // Add type here to indicate the media type
+  //media_type: string; // Add type here to indicate the media type
   backdrop_path: string;
   name?: string;
+  genre_ids?: number[];
 }
 
 interface GridViewProp {
@@ -36,8 +37,8 @@ function GridView({
         const numColumns = filter ? 6 : 7;
         //const isLastOne = filter ? index === 5 : index === 6;
         const isLastOne = (index + 1) % numColumns === 0;
-        
-        
+
+        //console.log("Is there any?", mediaType);
 
         return (
           <div
@@ -51,17 +52,34 @@ function GridView({
                 query: { mediaType: media.media_type }, // Optional: Include additional query params
               }}
             > */}
-              <MovieCard
-                watched={watched}
-                watchlist={watchlist}
-                type={media.media_type}
-                imgUrl={media.poster_path}
-                title={media.title}
-                name={media.name}
-                isLastOne={isLastOne}
-                id={media.id}
-                imgBackdrop={media.backdrop_path}
-              />
+            <MovieCard
+              watched={watched}
+              watchlist={watchlist}
+              type={mediaType === "movie" ? "movie" : "tv"}
+              // type={media.media_type}
+              imgUrl={media.poster_path}
+              title={media.title}
+              name={media.name}
+              isLastOne={isLastOne}
+              id={media.id}
+              genre={media.genre_ids}
+              imgBackdrop={media.backdrop_path}
+            />
+            {/* <MovieCard
+                    logInPage={logInPage}
+                    type={mediaType}
+                    imgBackdrop={media.backdrop_path}
+                    imgUrl={media.poster_path}
+                    genre={media.genre_ids}
+                    title={media.title}
+                    name={media.name}
+                    itemsGenres={itemsGenres}
+                    id={media.id}
+                    isPartialSlide={isPartialSlide}
+                    isLastThreeSlides={isLastThreeSlides}
+                    isLastOne={isLastOne}
+                    className="" 
+                  /> */}
             {/* </Link> */}
           </div>
         );

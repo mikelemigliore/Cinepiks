@@ -10,7 +10,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
-
 interface Props {
   //tmdbId?:number[];
   //image?: string[];
@@ -33,6 +32,11 @@ interface Props {
     name: string;
   }>;
   //getGenreNames: () => void;
+  description:string
+}
+
+interface Props {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
 }
 
 function MovieSwiper({
@@ -41,6 +45,8 @@ function MovieSwiper({
   logInPage,
   itemsGenres = [],
   mediaType,
+  onClick,
+  description
 }: //image = [],
 //tmdbId = []
 // mediaRapid = [],
@@ -48,6 +54,20 @@ Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleReload = () => {
+    // Serialize the medias array and store it in sessionStorage
+    //sessionStorage.setItem("movieData", JSON.stringify(medias));
+  
+    // Define the query parameters
+    const queryParams = new URLSearchParams({
+      type: mediaType === "movie" ? "movie" : "series",
+      customParam: description, // Add your custom parameter here
+    });
+  
+    // Navigate to the search page with query parameters
+    window.location.href = `/search?${queryParams.toString()}`;
+  };
 
   return (
     <div
@@ -62,10 +82,14 @@ Props) {
             <div></div>
           ) : (
             <div>
-              <Link href="/search">
-                <Button
-                  variant="ghost"
-                  className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
+              {/* <Link href="/search"> */}
+              <Button
+                variant="ghost"
+                onClick={(e) => {
+                  if (onClick) onClick(e); // Call the passed onClick handler if provided
+                  handleReload(); // Reload the page
+                }}
+                className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -73,11 +97,11 @@ Props) {
               : "opacity-100 md:opacity-0 md:-translate-x-10 md:invisible"
           }
         `}
-                >
-                  View All
-                  <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
-                </Button>
-              </Link>
+              >
+                View All
+                <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
+              </Button>
+              {/* </Link> */}
             </div>
           )}
         </h1>

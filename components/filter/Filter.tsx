@@ -6,6 +6,7 @@ import { FaFilter } from "react-icons/fa";
 const availability = [
   { id: "4", tag: "streaming" },
   { id: "2|3", tag: "theaters" },
+  { id: "2|3", tag: "upcoming" },
 ] as const;
 
 const genresMovie = [
@@ -110,17 +111,25 @@ type FilterCategory =
   | "ratings"
   | "runtime";
 
+interface Availability {
+  id: string;
+  tag: string;
+}
+
 interface FilterProp {
   filter: boolean;
   handleFilter: () => void;
   handleFilterParams: (
     newFilter: number[],
-    newFilterPlatfrom: number[],
-    newAvailability: string[],
+    newFilterPlatfrom: string[],
+    //newAvailability: string[],
+    newAvailability: Availability[],
     newRuntime: number[]
   ) => void;
-  handleFilterClear: (newFilter: number[], newFilterPlatfrom: number[]) => void;
+  handleFilterClear: (newFilter: number[], newFilterPlatfrom: string[]) => void;
   typeQuery: string | null;
+  typeContent: string | null;
+  typeService: string[] | null;
   //listGenres: number[]
 }
 
@@ -155,11 +164,19 @@ function Filter({
   handleFilterParams,
   handleFilterClear,
   typeQuery,
+  typeContent,
+  typeService,
 }: FilterProp) {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     availability: {
       streaming: { id: "4", selected: false, tag: "streaming" },
       theaters: { id: "2|3", selected: false, tag: "inTheaters" },
+      upcoming: {
+        id: "2|3",
+        selected: false,
+        //selected: typeContent === "upcoming" ? true : false,
+        tag: "upcoming",
+      },
     },
     genresMovie: {
       action: { id: 28, selected: false, tag: "action" },
@@ -259,6 +276,7 @@ function Filter({
       availability: {
         streaming: { id: "4", selected: false, tag: "action" },
         theaters: { id: "2|3", selected: false, tag: "inTheaters" },
+        upcoming: { id: "2|3", selected: false, tag: "upcoming" },
       },
       genresMovie: {
         action: { id: 28, selected: false, tag: "action" },
@@ -329,6 +347,62 @@ function Filter({
     });
   };
 
+  useEffect(() => {
+    if (typeContent === "upcoming") {
+      // Automatically select "upcoming" in the availability filter
+      setSelectedFilters((prevState) => ({
+        ...prevState,
+        availability: {
+          ...prevState.availability,
+          upcoming: {
+            ...prevState.availability.upcoming,
+            selected: true,
+          },
+        },
+      }));
+    }
+
+    if (typeContent === "nowPlaying") {
+      // Automatically select "upcoming" in the availability filter
+      setSelectedFilters((prevState) => ({
+        ...prevState,
+        availability: {
+          ...prevState.availability,
+          theaters: {
+            ...prevState.availability.theaters,
+            selected: true,
+          },
+        },
+      }));
+    }
+
+    if (typeService) {
+      typeService.forEach((item) => {
+        const platformMatch = Object.values(selectedFilters.platforms).find(
+          (platform) => platform.id === Number(item)
+        );
+    
+        if (platformMatch) {
+          const platformTag = platformMatch.tag as keyof typeof selectedFilters.platforms;
+        
+          setSelectedFilters((prevState) => {
+        
+            return {
+              ...prevState,
+              platforms: {
+                ...prevState.platforms,
+                [platformTag]: {
+                  ...prevState.platforms[platformTag],
+                  selected: true, // Toggle the selection
+                },
+              },
+            };
+          });
+        }
+      });
+    }
+  }, []);
+
   const handleClick = () => {
     handleClear();
     handleFilterClear([], []);
@@ -341,25 +415,28 @@ function Filter({
       selectedGenreIds = Object.entries(selectedFilters.genresMovie)
         .filter(([_, value]) => value.selected) // Filter only selected genres
         .map(([_, value]) => value.id); // Map to their IDs
-      console.log("Movie");
+      //console.log("Movie");
     } else {
       selectedGenreIds = Object.entries(selectedFilters.genresSeries)
         .filter(([_, value]) => value.selected) // Filter only selected genres
         .map(([_, value]) => value.id); // Map to their IDs
-      console.log("Series");
+      //console.log("Series");
     }
 
     const selectedPlatformIds = Object.entries(selectedFilters.platforms)
       .filter(([_, value]) => value.selected) // Filter only selected genres
-      .map(([_, value]) => value.id); // Map to their IDs
+      .map(([_, value]) => String(value.id)); // Map to their IDs
 
     const selectedAvailabilityIds = Object.entries(selectedFilters.availability)
       .filter(([_, value]) => value.selected) // Filter only selected genres
-      .map(([_, value]) => value.id); // Map to their IDs
+      //.map(([_, value]) =>  value.id); // Map to their IDs
+      .map(([_, value]) => ({ id: value.id, tag: value.tag })); // Map to their IDs
 
     const selectedRuntimeIds = Object.entries(selectedFilters.runtime)
       .filter(([_, value]) => value.selected) // Filter only selected genres
       .map(([_, value]) => value.id); // Map to their IDs
+
+    console.log("Platform item", selectedPlatformIds);
 
     // Pass the selectedGenreIds to handleFilterParams
     handleFilterParams(
@@ -489,6 +566,7 @@ function Filter({
         <div className="flex justify-end">
           <Button
             onClick={handleFilter}
+            disabled={typeContent === "trendingMovies" || typeQuery === "all"}
             className={`bg-customServicesColor rounded-[0.4vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 w-[2.5vw] h-[2.5vw] ${
               filter ? "bg-white/90" : ""
             }`}

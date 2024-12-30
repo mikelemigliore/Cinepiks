@@ -649,6 +649,7 @@ interface ListViewProp {
   poster_path: string;
   title?: string;
   overview: string;
+  backdrop_path:string
   //name?:string
   list?: boolean;
   watchlist?: boolean;
@@ -676,6 +677,7 @@ function ListView({
   poster_path,
   title,
   overview,
+  backdrop_path
 }: //name
 //genresMovie,
 //value,
@@ -912,7 +914,7 @@ ListViewProp) {
                         //handleReload={handleReload}
                         //handleStarted={handleStarted}
                         src={
-                          "https://image.tmdb.org/t/p/original/f8JTWmelQEDUqujwCeVeS7Jn10b.jpg"
+                          `https://image.tmdb.org/t/p/original${backdrop_path}`
                         }
                       />
                     </DialogContent>

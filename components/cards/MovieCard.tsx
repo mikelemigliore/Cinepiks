@@ -85,6 +85,7 @@ function MovieCard({
   const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
   const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
   const hoveredRef = useRef(false);
+  //console.log(type);
 
   const href = type === "movie" ? `/singlemovie` : `/singleseries`;
 

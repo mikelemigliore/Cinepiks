@@ -45,27 +45,27 @@ import {
 } from "../features/homepage/movies/moviesStreamServiceSlice";
 
 const services = [
-  { id: 1, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
-  { id: 2, title: "Hulu", img: "/genresIcons/Hulu-Logo.wine.svg" },
+  { id: 8, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
+  { id: 15, title: "Hulu", img: "/genresIcons/Hulu-Logo.wine.svg" },
   {
-    id: 3,
+    id: 119,
     title: "Prime Video",
     img: "/genresIcons/Amazon_Prime_Video_logo.svg.png",
   },
   {
-    id: 4,
+    id: 350,
     title: "Apple Tv",
     img: "/genresIcons/apple-tv-plus-seeklogo.svg",
   },
-  { id: 5, title: "Disney+", img: "/genresIcons/Disney+_2024.svg.png" },
-  { id: 6, title: "Max", img: "/genresIcons/20230413031451!Max_logo.svg" },
+  { id: 337, title: "Disney+", img: "/genresIcons/Disney+_2024.svg.png" },
+  { id: 384, title: "Max", img: "/genresIcons/20230413031451!Max_logo.svg" },
   {
-    id: 7,
+    id: 387,
     title: "Peacock",
     img: "/genresIcons/NBCUniversal_Peacock_Logo.svg",
   },
-  { id: 8, title: "Paramount+", img: "/genresIcons/paramount-seeklogo.svg" },
-  { id: 9, title: "Fandango", img: "/genresIcons/Fandango_logo14.png" },
+  { id: 531, title: "Paramount+", img: "/genresIcons/paramount-seeklogo.svg" },
+  //{ id: 9, title: "Fandango", img: "/genresIcons/Fandango_logo14.png" },
 ];
 
 const swiperTitle = [
@@ -214,13 +214,13 @@ function HomePage() {
     isLoading: inTheatersLoading,
     isError: inTheatersError,
     isFetching: inTheatersFetching,
-  } = useGetUpcomingQuery();
+  } = useGetUpcomingQuery({ page: 1 });
 
-  const { data: popularMovies } = useGetPopularQuery();
+  const { data: popularMovies } = useGetPopularQuery({ page: 1 });
 
   const { data: nowPlaying } = useGetNowPlayingQuery();
 
-  const { data: trending } = useGetTrendingQuery();
+  const { data: trending } = useGetTrendingQuery({ page: 1 });
 
   const { data: newReleases } = useGetNewSeriesReleasesQuery();
 
@@ -251,12 +251,14 @@ function HomePage() {
               medias={inTheaters}
               title={swiperTitle[0].title}
               mediaType={"movie"}
+              description={"upcoming"}
             />
 
             <MovieSwiper
               medias={popularMovies}
               title={swiperTitle[1].title}
               mediaType={"movie"}
+              description={"popularMovies"}
             />
 
             <div className="relative left-0 right-0 my-16 z-40">
@@ -270,27 +272,31 @@ function HomePage() {
               medias={nowPlaying}
               title={swiperTitle[2].title}
               mediaType={"movie"}
+              description={"nowPlaying"}
             />
 
             <MovieSwiper
               medias={trending}
               title={swiperTitle[3].title}
               mediaType={"movie"}
+              description={"trendingMovies"}
             />
             <div className="relative  left-0 right-0 my-16 z-40">
-              <ServicesSwiper services={services} />
+              <ServicesSwiper services={services} description={"services"} mediaType={"movie"}/>
             </div>
 
             <MovieSwiper
               medias={newReleases}
               title={swiperTitle[4].title}
               mediaType={"series"}
+              description={"newSeries"}
             />
 
             <MovieSwiper
               medias={trendingSeries}
               title={swiperTitle[5].title}
               mediaType={"series"}
+              description={"trendingSeries"}
             />
 
             <div className="relative left-0 right-0 my-16 z-40">
@@ -301,18 +307,21 @@ function HomePage() {
               medias={newMoviesOnNetflix}
               title={swiperTitle[6].title}
               mediaType={"movie"}
+              description={"newMoviesOnNetflix"}
             />
 
             <MovieSwiper
               medias={newMoviesOnHulu}
               title={swiperTitle[7].title}
               mediaType={"movie"}
+              description={"newMoviesOnHulu"}
             />
 
             <MovieSwiper
               medias={newMoviesOnPrime}
               title={swiperTitle[8].title}
               mediaType={"movie"}
+              description={"newMoviesOnPrime"}
             />
 
             {/* <div className="relative left-0 right-0 my-16 z-40">
@@ -326,24 +335,28 @@ function HomePage() {
               medias={actionMovies}
               title={swiperTitle[9].title}
               mediaType={"movie"}
+              description={"actionMovies"}
             />
 
             <MovieSwiper
               medias={adventureMovies}
               title={swiperTitle[10].title}
               mediaType={"movie"}
+              description={"adventureMovies"}
             />
 
             <MovieSwiper
               medias={horrorMovies}
               title={swiperTitle[11].title}
               mediaType={"movie"}
+              description={"horrorMovies"}
             />
 
             <MovieSwiper
               medias={thrillerMovies}
               title={swiperTitle[12].title}
               mediaType={"movie"}
+              description={"thrillerMovies"}
             />
           </div>
         </div>

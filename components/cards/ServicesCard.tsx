@@ -86,6 +86,7 @@ interface ServiceCardProp {
   isSelected: boolean;
   img: any;
   logInPage?: boolean;
+  id:number
 }
 
 function ServicesCard({
@@ -96,6 +97,7 @@ function ServicesCard({
   isSelected,
   img,
   logInPage,
+  id
 }: ServiceCardProp) {
   return (
     <div>

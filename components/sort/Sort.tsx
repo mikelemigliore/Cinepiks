@@ -15,13 +15,15 @@ import {
 interface SortProp {
   handleSortBy: (newSort: string) => void;
   type: string;
+  typeContent: string | null;
   //handleSortBy: () => void;
 }
 
-function Sort({ handleSortBy, type }: SortProp) {
+function Sort({ handleSortBy, type, typeContent }: SortProp) {
   return (
     <div className="w-[15vw] h-[6vh] bg-customServicesColor rounded-[0.4vw] flex justify-center items-center z-40 pr-[0.5vw]">
       <Select
+        disabled={typeContent === "trendingMovies"}
         onValueChange={(value: string) => handleSortBy(value)}
         defaultValue="popularity.desc"
       >

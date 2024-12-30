@@ -8,7 +8,7 @@ interface QueryState {
   page: number;
   sortBy: string;
   withFilterGenre: number[];
-  withFilterPlatform: number[];
+  withFilterPlatform: string[]
   ContentSearch: any[];
   withAvailability: any[];
   withRuntime:any[]
@@ -41,7 +41,7 @@ const querySlice = createSlice({
     setFilterGenre: (state, action: PayloadAction<number[]>) => {
       state.withFilterGenre = action.payload;
     },
-    setFilterPlatform: (state, action: PayloadAction<number[]>) => {
+    setFilterPlatform: (state, action: PayloadAction<string[]>) => {
       state.withFilterPlatform = action.payload;
     },
     setContent: (state, action: PayloadAction<any[]>) => {

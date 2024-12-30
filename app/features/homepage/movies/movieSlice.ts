@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery, FetchBaseQueryMeta } from "@reduxjs/toolkit/query/react";
 import { getTrailerMovieVideo } from "../../../pages/api/homePage";
 
 const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -57,6 +57,12 @@ const max_date = formatDate(
   new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000)
 );
 
+// Calculate max_date (e.g., 14 days  back from today)
+const daysToSub = 14;
+const max_date_back = formatDate(
+  new Date(today.getTime() - daysToSub * 24 * 60 * 60 * 1000)
+);
+
 // console.log(min_date);
 // console.log(max_date);
 
@@ -64,15 +70,29 @@ export const movieApi = createApi({
   reducerPath: "movieApi",
   baseQuery: fetchBaseQuery({ baseUrl: `https://api.themoviedb.org/3/` }),
   endpoints: (builder) => ({
-    getUpcoming: builder.query<MediaProp[], void>({
-      query: () =>
-        `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=2|3`,
+    getUpcoming: builder.query<MediaProp[], { page: number }>({
+      query: ({ page }: { page: number }) =>
+        `discover/movie?api_key=${apiKey}&page=${page}&region=US&language=en-US&sort_by=popularity.desc&release_date.gte=${min_date}&release_date.lte=${max_date}&with_release_type=2|3`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
-      transformResponse: async (response: any) => {
+      transformResponse: async (
+        response: any,
+        // meta: FetchBaseQueryMeta | undefined,
+        // arg: {
+        //   page: number;
+        // }
+      ) => {
+        //const { page } = arg;
         // Enhance the data with video keys
+
+        const filteredPoster = response.results.filter((item: any) => {
+          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+        });
+        
+        //console.log(filteredPoster);
+        
         const updatedResults = await Promise.all(
-          response.results.map(async (media: any) => {
+          filteredPoster.map(async (media: any) => {
             try {
               const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
               const dataTrailer = await responseTrailer.json();
@@ -90,16 +110,16 @@ export const movieApi = createApi({
         return updatedResults;
       },
     }),
-    getPopular: builder.query<ItemsBigCardsProp[], void>({
-      query: () =>
-        `movie/popular?api_key=${apiKey}&language=en-US&region=US&sort_by=popularity.desc&vote_count.gte=100&vote_average.gte=7`,
+    getPopular: builder.query<ItemsBigCardsProp[], { page: number }>({
+      query: ({ page }: { page: number }) =>
+        `movie/popular?api_key=${apiKey}&page=${page}&language=en-US&region=US&sort_by=popularity.desc&vote_count.gte=100&vote_average.gte=7`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         // Enhance the data with video keys
         // Filter results to ensure the original language is English
         const filteredData = response.results.filter(
-          (movie: any) => movie.original_language === "en"
+          (movie: any) => movie.original_language === "en" && !!movie.poster_path
         );
 
         return filteredData;
@@ -107,8 +127,10 @@ export const movieApi = createApi({
     }),
     getNowPlaying: builder.query<MediaProp[], void>({
       //movie/now_playing?api_key=${apiKey}&region=US
-      
-      query: () => `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
+
+      query: () =>
+        `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=${max_date_back}&release_date.lte=${max_date}`,
+        // `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -116,8 +138,8 @@ export const movieApi = createApi({
         return results;
       },
     }),
-    getTrending: builder.query<MediaProp[], void>({
-      query: () => `trending/movie/week?api_key=${apiKey}&region=US`,
+    getTrending: builder.query<MediaProp[], { page: number }>({
+      query: ({ page }: { page: number }) => `trending/movie/week?api_key=${apiKey}&region=US&page=${page}`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -254,5 +276,5 @@ export const {
   useGetHorrorMoviesQuery,
   useGetThrillerMoviesQuery,
   useGetTeaserMovieVideoQuery,
-  useGetTeaserSeriesVideoQuery
+  useGetTeaserSeriesVideoQuery,
 } = movieApi;
