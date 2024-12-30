@@ -10,7 +10,10 @@ import Sort from "@/components/sort/Sort";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
 import { useSearchParams } from "next/navigation";
-import { useGetContentQuery } from "../features/search/searchSlice";
+import {
+  useGetContentQuery,
+  useGetSearchItemQuery,
+} from "../features/search/searchSlice";
 import Link from "next/link";
 //import { useDispatch } from "react-redux";
 //import { RootState } from "../features/store";
@@ -44,21 +47,34 @@ function SearchPage() {
   const typeQuery = searchParams.get("type");
   const typeContent = searchParams.get("customParam");
   const typeService = searchParams.get("servicesParam");
+  const typeGenres = searchParams.get("genresParam");
+  const typeSearch = searchParams.get("queryParam");
 
-  //console.log("Beginning", typeService);
-  
+  //console.log("typeSerch", typeSearch);
+
+  const parsedTypeSearch = typeSearch
+    ? JSON.parse(typeSearch.replace(/""/g, '"')) // For JSON-like strings, e.g., "[8,15]"
+    : null; // Fallback if null or undefined
+
+  //console.log("parsedTypeSearch", parsedTypeSearch);
+
+  // console.log("Beginning typeGenres", typeGenres);
+
   const parsedTypeService = typeService
     ? JSON.parse(typeService.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
     : []; // Fallback if null or undefined
-  
-  //console.log("ParsedTypeService", parsedTypeService);
 
-  
+  const parsedTypeGenres = typeGenres
+    ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
+    : []; // Fallback if null or undefined
+
+  //console.log("ParsedTypeService", parsedTypeGenres);
 
   const [filter, setFilterd] = useState(false);
-  const [all, setAll] = useState(false);
+  const [all, setAll] = useState(typeQuery === "all" ? true : false);
   const [movies, setMovies] = useState(typeQuery === "movie" ? true : false);
   const [series, setSeries] = useState(typeQuery === "series" ? true : false);
+  //const [series, setSeries] = useState(typeQuery === "series" ? true : false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -150,7 +166,7 @@ function SearchPage() {
     isFetching,
     isSuccess,
   } = useGetContentQuery(
-    typeContent === "trendingMovies"
+    typeContent === "trendingMovies" || parsedTypeSearch !== null
       ? skipToken
       : {
           type,
@@ -167,54 +183,49 @@ function SearchPage() {
     typeContent === "trendingMovies" ? { page } : skipToken
   );
 
-  // const {
-  //   data: inTheaters,
-  //   isLoading: inTheatersLoading,
-  //   isError: inTheatersError,
-  //   isFetching: inTheatersFetching,
-  //   isSuccess: isInTheatersSuccess,
-  // } = useGetUpcomingQuery(typeContent === "upcoming" ? { page } : skipToken);
-
-  //const { data: popularMovies } = useGetPopularQuery(typeContent === "popularMovies" ? { page } : skipToken);
+  const { data: search, isSuccess: searchSuccess } = useGetSearchItemQuery(
+    parsedTypeSearch !== null ? { page, query: parsedTypeSearch } : skipToken
+  );
 
   // useEffect(() => {
-  //   if (typeContent === "upcoming") {
-  //     handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
+  //   if (search) {
+  //     console.log("Fetched Search Data:", search);
   //   }
-  // }, [typeContent]);
-
-  // const getData = () => {
-  //   if (typeContent === "upcoming") {
-  //     handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
-  //   }
-  // };
+  //   console.log("Redux ContentSearch State:", ContentSearch);
+  // }, [search, ContentSearch]);
 
   useEffect(() => {
-    //console.log("TypeContent", typeContent);
-
     if (
-      (isSuccess && contentSearch) ||
-      (contentSearch && typeContent === "popularMovies")
+      (isSuccess && contentSearch && parsedTypeSearch === null) ||
+      (contentSearch && parsedTypeSearch === null && typeContent === "popularMovies")
     ) {
+      //console.log("contentSearch");
       const updateDate = [...ContentSearch, ...contentSearch];
       dispatch(setContent(updateDate));
     } else if (trending && typeContent === "trendingMovies") {
+      //console.log("trending");
       const updateDate = [...ContentSearch, ...trending];
       dispatch(setContent(updateDate));
     } else if (typeContent === "upcoming") {
+      //console.log("upcoming");
       handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
     } else if (typeContent === "nowPlaying") {
+      //console.log("nowPlaying");
       handleFilterParams([], [], [{ id: "2|3", tag: "inTheaters" }], []);
-    } else if (parsedTypeService) {
-      //console.log("Into Effect",typeService);
-
+    } else if (parsedTypeService && parsedTypeSearch === null) {
+      //console.log("parsedTypeService");
       handleFilterParams([], parsedTypeService, [], []);
+    } else if (parsedTypeGenres && parsedTypeSearch === null) {
+      //console.log("parsedTypeGenres");
+      handleFilterParams(parsedTypeGenres, [], [], []);
+    } else if (search && parsedTypeSearch !== null) {
+      //console.log("search");
+      // console.log("ContentSearch", ContentSearch);
+      const updateDate = [...ContentSearch, ...search];
+      //console.log("Data", updateDate);
+      dispatch(setContent(updateDate));
     }
-    // else if (typeContent === "upcoming") {
-    //   const updateDate = [...ContentSearch, ...trending];
-    //   dispatch(setContent(updateDate));
-    // }
-  }, [trending, contentSearch, typeContent]);
+  }, [trending, contentSearch, typeContent,search,  typeQuery]);//search
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -351,6 +362,7 @@ function SearchPage() {
             handleSortBy={handleSortBy}
             type={type}
             typeContent={typeContent}
+            typeQuery={typeQuery}
           />
         </div>
       </div>
@@ -368,6 +380,7 @@ function SearchPage() {
             typeQuery={typeQuery}
             typeContent={typeContent}
             typeService={parsedTypeService}
+            typeGenres={parsedTypeGenres}
           />
 
           {/* Apply the transition to the entire buttons and cards container */}
@@ -412,55 +425,26 @@ function SearchPage() {
               </Link>
             </div>
             <div>
-              {grid ? (
-                <GridView
-                  mediaType={typeQuery === "movie" ? "movie" : "tv"}
-                  filter={filter}
-                  mediaSearch={ContentSearch}
-                ></GridView>
+              {ContentSearch.length === 0 ? (
+                <div>No results found.</div>
+              ) : grid ? (
+                <GridView filter={filter} mediaSearch={ContentSearch} />
               ) : (
-                ContentSearch.map(
-                  (media, index) => (
-                    //typeQuery === "movie" ? (
-                    <ListView
-                      id={media.id}
-                      key={index}
-                      filter={filter}
-                      media_type={media.media_type}
-                      poster_path={media.poster_path}
-                      title={media.title || media.name}
-                      backdrop_path={media.backdrop_path}
-                      //name={media.name ? media.name : ""}
-                      overview={media.overview}
-                      list={list}
-                      value={value}
-                      handleValue={handleValue}
-                    />
-                  )
-                  //)
-                  // : (
-                  //   <ListView
-                  //     id={media.id}
-                  //     key={index}
-                  //     filter={filter}
-                  //     media_type={media.media_type}
-                  //     poster_path={media.poster_path}
-                  //     name={media.name}
-                  //     overview={media.overview}
-                  //     list={list}
-                  //     value={value}
-                  //     handleValue={handleValue}
-                  //   />
-                  // )
-                )
-                // <ListView
-                //   key={index}
-                //   filter={filter}
-                //   mediaSearch={ContentSearch}
-                //   list={list}
-                //   value={value}
-                //   handleValue={handleValue}
-                // />
+                ContentSearch.map((media, index) => (
+                  <ListView
+                    id={media.id}
+                    key={index}
+                    filter={filter}
+                    media_type={media.media_type}
+                    poster_path={media.poster_path}
+                    title={media.title || media.name}
+                    backdrop_path={media.backdrop_path}
+                    overview={media.overview}
+                    list={list}
+                    value={value}
+                    handleValue={handleValue}
+                  />
+                ))
               )}
             </div>
           </div>

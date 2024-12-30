@@ -130,6 +130,7 @@ interface FilterProp {
   typeQuery: string | null;
   typeContent: string | null;
   typeService: string[] | null;
+  typeGenres: string[] | null;
   //listGenres: number[]
 }
 
@@ -166,6 +167,7 @@ function Filter({
   typeQuery,
   typeContent,
   typeService,
+  typeGenres
 }: FilterProp) {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     availability: {
@@ -393,6 +395,32 @@ function Filter({
                 ...prevState.platforms,
                 [platformTag]: {
                   ...prevState.platforms[platformTag],
+                  selected: true, // Toggle the selection
+                },
+              },
+            };
+          });
+        }
+      });
+    }
+
+    if (typeGenres) {
+      typeGenres.forEach((item) => {
+        const genresMatch = Object.values(selectedFilters.genresMovie).find(
+          (genre) => genre.id === Number(item)
+        );
+    
+        if (genresMatch) {
+          const genreTag = genresMatch.tag as keyof typeof selectedFilters.genresMovie;
+        
+          setSelectedFilters((prevState) => {
+        
+            return {
+              ...prevState,
+              genresMovie: {
+                ...prevState.genresMovie,
+                [genreTag]: {
+                  ...prevState.genresMovie[genreTag],
                   selected: true, // Toggle the selection
                 },
               },

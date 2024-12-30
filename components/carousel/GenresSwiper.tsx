@@ -12,10 +12,13 @@ import Link from "next/link";
 import GenresCard from "../cards/GenresCard";
 
 interface GenresProp {
-  genres: Array<{ id: number; title: string ,iconBlack:any,iconWhite:any}>;
+  genres: Array<{ id: number; title: string; iconBlack: any; iconWhite: any }>;
+  description: string;
+  mediaType?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
 }
 
-function GenresSwiper({ genres }: GenresProp) {
+function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -24,6 +27,25 @@ function GenresSwiper({ genres }: GenresProp) {
   const [selectedItems, setSelectedItems] = useState<{
     [key: number]: boolean;
   }>({});
+
+  // Get only the IDs of the selected genres
+  const activeServiceIds = genres
+    .filter((genre) => selectedItems[genre.id])
+    .map((genre) => genre.id);
+
+  const handleReload = () => {
+    // Serialize the medias array and store it in sessionStorage
+    //sessionStorage.setItem("movieData", JSON.stringify(medias));
+
+    // Define the query parameters
+    const queryParams = new URLSearchParams({
+      type: mediaType === "movie" ? "movie" : "tv",
+      genresParam: JSON.stringify(activeServiceIds), // Convert activeServices to a string
+    });
+
+    // Navigate to the search page with query parameters
+    window.location.href = `/search?${queryParams.toString()}`;
+  };
 
   // Handle the selection of a specific item
   const handleSelect = (id: number) => {
@@ -47,7 +69,8 @@ function GenresSwiper({ genres }: GenresProp) {
       <div className="ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.5vw] font-semibold">
         <h1>What's Your Genre?</h1>
         <h2 className="text-[2vw] md:text-[1vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
-        Select one or more tags, then click on 'Explore All' to view content from your favorite genres :
+          Select one or more tags, then click on 'Explore All' to view content
+          from your favorite genres :
         </h2>
       </div>
 
@@ -82,17 +105,17 @@ function GenresSwiper({ genres }: GenresProp) {
             const isSelected = !!selectedItems[genre.id]; // Check if the current service is selected
 
             return (
-                <SwiperSlide key={genre.id} className="pb-[5vh] md:pb-[8vh]">
-                  <GenresCard
-                    title={genre.title}
-                    iconBlack={genre.iconBlack}
-                    iconWhite={genre.iconWhite}
-                    isPartialSlide={isPartialSlide}
-                    activeIndex={activeIndex}
-                    isSelected={isSelected}
-                    onSelect={() => handleSelect(genre.id)} // Pass the specific id to the handler
-                  />
-                </SwiperSlide>
+              <SwiperSlide key={genre.id} className="pb-[5vh] md:pb-[8vh]">
+                <GenresCard
+                  title={genre.title}
+                  iconBlack={genre.iconBlack}
+                  iconWhite={genre.iconWhite}
+                  isPartialSlide={isPartialSlide}
+                  activeIndex={activeIndex}
+                  isSelected={isSelected}
+                  onSelect={() => handleSelect(genre.id)} // Pass the specific id to the handler
+                />
+              </SwiperSlide>
             );
           })}
         </Swiper>
@@ -103,16 +126,20 @@ function GenresSwiper({ genres }: GenresProp) {
       {/* Explore All button with disabled state */}
       {/* Conditionally render Link only when the button is enabled */}
       {isAnyItemSelected ? (
-        <Link href="/search">
-          <Button
-            onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
-            className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
-          >
-            Explore All
-            <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
-          </Button>
-        </Link>
+        // <Link href="/search">
+        <Button
+          onClick={(e) => {
+            if (onClick) onClick(e); // Call the passed onClick handler if provided
+            handleReload(); // Reload the page
+          }}
+          onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
+          className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
+        >
+          Explore All
+          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
+        </Button>
       ) : (
+        // </Link>
         <div className="ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
           Explore All
           <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />

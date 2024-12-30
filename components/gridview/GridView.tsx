@@ -6,7 +6,7 @@ interface Media {
   id: number;
   title?: string;
   poster_path: string;
-  //media_type: string; // Add type here to indicate the media type
+  media_type: string; // Add type here to indicate the media type
   backdrop_path: string;
   name?: string;
   genre_ids?: number[];
@@ -17,7 +17,7 @@ interface GridViewProp {
   mediaSearch: Media[];
   watchlist?: boolean;
   watched?: boolean;
-  mediaType?: string; // Indicates the type of content
+  //mediaType?: string | null; // Indicates the type of content
 }
 
 function GridView({
@@ -25,7 +25,7 @@ function GridView({
   mediaSearch,
   watchlist,
   watched,
-  mediaType,
+  //mediaType,
 }: GridViewProp) {
   return (
     <div
@@ -38,7 +38,7 @@ function GridView({
         //const isLastOne = filter ? index === 5 : index === 6;
         const isLastOne = (index + 1) % numColumns === 0;
 
-        //console.log("Is there any?", mediaType);
+        //console.log("Is there any?", media);
 
         return (
           <div
@@ -55,8 +55,8 @@ function GridView({
             <MovieCard
               watched={watched}
               watchlist={watchlist}
-              type={mediaType === "movie" ? "movie" : "tv"}
-              // type={media.media_type}
+              //type={mediaType === "movie" ? "movie" : "tv"}
+              type={media.media_type}
               imgUrl={media.poster_path}
               title={media.title}
               name={media.name}

@@ -18,29 +18,51 @@ function Search() {
 
   // Close search when clicking outside or navigating away from the /search page
   const containerRef = useOutsideClick(() => {
-    if (
-      isOpen && !query
-    ) {
+    if (isOpen && !query) {
       setIsOpen(false);
     }
   });
 
-  // Toggle search field visibility
+  // const handleReload = () => {
+  //   const queryParams = new URLSearchParams({
+  //     type: mediaType === "movie" ? "movie" : "tv",
+  //     servicesParam: JSON.stringify(activeServiceIds),
+  //   });
+  //   window.location.href = `/search?${queryParams.toString()}`;
+  // };
+
+  // Toggle search field visibility and Handle form submission Click
   const toggleSearch = () => {
     if (!isOpen) {
       setIsOpen(true);
       inputRef.current?.focus();
     } else if (inputRef.current?.value.trim()) {
-      router.push(`/search?q=${encodeURIComponent(inputRef.current.value.trim())}`);
+      // console.log(encodeURIComponent(inputRef.current.value.trim()));
+
+      // router.push(
+      //   `/search?q=${encodeURIComponent(inputRef.current.value.trim())}`
+      // );
+
+      const queryParams = new URLSearchParams({
+        type: "all",
+        queryParam: JSON.stringify(encodeURIComponent(inputRef.current.value.trim())),
+      });
+      window.location.href = `/search?${queryParams.toString()}`;
     }
     //router.push("/search");
   };
 
-  // Handle form submission
+  // Handle form submission Enter
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push("/search");
-    // Additional logic here if needed, e.g., search query processing
+    event.preventDefault(); // Prevent default form submission behavior
+    if (inputRef.current?.value.trim()) {
+
+      const queryParams = new URLSearchParams({
+        type: "all",
+        queryParam: JSON.stringify(encodeURIComponent(inputRef.current.value.trim())),
+      });
+      window.location.href = `/search?${queryParams.toString()}`;
+    }
   };
 
   return (

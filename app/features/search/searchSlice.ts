@@ -52,10 +52,10 @@ const pickPlatform = (withFilterPlatform: string[] | undefined) => {
   if (withFilterPlatform && withFilterPlatform.length > 0) {
     // Join the platform IDs with commas
     //console.log(withFilterPlatform);
-    
+
     const platforms = withFilterPlatform.join("|");
     //const platforms = withFilterPlatform.map(String).join("|");
-    console.log("PickPlatform",platforms);
+    console.log("PickPlatform", platforms);
 
     return `&with_watch_providers=${platforms}&watch_region=US`; //add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
   } else {
@@ -69,7 +69,6 @@ interface Availability {
   tag: string;
 }
 
-
 const pickAvailability = (withAvailability: Availability[] | undefined) => {
   if (withAvailability && withAvailability.length > 0) {
     const order = ["2|3", "4"];
@@ -80,10 +79,11 @@ const pickAvailability = (withAvailability: Availability[] | undefined) => {
     );
 
     //console.log(filteredItems);
-    
 
     // Separate logic for theaters and upcoming
-    const theatersItem = filteredItems.find((item) => item.tag === "inTheaters");
+    const theatersItem = filteredItems.find(
+      (item) => item.tag === "inTheaters"
+    );
     const upcomingItem = filteredItems.find((item) => item.tag === "upcoming");
 
     if (theatersItem && theatersItem.id === "2|3") {
@@ -135,7 +135,7 @@ export const searchApi = createApi({
         withFilterGenre?: number[];
         withFilterPlatform?: string[];
         //withAvailability?: string[];
-         withAvailability?: Availability[];
+        withAvailability?: Availability[];
         withRuntime?: number[];
       }) => {
         const endpoints: Record<string, string> = {
@@ -153,7 +153,7 @@ export const searchApi = createApi({
           )}${pickPlatform(withFilterPlatform)}`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,
         };
-        //console.log(endpoints[type]);
+        console.log(endpoints[type]);
         return (
           endpoints[type] || //The function attempts to find the URL for the specified type in the endpoints object.
           (() => {
@@ -183,6 +183,8 @@ export const searchApi = createApi({
           return []; // Return an empty array if response is invalid
         }
 
+        //console.log("Response", response);
+
         const newData = response.results.map((item: any) => ({
           ...item,
           media_type:
@@ -190,12 +192,20 @@ export const searchApi = createApi({
               ? "movie" //it sets media_type to "movie". If media_type is not present , it create it.
               : type === "series" //If type is "series"
               ? "tv" //sets media_type to "tv". If media_type is not present , it create it.
+              : type === "all"
+              ? item.first_air_date
+                ? "tv"
+                : "movie"
               : item.media_type, // it uses the existing media_type
         }));
 
+        //console.log("newData", newData);
+
         const filteredData = newData.filter((item: any) => {
-          return item.original_language !== "ko" && !!item.poster_path;
+          return !!item.poster_path; //item.original_language !== "ko"
         });
+
+        //console.log("filteredData", filteredData);
 
         if (type === "all") {
           const sorteData = filteredData.sort((a: any, b: any) => {
@@ -227,7 +237,29 @@ export const searchApi = createApi({
         }
       },
     }),
+    getSearchItem: builder.query({
+      query: ({ page, query }: { page: number; query: string }) =>
+        `/search/multi?api_key=${apiKey}&page=${page}&query=${query}&include_adult=false&language=en-US`,
+      keepUnusedDataFor: time,
+      transformResponse: (response: any) => {
+        const newData = response.results.map((item: any) => ({
+          ...item,
+          media_type: item.first_air_date ? "tv" : "movie",
+        }));
+        //console.log(newData);
+
+        const filteredData = newData.filter((item: any) => {
+          return !!item.poster_path; //item.original_language !== "ko"
+        });
+
+        const sorteData = filteredData.sort((a: any, b: any) => {
+          return b.popularity - a.popularity && b.vote_count - a.vote_count;
+        });
+
+        return sorteData;
+      },
+    }),
   }),
 });
 
-export const { useGetContentQuery } = searchApi;
+export const { useGetContentQuery, useGetSearchItemQuery } = searchApi;

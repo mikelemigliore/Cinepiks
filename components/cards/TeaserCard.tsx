@@ -83,9 +83,7 @@ const mediaType = type === "movie" ? "movie" : "tv";
       setVideoKey(videoTeaserMovie?.key);
     } else if (mediaType === "tv" && videoTeaserSeries){
       setVideoKey(videoTeaserSeries?.key)
-    } else {
-      setVideoKey("6ZfuNTqbHE8");
-    }
+    } 
   }, [videoTeaserMovie,videoTeaserSeries]);
 
   const handleTouchStart = () => {
@@ -274,7 +272,7 @@ const mediaType = type === "movie" ? "movie" : "tv";
                   </div>
                 ) : (
                   <div>
-                    <h1 className="font-bold text-[1vw] m-[0.5vh]">{name}</h1>
+                    <h1 className="font-bold text-[1vw] m-[0.5vh] overflow-hidden overflow-ellipsis line-clamp-1">{name}</h1>
                     <h2 className="m-[1vh] text-customTextColor font-bold text-[0.7vw]">
                       <span>Seasons: {season}</span>
                     </h2>

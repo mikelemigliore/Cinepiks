@@ -63,7 +63,7 @@ Props) {
   const [reload, setReload] = useState(false);
   const [started, setStarted] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
-  const [isAdded, setIsAdded] = useState(false);
+  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -99,8 +99,11 @@ Props) {
     setStarted(false);
   };
 
-  const handleAdded = (added: boolean) => {
-    setIsAdded((prevAdded) => !prevAdded);
+  const handleAdded = (movieId: number) => {
+    setIsAdded((prevAdded) => ({ // This represents the previous state of isAdded
+      ...prevAdded,//Copies all existing key-value pairs from the current state into a new object
+      [movieId]: !prevAdded[movieId], // If the current value is true, it changes to false, If the current value is false, it changes to true
+    }));
   };
 
   // Ensure video restarts when slide changes (for both next and prev)
@@ -270,13 +273,13 @@ Props) {
                   </div>
                   <div>
                     <Button
-                      onClick={() => handleAdded(isAdded)}
+                      onClick={() => handleAdded(media.id)}
                       className={`h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
-                        isAdded ? "bg-white/90 text-black" : ""
+                        isAdded[media.id] ? "bg-white/90 text-black" : ""
                       }`}
                     >
                       Watchlist
-                      {isAdded ? (
+                      {isAdded[media.id] ? (
                         <IoCheckmark className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
                       ) : (
                         <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
