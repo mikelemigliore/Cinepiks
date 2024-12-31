@@ -464,7 +464,7 @@ function Filter({
       .filter(([_, value]) => value.selected) // Filter only selected genres
       .map(([_, value]) => value.id); // Map to their IDs
 
-    console.log("Platform item", selectedPlatformIds);
+    //console.log("Platform item", selectedPlatformIds);
 
     // Pass the selectedGenreIds to handleFilterParams
     handleFilterParams(

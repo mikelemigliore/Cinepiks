@@ -40,7 +40,7 @@ const min_date_future = formatDate(
 const pickGenres = (withFilterGenre: number[] | undefined) => {
   if (withFilterGenre && withFilterGenre.length > 0) {
     const genres = withFilterGenre.join(",");
-    //console.log(genres);
+    console.log(genres);
 
     return `&with_genres=${genres}`;
   } else {
@@ -153,7 +153,7 @@ export const searchApi = createApi({
           )}${pickPlatform(withFilterPlatform)}`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,
         };
-        console.log(endpoints[type]);
+        //console.log(endpoints[type]);
         return (
           endpoints[type] || //The function attempts to find the URL for the specified type in the endpoints object.
           (() => {

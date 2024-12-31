@@ -36,7 +36,7 @@ import {
   useGetUpcomingQuery,
 } from "../features/homepage/movies/movieSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
-
+import { useMemo } from "react";
 interface Availability {
   id: string;
   tag: string;
@@ -58,17 +58,22 @@ function SearchPage() {
 
   //console.log("parsedTypeSearch", parsedTypeSearch);
 
-  // console.log("Beginning typeGenres", typeGenres);
+  //console.log("Beginning typeGenres", typeGenres);
 
   const parsedTypeService = typeService
     ? JSON.parse(typeService.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
     : []; // Fallback if null or undefined
 
-  const parsedTypeGenres = typeGenres
-    ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
-    : []; // Fallback if null or undefined
+    
 
-  //console.log("ParsedTypeService", parsedTypeGenres);
+    // Memoize parsedTypeGenres
+    const parsedTypeGenres = useMemo(() => {
+      return typeGenres
+        ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
+        : []; // Fallback if null or undefined
+    }, [typeGenres]);
+
+  //console.log("parsedTypeGenres", parsedTypeGenres);
 
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(typeQuery === "all" ? true : false);
@@ -142,6 +147,8 @@ function SearchPage() {
     //console.log("newAvailability:", newAvailability);
     dispatch(setPage(1)); // Reset page
     dispatch(setContent([]));
+    console.log(newGenreFilters);
+    
     dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
     dispatch(setFilterPlatform(newPlatformFilters)); // Update platform filters
     dispatch(setAvailability(newAvailability));
@@ -196,8 +203,12 @@ function SearchPage() {
 
   useEffect(() => {
     if (
-      (isSuccess && contentSearch && parsedTypeSearch === null) ||
-      (contentSearch && parsedTypeSearch === null && typeContent === "popularMovies")
+      (isSuccess &&
+        contentSearch &&
+        parsedTypeSearch === null) ||
+      (contentSearch &&
+        parsedTypeSearch === null &&
+        typeContent === "popularMovies")
     ) {
       //console.log("contentSearch");
       const updateDate = [...ContentSearch, ...contentSearch];
@@ -212,20 +223,20 @@ function SearchPage() {
     } else if (typeContent === "nowPlaying") {
       //console.log("nowPlaying");
       handleFilterParams([], [], [{ id: "2|3", tag: "inTheaters" }], []);
-    } else if (parsedTypeService && parsedTypeSearch === null) {
+    } else if (
+      parsedTypeService.length > 0 &&
+      parsedTypeSearch === null
+    ) {
       //console.log("parsedTypeService");
       handleFilterParams([], parsedTypeService, [], []);
-    } else if (parsedTypeGenres && parsedTypeSearch === null) {
-      //console.log("parsedTypeGenres");
-      handleFilterParams(parsedTypeGenres, [], [], []);
     } else if (search && parsedTypeSearch !== null) {
-      //console.log("search");
-      // console.log("ContentSearch", ContentSearch);
       const updateDate = [...ContentSearch, ...search];
-      //console.log("Data", updateDate);
       dispatch(setContent(updateDate));
+    } else if (parsedTypeGenres.length > 0 && parsedTypeSearch === null) {
+      //console.log("parsedTypeGenres", parsedTypeGenres);
+      handleFilterParams(parsedTypeGenres, [], [], []);
     }
-  }, [trending, contentSearch, typeContent,search,  typeQuery]);//search
+  }, [trending, contentSearch, typeContent, search, typeQuery]); //search
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
