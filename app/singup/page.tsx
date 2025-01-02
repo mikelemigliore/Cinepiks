@@ -1,8 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
 
 function SignUp() {
@@ -10,6 +11,15 @@ function SignUp() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
+  const { data: session, status: sessionStatus } = useSession();
+
+  useEffect(() => {
+    //console.log("Session", session);
+
+    if (sessionStatus === "authenticated") {
+      router.replace("/homepage");
+    }
+  }, [sessionStatus, router]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
@@ -75,111 +85,116 @@ function SignUp() {
     //console.log(username, email, password, confirmPassword);
   };
 
+  if (sessionStatus === "loading") {
+    return <h1>Loading...</h1>;
+  }
+
   return (
-    <div className="background">
-      <div className="w-full h-screen flex justify-center items-center">
-        <div className="w-[19vw] h-[32vw] bg-buttonColor pb-[4vw] rounded-3xl">
-          <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[3vh]">
-            <h1 className="text-[1.5vw]">Sign Up</h1>
-            <form onSubmit={handleSubmit}>
-              <div className="space-y-[1.5vw]">
-                <div>
-                  <h1 className="mb-[1vh]">Username</h1>
+    sessionStatus !== "authenticated" && (
+      <div className="background">
+        <div className="w-full h-screen flex justify-center items-center">
+          <div className="w-[19vw] h-[32vw] bg-buttonColor pb-[4vw] rounded-3xl">
+            <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[3vh]">
+              <h1 className="text-[1.5vw]">Sign Up</h1>
+              <form onSubmit={handleSubmit}>
+                <div className="space-y-[1.5vw]">
+                  <div>
+                    <h1 className="mb-[1vh]">Username</h1>
 
-                  {/* Search Input */}
-                  <input
-                    type="text"
-                    className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
-                    placeholder="Username..."
-                    required
-                  />
-                </div>
-                <div>
-                  <h1 className="mb-[1vh]">Email</h1>
-
-                  {/* Search Input */}
-                  <input
-                    type="text"
-                    className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
-                    placeholder="Email..."
-                    required
-                  />
-                </div>
-                <div>
-                  <h1 className="mb-[1vh]">Password</h1>
-                  <div className="flex relative">
                     {/* Search Input */}
                     <input
-                      type={showPassword ? "text" : "password"}
-                      className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                        showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                      }`}
-                      placeholder="Password..."
+                      type="text"
+                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                      placeholder="Username..."
                       required
-                      //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                     />
-                    <div
-                      className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? (
-                        <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                      ) : (
-                        <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                      )}
-                    </div>
                   </div>
-                </div>
-                <div>
-                  <h1 className="mb-[1vh]">Confirm Password</h1>
-                  <div className="flex relative">
+                  <div>
+                    <h1 className="mb-[1vh]">Email</h1>
+
                     {/* Search Input */}
                     <input
-                      type={confirmShowPassword ? "text" : "password"}
-                      className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                        confirmShowPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                      }`}
-                      placeholder="Confirm password..."
+                      type="text"
+                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
+                      placeholder="Email..."
                       required
-                      //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                     />
-                    <div
-                      className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
-                      onClick={confirmTogglePasswordVisibility}
-                    >
-                      {confirmShowPassword ? (
-                        <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                      ) : (
-                        <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                      )}
+                  </div>
+                  <div>
+                    <h1 className="mb-[1vh]">Password</h1>
+                    <div className="flex relative">
+                      {/* Search Input */}
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
+                          showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
+                        }`}
+                        placeholder="Password..."
+                        required
+                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+                      />
+                      <div
+                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? (
+                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                        ) : (
+                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <div>
+                    <h1 className="mb-[1vh]">Confirm Password</h1>
+                    <div className="flex relative">
+                      {/* Search Input */}
+                      <input
+                        type={confirmShowPassword ? "text" : "password"}
+                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
+                          confirmShowPassword ? "text-[0.9vw]" : "text-[0.9vw]"
+                        }`}
+                        placeholder="Confirm password..."
+                        required
+                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+                      />
+                      <div
+                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
+                        onClick={confirmTogglePasswordVisibility}
+                      >
+                        {confirmShowPassword ? (
+                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                        ) : (
+                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-start ml-[-1vw]">
+                    <Link
+                      href="/"
+                      className="bg-transparent rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-transparent"
+                    >
+                      Cancel
+                    </Link>
+                    <button
+                      type="submit"
+                      className="bg-customColorCard rounded-full px-[1.5vw] py-[0.7vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                  <p className="text-red-600 text-[0.9vw] mt-[0.5vw]">
+                    {error && error}
+                  </p>
                 </div>
-                <div className="flex justify-start ml-[-1vw]">
-                  <Link
-                    href="/"
-                    className="bg-transparent rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-transparent"
-                  >
-                    Cancel
-                  </Link>
-                  <button
-                    type="submit"
-                    className="bg-customColorCard rounded-full px-[1.5vw] py-[0.7vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
-                  >
-                    Apply
-                  </button>
-                </div>
-                <p className="text-red-600 text-[0.9vw] mt-[0.5vw]">
-                  {error && error}
-                </p>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 }
 
 export default SignUp;
-

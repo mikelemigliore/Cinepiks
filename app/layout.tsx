@@ -37,7 +37,7 @@ export default async function RootLayout({
         <AuthProvider session={session}>
           {/* Conditionally render Navbar */}
           <ReduxProvider>
-            <nav className="fixed w-full bg-customColor py-[1vw] md:bg-transparent lg:bg-gradient-to-b md:from-customColor/50 md:to-transparent md:hover:bg-customColor md:transition-all md:duration-700 z-[100]">
+            <nav>
               <Navbar />
             </nav>
             <main>
