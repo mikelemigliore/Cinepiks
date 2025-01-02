@@ -13,7 +13,7 @@ import Link from "next/link";
 interface Prop {
   services: Array<{ id: number; title: string; img: any }>;
   logInPage?: boolean;
-  description: string;
+  description?: string;
   mediaType?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
 }

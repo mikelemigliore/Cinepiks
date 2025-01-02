@@ -1,4 +1,3 @@
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,7 +17,13 @@ import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
 //import { getGenres, getLoginMainCarousel, getPopular, getUpcoming } from "./pages/api/loginPage";
 import { useGetNowPlayingQuery } from "./features/homepage/movies/movieSlice";
-import { useGetGenresQuery, useGetUpcomingQuery, useGetPopularQuery } from "./features/loginpage/loginSlice";
+import {
+  useGetGenresQuery,
+  useGetUpcomingQuery,
+  useGetPopularQuery,
+} from "./features/loginpage/loginSlice";
+import { useRouter } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
 //import './globals/background.css';
 
 interface ItemProp {
@@ -58,6 +63,15 @@ const swiperTitles = [
 ];
 
 function LoginIn() {
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const session = useSession();
+
+  //console.log("Router", router);
+
+  //const { data: session, status } = useSession();
+
   const [items, setItems] = useState<ItemProp[]>([]);
   const [itemsGenres, setItemsGenres] = useState([]);
   const [inTheaters, setInTheaters] = useState([]);
@@ -67,39 +81,32 @@ function LoginIn() {
   const [activeSlide, setActiveSlide] = useState(0);
   const totalSlides = items.length; // Set the total number of slides
 
+  const { data: loginmainCaraseul } = useGetNowPlayingQuery();
 
-  const {data: loginmainCaraseul} = useGetNowPlayingQuery() 
+  const { data: genres } = useGetGenresQuery({});
 
-  const {data: genres} = useGetGenresQuery({})
+  const { data: moviesUpcoming } = useGetUpcomingQuery({});
 
-  const {data: moviesUpcoming} = useGetUpcomingQuery({})
+  const { data: moviesPopular } = useGetPopularQuery({});
 
-  const {data: moviesPopular} = useGetPopularQuery({})
-
-
-  useEffect(()=>{
-    if(loginmainCaraseul){
+  useEffect(() => {
+    if (loginmainCaraseul) {
       setItems(loginmainCaraseul);
     }
 
-    if(genres){
-      setItemsGenres(genres.genres)
+    if (genres) {
+      setItemsGenres(genres.genres);
     }
 
-    if(moviesUpcoming){
-      setInTheaters(moviesUpcoming.results)
+    if (moviesUpcoming) {
+      setInTheaters(moviesUpcoming.results);
     }
 
-    if(moviesPopular){
-      setPopularMovies(moviesPopular.results)
+    if (moviesPopular) {
+      setPopularMovies(moviesPopular.results);
     }
+  }, [loginmainCaraseul, moviesUpcoming, moviesPopular]);
 
-  },[loginmainCaraseul, moviesUpcoming, moviesPopular])
-
-
-
-
-  
   const getGenreNames = (genreId: number, Genres: any[]) => {
     const genre = Genres.find((g) => g.id === genreId); //The find() method searches the Genres array for an element matching the given condition (g.id === genreId).
 
@@ -174,6 +181,79 @@ function LoginIn() {
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
+  useEffect(() => {
+    console.log("Session", session);
+
+    if (session?.status === "authenticated") {
+      router.replace("/homepage");
+    }
+  }, [session, router]);
+
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     router.replace("/homepage");
+  //   }
+  // }, [status, router]);
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    //console.log("Form submitted");
+
+    //const username = e.target[0].value;
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    //const confirmPassword = e.target[3].value;
+
+    //console.log("Email:", email, "Password:", password); // E
+
+    if (!isValidEmail(email)) {
+      setError("Email is invalid");
+      return;
+    }
+
+    if (!password || password.length < 8) {
+      setError("Password is invalid");
+      return;
+    }
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    // if(res === undefined){
+    //   console.log("Not working");
+    // }
+    
+
+    if (res?.error) {
+      //console.log("Entered");
+      setError("Invalid email or password");
+      if (res?.url) router.replace("/homepage");
+
+    } else {
+      //console.log("Not entered");
+      setError("");
+      // if (res?.url) {
+      //   router.replace("/homepage"); // Navigate to the homepage on success
+      // }
+    }
+
+    // console.log(email, password);
+  };
+
+
+  // const handleRedirect = () => {
+  //   router.replace("/homepage"); // Replace with the actual route you want to test
+  // };
+
   return (
     <div className="">
       <div className="flex">
@@ -241,44 +321,48 @@ function LoginIn() {
           <div className="flex flex-col items-center">
             <div className="space-y-[1vw]">
               <h1 className="mb-[1vh] text-[1.2vw] font-bold">Log In</h1>
-              <div>
-                <form>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-[1vw]">
                   <input
                     type="text"
                     className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor`}
-                    placeholder="Enter email or username"
+                    placeholder="Enter email"
+                    required
                   />
-                </form>
-              </div>
-              <div>
-                <form className="flex relative">
-                  {/* Search Input */}
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                      showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                    }`}
-                    placeholder=""
-                    readOnly
-                    value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-                  />
-                  <div
-                    className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-customColor pl-[0.5vw]"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? (
-                      <AiOutlineEyeInvisible className="bg-customColor w-[1.3vw] h-[1.3vw]" />
-                    ) : (
-                      <AiOutlineEye className="bg-customColor w-[1.3vw] h-[1.3vw]" />
-                    )}
+                </div>
+                <div className="mb-[1vw]">
+                  <div className="flex relative">
+                    {/* Search Input */}
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
+                        showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
+                      }`}
+                      placeholder="Enter password"
+                      required
+                    />
+                    <div
+                      className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-customColor pl-[0.5vw]"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? (
+                        <AiOutlineEyeInvisible className="bg-customColor w-[1.3vw] h-[1.3vw]" />
+                      ) : (
+                        <AiOutlineEye className="bg-customColor w-[1.3vw] h-[1.3vw]" />
+                      )}
+                    </div>
                   </div>
-                </form>
-              </div>
-              <div>
-                <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
-                  Log In
-                </Button>
-              </div>
+                </div>
+                <div>
+                  <button
+                    type="submit"
+                    //onClick={handleRedirect}
+                    className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
+                  >
+                    Log In
+                  </button>
+                </div>
+              </form>
               <div className="flex items-center space-x-2">
                 <div>
                   <div className="flex items-center">
@@ -332,6 +416,9 @@ function LoginIn() {
                   Continue with Facebook
                 </Button>
               </div>
+              <p className="text-red-600 text-[0.9vw] mt-[0.5vw]">
+                {error && error}
+              </p>
               <div className="flex items-center space-x-2 ml-[2.5vw]">
                 <div>
                   <h1 className="text-[0.8vw] font-medium leading-none text-customTextColor">
@@ -514,8 +601,11 @@ function LoginIn() {
         </div>
         {/* {swiperTitles.map((swiperTitle) => ( */}
         <div>
-          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">Upcoming</h1>
+          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">
+            Upcoming
+          </h1>
           <MovieSwiper
+            description={""}
             logInPage={logInPage}
             medias={inTheaters}
             itemsGenres={itemsGenres}
@@ -525,8 +615,11 @@ function LoginIn() {
           />
         </div>
         <div>
-          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">Popular</h1>
+          <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">
+            Popular
+          </h1>
           <MovieSwiper
+            description={""}
             logInPage={logInPage}
             medias={popularMovies}
             itemsGenres={itemsGenres}
@@ -542,3 +635,14 @@ function LoginIn() {
 }
 
 export default LoginIn;
+
+// function LoginIn() {
+
+//   return (
+//     <div className="">
+//       <h1>Login Page</h1>
+//     </div>
+//   );
+// }
+
+// export default LoginIn;

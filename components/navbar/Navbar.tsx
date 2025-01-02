@@ -11,6 +11,8 @@ import Search from "./Search";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5"; // Icons for hamburger menu
 import { usePathname } from "next/navigation";
 
+//const pathname = usePathname();
+
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,8 +23,8 @@ function Navbar() {
   const pathname = usePathname();
 
   return (
-    <div>
-      {pathname === "/singup" ? (
+    <>
+      {pathname === "/singup" || pathname === "/" ? (
         <div></div>
       ) : (
         <Container className="flex justify-between gap-4 flex-wrap md:py-0 px-[1vw] md:px-[2vw]">
@@ -79,7 +81,7 @@ function Navbar() {
           </div>
         </Container>
       )}
-    </div>
+    </>
   );
 }
 
