@@ -386,7 +386,7 @@ function LoginIn() {
                   </div>
                   <div className="pl-[1.5vw]">
                     <Link
-                      href="/"
+                      href="/forgotpassword"
                       className="text-[0.7vw] font-medium leading-none text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
                     >
                       Forgot Password?
