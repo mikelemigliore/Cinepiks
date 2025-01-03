@@ -8,13 +8,15 @@ import { SlArrowRight } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import YoutubePlayer from "./YoutubePlayer";
 import { GoMute, GoUnmute } from "react-icons/go";
-import {
-  //getTeaserMovieVideo,
-  //getTeaserSeriesVideo,
-  //getTrailerVideo,
-} from "@/app/pages/api/homePage";
+import //getTeaserMovieVideo,
+//getTeaserSeriesVideo,
+//getTrailerVideo,
+"@/app/pages/api/homePage";
 
-import { useGetTeaserMovieVideoQuery, useGetTeaserSeriesVideoQuery } from "@/app/features/homepage/movies/movieSlice";
+import {
+  useGetTeaserMovieVideoQuery,
+  useGetTeaserSeriesVideoQuery,
+} from "@/app/features/homepage/movies/movieSlice";
 
 interface Genre {
   id: number;
@@ -71,8 +73,7 @@ TeaserCardProps) {
 
   //const activeCardRef = useRef<string | null>(null); // To track the currently active card
 
-const mediaType = type === "movie" ? "movie" : "tv";
-
+  const mediaType = type === "movie" ? "movie" : "tv";
 
   const { data: videoTeaserMovie } = useGetTeaserMovieVideoQuery(id);
 
@@ -81,10 +82,10 @@ const mediaType = type === "movie" ? "movie" : "tv";
   useEffect(() => {
     if (mediaType === "movie" && videoTeaserMovie) {
       setVideoKey(videoTeaserMovie?.key);
-    } else if (mediaType === "tv" && videoTeaserSeries){
-      setVideoKey(videoTeaserSeries?.key)
-    } 
-  }, [videoTeaserMovie,videoTeaserSeries]);
+    } else if (mediaType === "tv" && videoTeaserSeries) {
+      setVideoKey(videoTeaserSeries?.key);
+    }
+  }, [videoTeaserMovie, videoTeaserSeries]);
 
   const handleTouchStart = () => {
     // Set a timeout for detecting long press
@@ -168,6 +169,40 @@ const mediaType = type === "movie" ? "movie" : "tv";
     const hours = Math.floor(minutes / 60); // Get the hours
     const remainingMinutes = minutes % 60; // Get the remaining minutes
     return `${hours}h ${remainingMinutes}m`;
+  };
+
+  // const handleLike = async (id: number) => {
+  //   console.log("This is the id:", id);
+  // };
+
+  const handleLike = async ( like: any) => {
+    
+    
+    try {
+
+      console.log("Like", like);
+      
+      const res = await fetch("/api/likes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ like }),
+      });
+
+      if (res.status === 400) {
+        console.log("Error");
+      }
+
+      if (res.status === 200) {
+        console.log("Like added:");
+      }
+  
+      //const data = await response.json();
+      //console.log("Like added:");
+    } catch (error) {
+      console.error("Error adding like:", error);
+    }
   };
 
   return (
@@ -272,7 +307,9 @@ const mediaType = type === "movie" ? "movie" : "tv";
                   </div>
                 ) : (
                   <div>
-                    <h1 className="font-bold text-[1vw] m-[0.5vh] overflow-hidden overflow-ellipsis line-clamp-1">{name}</h1>
+                    <h1 className="font-bold text-[1vw] m-[0.5vh] overflow-hidden overflow-ellipsis line-clamp-1">
+                      {name}
+                    </h1>
                     <h2 className="m-[1vh] text-customTextColor font-bold text-[0.7vw]">
                       <span>Seasons: {season}</span>
                     </h2>
@@ -301,7 +338,9 @@ const mediaType = type === "movie" ? "movie" : "tv";
                       )}
                     </Button>
                     <Button
-                      onClick={() => setIsLiked(!isLiked)}
+                      type="submit"
+                      onClick={() => handleLike(id)}
+                      // onClick={() => setIsLiked(!isLiked)}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold transition-transform duration-300 ease-in-out active:bg-white active:scale-95 ${
                         isLiked ? "bg-white/90 text-black" : ""
                       }`}

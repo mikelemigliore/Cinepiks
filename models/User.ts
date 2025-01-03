@@ -22,6 +22,15 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    likes: {
+      type: [
+        {
+          type: Schema.Types.Mixed, // Allows any type of data in the array
+        },
+      ],
+      default: [], // Initialize as an empty array
+      required: false,
+    },
     password: { type: String, required: false },
   },
   { timestamps: true }

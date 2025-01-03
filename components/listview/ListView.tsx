@@ -655,7 +655,7 @@ interface ListViewProp {
   watchlist?: boolean;
   watched?: boolean;
   value?: number | null; //This was commented out
-  handleValue: (newValue: number | null) => void; //This was commented out
+  handleValue?: (newValue: number | null) => void; //This was commented out
   mediaType?: string; // Indicates the type of content
   id: number;
   // genresMovie?: GenresType[];

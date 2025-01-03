@@ -24,7 +24,7 @@ function Navbar() {
 
   return (
     <>
-      {pathname === "/singup" || pathname === "/" || pathname === "/forgotpassword" || pathname === "/resetpassword/[token]" ? (
+      {pathname === "/singup" || pathname === "/" || pathname === "/forgotpassword" || pathname.startsWith("/resetpassword") ? (
         <div></div>
       ) : (
         <div className="fixed w-full bg-customColor py-[1vw] md:bg-transparent lg:bg-gradient-to-b md:from-customColor/50 md:to-transparent md:hover:bg-customColor md:transition-all md:duration-700 z-[100]">
