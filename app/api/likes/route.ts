@@ -1,30 +1,38 @@
 import User from "@/models/User";
 import connect from "@/utils/db";
-import bcrypt from "bcryptjs";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export const POST = async (request: any) => {
-  const { like } = await request.json();
+  const { like, userEmail } = await request.json(); // ✅ Expect userId from the frontend
 
   await connect();
 
   try {
-    //console.log("Request", like);
-
-    if (!like) {
+    if (!like || !userEmail) {
       return NextResponse.json(
         { message: "User ID and like data are required." },
         { status: 400 }
       );
     }
 
-    const existingResult = await User.findOne({ likes: like });
+    // ✅ Ensure the like is added for the correct user
+    const existingUser = await User.findOne({ email: userEmail });
 
-    if(existingResult){
-        return NextResponse.json("Already in your likes")
+    if (!existingUser) {
+      return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    const result = await User.updateOne({ $push: { likes: like } });
+    if (existingUser.likes.includes(like)) {
+      return NextResponse.json("Already liked this content.");
+    }
+
+    const result = await User.updateOne(
+      { email: userEmail }, // ✅ Update only this specific user
+      { $push: { likes: like } } // ✅ Add the like to the user's array
+    );
 
     return NextResponse.json(
       { message: "Like added successfully.", result },
@@ -38,14 +46,20 @@ export const POST = async (request: any) => {
   }
 };
 
-export const GET = async () => {
+export const GET = async (request: any) => {
   await connect(); // Ensure the database is connected
 
   try {
-    // Retrieve the first user's likes array
-    const user = await User.findOne({}, "likes");
+    const session: any = await getServerSession(authOptions);
+
+    //console.log("Session", session);
+
+    const userEmail = session.user.email; // ✅ Securely fetch userId from session
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const user = await User.findOne({ email: userEmail }, "likes");
     const likes = user.likes;
-    //console.log(user.likes);
 
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -63,23 +77,38 @@ export const GET = async () => {
   }
 };
 
-// export const GET = async () => {
-//     //const { like } = await request.json();
+export const DELETE = async (request: any) => {
+  const { like, userEmail } = await request.json();
 
-//     await connect();
+  await connect();
 
-//     try {
+  try {
+    if (!like || !userEmail) {
+      return NextResponse.json(
+        { message: "User ID and like data are required." },
+        { status: 400 }
+      );
+    }
 
-//     const user = await User.findOne({}, 'likes');
+    const existingUser = await User.findOne({ email: userEmail });
 
-//       return NextResponse.json(
-//         { message: "Like added successfully.", user },
-//         { status: 200 }
-//       );
-//     } catch (error: any) {
-//       return NextResponse.json(
-//         { message: "Error adding like.", error: error.message },
-//         { status: 500 }
-//       );
-//     }
-//   };
+    if (!existingUser) {
+      return NextResponse.json({ message: "User not found." }, { status: 404 });
+    }
+
+    const result = await User.updateOne(
+      { email: userEmail },
+      { $pull: { likes: like } }
+    );
+
+    return NextResponse.json(
+      { message: "Like removed successfully.", result },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { message: "Error adding like.", error: error.message },
+      { status: 500 }
+    );
+  }
+};

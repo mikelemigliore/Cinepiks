@@ -17,6 +17,7 @@ import {
   useGetMovieCertificationQuery,
   useGetMovieDetailsQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
+import { getSession } from "next-auth/react";
 
 interface Genre {
   id: number;
@@ -66,16 +67,47 @@ function BigCard({
   >(null);
   const [imdb, setIMDb] = useState<number | null>(null);
   const [tmdbScore, setTMDbScore] = useState<number | null>(null);
+  const [likes, setLikes] = useState<number[]>([]);
 
-
-  
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
 
   const { data: rating } = useGetRatingsQuery(imdbId || "");
 
   const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
 
+  useEffect(() => {
+    const handleLike = async () => {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          const data = await res.json(); // Parse the JSON response
+          setLikes(data.likes);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    };
+
+    handleLike();
+  }, []);
+
+  useEffect(() => {
+    if (likes?.includes(id)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  }, [likes]);
 
   useEffect(() => {
     if (movieDetails) {
@@ -84,7 +116,9 @@ function BigCard({
       setDescription(movieDetails?.overview || "No description available");
       setTMDbScore(movieDetails?.vote_average || null);
       setImdbId(movieDetails.imdb_id || null);
-      setTitle(movieDetails.original_title || movieDetails.name || "Unknown Title");
+      setTitle(
+        movieDetails.original_title || movieDetails.name || "Unknown Title"
+      );
       setImage(movieDetails.backdrop_path || null);
     }
 
@@ -103,18 +137,64 @@ function BigCard({
     }
   }, [rating, movieDetails]);
 
-
-
   const formatRuntime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60); 
-    const remainingMinutes = minutes % 60; 
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
   };
 
-
-
-
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  const handleLike = async (like: any) => {
+    const session = await getSession();
+
+    console.log("Session", session);
+    const userEmail = session?.user?.email; // ✅ Securely fetch userId from session
+
+    if (isLiked === false) {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail, like }),
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like added:");
+          setIsLiked(true);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    } else {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail, like }),
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like removed");
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    }
+  };
 
   return (
     <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[80vw] md:w-[90vw] h-[80vh] md:h-[71vh] rounded-3xl shadow-2xl">
@@ -278,7 +358,7 @@ function BigCard({
             </Button>
 
             <Button
-              onClick={() => setIsLiked(!isLiked)}
+              onClick={() => handleLike(id)}
               className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""
               }`}

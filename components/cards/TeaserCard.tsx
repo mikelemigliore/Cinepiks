@@ -17,6 +17,7 @@ import {
   useGetTeaserMovieVideoQuery,
   useGetTeaserSeriesVideoQuery,
 } from "@/app/features/homepage/movies/movieSlice";
+import { getSession } from "next-auth/react";
 
 interface Genre {
   id: number;
@@ -80,6 +81,38 @@ TeaserCardProps) {
   const { data: videoTeaserSeries } = useGetTeaserSeriesVideoQuery(id);
 
   useEffect(() => {
+    const handleLike = async () => {
+      if (!expandCard) return; // Prevent running if expandCard is false
+
+      try {
+        const res = await fetch("/api/likes", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          const data = await res.json();
+          if (data.likes.includes(id)) {
+            setIsLiked(true);
+          } else {
+            setIsLiked(false);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching like status:", error);
+      }
+    };
+
+    handleLike();
+  }, [expandCard, id]); // Only run when expandCard changes to true
+
+  useEffect(() => {
     if (mediaType === "movie" && videoTeaserMovie) {
       setVideoKey(videoTeaserMovie?.key);
     } else if (mediaType === "tv" && videoTeaserSeries) {
@@ -108,46 +141,13 @@ TeaserCardProps) {
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const mediaType = type === "movie" ? "movie" : "tv";
-
-  //       if (mediaType === "movie") {
-  //         const response = await getTeaserMovieVideo(id);
-  //         const data = await response.json();
-
-  //           setVideoKey(data.key);
-
-  //       } else {
-  //         const response = await getTeaserSeriesVideo(id);
-  //         const data = await response.json();
-
-  //           setVideoKey(data.key);
-
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching carousel items:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   const handleMouseEnter = () => {
-    //if (isDesktop) {
-    // Only trigger hover effects if it's a desktop view
-    // Delay the video playback by a short time
     hoverTimeoutRef.current = setTimeout(() => {
       setIsPlaying(true);
-      //setShowContent(true);
-    }, 300); // 300ms delay to stabilize hover
-    //}
+    }, 300);
   };
 
   const handleMouseLeave = () => {
-    // Only reset states on hover leave if it's a desktop view
-    // Clear the hover timeout when the user leaves early
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
@@ -171,37 +171,54 @@ TeaserCardProps) {
     return `${hours}h ${remainingMinutes}m`;
   };
 
-  // const handleLike = async (id: number) => {
-  //   console.log("This is the id:", id);
-  // };
+  const handleLike = async (like: any) => {
+    const session = await getSession();
 
-  const handleLike = async ( like: any) => {
-    
-    
-    try {
+    console.log("Session", session);
+    const userEmail = session?.user?.email;  // ✅ Securely fetch userId from session
 
-      console.log("Like", like);
-      
-      const res = await fetch("/api/likes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ like }),
-      });
+    if (isLiked === false) {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({userEmail, like }),
+        });
 
-      if (res.status === 400) {
-        console.log("Error");
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like added:");
+          setIsLiked(true);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
       }
+    } else {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({userEmail, like }),
+        });
 
-      if (res.status === 200) {
-        console.log("Like added:");
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like removed");
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
       }
-  
-      //const data = await response.json();
-      //console.log("Like added:");
-    } catch (error) {
-      console.error("Error adding like:", error);
     }
   };
 

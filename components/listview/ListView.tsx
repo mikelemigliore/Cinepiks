@@ -599,6 +599,7 @@ import {
   useGetMovieTrailerQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
 import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
+import { getSession } from "next-auth/react";
 
 interface GenresType {
   id: number;
@@ -649,7 +650,7 @@ interface ListViewProp {
   poster_path: string;
   title?: string;
   overview: string;
-  backdrop_path:string
+  backdrop_path: string;
   //name?:string
   list?: boolean;
   watchlist?: boolean;
@@ -658,6 +659,7 @@ interface ListViewProp {
   handleValue?: (newValue: number | null) => void; //This was commented out
   mediaType?: string; // Indicates the type of content
   id: number;
+  //likes?: number[];
   // genresMovie?: GenresType[];
 }
 
@@ -677,14 +679,15 @@ function ListView({
   poster_path,
   title,
   overview,
-  backdrop_path
+  backdrop_path,
+  //likes,
 }: //name
 //genresMovie,
 //value,
 //handleValue,
 ListViewProp) {
   const [isAdded, setIsAdded] = useState<Record<number, boolean>>({}); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
-  const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
+  const [isLiked, setIsLiked] = useState(false);
   const [scores, setScores] = useState<Record<number, number | null>>({}); //Purpose: This state variable, scores, keeps track of the rating (or score) for each movie.
   //Type: Record<number, number | null> means scores is an object where each key is a movie ID (number) and each value is a number representing the movie’s score or null if there’s no score yet.
   //Initial Value: {}, so initially, no movie has a score.
@@ -707,6 +710,7 @@ ListViewProp) {
   const [director, setDirector] = useState();
   const [cast, setCast] = useState<CastMember[]>([]);
   const [videoKey, setVideoKey] = useState("");
+  const [likes, setLikes] = useState<number[]>([]);
 
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
 
@@ -718,6 +722,40 @@ ListViewProp) {
   const { data: movieCast } = useGetMovieCastQuery(id || 0);
 
   const { data: movieTrailer } = useGetMovieTrailerQuery(id || 0);
+
+  useEffect(() => {
+    const handleLike = async () => {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          const data = await res.json(); // Parse the JSON response
+          setLikes(data.likes);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    };
+
+    handleLike();
+  }, []);
+
+  useEffect(()=>{
+    if (likes?.includes(id)) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+  },[likes])
 
   useEffect(() => {
     if (movieDetails) {
@@ -776,12 +814,71 @@ ListViewProp) {
     }));
   };
 
-  const handleLike = (movieId: number) => {
-    setIsLiked((prevLiked) => ({
-      ...prevLiked,
-      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
-    }));
+  const handleLike = async (like: any) => {
+    const session = await getSession();
+
+    console.log("Session", session);
+    const userEmail = session?.user?.email; // ✅ Securely fetch userId from session
+
+    if (isLiked === false) {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail, like }),
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like added:");
+          setIsLiked(true);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    } else {
+      try {
+        const res = await fetch("/api/likes", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userEmail, like }),
+        });
+
+        if (res.status === 400) {
+          console.log("Error");
+        }
+
+        if (res.status === 200) {
+          console.log("Like removed");
+          setIsLiked(false);
+        }
+      } catch (error) {
+        console.error("Error adding like:", error);
+      }
+    }
   };
+
+  // const handleLike = (movieId: number) => {
+  //   if (likes?.includes(movieId)) {
+  //     setIsLiked(true);
+  //   } else {
+  //     setIsLiked(false);
+  //   }
+  // };
+
+  // const handleLike = (movieId: number) => {
+  //   setIsLiked((prevLiked) => ({
+  //     ...prevLiked,
+  //     [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
+  //   }));
+  // };
 
   const handleScoreChange = (movieId: number, newValue: number | null) => {
     setScores((prevScores) => ({
@@ -913,22 +1010,21 @@ ListViewProp) {
                         //reload={reload}
                         //handleReload={handleReload}
                         //handleStarted={handleStarted}
-                        src={
-                          `https://image.tmdb.org/t/p/original${backdrop_path}`
-                        }
+                        src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
                       />
                     </DialogContent>
                   </Dialog>
                 </Button>
 
                 <Button
+                  type="submit"
                   onClick={() => handleLike(id)}
                   className={`flex justify-center items-center h-10 w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                    isLiked[id] ? "bg-white/90 text-black font-bold" : ""
+                    isLiked ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
                   Like
-                  {isLiked[id] ? (
+                  {isLiked ? (
                     <AiFillLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
                   ) : (
                     <AiOutlineLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />

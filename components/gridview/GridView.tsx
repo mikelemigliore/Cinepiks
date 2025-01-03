@@ -38,7 +38,7 @@ function GridView({
         //const isLastOne = filter ? index === 5 : index === 6;
         const isLastOne = (index + 1) % numColumns === 0;
 
-        //console.log("Is there any?", media);
+        //console.log(media);
 
         return (
           <div

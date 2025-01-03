@@ -7,7 +7,7 @@ import { movieDetailsApi } from "./homepage/movies/moviedetailsSlice";
 import { loginApi } from "./loginpage/loginSlice";
 import { searchApi } from "./search/searchSlice";
 import querySlice from "./querySlice"
-import { likesApi } from "./likes/likesSlice";
+//import { likesApi } from "./likes/likesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -27,7 +27,7 @@ export const store = configureStore({
     [movieDetailsApi.reducerPath]: movieDetailsApi.reducer,
     [loginApi.reducerPath]: loginApi.reducer,
     [searchApi.reducerPath]: searchApi.reducer,
-    [likesApi.reducerPath] : likesApi.reducer,
+    //[likesApi.reducerPath] : likesApi.reducer,
     query: querySlice, // Register the querySlice reducer under the 'query' key
   },
   middleware: (
@@ -40,7 +40,7 @@ export const store = configureStore({
       .concat(ratingsApi.middleware)
       .concat(movieDetailsApi.middleware)
       .concat(loginApi.middleware)
-      .concat(likesApi.middleware)
+      //.concat(likesApi.middleware)
       .concat(searchApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
 });
 
