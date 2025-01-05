@@ -6,18 +6,14 @@ import { SlArrowRight } from "react-icons/sl";
 import { LuPlus } from "react-icons/lu";
 import { IoCheckmark } from "react-icons/io5";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-// import {
-//   getGenres,
-//   getMovieCertification,
-//   getMovieDetails,
-// } from "@/app/pages/api/loginPage";
-// import { getRatings } from "@/app/pages/api/homePage";
 import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
 import {
   useGetMovieCertificationQuery,
   useGetMovieDetailsQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
-import { getSession } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
+import handleLikeBtn from "@/utils/handleLikeBtn";
 
 interface Genre {
   id: number;
@@ -75,39 +71,19 @@ function BigCard({
 
   const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
 
-  useEffect(() => {
-    const handleLike = async () => {
-      try {
-        const res = await fetch("/api/likes", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (res.status === 400) {
-          console.log("Error");
-        }
-
-        if (res.status === 200) {
-          const data = await res.json(); // Parse the JSON response
-          setLikes(data.likes);
-        }
-      } catch (error) {
-        console.error("Error adding like:", error);
-      }
-    };
-
-    handleLike();
-  }, []);
+  const dispatch = useDispatch();
+  const likesdb = useSelector((state: RootState) => state.likes.likes);
 
   useEffect(() => {
-    if (likes?.includes(id)) {
+    const Liked = likesdb.map((like) => like.id).includes(id);
+    //console.log("Liked", Liked);
+
+    if (Liked) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [likes]);
+  }, [id, likesdb]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
     if (movieDetails) {
@@ -145,56 +121,10 @@ function BigCard({
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
-  const handleLike = async (like: any) => {
-    const session = await getSession();
 
-    console.log("Session", session);
-    const userEmail = session?.user?.email; // ✅ Securely fetch userId from session
-
-    if (isLiked === false) {
-      try {
-        const res = await fetch("/api/likes", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userEmail, like }),
-        });
-
-        if (res.status === 400) {
-          console.log("Error");
-        }
-
-        if (res.status === 200) {
-          console.log("Like added:");
-          setIsLiked(true);
-        }
-      } catch (error) {
-        console.error("Error adding like:", error);
-      }
-    } else {
-      try {
-        const res = await fetch("/api/likes", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userEmail, like }),
-        });
-
-        if (res.status === 400) {
-          console.log("Error");
-        }
-
-        if (res.status === 200) {
-          console.log("Like removed");
-          setIsLiked(false);
-        }
-      } catch (error) {
-        console.error("Error adding like:", error);
-      }
-    }
-  };
+  const handleLike = async ()=>{
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id)
+  }
 
   return (
     <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[80vw] md:w-[90vw] h-[80vh] md:h-[71vh] rounded-3xl shadow-2xl">
@@ -358,7 +288,7 @@ function BigCard({
             </Button>
 
             <Button
-              onClick={() => handleLike(id)}
+              onClick={() => handleLike()}
               className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""
               }`}
@@ -378,3 +308,64 @@ function BigCard({
 }
 
 export default BigCard;
+
+
+
+
+
+
+  // const handleLike = async (id: number) => {
+  //   const session = await getSession();
+  //   const userEmail = session?.user?.email;
+
+  //   if (!userEmail) {
+  //     console.error("User not logged in!");
+  //     return;
+  //   }
+
+  //   if (isLiked === true) {
+  //     // REMOVE LIKE
+  //     try {
+  //       const res = await fetch("/api/likes", {
+  //         method: "DELETE",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ userEmail, like: id }),
+  //       });
+
+  //       if (res.status === 400) {
+  //         console.log("Error");
+  //       }
+
+  //       if (res.status === 200) {
+  //         setIsLiked(false);
+  //         const data = await getLike(id);
+  //         const likedContent = await data.json();
+  //         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
+  //       }
+  //     } catch (error) {
+  //       console.error("Error removing like:", error);
+  //     }
+  //   } else {
+  //     // ADD LIKE
+  //     try {
+  //       const res = await fetch("/api/likes", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ userEmail, like: id }),
+  //       });
+
+  //       if (res.status === 400) {
+  //         console.log("Error");
+  //       }
+
+  //       if (res.status === 200) {
+  //         setIsLiked(true);
+  //         const data = await getLike(id); // Fetch movie data by IDs
+  //         const likedContent = await data.json();
+  //         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
+  //       }
+  //     } catch (error) {
+  //       console.error("Error adding like:", error);
+  //     }
+  //   }
+  // };

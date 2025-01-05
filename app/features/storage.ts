@@ -21,3 +21,8 @@ const storage = typeof window !== 'undefined'
     : createNoopStorage();
 
 export default storage;
+
+
+// You're including this in your web app to persist data (like watchlists, preferences, and tokens) across page reloads using localStorage. 
+// It ensures SSR compatibility in Next.js by using a dummy storage when localStorage isn't available on the server, 
+// preventing errors. This helps maintain user data and preferences without breaking the app during server-side rendering.

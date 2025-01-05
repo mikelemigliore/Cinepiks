@@ -409,20 +409,13 @@ import { SlArrowRight } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import YoutubePlayer from "./YoutubePlayer";
 import { GoMute, GoUnmute } from "react-icons/go";
-import //getTeaserMovieVideo,
-//getTeaserSeriesVideo,
-//getTrailerVideo,
-"@/app/pages/api/homePage";
-
 import {
   useGetTeaserMovieVideoQuery,
   useGetTeaserSeriesVideoQuery,
 } from "@/app/features/homepage/movies/movieSlice";
-import { getSession } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
-import { likeMovie, unlikeMovie } from "@/app/features/dbSlice";
-import { getLike, getLikes } from "@/app/pages/api/likesPage";
+import handleLikeBtn from "@/utils/handleLikeBtn";
 
 interface Genre {
   id: number;
@@ -489,14 +482,12 @@ TeaserCardProps) {
 
   const likesdb = useSelector((state: RootState) => state.likes.likes);
 
-  //const storedLikesdb = JSON.parse(localStorage.getItem("likesdb") || "[]");
-  // Load data from localStorage when the component mounts (if store resets)
-  // console.log(storedLikesdb);
-  //console.log(likesdb);
-
   useEffect(() => {
     //console.log(expandCard);
     if (!expandCard) return;
+
+    console.log("likesdb", likesdb);
+
     const Liked = likesdb.map((like) => like.id).includes(id);
     //console.log("Liked", Liked);
 
@@ -566,75 +557,10 @@ TeaserCardProps) {
     return `${hours}h ${remainingMinutes}m`;
   };
 
-  const handleLike = async (id: number) => {
-    const session = await getSession();
-    const userEmail = session?.user?.email;
 
-    if (!userEmail) {
-      console.error("User not logged in!");
-      return;
-    }
-
-    if (isLiked === true) {
-      // REMOVE LIKE
-      try {
-        const res = await fetch("/api/likes", {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userEmail, like: id }),
-        });
-
-        if (res.status === 400) {
-          console.log("Error");
-        }
-
-        if (res.status === 200) {
-          const data = await getLike(id);
-          const likedContent = await data.json();
-          dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-          setIsLiked(false);
-        }
-        // if (res.ok) {
-        //   //setIsLiked(false);
-        //   const data = await getLike(id);
-        //   const likedContent = await data.json();
-        //   dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-        //   setIsLiked(false);
-        // }
-      } catch (error) {
-        console.error("Error removing like:", error);
-      }
-    } else {
-      // ADD LIKE
-      try {
-        const res = await fetch("/api/likes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userEmail, like: id }),
-        });
-
-        if (res.status === 400) {
-          console.log("Error");
-        }
-
-        if (res.status === 200) {
-          const data = await getLike(id); // Fetch movie data by IDs
-          const likedContent = await data.json();
-          dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-          setIsLiked(false);
-        }
-        // if (res.ok) {
-        //   //setIsLiked(true);
-        //   const data = await getLike(id); // Fetch movie data by IDs
-        //   const likedContent = await data.json();
-        //   dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-        //   setIsLiked(true);
-        // }
-      } catch (error) {
-        console.error("Error adding like:", error);
-      }
-    }
-  };
+  const handleLike = async ()=>{
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id)
+  }
 
   return (
     <div>
@@ -656,17 +582,8 @@ TeaserCardProps) {
             }  ${
               isLastThreeSlides || isLastOne
                 ? "md:group-hover:transform-origin-left md:group-hover:-translate-x-[10vw]"
-                : "" //"md:group-hover:transform-origin-left md:group-hover:translate-x-0"
+                : "" 
             }`}
-            // className={`relative bg-customColorCard w-full h-full shadow-xl md:rounded-3xl transition-all duration-500 ease-in-out transform ${
-            //   showContent && isDesktop
-            //     ? "md:w-[22vw] md:h-[44vh]"
-            //     : "md:w-[22vw] md:h-[44vh]"
-            // } group-hover:scale-105 md:group-hover:z-10 ${
-            //   isLastThreeSlides || isLastOne
-            //     ? "md:group-hover:transform-origin-left md:group-hover:-translate-x-[10vw]"
-            //     : "md:group-hover:transform-origin-left md:group-hover:translate-x-0"
-            // }`}
           >
             {/* Poster / Video */}
             <div>
@@ -770,7 +687,7 @@ TeaserCardProps) {
                     </Button>
                     <Button
                       type="submit"
-                      onClick={() => handleLike(id)}
+                      onClick={() => handleLike()}
                       // onClick={() => setIsLiked(!isLiked)}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold transition-transform duration-300 ease-in-out active:bg-white active:scale-95 ${
                         isLiked ? "bg-white/90 text-black" : ""
@@ -812,3 +729,63 @@ TeaserCardProps) {
 }
 
 export default TeaserCard;
+
+
+
+
+
+  // const handleLike = async (id: number) => {
+  //   const session = await getSession();
+  //   const userEmail = session?.user?.email;
+
+  //   if (!userEmail) {
+  //     console.error("User not logged in!");
+  //     return;
+  //   }
+
+  //   if (isLiked === true) {
+  //     // REMOVE LIKE
+  //     try {
+  //       const res = await fetch("/api/likes", {
+  //         method: "DELETE",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ userEmail, like: id }),
+  //       });
+
+  //       if (res.status === 400) {
+  //         console.log("Error");
+  //       }
+
+  //       if (res.status === 200) {
+  //         setIsLiked(false);
+  //         const data = await getLike(id);
+  //         const likedContent = await data.json();
+  //         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
+  //       }
+  //     } catch (error) {
+  //       console.error("Error removing like:", error);
+  //     }
+  //   } else {
+  //     // ADD LIKE
+  //     try {
+  //       const res = await fetch("/api/likes", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ userEmail, like: id }),
+  //       });
+
+  //       if (res.status === 400) {
+  //         console.log("Error");
+  //       }
+
+  //       if (res.status === 200) {
+  //         setIsLiked(true);
+  //         const data = await getLike(id); // Fetch movie data by IDs
+  //         const likedContent = await data.json();
+  //         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
+  //       }
+  //     } catch (error) {
+  //       console.error("Error adding like:", error);
+  //     }
+  //   }
+  // };

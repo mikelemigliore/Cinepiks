@@ -12,6 +12,7 @@ import { likesDBApi } from "./likes/likesSlice";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from './storage';  // Import the storage created above
 //import rootReducer from './features/store';
+//import storage from 'redux-persist/lib/storage'
 
 
 // Combine reducers (if you have multiple slices)
@@ -67,6 +68,5 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
 
 

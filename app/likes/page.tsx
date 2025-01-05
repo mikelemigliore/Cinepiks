@@ -146,19 +146,67 @@
 
 // export default LikesPage;
 
+interface Media {
+  adult: boolean;
+  backdrop_path: string;
+  belongs_to_collection: {
+      id: number;
+      name: string;
+      poster_path: string | null;
+      backdrop_path: string;
+  };
+  budget: number;
+  genres: {
+      id: number;
+      name: string;
+  }[];
+  homepage: string;
+  id: number;
+  imdb_id: string;
+  media_type: string;
+  origin_country: string[];
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: {
+      id: number;
+      name: string;
+      logo_path: string | null;
+      origin_country: string;
+  }[];
+  production_countries: {
+      iso_3166_1: string;
+      name: string;
+  }[];
+  release_date: string;
+  revenue: number;
+  runtime: number;
+  spoken_languages: {
+      iso_639_1: string;
+      name: string;
+  }[];
+  status: string;
+  tagline: string;
+  title?: string;
+  name?:string
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
+
+
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
-import { getLikes } from "../pages/api/likesPage";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../features/store";
-//import { refreshLikes, setLikes } from "../features/dbSlice";
-import { useGetLikesQuery } from "../features/likes/likesSlice";
-import { setLikes, setType } from "../features/dbSlice";
 
 function LikesPage() {
   //const searchParams = useSearchParams()
@@ -166,27 +214,11 @@ function LikesPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [watchlist, setWatchlist] = useState(true);
-  //const [likes, setLikes] = useState<any[]>([]);
-  const [watchlistItemSearch, setWatchlistItemSearch] = useState<any[]>([]);
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   const likesdb = useSelector((state: RootState) => state.likes.likes);
 
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     if (likesdb.length > 0) {
-  //       try {
-  //         setWatchlistItemSearch(likesdb); // Remove null entries
-  //       } catch (error) {
-  //         console.error("Error fetching movie details:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchMovieDetails();
-  // }, [likesdb]);
-  
 
   const handleGrid = () => {
     setGrid(!grid);

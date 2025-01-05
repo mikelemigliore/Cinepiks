@@ -25,6 +25,9 @@ export const POST = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
+    console.log(existingUser);
+    
+
     if (existingUser.likes.includes(like)) {
       return NextResponse.json("Already liked this content.");
     }

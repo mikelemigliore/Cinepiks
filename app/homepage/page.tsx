@@ -399,7 +399,7 @@ import {
   useGetPrimeMoviesQuery,
 } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
-import { setLikes, setType } from "../features/dbSlice";
+import { setLikes } from "../features/dbSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../features/store";
 import { getLikes } from "../pages/api/likesPage";
@@ -558,7 +558,7 @@ const genres = [
 
 function HomePage() {
   const dispatch = useDispatch();
-  const type = useSelector((state: RootState) => state.likes.type);
+  //const type = useSelector((state: RootState) => state.likes.type);
   const likesdb = useSelector((state: RootState) => state.likes.likes);
 
   // Fetch data using RTK Query
