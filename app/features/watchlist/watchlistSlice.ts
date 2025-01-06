@@ -1,22 +1,22 @@
-// likesApi.ts
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const time = 600;
 
-export const likesDBApi = createApi({
-  reducerPath: "likesDBApi",
+export const watchlistDBApi = createApi({
+  reducerPath: "watchlistDBApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for your app's backend
   endpoints: (builder) => ({
-    getLikes: builder.query({
-      query: () => `likes`, // Fetches from /api/likes endpoint in your app
+    getWatchlist: builder.query({
+      query: () => `watchlist`, // Fetches from /api/likes endpoint in your app
       keepUnusedDataFor: time, // Cache the data for 10 minutes
       transformResponse: (response:any) => {
-        //console.log("response.likes",response.likes);
+        //console.log(response.watchlist);
         
-        return response.likes
+        return response.watchlist
       }, // Transform the response to just the data
     }),
   }),
 });
 
-export const { useGetLikesQuery } = likesDBApi;
+export const { useGetWatchlistQuery } = watchlistDBApi;

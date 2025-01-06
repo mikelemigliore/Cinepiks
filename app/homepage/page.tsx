@@ -399,10 +399,12 @@ import {
   useGetPrimeMoviesQuery,
 } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
-import { setLikes } from "../features/dbSlice";
+import { setLikes, setWatchlists } from "../features/dbSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../features/store";
 import { getLikes } from "../pages/api/likesPage";
+import { useGetWatchlistQuery } from "../features/watchlist/watchlistSlice";
+import { getWatchlists } from "../pages/api/watchlistPage";
 
 const services = [
   { id: 8, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -559,10 +561,16 @@ const genres = [
 function HomePage() {
   const dispatch = useDispatch();
   //const type = useSelector((state: RootState) => state.likes.type);
-  const likesdb = useSelector((state: RootState) => state.likes.likes);
+  const likesdb = useSelector((state: RootState) => state.content.likes);
 
   // Fetch data using RTK Query
   const { data: likesDB, isLoading, error, isSuccess } = useGetLikesQuery({});
+
+
+  
+
+  const { data: watchlistDB, isSuccess: watchlistSucces } =
+    useGetWatchlistQuery({});
 
   // Fetch movie details when IDs are available
   useEffect(() => {
@@ -570,11 +578,25 @@ function HomePage() {
       if (isSuccess && likesDB.length > 0) {
         try {
           // Fetch full movie details for the given IDs
+
+          //const likesId = likesDB.map((item:any)=> item.id);
+
           const res = await getLikes(likesDB); // Fetch movie data by IDs
           const likedContent = await res.json();
-
           // Store the full movie details in Redux
           dispatch(setLikes(likedContent));
+        } catch (error) {
+          console.error("Error fetching movie details:", error);
+        }
+      }
+
+      if (watchlistSucces && watchlistDB.length > 0) {
+        try {
+          // Fetch full movie details for the given IDs
+          const res = await getWatchlists(watchlistDB); // Fetch movie data by IDs
+          const watchlistedContent = await res.json();
+          // Store the full movie details in Redux
+          dispatch(setWatchlists(watchlistedContent));
         } catch (error) {
           console.error("Error fetching movie details:", error);
         }
@@ -582,9 +604,26 @@ function HomePage() {
     };
 
     fetchMovieDetails();
-  }, [likesDB]); // Trigger only when the movie IDs are fetched
+  }, [likesDB, watchlistDB]); // Trigger only when the movie IDs are fetched
 
+  // // Fetch movie details when IDs are available
+  // useEffect(() => {
+  //   const fetchMovieDetails = async () => {
+  //     if (watchlistSucces && watchlistDB.length > 0) {
+  //       try {
+  //         // Fetch full movie details for the given IDs
+  //         const res = await getWatchlists(watchlistDB); // Fetch movie data by IDs
+  //         const watchlistedContent = await res.json();
+  //         // Store the full movie details in Redux
+  //         dispatch(setWatchlists(watchlistedContent));
+  //       } catch (error) {
+  //         console.error("Error fetching movie details:", error);
+  //       }
+  //     }
+  //   };
 
+  //   fetchMovieDetails();
+  // }, [watchlistDB]); // Trigger only when the movie IDs are fetched
 
   const {
     data: inTheaters,
@@ -620,7 +659,7 @@ function HomePage() {
   return (
     <div className="relative">
       <div>
-        <MainCarousel medias={inTheaters || []} />
+        <MainCarousel medias={inTheaters || [] } mediaType={"movie"} />
         <div className="relative -mt-[26rem] md:-mt-[9rem]">
           <div className="relative left-0 my-12 right-0 z-40">
             <MovieSwiper

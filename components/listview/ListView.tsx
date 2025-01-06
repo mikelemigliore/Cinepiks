@@ -674,11 +674,7 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { FaPlay } from "react-icons/fa";
 import YoutubeTrailerPlayer from "../trailer/YoutubeTrailerPlayer";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
@@ -694,6 +690,7 @@ import { useGetRatingsQuery } from "@/app/features/ratingsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
+import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 
 interface GenresType {
   id: number;
@@ -775,7 +772,7 @@ function ListView({
   overview,
   backdrop_path,
 }: ListViewProp) {
-  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({}); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
+  const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
   const [isLiked, setIsLiked] = useState(false);
   const [scores, setScores] = useState<Record<number, number | null>>({}); //Purpose: This state variable, scores, keeps track of the rating (or score) for each movie.
   //Type: Record<number, number | null> means scores is an object where each key is a movie ID (number) and each value is a number representing the movie’s score or null if there’s no score yet.
@@ -813,16 +810,30 @@ function ListView({
   const { data: movieTrailer } = useGetMovieTrailerQuery(id || 0);
 
   const dispatch = useDispatch();
-  const likesdb = useSelector((state: RootState) => state.likes.likes);
+  const likesdb = useSelector((state: RootState) => state.content.likes);
+
+  const watchlistdb = useSelector(
+    (state: RootState) => state.content.watchlist
+  );
 
   useEffect(() => {
     const Liked = likesdb.map((like) => like.id).includes(id);
+
+    const Watchlisted = watchlistdb
+      .map((watchlist) => watchlist.id)
+      .includes(id);
     //console.log("Liked", Liked);
 
     if (Liked) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
+    }
+
+    if (Watchlisted) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
     }
   }, [id]); // Run only once when the component mounts or id changes
 
@@ -871,15 +882,12 @@ function ListView({
 
   const handlePlay = () => {};
 
-  const handleAdded = (movieId: number) => {
-    setIsAdded((prevAdded) => ({
-      ...prevAdded,
-      [movieId]: !prevAdded[movieId], // Toggle the like state for the specific movie
-    }));
+  const handleLike = async () => {
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id, media_type);
   };
 
-  const handleLike = async () => {
-    handleLikeBtn(dispatch, setIsLiked, isLiked, id);
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, media_type);
   };
 
   const handleScoreChange = (movieId: number, newValue: number | null) => {
@@ -894,7 +902,6 @@ function ListView({
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
   };
-
 
   return (
     <div
@@ -955,13 +962,13 @@ function ListView({
                   ""
                 ) : (
                   <Button
-                    onClick={() => handleAdded(id)}
+                    onClick={() => handleAdded()}
                     className={`h-10 w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                      isAdded[id] ? "bg-white/90 text-black font-bold" : ""
+                      isAdded ? "bg-white/90 text-black font-bold" : ""
                     }`}
                   >
                     Watchlist
-                    {isAdded[id] ? (
+                    {isAdded ? (
                       <IoCheckmark className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
                     ) : (
                       <LuPlus className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />

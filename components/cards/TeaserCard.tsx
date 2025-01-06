@@ -416,6 +416,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
+import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 
 interface Genre {
   id: number;
@@ -480,7 +481,11 @@ TeaserCardProps) {
 
   const dispatch = useDispatch();
 
-  const likesdb = useSelector((state: RootState) => state.likes.likes);
+  const likesdb = useSelector((state: RootState) => state.content.likes);
+
+  const watchlistdb = useSelector(
+    (state: RootState) => state.content.watchlist
+  );
 
   useEffect(() => {
     //console.log(expandCard);
@@ -489,12 +494,22 @@ TeaserCardProps) {
     console.log("likesdb", likesdb);
 
     const Liked = likesdb.map((like) => like.id).includes(id);
+
+    const Watchlisted = watchlistdb
+      .map((watchlist) => watchlist.id)
+      .includes(id);
     //console.log("Liked", Liked);
 
     if (Liked) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
+    }
+
+    if (Watchlisted) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
     }
   }, [expandCard, id]); // Run only once when the component mounts or id changes
 
@@ -557,10 +572,13 @@ TeaserCardProps) {
     return `${hours}h ${remainingMinutes}m`;
   };
 
+  const handleLike = async () => {
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id, mediaType);
+  };
 
-  const handleLike = async ()=>{
-    handleLikeBtn(dispatch, setIsLiked, isLiked, id)
-  }
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  };
 
   return (
     <div>
@@ -582,7 +600,7 @@ TeaserCardProps) {
             }  ${
               isLastThreeSlides || isLastOne
                 ? "md:group-hover:transform-origin-left md:group-hover:-translate-x-[10vw]"
-                : "" 
+                : ""
             }`}
           >
             {/* Poster / Video */}
@@ -674,7 +692,7 @@ TeaserCardProps) {
                 <div className="">
                   <div className="space-x-[0.5vw]">
                     <Button
-                      onClick={() => setIsAdded(!isAdded)}
+                      onClick={() => handleAdded()}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 ${
                         isAdded ? "bg-white/90 text-black font-bold" : ""
                       }`}
@@ -730,62 +748,58 @@ TeaserCardProps) {
 
 export default TeaserCard;
 
+// const handleLike = async (id: number) => {
+//   const session = await getSession();
+//   const userEmail = session?.user?.email;
 
+//   if (!userEmail) {
+//     console.error("User not logged in!");
+//     return;
+//   }
 
+//   if (isLiked === true) {
+//     // REMOVE LIKE
+//     try {
+//       const res = await fetch("/api/likes", {
+//         method: "DELETE",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ userEmail, like: id }),
+//       });
 
+//       if (res.status === 400) {
+//         console.log("Error");
+//       }
 
-  // const handleLike = async (id: number) => {
-  //   const session = await getSession();
-  //   const userEmail = session?.user?.email;
+//       if (res.status === 200) {
+//         setIsLiked(false);
+//         const data = await getLike(id);
+//         const likedContent = await data.json();
+//         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
+//       }
+//     } catch (error) {
+//       console.error("Error removing like:", error);
+//     }
+//   } else {
+//     // ADD LIKE
+//     try {
+//       const res = await fetch("/api/likes", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ userEmail, like: id }),
+//       });
 
-  //   if (!userEmail) {
-  //     console.error("User not logged in!");
-  //     return;
-  //   }
+//       if (res.status === 400) {
+//         console.log("Error");
+//       }
 
-  //   if (isLiked === true) {
-  //     // REMOVE LIKE
-  //     try {
-  //       const res = await fetch("/api/likes", {
-  //         method: "DELETE",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ userEmail, like: id }),
-  //       });
-
-  //       if (res.status === 400) {
-  //         console.log("Error");
-  //       }
-
-  //       if (res.status === 200) {
-  //         setIsLiked(false);
-  //         const data = await getLike(id);
-  //         const likedContent = await data.json();
-  //         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-  //       }
-  //     } catch (error) {
-  //       console.error("Error removing like:", error);
-  //     }
-  //   } else {
-  //     // ADD LIKE
-  //     try {
-  //       const res = await fetch("/api/likes", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ userEmail, like: id }),
-  //       });
-
-  //       if (res.status === 400) {
-  //         console.log("Error");
-  //       }
-
-  //       if (res.status === 200) {
-  //         setIsLiked(true);
-  //         const data = await getLike(id); // Fetch movie data by IDs
-  //         const likedContent = await data.json();
-  //         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-  //       }
-  //     } catch (error) {
-  //       console.error("Error adding like:", error);
-  //     }
-  //   }
-  // };
+//       if (res.status === 200) {
+//         setIsLiked(true);
+//         const data = await getLike(id); // Fetch movie data by IDs
+//         const likedContent = await data.json();
+//         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
+//       }
+//     } catch (error) {
+//       console.error("Error adding like:", error);
+//     }
+//   }
+// };

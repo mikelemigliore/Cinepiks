@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
+import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 
 interface Genre {
   id: number;
@@ -72,18 +73,36 @@ function BigCard({
   const { data: movieCertification } = useGetMovieCertificationQuery(id || 0);
 
   const dispatch = useDispatch();
-  const likesdb = useSelector((state: RootState) => state.likes.likes);
+  const likesdb = useSelector((state: RootState) => state.content.likes);
 
+  const watchlistdb = useSelector(
+    (state: RootState) => state.content.watchlist
+  );
+
+  //Temporarly commented because it was causing an error
   useEffect(() => {
+    //console.log(likesdb[0].id);
+    
     const Liked = likesdb.map((like) => like.id).includes(id);
-    //console.log("Liked", Liked);
-
     if (Liked) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [id, likesdb]); // Run only once when the component mounts or id changes
+  }, [id, likesdb]); 
+
+  useEffect(() => {
+    const Watchlisted = watchlistdb
+      .map((watchlist) => watchlist.id)
+      .includes(id);
+    //console.log("Liked", Liked);
+
+    if (Watchlisted) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
+    }
+  }, [id, watchlistdb]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
     if (movieDetails) {
@@ -121,10 +140,13 @@ function BigCard({
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
+  const handleLike = async () => {
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id, mediaType);
+  };
 
-  const handleLike = async ()=>{
-    handleLikeBtn(dispatch, setIsLiked, isLiked, id)
-  }
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id,mediaType);
+  };
 
   return (
     <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[80vw] md:w-[90vw] h-[80vh] md:h-[71vh] rounded-3xl shadow-2xl">
@@ -274,7 +296,7 @@ function BigCard({
             </Link>
 
             <Button
-              onClick={() => setIsAdded(!isAdded)}
+              onClick={() => handleAdded()}
               className={`h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
               }`}
@@ -309,63 +331,58 @@ function BigCard({
 
 export default BigCard;
 
+// const handleLike = async (id: number) => {
+//   const session = await getSession();
+//   const userEmail = session?.user?.email;
 
+//   if (!userEmail) {
+//     console.error("User not logged in!");
+//     return;
+//   }
 
+//   if (isLiked === true) {
+//     // REMOVE LIKE
+//     try {
+//       const res = await fetch("/api/likes", {
+//         method: "DELETE",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ userEmail, like: id }),
+//       });
 
+//       if (res.status === 400) {
+//         console.log("Error");
+//       }
 
+//       if (res.status === 200) {
+//         setIsLiked(false);
+//         const data = await getLike(id);
+//         const likedContent = await data.json();
+//         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
+//       }
+//     } catch (error) {
+//       console.error("Error removing like:", error);
+//     }
+//   } else {
+//     // ADD LIKE
+//     try {
+//       const res = await fetch("/api/likes", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ userEmail, like: id }),
+//       });
 
-  // const handleLike = async (id: number) => {
-  //   const session = await getSession();
-  //   const userEmail = session?.user?.email;
+//       if (res.status === 400) {
+//         console.log("Error");
+//       }
 
-  //   if (!userEmail) {
-  //     console.error("User not logged in!");
-  //     return;
-  //   }
-
-  //   if (isLiked === true) {
-  //     // REMOVE LIKE
-  //     try {
-  //       const res = await fetch("/api/likes", {
-  //         method: "DELETE",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ userEmail, like: id }),
-  //       });
-
-  //       if (res.status === 400) {
-  //         console.log("Error");
-  //       }
-
-  //       if (res.status === 200) {
-  //         setIsLiked(false);
-  //         const data = await getLike(id);
-  //         const likedContent = await data.json();
-  //         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-  //       }
-  //     } catch (error) {
-  //       console.error("Error removing like:", error);
-  //     }
-  //   } else {
-  //     // ADD LIKE
-  //     try {
-  //       const res = await fetch("/api/likes", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ userEmail, like: id }),
-  //       });
-
-  //       if (res.status === 400) {
-  //         console.log("Error");
-  //       }
-
-  //       if (res.status === 200) {
-  //         setIsLiked(true);
-  //         const data = await getLike(id); // Fetch movie data by IDs
-  //         const likedContent = await data.json();
-  //         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-  //       }
-  //     } catch (error) {
-  //       console.error("Error adding like:", error);
-  //     }
-  //   }
-  // };
+//       if (res.status === 200) {
+//         setIsLiked(true);
+//         const data = await getLike(id); // Fetch movie data by IDs
+//         const likedContent = await data.json();
+//         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
+//       }
+//     } catch (error) {
+//       console.error("Error adding like:", error);
+//     }
+//   }
+// };

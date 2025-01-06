@@ -622,6 +622,10 @@ import {
   useGetSeriesRuntimeQuery,
   useGetSeriesSocialsQuery,
 } from "@/app/features/homepage/series/seriesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
+import handleLikeBtn from "@/utils/handleLikeBtn";
+import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 
 interface SeriesProp {
   id: number;
@@ -700,8 +704,8 @@ MainDetailsProps) {
   const [homepage, setHomePage] = useState<string | null>(null);
   const [director, setDirector] = useState();
   const [single, setSingleMedia] = useState(true);
-  const [isAdded, setIsAdded] = useState<Record<number, boolean>>({});
-  const [isLiked, setIsLiked] = useState<Record<number, boolean>>({});
+  const [isAdded, setIsAdded] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [isListView, setIsListView] = useState(true);
   const [value, setValue] = React.useState<number | null>(0);
   const [imdbIdSeries, setImdbIdSeries] = useState("");
@@ -725,6 +729,20 @@ MainDetailsProps) {
   const { data: seriesRuntime } = useGetSeriesRuntimeQuery(id || 0);
 
   const { data: seriesSocials } = useGetSeriesSocialsQuery(id || 0);
+
+    const dispatch = useDispatch();
+    const likesdb = useSelector((state: RootState) => state.content.likes);
+  
+    useEffect(() => {
+      const Liked = likesdb.map((like) => like.id).includes(id);
+      //console.log("Liked", Liked);
+  
+      if (Liked) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
+      }
+    }, [id, likesdb]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
     if (type === "movie") {
@@ -795,19 +813,14 @@ MainDetailsProps) {
   }, [movieDetails, rating, seriesDetails, seriesCertification, seriesRuntime, seriesSocials]);
 
 
-  const handleAdded = (movieId: number) => {
-    setIsAdded((prevAdded) => ({
-      ...prevAdded,
-      [movieId]: !prevAdded[movieId], // Toggle the like state for the specific movie
-    }));
+  const handleLike = async ()=>{
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id, type)
+  }
+
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id,type);
   };
 
-  const handleLike = (movieId: number) => {
-    setIsLiked((prevLiked) => ({
-      ...prevLiked,
-      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
-    }));
-  };
 
   const handleValue = (newValue: number | null) => {
     if (newValue !== null) {
@@ -880,13 +893,13 @@ MainDetailsProps) {
 
           <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh]">
             <Button
-              onClick={() => handleAdded(media[0].id)}
+              onClick={() => handleAdded()}
               className={`mr-[0.5vw] h-10 w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                isAdded[media[0].id] ? "bg-white/90 text-black font-bold" : ""
+                isAdded ? "bg-white/90 text-black font-bold" : ""
               }`}
             >
               Watchlist
-              {isAdded[media[0].id] ? (
+              {isAdded ? (
                 <IoCheckmark className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
               ) : (
                 <LuPlus className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
@@ -915,13 +928,13 @@ MainDetailsProps) {
             </Dialog>
 
             <Button
-              onClick={() => handleLike(media[0].id)}
+              onClick={() => handleLike()}
               className={`ml-[0.5vw] flex justify-center items-center h-10 w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                isLiked[media[0].id] ? "bg-white/90 text-black font-bold" : ""
+                isLiked ? "bg-white/90 text-black font-bold" : ""
               }`}
             >
               Like
-              {isLiked[media[0].id] ? (
+              {isLiked ? (
                 <AiFillLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
               ) : (
                 <AiOutlineLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />

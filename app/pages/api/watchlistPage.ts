@@ -1,7 +1,6 @@
-export async function getLikes(ids: any[]) {
+export async function getWatchlists(ids: any[]) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-  //console.log("IDS", ids);
   const moviesId = ids
     .filter((item: any) => item.type === "movie")
     .map((item) => item.id);
@@ -10,7 +9,7 @@ export async function getLikes(ids: any[]) {
     .map((item) => item.id);
 
   try {
-    let responses:any = [];
+    let responses: any = [];
 
     if (moviesId.length > 0) {
       responses = responses.concat(
@@ -31,12 +30,11 @@ export async function getLikes(ids: any[]) {
         )
       );
     }
-
     const content = responses.length
-      ? await Promise.all(responses.map((res:any) => res.json()))
+      ? await Promise.all(responses.map((res: any) => res.json()))
       : [];
 
-    //console.log("Content",content);
+    //console.log(content);
 
     const newData = content.map((item: any) => ({
       ...item,
@@ -54,7 +52,7 @@ export async function getLikes(ids: any[]) {
   }
 }
 
-export async function getLike(id: number, mediaType: string) {
+export async function getWatchlist(id: number, mediaType: string) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
   try {
     let responses;
@@ -68,7 +66,6 @@ export async function getLike(id: number, mediaType: string) {
         `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}`
       );
     }
-
     const content = await responses.json();
 
     //console.log(content);

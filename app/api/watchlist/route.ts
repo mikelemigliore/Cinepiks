@@ -6,14 +6,12 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export const POST = async (request: any) => {
-  const { like, userEmail, mediaType } = await request.json(); // ✅ Expect userId from the frontend
-
-  //console.log(mediaType);
+  const { watchlist, userEmail,mediaType } = await request.json(); // ✅ Expect userId from the frontend
 
   await connect();
 
   try {
-    if (!like || !userEmail) {
+    if (!watchlist || !userEmail) {
       return NextResponse.json(
         { message: "User ID and like data are required." },
         { status: 400 }
@@ -23,21 +21,18 @@ export const POST = async (request: any) => {
     // ✅ Ensure the like is added for the correct user
     const existingUser = await User.findOne({ email: userEmail });
 
-    //console.log("existingUser",existingUser);
-    
-
     if (!existingUser) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
+    //console.log(existingUser);
     // ✅ Check if the like already exists using `some()`
-    const existingLike = existingUser.likes.some(
-      (likeObj: any) => likeObj.id === like
+    const existingWatchlist = existingUser.watchlist.some(
+      (watchlistObj: any) => watchlistObj.id === watchlist
     );
-
-    //console.log("existingLike",existingLike);
     
-    if (existingLike) {
+
+    if (existingWatchlist) {
       return NextResponse.json("Already liked this content.");
     }
 
@@ -45,23 +40,19 @@ export const POST = async (request: any) => {
       { email: userEmail }, // ✅ Update only this specific user
       {
         $push: {
-          likes: {
-            id: like,
+          watchlist: {
+            id: watchlist,
             type: mediaType,
           },
         },
       } // ✅ Add the like to the user's array
     );
 
-    //console.log("result",result);
-    
-
     return NextResponse.json(
       { message: "Like added successfully.", result },
       { status: 200 }
     );
   } catch (error: any) {
-    console.error("Error adding like:", error); // Log the full error
     return NextResponse.json(
       { message: "Error adding like.", error: error.message },
       { status: 500 }
@@ -70,6 +61,8 @@ export const POST = async (request: any) => {
 };
 
 export const GET = async (request: any) => {
+
+  //console.log("watchlistt");
   await connect(); // Ensure the database is connected
 
   try {
@@ -81,10 +74,10 @@ export const GET = async (request: any) => {
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const user = await User.findOne({ email: userEmail }, "likes");
-    const likes = user.likes;
+    const user = await User.findOne({ email: userEmail }, "watchlist");
+    const watchlist = user.watchlist;
 
-    //console.log("likes",likes);
+    //console.log("watchlist",watchlist);
     
 
     if (!user) {
@@ -92,7 +85,7 @@ export const GET = async (request: any) => {
     }
 
     return NextResponse.json(
-      { message: "Likes retrieved successfully.", likes },
+      { message: "Likes retrieved successfully.", watchlist },
       { status: 200 }
     );
   } catch (error: any) {
@@ -104,12 +97,12 @@ export const GET = async (request: any) => {
 };
 
 export const DELETE = async (request: any) => {
-  const { like, userEmail, mediaType } = await request.json();
+  const { watchlist, userEmail,mediaType } = await request.json();
 
   await connect();
 
   try {
-    if (!like || !userEmail) {
+    if (!watchlist || !userEmail) {
       return NextResponse.json(
         { message: "User ID and like data are required." },
         { status: 400 }
@@ -126,8 +119,8 @@ export const DELETE = async (request: any) => {
       { email: userEmail },
       {
         $pull: {
-          likes: {
-            id: like,
+          watchlist: {
+            id: watchlist,
             type: mediaType,
           },
         },

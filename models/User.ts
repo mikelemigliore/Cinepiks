@@ -2,6 +2,25 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+// Subschema for a single address object
+
+const likesSchema = new mongoose.Schema({
+
+  id: Number,
+
+  type: String,
+
+});
+
+const watchlistSchema = new mongoose.Schema({
+
+  id: Number,
+
+  type: String,
+
+});
+
+
 const userSchema = new Schema(
   {
     username: {
@@ -23,11 +42,12 @@ const userSchema = new Schema(
       required: false,
     },
     likes: {
-      type: [
-        {
-          type: Schema.Types.Mixed, // Allows any type of data in the array
-        },
-      ],
+      type: [likesSchema],
+      default: [],    // Initialize as an empty array
+      required: false // Indicates this field is optional
+    },
+    watchlist: {
+      type: [watchlistSchema],
       default: [], // Initialize as an empty array
       required: false,
     },

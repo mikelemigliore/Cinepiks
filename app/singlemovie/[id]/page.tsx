@@ -18,6 +18,8 @@ import {
   useGetMovieTrailerQuery,
   useGetMovieCastQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
 
 const movie = [
   {
@@ -78,6 +80,8 @@ function SingleMoviePage() {
   const { data: movieTrailer } = useGetMovieTrailerQuery(Id || 0);
 
   const { data: movieCast } = useGetMovieCastQuery(Id || 0);
+
+
 
   useEffect(() => {
     if (movieDetails) {

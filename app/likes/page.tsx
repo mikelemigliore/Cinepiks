@@ -217,7 +217,10 @@ function LikesPage() {
 
   //const dispatch = useDispatch();
 
-  const likesdb = useSelector((state: RootState) => state.likes.likes);
+  const likesdb = useSelector((state: RootState) => state.content.likes);
+
+ // console.log("LLLLLL",likesdb);
+  
 
 
   const handleGrid = () => {

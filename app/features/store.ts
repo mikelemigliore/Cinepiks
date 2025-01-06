@@ -10,6 +10,7 @@ import querySlice from "./querySlice";
 import dbSlice from "./dbSlice";
 import { likesDBApi } from "./likes/likesSlice";
 import { persistReducer, persistStore } from 'redux-persist';
+import { watchlistDBApi } from "./watchlist/watchlistSlice";
 import storage from './storage';  // Import the storage created above
 //import rootReducer from './features/store';
 //import storage from 'redux-persist/lib/storage'
@@ -46,7 +47,8 @@ export const store = configureStore({
     [loginApi.reducerPath]: loginApi.reducer,
     [searchApi.reducerPath]: searchApi.reducer,
     [likesDBApi.reducerPath] : likesDBApi.reducer,
-    likes: persistedReducer,
+    [watchlistDBApi.reducerPath]: watchlistDBApi.reducer,
+    content: persistedReducer,
     query: querySlice, // Register the querySlice reducer under the 'query' key
   },
   middleware: (
@@ -62,6 +64,7 @@ export const store = configureStore({
       .concat(movieDetailsApi.middleware)
       .concat(loginApi.middleware)
       .concat(likesDBApi.middleware)
+      .concat(watchlistDBApi.middleware)
       .concat(searchApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
 });
 // ✅ Export the store and persistor
