@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
 import SeriesTracker from "@/components/singlePageComps/SeriesTracker";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   useGetSeriesDetailsQuery,
   useGetTrailerSeriesVideoQuery,
@@ -21,6 +21,11 @@ import MoreInfo from "@/components/moreinfo/MoreInfo";
 import CastSwiper from "@/components/carousel/CastSwiper";
 import MoreLikeThisSwiper from "@/components/carousel/MoreLikeThisSwiper";
 import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
+import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setSeasonData } from "@/app/features/dbSlice";
+import handleSeasonBtn from "@/utils/handleSeasonBtn";
+import { RootState } from "@/app/features/store";
 
 const series = [
   {
@@ -54,10 +59,11 @@ type FilterKey = "all" | "buy" | "rent" | "subscription";
 
 function SingleSeriesPage() {
   const [selectedSeason, setSelectedSeason] = useState<number>(1); // Start with season 1
-  const [watchedEpisodes, setWatchedEpisodes] = useState<{
-    [episodeNumber: number]: boolean; //defines the type of the state, which is an object with numeric keys (episodeNumber) and boolean values.
-    //The initial state is set to an empty object {}, meaning no episodes are marked as watched initially.
-  }>({});
+  // const [watchedEpisodes, setWatchedEpisodes] = useState<{
+  //   [episodeNumber: number]: boolean; //defines the type of the state, which is an object with numeric keys (episodeNumber) and boolean values.
+  //   //The initial state is set to an empty object {}, meaning no episodes are marked as watched initially.
+  // }>({});
+  const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
 
   //const [videoKey4, setVideoKey4] = useState("BAQvCB3Fnm0");
   const [autoplay, setAutoplay] = useState(true);
@@ -122,6 +128,44 @@ function SingleSeriesPage() {
     Id,
     selectedSeason,
   });
+
+  const dispatch = useDispatch();
+
+  const seasondb = useSelector((state: RootState) => state.content.season);
+
+  const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+
+  // Fetch movie details when IDs are available
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      if (seasonSucces && seasonDB.length > 0) {
+        try {
+          console.log("seasonDB", seasonDB);
+
+          const data = seasonDB.filter((item: any) => item.seriesId === Id);
+
+          if (data.length > 0) {
+            const res = data
+              .filter((item: any) => item.seasonNumber === selectedSeason)
+              .map((item: any) => item.episodes);
+
+            console.log("res", res[0]);
+
+            dispatch(setSeasonData(seasonDB));
+            setWatchedEpisodes(res[0] || []); // ✅ Ensuring an empty object as fallback
+          } else {
+            setWatchedEpisodes([]); // ✅ Empty state fallback
+          }
+        } catch (error) {
+          console.error("Error fetching movie details:", error);
+        }
+      }
+    };
+
+    fetchMovieDetails();
+  }, [Id,selectedSeason]); // Trigger only when the movie IDs are fetched
+
+  //console.log("watchedEpisodes", watchedEpisodes);
 
   useEffect(() => {
     if (seriesDetails) {
@@ -236,29 +280,44 @@ function SingleSeriesPage() {
     setHightolow(false);
   };
 
+  // const handleEpisodeWatched = (episodeNumber: number) => {
+  //   setWatchedEpisodes((prevWatched) => ({
+  //     //Calls setWatchedEpisodes, the function that updates the watchedEpisodes state.
+  //     //The function takes prevWatched as an argument, which represents the previous state of watchedEpisodes.
+  //     ...prevWatched, //Uses the spread operator ... to copy all previous entries in prevWatched to the new object. This ensures any existing data in the state is retained.
+  //     [episodeNumber]: !prevWatched[episodeNumber], //Adds or updates the entry for episodeNumber in watchedEpisodes.
+  //     // !prevWatched[episodeNumber] toggles the current value for this episode:
+  //     // If it was true (watched), it becomes false.
+  //     // If it was false or undefined (not watched), it becomes true
+  //   }));
+  // };
   const handleEpisodeWatched = (episodeNumber: number) => {
-    setWatchedEpisodes((prevWatched) => ({
-      //Calls setWatchedEpisodes, the function that updates the watchedEpisodes state.
-      //The function takes prevWatched as an argument, which represents the previous state of watchedEpisodes.
-      ...prevWatched, //Uses the spread operator ... to copy all previous entries in prevWatched to the new object. This ensures any existing data in the state is retained.
-      [episodeNumber]: !prevWatched[episodeNumber], //Adds or updates the entry for episodeNumber in watchedEpisodes.
-      // !prevWatched[episodeNumber] toggles the current value for this episode:
-      // If it was true (watched), it becomes false.
-      // If it was false or undefined (not watched), it becomes true
-    }));
+    setWatchedEpisodes(
+      (prev) =>
+        prev.includes(episodeNumber)
+          ? prev.filter((ep) => ep !== episodeNumber) // If already watched, remove it
+          : [...prev, episodeNumber] // If not watched, add it
+    );
   };
 
   const handleOnValueChange = (value: any) => {
     setSelectedSeason(Number(value));
-    setWatchedEpisodes({});
+    setWatchedEpisodes([]);
   };
 
   const seasonEpisodes = seasons[selectedSeason - 1]?.episodes || []; // Use an empty array as a fallback
-  const progressValue = //retrieves an array of all the values in the watchedEpisodes object. Since watchedEpisodes stores episodes as keys with boolean values
-    //(true for watched, false for not watched), this array contains only true and false values
-    (Object.values(watchedEpisodes).filter(Boolean).length / //filters the array, keeping only true values. This effectively creates an array of episodes that have been watched.
-      seasonEpisodes.length) * //counts the number of true values, which represents the total number of watched episodes.
-    100;
+  // const progressValue = //retrieves an array of all the values in the watchedEpisodes object. Since watchedEpisodes stores episodes as keys with boolean values
+  //   //(true for watched, false for not watched), this array contains only true and false values
+  //   (Object.values(watchedEpisodes).filter(Boolean).length / //filters the array, keeping only true values. This effectively creates an array of episodes that have been watched.
+  //     seasonEpisodes.length) * //counts the number of true values, which represents the total number of watched episodes.
+  //   100;
+
+  const progressValue =
+    watchedEpisodes && seasonEpisodes?.length
+      ? (Object.values(watchedEpisodes).filter(Boolean).length /
+          seasonEpisodes.length) *
+        100
+      : 0; // Fallback value if data is not available
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -309,6 +368,7 @@ function SingleSeriesPage() {
               episodes={seasonEpisodes}
               watchedEpisodes={watchedEpisodes}
               onEpisodeWatched={handleEpisodeWatched}
+              Id={Id}
             />
             <div className="flex gap-[6vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
               <div className="h-[2vw]">
@@ -349,21 +409,21 @@ function SingleSeriesPage() {
             </div>
             <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[76vw] ml-[13vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
-              <MoreInfo id={Id} type={type}/>
+              <MoreInfo id={Id} type={type} />
             </div>
             <div className="mt-[4vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
             <div className="max-w-[75vw] ml-[13vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
             <div className="mt-[6vw]">
-            <MoreLikeThisSwiper
+              <MoreLikeThisSwiper
                 //collection={wholeCollection}
                 id={Id}
                 mediaType={"series"}
               />
             </div>
             <div>
-            <RecommendationSwiper id={Id} mediaType={"series"} />
+              <RecommendationSwiper id={Id} mediaType={"series"} />
             </div>
           </div>
         </div>

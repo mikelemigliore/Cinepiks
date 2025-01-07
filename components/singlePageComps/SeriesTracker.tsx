@@ -45,6 +45,10 @@ import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import StarRating from "@/components/starRating/StarRating";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
+import { setSeasonData } from "@/app/features/dbSlice";
+import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
+import { useDispatch } from "react-redux";
+import handleSeasonBtn from "@/utils/handleSeasonBtn";
 
 interface Episode {
   id: string;
@@ -54,7 +58,7 @@ interface Episode {
   score: string;
   img: string;
   description: string;
-  date:string
+  date: string;
 }
 
 interface SeasonsProp {
@@ -68,8 +72,9 @@ interface SeriesTrackerProp {
   seasons: SeasonsProp[];
   progressValue: number;
   episodes: Episode[];
-  watchedEpisodes: { [episodeNumber: number]: boolean };
+  watchedEpisodes: number[];
   onEpisodeWatched: (episodeNumber: number) => void;
+  Id:number
 }
 
 function SeriesTracker({
@@ -80,7 +85,38 @@ function SeriesTracker({
   episodes,
   watchedEpisodes,
   onEpisodeWatched,
+  Id
 }: SeriesTrackerProp) {
+  const dispatch = useDispatch();
+
+  const { data: seasonDataDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+
+  // Fetch movie details when IDs are available
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      if (seasonSucces && seasonDataDB.length > 0) {
+        try {
+          //const res = await getLikes(seasonDataDB); // Fetch movie data by IDs
+          //const likedContent = await res.json();
+          // Store the full movie details in Redux
+          //console.log("seasonDataDB", seasonDataDB);
+
+          dispatch(setSeasonData(seasonDataDB));
+        } catch (error) {
+          console.error("Error fetching movie details:", error);
+        }
+      } else {
+        // console.log("NOT YET");
+        // console.log(selectedSeason);
+        //console.log(watchedEpisodes);
+      }
+    };
+
+    fetchMovieDetails();
+  }, [selectedSeason]); // Trigger only when the movie IDs are fetched
+
+
+
   return (
     <div className="ml-[13vw] max-w-[75vw] mt-[4vw] mb-[2vw]">
       <div className="flex justify-between mb-[1.5vw]">
@@ -124,6 +160,8 @@ function SeriesTracker({
       </div>
       <div className="">
         <CarouselEpisode
+        Id={Id}
+        selectedSeason={selectedSeason}
           episodes={episodes}
           watchedEpisodes={watchedEpisodes}
           onEpisodeWatched={onEpisodeWatched}

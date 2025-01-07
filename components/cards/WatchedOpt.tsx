@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { IoCheckmark } from "react-icons/io5";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { SlArrowRight } from "react-icons/sl";
 import StarRating from "../starRating/StarRating";
+import handleWatchedBtn from "@/utils/handleWatchedBtn";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
 
 const watchedItem = [
   {
@@ -19,22 +22,45 @@ const watchedItem = [
 interface WatchedOptProp {
   src: string;
   watchlistOptions?: boolean;
-  type?: string; // Define possible values
+  mediaType: string; // Define possible values
   watchedOptions?: boolean;
+  id: number;
 }
 
 function WatchedOpt({
   src,
   watchlistOptions,
-  type,
+  mediaType,
   watchedOptions,
+  id,
 }: WatchedOptProp) {
   const [expand, setExpand] = useState(false);
   const [expandRemove, setExpandRemove] = useState(false);
   const [expandView, setExpandView] = useState(false);
   const [scores, setScores] = useState<Record<number, number | null>>({});
+  const [isAdded, setIsAdded] = useState(true);
+  const [value, setValue] = React.useState<number>(0);
 
-  const href = type === "movie" ? "/singlemovie" : "/singleseries";
+  const dispatch = useDispatch();
+
+  const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
+
+  const scoredb = useSelector((state: RootState) => state.content.score);
+
+  useEffect(() => {
+    const Score = scoredb.map((score) => score.id).includes(id);
+
+    if (Score) {
+      const res = scoredb.filter((item: any) => {
+        return item.id === id;
+      });
+      console.log("RES", res);
+
+      setValue(res[0].score);
+    } else {
+      setValue(0);
+    }
+  }, [id]); // Run only once when the component mounts or id changes
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchedOptions) {
@@ -66,12 +92,16 @@ function WatchedOpt({
     }));
   };
 
+  const handleWatched = () => {
+    handleWatchedBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  };
+
   return (
     <div onClick={handleImageClick} className="relative">
       <img
         src={src}
         className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-          watchedOptions ? "opacity-60 pointer-events-none" : ""
+          watchedOptions ? "opacity-45 pointer-events-none" : ""
         }`}
       />
 
@@ -89,6 +119,7 @@ function WatchedOpt({
               <Button
                 onMouseEnter={handleMouseEnterRemove}
                 onMouseLeave={handleMouseLeaveRemove}
+                onClick={() => handleWatched()}
                 className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
                   expandRemove
                     ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
@@ -134,7 +165,9 @@ function WatchedOpt({
               className="w-[2vw] h-[2vw]"
               src="genresIcons/icons8-star.svg"
             />
-            <div className="font-bold text-[1vw] flex items-end ml-[0.5vw]">4 / 5</div>
+            <div className="font-bold text-[1vw] flex items-end ml-[0.5vw]">
+              {`${value === 0 ? "--" : value} / 5`}
+            </div>
           </div>
         </div>
       )}

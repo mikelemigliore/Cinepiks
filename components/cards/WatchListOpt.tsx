@@ -79,19 +79,31 @@ import Link from "next/link";
 import { IoCheckmark } from "react-icons/io5";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { SlArrowRight } from "react-icons/sl";
+import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
+import { useDispatch } from "react-redux";
+import handleWatchedBtn from "@/utils/handleWatchedBtn";
 
 interface WatchListOptProp {
   src: string;
   watchlistOptions?: boolean;
-  type?: string; // Define possible values
+  mediaType: string; // Define possible values
+  id: number;
 }
 
-function WatchListOpt({ src, watchlistOptions, type }: WatchListOptProp) {
+function WatchListOpt({
+  src,
+  watchlistOptions,
+  mediaType,
+  id,
+}: WatchListOptProp) {
   const [expand, setExpand] = useState(false);
   const [expandRemove, setExpandRemove] = useState(false);
   const [expandView, setExpandView] = useState(false);
+  const [isAdded, setIsAdded] = useState(true);
 
-  const href = type === "movie" ? "/singlemovie" : "/singleseries"
+  const dispatch = useDispatch();
+
+  const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchlistOptions) {
@@ -124,6 +136,15 @@ function WatchListOpt({ src, watchlistOptions, type }: WatchListOptProp) {
     setExpandView(false);
   };
 
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  };
+
+  const handleWatched = () => {
+    handleWatchedBtn(dispatch, setIsAdded, !isAdded, id, mediaType);
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  };
+
   return (
     <div onClick={handleImageClick} className="relative">
       <img
@@ -144,6 +165,7 @@ function WatchListOpt({ src, watchlistOptions, type }: WatchListOptProp) {
           <Button
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={() => handleWatched()}
             className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
               expand
                 ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
@@ -164,6 +186,7 @@ function WatchListOpt({ src, watchlistOptions, type }: WatchListOptProp) {
             <Button
               onMouseEnter={handleMouseEnterRemove}
               onMouseLeave={handleMouseLeaveRemove}
+              onClick={() => handleAdded()}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
                 expandRemove
                   ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"

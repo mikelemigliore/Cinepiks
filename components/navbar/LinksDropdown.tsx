@@ -17,8 +17,17 @@ import { AiFillLike } from "react-icons/ai";
 import { IoMdLogOut } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
 
-function LinksDropdown() {
+interface Props {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
+}
+
+function LinksDropdown({ onClick }: Props) {
   const { data: session }: any = useSession();
+
+  const handleLikesReload = () => {
+    window.location.href = "/likes"; // Force page reload
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -87,18 +96,24 @@ function LinksDropdown() {
               Watched
             </Button>
           </Link>
-          <Link
+          {/* <Link
             href={"/likes"}
             className="flex items-center font-medium text-[1.2vw] capitalize w-full"
-          >
+          > */}
+          <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
             <Button
               variant="ghost"
+              onClick={(e) => {
+                if (onClick) onClick(e); // Call the passed onClick handler if provided
+                handleLikesReload(); // Reload the page
+              }}
               className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
             >
               <AiFillLike size={25} />
               Likes
             </Button>
-          </Link>
+          </div>
+          {/* </Link> */}
           {!session ? (
             <></>
           ) : (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -11,16 +11,20 @@ import { MdModeEditOutline } from "react-icons/md";
 import Rating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
+import handleScoreBtn from "@/utils/handleScoreBtn";
+import { useDispatch } from "react-redux";
 
 interface StarRatingProp {
   title?: string;
-  name?:string;
-  value:number | null
-  handleValue: (newValue: number | null) => void;
+  name?: string;
+  value: number | null;
+  handleValue: (newValue: number) => void;
+  id: number;
+  mediaType: string;
 }
 
 const labels: { [index: string]: string } = {
-  0:"No Score",
+  0: "No Score",
   0.5: "Useless",
   1: "Useless+",
   1.5: "Poor",
@@ -33,12 +37,32 @@ const labels: { [index: string]: string } = {
   5: "Excellent+",
 };
 
-function StarRating({ title, value, handleValue }: StarRatingProp) {
+function StarRating({
+  title,
+  value,
+  handleValue,
+  id,
+  mediaType,
+}: StarRatingProp) {
   const [hover, setHover] = React.useState(-1);
+
+  const media_type = mediaType === "movie" ? "movie" : "tv";
+
+  const dispatch = useDispatch();
 
   function getLabelText(value: number) {
     return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
   }
+
+  const handleScore = (value:number) => {
+    if (value !== null) {
+      handleScoreBtn(dispatch, value, id, media_type);
+    } else {
+      handleScoreBtn(dispatch, value, id, media_type);
+    }
+  };
+
+
 
   return (
     <div>
@@ -51,7 +75,7 @@ function StarRating({ title, value, handleValue }: StarRatingProp) {
             className="w-[4.5vw] h-[4.5vw] mt-[2vw]"
             src="/genresIcons/icons8-star.svg"
           />
-          <div className='font-bold text-[1.2vw]'>{title}</div>
+          <div className="font-bold text-[1.2vw]">{title}</div>
           <Rating
             size="large"
             name="hover-feedback"
@@ -59,14 +83,18 @@ function StarRating({ title, value, handleValue }: StarRatingProp) {
             precision={0.5}
             getLabelText={getLabelText}
             onChange={(event, newValue) => {
+              if (newValue !== null) {
                 handleValue(newValue);
+                handleScore(newValue);
+              } else {
+                handleValue(0);
+                handleScore(0);
+              }
             }}
             onChangeActive={(event, newHover) => {
               setHover(newHover);
             }}
-            emptyIcon={
-              <StarIcon style={{ opacity: 1 }} fontSize="inherit" />
-            }
+            emptyIcon={<StarIcon style={{ opacity: 1 }} fontSize="inherit" />}
           />
           {value !== null && (
             <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>

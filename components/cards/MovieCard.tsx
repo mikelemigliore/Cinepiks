@@ -127,7 +127,6 @@ function MovieCard({
     }
   }, [movieDetails, seriesDetails]);
 
-
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
@@ -171,6 +170,7 @@ function MovieCard({
     if (expandCard) {
       e.preventDefault();
     }
+    //window.location.href = `${href}/${id}`; // Force page reload when traveling to singlepage, it works but too many reloads
   };
 
   const formatRuntime = (minutes: number): string => {
@@ -180,6 +180,10 @@ function MovieCard({
   };
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
+
+  // const handleReload = () => {
+  //   window.location.href = `${href}/${id}`; // Force page reload
+  // };
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -322,74 +326,81 @@ function MovieCard({
           </Dialog>
         ) : (
           <Link href={`${href}/${id}`} passHref>
-            <div
-              className="relative"
-              onClick={handleClick} // Handle click event for conditional navigation
-            >
-              {/* Poster Image */}
-              {list ? (
-                <img
-                  src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
-                />
-              ) : watchlist ? (
-                <WatchListOpt
-                  src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  watchlistOptions={watchlistOptions}
-                  type={type}
-                />
-              ) : watched ? (
-                <WatchedOpt
-                  src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  watchedOptions={watchedOptions}
-                  type={type}
-                />
-              ) : single ? (
-                <img
-                  src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                    watchlistOptions ? "opacity-25" : ""
-                  }`}
-                />
-              ) : (
-                <img
-                  src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                    expandCard ? "opacity-0" : "opacity-100"
-                  }`}
-                />
-              )}
-              <div>
-                <div
-                  className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
-                    expandCard
-                      ? "opacity-100 z-10 cursor-default"
-                      : "opacity-0 z-0"
-                  }`}
-                >
-                  <TeaserCard
-                    type={type}
-                    href={href}
-                    title={title}
-                    name={name}
-                    imgUrl={imgUrl}
-                    imgBackdrop={imgBackdrop}
-                    genres={genres}
-                    runtime={runtime}
-                    season={season}
-                    isLastThreeSlides={isLastThreeSlides}
-                    isLastOne={isLastOne}
-                    expandCard={expandCard}
-                    //showContent={showContent}
-                    isDesktop={isDesktop}
+            
+            {/* <div className="hover:cursor-pointer"> */}
+              <div
+                className="relative"
+                onClick={handleClick} // Handle click event for conditional navigation
+              >
+                {/* Poster Image */}
+                {list ? (
+                  <img
+                    src={`${BASE_IMAGE_URL}${imgUrl}`}
+                    className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                  />
+                ) : watchlist ? (
+                  <WatchListOpt
+                    src={`${BASE_IMAGE_URL}${imgUrl}`}
+                    watchlistOptions={watchlistOptions}
+                    mediaType={mediaType}
                     id={id}
                   />
+                ) : watched ? (
+                  <WatchedOpt
+                    src={`${BASE_IMAGE_URL}${imgUrl}`}
+                    watchedOptions={watchedOptions}
+                    mediaType={mediaType}
+                    //type={type}
+                    id={id}
+                  />
+                ) : single ? (
+                  <img
+                    src={`${BASE_IMAGE_URL}${imgUrl}`}
+                    className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                      watchlistOptions ? "opacity-25" : ""
+                    }`}
+                  />
+                ) : (
+                  <img
+                    src={`${BASE_IMAGE_URL}${imgUrl}`}
+                    className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                      expandCard ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
+                )}
+                <div>
+                  <div
+                    className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
+                      expandCard
+                        ? "opacity-100 z-10 cursor-default"
+                        : "opacity-0 z-0"
+                    }`}
+                  >
+                    <TeaserCard
+                      type={type}
+                      href={href}
+                      title={title}
+                      name={name}
+                      imgUrl={imgUrl}
+                      imgBackdrop={imgBackdrop}
+                      genres={genres}
+                      runtime={runtime}
+                      season={season}
+                      isLastThreeSlides={isLastThreeSlides}
+                      isLastOne={isLastOne}
+                      expandCard={expandCard}
+                      //showContent={showContent}
+                      isDesktop={isDesktop}
+                      id={id}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <h1 className="w-[12vw] pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-              {title || name}
-            </h1>
+              <h1 className="w-[12vw] pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                {title || name}
+              </h1>
+              
+            {/* </div> */}
           </Link>
         )}
       </Container>

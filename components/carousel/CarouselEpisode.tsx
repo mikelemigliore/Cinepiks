@@ -7,6 +7,8 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import EpisodeCard from "../cards/EpisodeCard";
+import handleSeasonBtn from "@/utils/handleSeasonBtn";
+import { useDispatch } from "react-redux";
 
 interface Episode {
   id: string;
@@ -16,20 +18,40 @@ interface Episode {
   score: string;
   img: string;
   description: string;
-  date:string
+  date: string;
 }
 
 interface SwiperEpisodeProps {
   episodes: Episode[];
-  watchedEpisodes: { [episodeNumber: number]: boolean };
+  watchedEpisodes: number[];
   onEpisodeWatched: (episodeNumber: number) => void;
+  selectedSeason: number;
+  Id:number
 }
 
 function CarouselEpisode({
   episodes,
   watchedEpisodes,
   onEpisodeWatched,
+  selectedSeason,
+  Id
 }: SwiperEpisodeProps) {
+  //const dispatch = useDispatch();
+
+  //console.log(selectedSeason);
+  //console.log(watchedEpisodes);
+
+  // const handleSeason = async () => {
+  //   // const watchedEpisodesArray = Object.keys(watchedEpisodes).map(key => ({
+  //   //   episodeNumber: Number(key),
+  //   //   watched: watchedEpisodes[Number(key)],
+  //   // }));
+
+  //   // console.log(watchedEpisodesArray);
+    
+  //   handleSeasonBtn(dispatch, selectedSeason, watchedEpisodes);
+  // };
+
   return (
     <div>
       <div className="">
@@ -45,7 +67,7 @@ function CarouselEpisode({
                 className="basis-1/4 md:basis-1/4"
               >
                 <EpisodeCard
-                  watched={watchedEpisodes[episodesItem.episode] || false} //This line checks if the current episode (indicated by episodesItem.episode) is marked as watched in the watchedEpisodes state.
+                  watched={watchedEpisodes.includes(episodesItem.episode)}//This line ensures the value is always a boolean.
                   onWatch={() => onEpisodeWatched(episodesItem.episode)} // is called with episodesItem.episode as an argument. This function presumably toggles the watched status of the specified episode.
                   episodeNumber={episodesItem.episode}
                   img={episodesItem.img}
@@ -54,6 +76,9 @@ function CarouselEpisode({
                   score={episodesItem.score}
                   description={episodesItem.description}
                   date={episodesItem.date}
+                  //handleSeason={handleSeason}
+                  selectedSeason={selectedSeason}
+                  Id={Id}
                 />
               </CarouselItem>
             ))}

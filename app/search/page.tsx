@@ -83,7 +83,7 @@ function SearchPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-  const [value, setValue] = React.useState<number | null>(0);
+  // const [value, setValue] = React.useState<number | null>(0);
   const [loading, setLoading] = useState(true);
   // Inside your component
   const dispatch = useDispatch();
@@ -263,13 +263,13 @@ function SearchPage() {
     }
   }, 300);
 
-  const handleValue = (newValue: number | null) => {
-    if (newValue !== null) {
-      setValue(newValue);
-    } else {
-      setValue(0);
-    }
-  };
+  // const handleValue = (newValue: number) => {
+  //   if (newValue !== null) {
+  //     setValue(newValue);
+  //   } else {
+  //     setValue(0);
+  //   }
+  // };
 
   const handleFilter = () => {
     setFilterd(!filter);
@@ -452,8 +452,8 @@ function SearchPage() {
                     backdrop_path={media.backdrop_path}
                     overview={media.overview}
                     list={list}
-                    value={value}
-                    handleValue={handleValue}
+                    //value={value}
+                    //handleValue={handleValue}
                   />
                 ))
               )}

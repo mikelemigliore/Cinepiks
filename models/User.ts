@@ -5,21 +5,39 @@ const { Schema } = mongoose;
 // Subschema for a single address object
 
 const likesSchema = new mongoose.Schema({
-
   id: Number,
 
   type: String,
-
 });
 
 const watchlistSchema = new mongoose.Schema({
-
   id: Number,
 
   type: String,
-
 });
 
+const watchedSchema = new mongoose.Schema({
+  id: Number,
+
+  type: String,
+});
+
+// New score schema directly under the user, one score per movie
+const scoreSchema = new mongoose.Schema({
+  id: Number,
+  type: String,
+  score: Number,
+});
+
+// const episodeSchema = new mongoose.Schema({
+//   episodeNumber: Number,
+// });
+
+const seasonSchema = new mongoose.Schema({
+  seriesId: Number,
+  seasonNumber: Number,
+  episodes: [Number], // Embedding the episode schema as an array
+});
 
 const userSchema = new Schema(
   {
@@ -43,11 +61,26 @@ const userSchema = new Schema(
     },
     likes: {
       type: [likesSchema],
-      default: [],    // Initialize as an empty array
-      required: false // Indicates this field is optional
+      default: [], // Initialize as an empty array
+      required: false, // Indicates this field is optional
     },
     watchlist: {
       type: [watchlistSchema],
+      default: [], // Initialize as an empty array
+      required: false,
+    },
+    watched: {
+      type: [watchedSchema],
+      default: [], // Initialize as an empty array
+      required: false,
+    },
+    score: {
+      type: [scoreSchema],
+      default: [], // Initialize as an empty array
+      required: false,
+    },
+    season: {
+      type: [seasonSchema],
       default: [], // Initialize as an empty array
       required: false,
     },

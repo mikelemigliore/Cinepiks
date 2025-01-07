@@ -399,12 +399,15 @@ import {
   useGetPrimeMoviesQuery,
 } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
-import { setLikes, setWatchlists } from "../features/dbSlice";
+import { setLikes, setScore, setWatched, setWatchlists } from "../features/dbSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../features/store";
 import { getLikes } from "../pages/api/likesPage";
 import { useGetWatchlistQuery } from "../features/watchlist/watchlistSlice";
 import { getWatchlists } from "../pages/api/watchlistPage";
+import { useGetWatchedQuery } from "../features/watched/watchedSlice";
+import { getWatchedList } from "../pages/api/watchedPage";
+import { useGetScoreQuery } from "../features/score/scoreSlice";
 
 const services = [
   { id: 8, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -566,11 +569,12 @@ function HomePage() {
   // Fetch data using RTK Query
   const { data: likesDB, isLoading, error, isSuccess } = useGetLikesQuery({});
 
-
-  
-
   const { data: watchlistDB, isSuccess: watchlistSucces } =
     useGetWatchlistQuery({});
+
+  const { data: watchedtDB, isSuccess: watchedSucces } = useGetWatchedQuery({});
+
+  const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   // Fetch movie details when IDs are available
   useEffect(() => {
@@ -601,10 +605,33 @@ function HomePage() {
           console.error("Error fetching movie details:", error);
         }
       }
+
+      if (watchedSucces && watchedtDB.length > 0) {
+        try {
+          // Fetch full movie details for the given IDs
+          const res = await getWatchedList(watchedtDB); // Fetch movie data by IDs
+          const watchedContent = await res.json();
+          // Store the full movie details in Redux
+          dispatch(setWatched(watchedContent));
+        } catch (error) {
+          console.error("Error fetching movie details:", error);
+        }
+      }
+
+      if (scoreSucces && scoreDB.length > 0) {
+        try {
+          // const res = await getWatchedList(watchedtDB); 
+          // const watchedContent = await res.json();
+
+          dispatch(setScore(scoreDB));
+        } catch (error) {
+          console.error("Error fetching movie details:", error);
+        }
+      }
     };
 
     fetchMovieDetails();
-  }, [likesDB, watchlistDB]); // Trigger only when the movie IDs are fetched
+  }, [likesDB, watchlistDB, watchedtDB,scoreDB]); // Trigger only when the movie IDs are fetched
 
   // // Fetch movie details when IDs are available
   // useEffect(() => {
@@ -659,7 +686,7 @@ function HomePage() {
   return (
     <div className="relative">
       <div>
-        <MainCarousel medias={inTheaters || [] } mediaType={"movie"} />
+        <MainCarousel medias={inTheaters || []} mediaType={"movie"} />
         <div className="relative -mt-[26rem] md:-mt-[9rem]">
           <div className="relative left-0 my-12 right-0 z-40">
             <MovieSwiper

@@ -20,6 +20,7 @@ import {
 } from "@/app/features/homepage/movies/moviedetailsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
+import { useRouter } from "next/navigation";
 
 const movie = [
   {
@@ -57,6 +58,8 @@ function SingleMoviePage() {
   const [lowtohigh, setLowtohigh] = useState(false);
   const type = "movie";
 
+  //const router = useRouter();
+
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
       all: filter === "all",
@@ -72,8 +75,8 @@ function SingleMoviePage() {
   const { id } = params;
   const Id = Number(id);
 
-  console.log("ID:", Id);
-  console.log("Media Type:", mediaType);
+  // console.log("ID:", Id);
+  // console.log("Media Type:", mediaType);
 
   const { data: movieDetails } = useGetMovieDetailsQuery(Id || 0);
 
@@ -81,7 +84,9 @@ function SingleMoviePage() {
 
   const { data: movieCast } = useGetMovieCastQuery(Id || 0);
 
-
+  // useEffect(() => {
+  //   router.refresh(); // Forces a full page reload
+  // }, []);
 
   useEffect(() => {
     if (movieDetails) {

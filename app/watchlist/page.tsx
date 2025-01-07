@@ -189,7 +189,7 @@ function WatchlistPage() {
               {watchlistdb.length === 0 ? (
                 <div>No results found.</div>
               ) : grid ? (
-                <GridView filter={filter} mediaSearch={watchlistdb} />
+                <GridView filter={filter} mediaSearch={watchlistdb} watchlist={watchlist}/>
               ) : (
                 watchlistdb.map((media, index) => (
                   <ListView

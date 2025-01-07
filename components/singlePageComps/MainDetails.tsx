@@ -626,6 +626,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
+import handleScoreBtn from "@/utils/handleScoreBtn";
 
 interface SeriesProp {
   id: number;
@@ -707,7 +708,7 @@ MainDetailsProps) {
   const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isListView, setIsListView] = useState(true);
-  const [value, setValue] = React.useState<number | null>(0);
+  const [value, setValue] = React.useState<number>(0);
   const [imdbIdSeries, setImdbIdSeries] = useState("");
 
   const { data: rating } = useGetRatingsQuery(imdbId || "");
@@ -730,19 +731,53 @@ MainDetailsProps) {
 
   const { data: seriesSocials } = useGetSeriesSocialsQuery(id || 0);
 
-    const dispatch = useDispatch();
-    const likesdb = useSelector((state: RootState) => state.content.likes);
-  
-    useEffect(() => {
-      const Liked = likesdb.map((like) => like.id).includes(id);
-      //console.log("Liked", Liked);
-  
-      if (Liked) {
-        setIsLiked(true);
-      } else {
-        setIsLiked(false);
-      }
-    }, [id, likesdb]); // Run only once when the component mounts or id changes
+  const dispatch = useDispatch();
+  const likesdb = useSelector((state: RootState) => state.content.likes);
+
+  const watchlistdb = useSelector(
+    (state: RootState) => state.content.watchlist
+  );
+
+  const scoredb = useSelector((state: RootState) => state.content.score);
+
+  useEffect(() => {
+    const Liked = likesdb.map((like) => like.id).includes(id);
+    //console.log("Liked", Liked);
+
+    const Watchlisted = watchlistdb
+      .map((watchlist) => watchlist.id)
+      .includes(id);
+    //console.log("Liked", Liked);
+
+    const Score = scoredb.map((score) => score.id).includes(id);
+
+    console.log("SCPRE", Score);
+
+    console.log("scoredb", scoredb);
+
+    if (Liked) {
+      setIsLiked(true);
+    } else {
+      setIsLiked(false);
+    }
+
+    if (Watchlisted) {
+      setIsAdded(true);
+    } else {
+      setIsAdded(false);
+    }
+
+    if (Score) {
+      const res = scoredb.filter((item: any) => {
+        return item.id === id;
+      });
+      console.log("RES", res);
+
+      setValue(res[0].score);
+    } else {
+      setValue(0);
+    }
+  }, [id]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
     if (type === "movie") {
@@ -777,7 +812,6 @@ MainDetailsProps) {
         setDirector(movieDirector || {});
       }
     } else {
-
       if (seriesDetails) {
         setPoster(seriesDetails?.poster_path || "");
         setGenres(seriesDetails?.genres || []);
@@ -809,20 +843,24 @@ MainDetailsProps) {
         setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
       }
     }
+  }, [
+    movieDetails,
+    rating,
+    seriesDetails,
+    seriesCertification,
+    seriesRuntime,
+    seriesSocials,
+  ]);
 
-  }, [movieDetails, rating, seriesDetails, seriesCertification, seriesRuntime, seriesSocials]);
-
-
-  const handleLike = async ()=>{
-    handleLikeBtn(dispatch, setIsLiked, isLiked, id, type)
-  }
-
-  const handleAdded = async () => {
-    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id,type);
+  const handleLike = async () => {
+    handleLikeBtn(dispatch, setIsLiked, isLiked, id, type);
   };
 
+  const handleAdded = async () => {
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, type);
+  };
 
-  const handleValue = (newValue: number | null) => {
+  const handleValue = (newValue: number) => {
     if (newValue !== null) {
       setValue(newValue);
     } else {
@@ -1079,6 +1117,8 @@ MainDetailsProps) {
                   title={title}
                   value={value}
                   handleValue={handleValue}
+                  id={id}
+                  mediaType={type}
                 />
               </div>
 

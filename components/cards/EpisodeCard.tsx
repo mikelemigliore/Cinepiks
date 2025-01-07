@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,11 @@ import { GoStarFill, GoUnmute } from "react-icons/go";
 import { SlArrowRight } from "react-icons/sl";
 import { Button } from "../ui/button";
 import { IoCheckmark } from "react-icons/io5";
+import handleSeasonBtn from "@/utils/handleSeasonBtn";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
+import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
+import { setSeasonData } from "@/app/features/dbSlice";
 
 interface EpisodeCardProp {
   episodeNumber: number;
@@ -23,7 +28,10 @@ interface EpisodeCardProp {
   watched: boolean;
   onWatch: () => void;
   description: string;
-  date:string
+  date: string;
+  selectedSeason: number;
+  Id: number;
+  //handleSeason: () => void;
 }
 
 function EpisodeCard({
@@ -35,10 +43,48 @@ function EpisodeCard({
   onWatch,
   watched,
   description,
-  date
-}: EpisodeCardProp) {
+  date,
+  selectedSeason,
+  Id,
+}: //handleSeason,
+EpisodeCardProp) {
   // const [watched, setWatched] = useState(false);
 
+  const dispatch = useDispatch();
+
+  // const seasondb = useSelector((state: RootState) => state.content.season);
+
+  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+
+  // // Fetch movie details when IDs are available
+  // useEffect(() => {
+  //   const fetchMovieDetails = async () => {
+  //     if (seasonSucces && seasonDB.length > 0) {
+  //       try {
+  //         console.log("seasonDB", seasonDB);
+  //         const res = seasonDB
+  //           .filter((item: any) => item.seasonNumber === selectedSeason)
+  //           .map((item: any) => item.episodes);
+
+  //         console.log("res", res[0]);
+
+  //         // Fetch full movie details for the given IDs
+
+  //         //const likesId = likesDB.map((item:any)=> item.id);
+
+  //         //const res = await getLikes(likesDB); // Fetch movie data by IDs
+  //         //const likedContent = await res.json();
+  //         // Store the full movie details in Redux
+  //         dispatch(setSeasonData(seasonDB));
+  //         //setWatchedEpisodes()
+  //       } catch (error) {
+  //         console.error("Error fetching movie details:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchMovieDetails();
+  // }, [seasonDB]); // Trigger only when the movie IDs are fetched
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -76,13 +122,28 @@ function EpisodeCard({
     }
   };
 
+  const handleSeason = async () => {
+    // const watchedEpisodesArray = Object.keys(watchedEpisodes).map(key => ({
+    //   episodeNumber: Number(key),
+    //   watched: watchedEpisodes[Number(key)],
+    // }));
+
+    // console.log(watchedEpisodesArray);
+
+    handleSeasonBtn(dispatch, selectedSeason, episodeNumber, Id, watched);
+  };
+
+  const handleClick = () => {
+    onWatch();
+    handleSeason();
+  };
 
   return (
     <div className=" relative w-[18vw] h-[17vw] rounded-2xl">
       <img className="rounded-2xl shadow-lg" src={img}></img>
       <div className="absolute top-0 right-[1vw] md:ml-[1rem] md:mt-[1rem] z-[1010]">
         <Button
-          onClick={onWatch}
+          onClick={() => handleClick()}
           className={`flex items-center justify-center  w-[2vw] h-[2vw] rounded-full bg-opacity-35 border-none bg-slate-300  hover:bg-slate-300  hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
             watched ? "bg-white/90" : ""
           }`}

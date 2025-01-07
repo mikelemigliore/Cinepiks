@@ -746,8 +746,8 @@ interface ListViewProp {
   list?: boolean;
   watchlist?: boolean;
   watched?: boolean;
-  value?: number | null; //This was commented out
-  handleValue?: (newValue: number | null) => void; //This was commented out
+  //value: number | null; //This was commented out
+  //handleValue: (newValue: number) => void; //This was commented out
   mediaType?: string; // Indicates the type of content
   id: number;
   //likes?: number[];
@@ -764,13 +764,15 @@ function ListView({
   list,
   watchlist,
   watched,
-  value,
+  //value,
   id,
   media_type,
   poster_path,
   title,
   overview,
   backdrop_path,
+  mediaType,
+  //handleValue
 }: ListViewProp) {
   const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
   const [isLiked, setIsLiked] = useState(false);
@@ -797,6 +799,7 @@ function ListView({
   const [cast, setCast] = useState<CastMember[]>([]);
   const [videoKey, setVideoKey] = useState("");
   //const [likes, setLikes] = useState<number[]>([]);
+  const [value, setValue] = React.useState<number>(0);
 
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
 
@@ -816,6 +819,8 @@ function ListView({
     (state: RootState) => state.content.watchlist
   );
 
+  const scoredb = useSelector((state: RootState) => state.content.score);
+
   useEffect(() => {
     const Liked = likesdb.map((like) => like.id).includes(id);
 
@@ -823,6 +828,8 @@ function ListView({
       .map((watchlist) => watchlist.id)
       .includes(id);
     //console.log("Liked", Liked);
+
+    const Score = scoredb.map((score) => score.id).includes(id);
 
     if (Liked) {
       setIsLiked(true);
@@ -835,6 +842,18 @@ function ListView({
     } else {
       setIsAdded(false);
     }
+
+    if (Score) {
+      const res = scoredb.filter((item: any) => {
+        return item.id === id;
+      });
+      console.log("RES", res);
+
+      setValue(res[0].score);
+    } else {
+      setValue(0);
+    }
+
   }, [id]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
@@ -897,6 +916,13 @@ function ListView({
     }));
   };
 
+  const handleValue = (newValue: number) => {
+    if (newValue !== null) {
+      setValue(newValue);
+    } else {
+      setValue(0);
+    }
+  };
   const formatRuntime = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
@@ -1112,13 +1138,20 @@ function ListView({
                   <div className="flex">
                     <div className=" text-[1vw]">Your Score</div>
                     <StarRating
+                      title={title}
+                      value={value}
+                      handleValue={handleValue}
+                      id={id}
+                      mediaType={media_type}
+                    />
+                    {/* <StarRating
                       title={title || undefined}
                       //name={name}
                       value={scores[id] || null}
                       handleValue={(newValue) =>
                         handleScoreChange(id, newValue)
                       }
-                    />
+                    /> */}
                   </div>
 
                   <div className="flex items-end text-[1vw] mt-[1vh]">
@@ -1126,7 +1159,7 @@ function ListView({
                       className="mr-[0.5vw] w-[1.7vw] h-[1.7vw]"
                       src="genresIcons/icons8-star.svg"
                     />{" "}
-                    {scores[id] ? scores[id] : "--"} / 5<div></div>
+                    {value ? value : "--"} / 5<div></div>
                   </div>
                 </div>
               </div>
