@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +8,10 @@ import {
 } from "../ui/carousel";
 import EpisodeCard from "../cards/EpisodeCard";
 import handleSeasonBtn from "@/utils/handleSeasonBtn";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/features/store";
+import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
+import { setSeasonData } from "@/app/features/dbSlice";
 
 interface Episode {
   id: string;
@@ -36,21 +39,40 @@ function CarouselEpisode({
   selectedSeason,
   Id
 }: SwiperEpisodeProps) {
-  //const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  //console.log(selectedSeason);
-  //console.log(watchedEpisodes);
+  // const seasondb = useSelector((state: RootState) => state.content.season);
 
-  // const handleSeason = async () => {
-  //   // const watchedEpisodesArray = Object.keys(watchedEpisodes).map(key => ({
-  //   //   episodeNumber: Number(key),
-  //   //   watched: watchedEpisodes[Number(key)],
-  //   // }));
+  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
 
-  //   // console.log(watchedEpisodesArray);
-    
-  //   handleSeasonBtn(dispatch, selectedSeason, watchedEpisodes);
-  // };
+  // // Fetch movie details when IDs are available
+  // useEffect(() => {
+  //   const fetchMovieDetails = async () => {
+  //     if (seasonSucces && seasonDB.length > 0) {
+  //       try {
+  //         //console.log("seasonDB", seasonDB);
+
+  //         const data = seasonDB.filter((item: any) => item.seriesId === Id);
+
+  //         if (data.length > 0) {
+  //           const res = data
+  //             .filter((item: any) => item.seasonNumber === selectedSeason)
+  //             .map((item: any) => item.episodes);
+
+  //           //console.log("res", res[0]);
+
+  //           dispatch(setSeasonData(seasonDB));
+  //           onEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching movie details:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchMovieDetails();
+  // }, [Id, selectedSeason]); // Trigger only when the movie IDs are fetched
+  
 
   return (
     <div>

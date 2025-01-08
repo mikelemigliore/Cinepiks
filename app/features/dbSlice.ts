@@ -142,16 +142,19 @@ const dbSlice = createSlice({
       const { Id, seasonNumber, episodeNumber } = action.payload;
 
       // ✅ Find the correct index instead of just the first match
-      const seasonIndex = state.season.findIndex(
+      const seasonEntry = state.season.find(
         (season) =>
           season.seriesId === Id && season.seasonNumber === seasonNumber
       );
+      
 
-      if (seasonIndex !== -1) {
+      if (seasonEntry) {
+        console.log("seasonIndex", seasonEntry);
+
         // ✅ Update the found season correctly by index
-        if (!state.season[seasonIndex].episodes.includes(episodeNumber)) {
-          state.season[seasonIndex].episodes.push(episodeNumber);
-        }
+        if (!seasonEntry.episodes.includes(episodeNumber)) {
+          seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
+    }
       } else {
         // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
         state.season.push({

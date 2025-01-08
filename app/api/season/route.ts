@@ -7,13 +7,13 @@ import { authOptions } from "../auth/[...nextauth]/route";
 
 export const POST = async (request: any) => {
   const { season, userEmail, episodeNumber, Id } = await request.json(); // ✅ Expect userId from the frontend
-  console.log("ID", Id);
-  console.log("season", season);
-  console.log("watchedEpisodes", episodeNumber);
+  // console.log("ID", Id);
+  // console.log("season", season);
+  // console.log("watchedEpisodes", episodeNumber);
   await connect();
 
   try {
-    if (!season || !userEmail) {
+    if (!userEmail) {
       return NextResponse.json(
         { message: "User ID and like data are required." },
         { status: 400 }
@@ -27,34 +27,70 @@ export const POST = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    const result = await User.updateOne(
-      {
-        email: userEmail,
-        "season.seriesId": Id, // ✅ Matches the correct series
-        "season.seasonNumber": season,
-      },
-      {
-        $addToSet: {
-          "season.$.episodes": episodeNumber,
-        },
-      }
+    const existingSeason = existingUser.season.find(
+      (s: any) => s.seriesId === Id && s.seasonNumber === season
     );
 
-    // If the season doesn't exist, create it with a unique seriesId
-    if (result.modifiedCount === 0) {
-      await User.updateOne(
-        { email: userEmail },
-        {
-          $push: {
-            season: {
-              seriesId: Id, // ✅ Saves the series ID
-              seasonNumber: season,
-              episodes: [episodeNumber],
-            },
-          },
-        }
+    // ✅ Check if the episode already exists
+    const episodeExists = existingSeason?.episodes.includes(episodeNumber);
+
+    if (episodeExists) {
+      return NextResponse.json(
+        { message: "Episode already exists." },
+        { status: 400 }
       );
     }
+
+    let result;
+
+    if (existingSeason) {
+      // result = await User.updateOne(
+      //     {
+      //         email: userEmail,
+      //         "season.seriesId": Id,
+      //         "season.seasonNumber": season
+      //     },
+      //     {
+      //         $addToSet: {
+      //             "season.$.episodes": episodeNumber
+      //         }
+      //     }
+      // );
+      result = await User.updateOne(
+        {
+            email: userEmail, // Match the user by email
+        },
+        {
+            $addToSet: {
+                "season.$[element].episodes": episodeNumber  // Only update the matched season
+            }
+        },
+        {
+            arrayFilters: [
+                {
+                    "element.seriesId": Id,  // Ensure the series ID matches
+                    "element.seasonNumber": season // Ensure the season number matches
+                }
+            ]
+        }
+    );
+  } else {
+      // ✅ New season, create the first entry
+      result =  await User.updateOne(
+          { email: userEmail },
+          {
+              $push: {
+                  season: {
+                      seriesId: Id,
+                      seasonNumber: season,
+                      episodes: [episodeNumber]
+                  }
+              }
+          }
+      );
+  }
+
+    
 
     return NextResponse.json(
       { message: "Like added successfully.", result },
@@ -104,7 +140,7 @@ export const GET = async (request: any) => {
 
 export const DELETE = async (request: any) => {
   const { season, userEmail, episodeNumber, Id } = await request.json();
-  console.log("ID", Id);
+  //console.log("ID", Id);
   await connect();
 
   try {
@@ -121,8 +157,8 @@ export const DELETE = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    console.log("ID", Id);
-    
+    //console.log("ID", Id);
+
     // ✅ Remove the episode from the specified series and season
     const result = await User.updateOne(
       {
@@ -137,8 +173,7 @@ export const DELETE = async (request: any) => {
       }
     );
 
-    console.log(result);
-    
+    //console.log(result);
 
     return NextResponse.json(
       { message: "Like removed successfully.", result },

@@ -22,7 +22,7 @@ async function handleSeasonBtn(
   selectedSeason: any,
   episodeNumber: any,
   Id: any,
-  watched:any
+  watched: any
 ) {
   const session = await getSession();
   const userEmail = session?.user?.email;
@@ -42,7 +42,7 @@ async function handleSeasonBtn(
           userEmail,
           season: selectedSeason,
           episodeNumber,
-          Id
+          Id,
         }),
       });
 
@@ -83,11 +83,14 @@ async function handleSeasonBtn(
       }
 
       if (res.status === 200) {
+        // console.log(Id);
+        // console.log(selectedSeason);
+        // console.log(episodeNumber);
         dispatch(
           addEpisode({
+            Id,
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
-            Id,
           })
         ); // ✅ Dispatch Redux action
       }

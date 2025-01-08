@@ -36,7 +36,7 @@ const scoreSchema = new mongoose.Schema({
 const seasonSchema = new mongoose.Schema({
   seriesId: Number,
   seasonNumber: Number,
-  episodes: [Number], // Embedding the episode schema as an array
+  episodes: [Number], 
 });
 
 const userSchema = new Schema(

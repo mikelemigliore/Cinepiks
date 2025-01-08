@@ -48,43 +48,32 @@ function EpisodeCard({
   Id,
 }: //handleSeason,
 EpisodeCardProp) {
-  // const [watched, setWatched] = useState(false);
-
+  //const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
+  const [isWatched, setIsWatched] = useState(false);
   const dispatch = useDispatch();
 
-  // const seasondb = useSelector((state: RootState) => state.content.season);
+  const seasondb = useSelector((state: RootState) => state.content.season);
 
   // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
 
-  // // Fetch movie details when IDs are available
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     if (seasonSucces && seasonDB.length > 0) {
-  //       try {
-  //         console.log("seasonDB", seasonDB);
-  //         const res = seasonDB
-  //           .filter((item: any) => item.seasonNumber === selectedSeason)
-  //           .map((item: any) => item.episodes);
+  //console.log("episodeNumberSSSSS", episodeNumber);
 
-  //         console.log("res", res[0]);
+  // Fetch movie details when IDs are available
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      if (seasondb?.length > 0) {
+        const data = seasondb.filter((item) => item.seriesId === Id);
+        // Defensive fallback
+        const res =
+          data
+            .filter((item) => item.seasonNumber === selectedSeason)
+            ?.map((item) => item.episodes) || [];
+        setIsWatched(res[0]?.includes(episodeNumber) || false);
+      }
+    };
 
-  //         // Fetch full movie details for the given IDs
-
-  //         //const likesId = likesDB.map((item:any)=> item.id);
-
-  //         //const res = await getLikes(likesDB); // Fetch movie data by IDs
-  //         //const likedContent = await res.json();
-  //         // Store the full movie details in Redux
-  //         dispatch(setSeasonData(seasonDB));
-  //         //setWatchedEpisodes()
-  //       } catch (error) {
-  //         console.error("Error fetching movie details:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchMovieDetails();
-  // }, [seasonDB]); // Trigger only when the movie IDs are fetched
+    fetchMovieDetails();
+  }, [seasondb, selectedSeason, Id, episodeNumber]); // Trigger only when the movie IDs are fetched
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -130,6 +119,13 @@ EpisodeCardProp) {
 
     // console.log(watchedEpisodesArray);
 
+    //GOOD
+    // console.log("selectedSeason", selectedSeason);
+    // console.log("episodeNumber", episodeNumber);
+    // console.log("Id", Id);
+    // console.log("watched", watched);
+    
+
     handleSeasonBtn(dispatch, selectedSeason, episodeNumber, Id, watched);
   };
 
@@ -145,12 +141,12 @@ EpisodeCardProp) {
         <Button
           onClick={() => handleClick()}
           className={`flex items-center justify-center  w-[2vw] h-[2vw] rounded-full bg-opacity-35 border-none bg-slate-300  hover:bg-slate-300  hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-            watched ? "bg-white/90" : ""
+            isWatched ? "bg-white/90" : ""
           }`}
         >
           <IoCheckmark
             className={`w-[4vw] h-[4vw] min-w-[17px] min-h-[17px] ${
-              watched ? "text-black" : ""
+              isWatched ? "text-black" : ""
             }`}
           />
         </Button>

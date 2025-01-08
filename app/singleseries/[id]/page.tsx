@@ -59,10 +59,7 @@ type FilterKey = "all" | "buy" | "rent" | "subscription";
 
 function SingleSeriesPage() {
   const [selectedSeason, setSelectedSeason] = useState<number>(1); // Start with season 1
-  // const [watchedEpisodes, setWatchedEpisodes] = useState<{
-  //   [episodeNumber: number]: boolean; //defines the type of the state, which is an object with numeric keys (episodeNumber) and boolean values.
-  //   //The initial state is set to an empty object {}, meaning no episodes are marked as watched initially.
-  // }>({});
+
   const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
 
   //const [videoKey4, setVideoKey4] = useState("BAQvCB3Fnm0");
@@ -129,41 +126,41 @@ function SingleSeriesPage() {
     selectedSeason,
   });
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const seasondb = useSelector((state: RootState) => state.content.season);
+  // const seasondb = useSelector((state: RootState) => state.content.season);
 
-  const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
 
-  // Fetch movie details when IDs are available
-  useEffect(() => {
-    const fetchMovieDetails = async () => {
-      if (seasonSucces && seasonDB.length > 0) {
-        try {
-          console.log("seasonDB", seasonDB);
+  // // Fetch movie details when IDs are available
+  // useEffect(() => {
+  //   const fetchMovieDetails = async () => {
+  //     if (seasonSucces && seasonDB.length > 0) {
+  //       try {
+  //         console.log("seasonDB", seasonDB);
 
-          const data = seasonDB.filter((item: any) => item.seriesId === Id);
+  //         const data = seasonDB.filter((item: any) => item.seriesId === Id);
 
-          if (data.length > 0) {
-            const res = data
-              .filter((item: any) => item.seasonNumber === selectedSeason)
-              .map((item: any) => item.episodes);
+  //         if (data.length > 0) {
+  //           const res = data
+  //             .filter((item: any) => item.seasonNumber === selectedSeason)
+  //             .map((item: any) => item.episodes);
 
-            console.log("res", res[0]);
+  //           console.log("res", res[0]);
 
-            dispatch(setSeasonData(seasonDB));
-            setWatchedEpisodes(res[0] || []); // ✅ Ensuring an empty object as fallback
-          } else {
-            setWatchedEpisodes([]); // ✅ Empty state fallback
-          }
-        } catch (error) {
-          console.error("Error fetching movie details:", error);
-        }
-      }
-    };
+  //           dispatch(setSeasonData(seasonDB));
+  //           setWatchedEpisodes(res[0] || []); // ✅ Ensuring an empty object as fallback
+  //         } else {
+  //           setWatchedEpisodes([]); // ✅ Empty state fallback
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching movie details:", error);
+  //       }
+  //     }
+  //   };
 
-    fetchMovieDetails();
-  }, [Id,selectedSeason]); // Trigger only when the movie IDs are fetched
+  //   fetchMovieDetails();
+  // }, [Id,selectedSeason]); // Trigger only when the movie IDs are fetched
 
   //console.log("watchedEpisodes", watchedEpisodes);
 
@@ -291,6 +288,8 @@ function SingleSeriesPage() {
   //     // If it was false or undefined (not watched), it becomes true
   //   }));
   // };
+
+
   const handleEpisodeWatched = (episodeNumber: number) => {
     setWatchedEpisodes(
       (prev) =>
@@ -306,12 +305,6 @@ function SingleSeriesPage() {
   };
 
   const seasonEpisodes = seasons[selectedSeason - 1]?.episodes || []; // Use an empty array as a fallback
-  // const progressValue = //retrieves an array of all the values in the watchedEpisodes object. Since watchedEpisodes stores episodes as keys with boolean values
-  //   //(true for watched, false for not watched), this array contains only true and false values
-  //   (Object.values(watchedEpisodes).filter(Boolean).length / //filters the array, keeping only true values. This effectively creates an array of episodes that have been watched.
-  //     seasonEpisodes.length) * //counts the number of true values, which represents the total number of watched episodes.
-  //   100;
-
   const progressValue =
     watchedEpisodes && seasonEpisodes?.length
       ? (Object.values(watchedEpisodes).filter(Boolean).length /
