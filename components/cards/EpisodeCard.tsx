@@ -31,7 +31,9 @@ interface EpisodeCardProp {
   date: string;
   selectedSeason: number;
   Id: number;
-  //handleSeason: () => void;
+  progressValue: number;
+  progress: number;
+  setProgress:any
 }
 
 function EpisodeCard({
@@ -46,29 +48,42 @@ function EpisodeCard({
   date,
   selectedSeason,
   Id,
+  progressValue,
+  progress,
+  setProgress
 }: //handleSeason,
 EpisodeCardProp) {
   //const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
   const [isWatched, setIsWatched] = useState(false);
   const dispatch = useDispatch();
 
+ // const progress = 0
+
   const seasondb = useSelector((state: RootState) => state.content.season);
 
-  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+  //const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
 
-  //console.log("episodeNumberSSSSS", episodeNumber);
+  //console.log("progressValue",progressValue);
 
   // Fetch movie details when IDs are available
   useEffect(() => {
     const fetchMovieDetails = async () => {
       if (seasondb?.length > 0) {
+        // const data = seasondb.filter((item) => item.seriesId === Id);
+        // // Defensive fallback
+        // const res =
+        //   data
+        //     .filter((item) => item.seasonNumber === selectedSeason)
+        //     ?.map((item) => item.episodes) || [];
+        // setIsWatched(res[0]?.includes(episodeNumber) || false);
         const data = seasondb.filter((item) => item.seriesId === Id);
-        // Defensive fallback
         const res =
           data
             .filter((item) => item.seasonNumber === selectedSeason)
-            ?.map((item) => item.episodes) || [];
-        setIsWatched(res[0]?.includes(episodeNumber) || false);
+            ?.flatMap((item) => item.episodes) || [];
+
+        // ✅ Corrected to check the property inside each episode object
+        setIsWatched(res.some((ep: any) => ep.episodeNumber === episodeNumber));
       }
     };
 
@@ -111,22 +126,19 @@ EpisodeCardProp) {
     }
   };
 
-  const handleSeason = async () => {
-    // const watchedEpisodesArray = Object.keys(watchedEpisodes).map(key => ({
-    //   episodeNumber: Number(key),
-    //   watched: watchedEpisodes[Number(key)],
-    // }));
-
-    // console.log(watchedEpisodesArray);
-
-    //GOOD
-    // console.log("selectedSeason", selectedSeason);
-    // console.log("episodeNumber", episodeNumber);
-    // console.log("Id", Id);
-    // console.log("watched", watched);
-    
-
-    handleSeasonBtn(dispatch, selectedSeason, episodeNumber, Id, watched);
+  const handleSeason = () => {
+    const episodeValue = progressValue; // ✅ Ensure episodeValue is defined correctly
+    //console.log("episodeValue", episodeValue);
+    setProgress((prevProgress:any) => prevProgress + episodeValue); // ✅ Update Progress Directly
+    handleSeasonBtn(
+      dispatch,
+      selectedSeason,
+      episodeNumber,
+      Id,
+      isWatched,
+      episodeValue,
+      progress
+    );
   };
 
   const handleClick = () => {

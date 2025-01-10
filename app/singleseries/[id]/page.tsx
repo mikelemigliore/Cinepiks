@@ -103,15 +103,9 @@ function SingleSeriesPage() {
     }));
   };
 
-  // Fetch call to TMDB to get the data I need for cast section, excellent example
-  //const [cast, setCast] = useState([]);
-  //const seriesId = 580489; // Example movie ID for Venom
-
   const params = useParams();
   const { id } = params;
   const Id = Number(id);
-
-  //console.log(Id);
 
   const { data: seriesDetails } = useGetSeriesDetailsQuery(Id);
 
@@ -125,44 +119,6 @@ function SingleSeriesPage() {
     Id,
     selectedSeason,
   });
-
-  // const dispatch = useDispatch();
-
-  // const seasondb = useSelector((state: RootState) => state.content.season);
-
-  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
-
-  // // Fetch movie details when IDs are available
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     if (seasonSucces && seasonDB.length > 0) {
-  //       try {
-  //         console.log("seasonDB", seasonDB);
-
-  //         const data = seasonDB.filter((item: any) => item.seriesId === Id);
-
-  //         if (data.length > 0) {
-  //           const res = data
-  //             .filter((item: any) => item.seasonNumber === selectedSeason)
-  //             .map((item: any) => item.episodes);
-
-  //           console.log("res", res[0]);
-
-  //           dispatch(setSeasonData(seasonDB));
-  //           setWatchedEpisodes(res[0] || []); // ✅ Ensuring an empty object as fallback
-  //         } else {
-  //           setWatchedEpisodes([]); // ✅ Empty state fallback
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching movie details:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchMovieDetails();
-  // }, [Id,selectedSeason]); // Trigger only when the movie IDs are fetched
-
-  //console.log("watchedEpisodes", watchedEpisodes);
 
   useEffect(() => {
     if (seriesDetails) {
@@ -289,7 +245,6 @@ function SingleSeriesPage() {
   //   }));
   // };
 
-
   const handleEpisodeWatched = (episodeNumber: number) => {
     setWatchedEpisodes(
       (prev) =>
@@ -305,12 +260,10 @@ function SingleSeriesPage() {
   };
 
   const seasonEpisodes = seasons[selectedSeason - 1]?.episodes || []; // Use an empty array as a fallback
-  const progressValue =
-    watchedEpisodes && seasonEpisodes?.length
-      ? (Object.values(watchedEpisodes).filter(Boolean).length /
-          seasonEpisodes.length) *
-        100
-      : 0; // Fallback value if data is not available
+  // const progressValue =
+  //   watchedEpisodes.length > 0 && seasonEpisodes.length > 0
+  //     ? (watchedEpisodes.length / seasonEpisodes.length) * 100
+  //     : 0;
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
@@ -357,7 +310,7 @@ function SingleSeriesPage() {
               handleOnValueChange={handleOnValueChange}
               selectedSeason={selectedSeason}
               seasons={seasons}
-              progressValue={progressValue}
+              //progressValue={progressValue}
               episodes={seasonEpisodes}
               watchedEpisodes={watchedEpisodes}
               onEpisodeWatched={handleEpisodeWatched}

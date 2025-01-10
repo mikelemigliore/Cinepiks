@@ -22,7 +22,10 @@ async function handleSeasonBtn(
   selectedSeason: any,
   episodeNumber: any,
   Id: any,
-  watched: any
+  isWatched: any,
+  episodeValue: any,
+  progress: any
+  //progressValue:any
 ) {
   const session = await getSession();
   const userEmail = session?.user?.email;
@@ -32,7 +35,7 @@ async function handleSeasonBtn(
     return;
   }
 
-  if (watched === true) {
+  if (isWatched === true) {
     // REMOVE LIKE
     try {
       const res = await fetch("/api/season", {
@@ -43,6 +46,8 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
+          episodeValue,
+          // progressValue
         }),
       });
 
@@ -56,6 +61,8 @@ async function handleSeasonBtn(
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
             Id,
+            episodeValue: episodeValue,
+            //progress
           })
         ); // ✅ Dispatch Redux action
       }
@@ -64,7 +71,6 @@ async function handleSeasonBtn(
     }
   } else {
     // ADD LIKE
-
     //console.log("watchedEpisodes",episodeNumber);
     try {
       const res = await fetch("/api/season", {
@@ -75,6 +81,9 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
+          episodeValue,
+          progress,
+          //progressValue
         }),
       });
 
@@ -85,12 +94,14 @@ async function handleSeasonBtn(
       if (res.status === 200) {
         // console.log(Id);
         // console.log(selectedSeason);
-        // console.log(episodeNumber);
+        console.log("progress + episodeValue", progress + episodeValue);
         dispatch(
           addEpisode({
             Id,
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
+            episodeValue: episodeValue,
+            progress: progress + episodeValue, // Update state progress correctly
           })
         ); // ✅ Dispatch Redux action
       }

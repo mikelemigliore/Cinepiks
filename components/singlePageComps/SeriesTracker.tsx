@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import EpisodeCard from "@/components/cards/EpisodeCard";
 import {
   Select,
@@ -71,7 +71,7 @@ interface SeriesTrackerProp {
   handleOnValueChange: (value: number) => void;
   selectedSeason: number;
   seasons: SeasonsProp[];
-  progressValue: number;
+  //progressValue: number;
   episodes: Episode[];
   watchedEpisodes: number[];
   onEpisodeWatched: (episodeNumber: number) => void;
@@ -82,14 +82,21 @@ function SeriesTracker({
   handleOnValueChange,
   selectedSeason,
   seasons,
-  progressValue,
+  //progressValue,
   episodes,
   watchedEpisodes,
   onEpisodeWatched,
   Id,
 }: SeriesTrackerProp) {
-
+  const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
+
+  // const progressValue =
+  //   watchedEpisodes.length > 0 && episodes.length > 0
+  //     ? (watchedEpisodes.length / episodes.length) * 100
+  //     : 0;
+
+  const progressValue = episodes.length > 0 ? 100 / episodes.length : 0;
 
   const seasondb = useSelector((state: RootState) => state.content.season);
 
@@ -98,30 +105,60 @@ function SeriesTracker({
   // Fetch movie details when IDs are available
   useEffect(() => {
     const fetchMovieDetails = async () => {
-      if (seasonSucces && seasonDB.length > 0) {
-        try {
-          //console.log("seasonDB", seasonDB);
+      //console.log("fetching...");
+      try {
+        //console.log("seasonDB", seasonDB);
 
-          const data = seasonDB.filter((item: any) => item.seriesId === Id);
+        //console.log(seasonDB);
 
-          if (data.length > 0) {
-            const res = data
-              .filter((item: any) => item.seasonNumber === selectedSeason)
-              .map((item: any) => item.episodes);
+        const data = seasonDB.filter((item: any) => item.seriesId === Id);
+        console.log(data);
+        if (data.length > 0) {
+          const res = data
+            .filter((item: any) => item.seasonNumber === selectedSeason)
+            .map((item: any) => item.episodes);
 
-            //console.log("res", res[0]);
+          // // ✅ Log each episodeValue correctly
+          // res[0].forEach((episode: any) =>
+          //   console.log("Episode Value:", episode.episodeValue)
+          // );
 
-            dispatch(setSeasonData(seasonDB));
-            onEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
-          }
-        } catch (error) {
-          console.error("Error fetching movie details:", error);
+          // ✅ Sum all episode values correctly
+          const episodeValueSum = res[0].reduce(
+            (sum: number, episode: any) => sum + (episode.episodeValue || 0),
+            0
+          );
+          //console.log("progress: " + seasonDB[0].progress);
+          setProgress(seasonDB[0].progress);
+          //setProgress(episodeValueSum)
+          console.log("episodeValueSum", episodeValueSum);
+          // console.log("seasonDB", seasonDB);
+          dispatch(setSeasonData(seasonDB));
+          onEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
+
+          console.log("finished...");
         }
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
       }
     };
 
     fetchMovieDetails();
-  }, [Id, selectedSeason]); // Trigger only when the movie IDs are fetched
+  }, [seasonDB]); // Trigger only when the movie IDs are fetched
+
+  const numberOfWatchedEpisodes = useMemo(() => {
+    console.log("calculating");
+    console.log(Id);
+    const data = seasondb
+      .filter((item) => item.seriesId == Id)
+      .filter((item) => item.seasonNumber === selectedSeason);
+
+    return data[0]?.episodes.length ?? 0;
+  }, [selectedSeason, seasondb, onEpisodeWatched]);
+
+  //const numberOfWatchedEpisodes = watchedEpisodes.length;
+  const percentage = (numberOfWatchedEpisodes / episodes.length) * 100;
+  //console.log("Number of watched episodes:", numberOfWatchedEpisodes);
 
   return (
     <div className="ml-[13vw] max-w-[75vw] mt-[4vw] mb-[2vw]">
@@ -153,12 +190,10 @@ function SeriesTracker({
         </div>
         <div className="flex flex-col items-center">
           <div>
-            <div className="mb-[1vw]">
-              {Math.round(progressValue)}% Completed
-            </div>
+            <div className="mb-[1vw]">{Math.round(percentage)}% Completed</div>
             <Progress
               className="[&>*]:bg-white/90 bg-buttonColor w-[45vw]"
-              value={progressValue}
+              value={percentage}
               max={100}
             />
           </div>
@@ -171,6 +206,9 @@ function SeriesTracker({
           episodes={episodes}
           watchedEpisodes={watchedEpisodes}
           onEpisodeWatched={onEpisodeWatched}
+          progressValue={progressValue}
+          progress={progress}
+          setProgress={setProgress}
         />
       </div>
     </div>

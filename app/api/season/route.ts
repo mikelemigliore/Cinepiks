@@ -6,10 +6,15 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export const POST = async (request: any) => {
-  const { season, userEmail, episodeNumber, Id } = await request.json(); // ✅ Expect userId from the frontend
+  // const { season, userEmail, episodeNumber, Id, progressValue } =
+  //   await request.json();
+  const { season, userEmail, episodeNumber, Id, episodeValue, progress } =
+    await request.json();
+
+  // ✅ Expect userId from the frontend
   // console.log("ID", Id);
   // console.log("season", season);
-  // console.log("watchedEpisodes", episodeNumber);
+  //console.log("progressValue", progressValue);
   await connect();
 
   try {
@@ -27,70 +32,127 @@ export const POST = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
+    // const existingSeason = existingUser.season.find(
+    //   (s: any) => s.seriesId === Id && s.seasonNumber === season
+    // );
+
+    // const episodeExists = existingSeason?.episodes.includes(episodeNumber);
+
+    // if (episodeExists) {
+    //   return NextResponse.json(
+    //     { message: "Episode already exists." },
+    //     { status: 400 }
+    //   );
+    // }
+
+    // let result;
+
+    // if (existingSeason) {
+    //   result = await User.updateOne(
+    //     {
+    //       email: userEmail, // Match the user by email
+    //     },
+    //     {
+    //       $addToSet: {
+    //         "season.$[element].episodes": episodeNumber, // Only update the matched season
+    //       },
+    //       $set: {
+    //         "season.$[element].progress": progressValue, // Only update the matched season
+    //       },
+    //     },
+    //     {
+    //       arrayFilters: [
+    //         {
+    //           "element.seriesId": Id, // Ensure the series ID matches
+    //           "element.seasonNumber": season, // Ensure the season number matches
+    //         },
+    //       ],
+    //     }
+    //   );
+    // }
+
+    // ✅ Check if the season exists
     const existingSeason = existingUser.season.find(
       (s: any) => s.seriesId === Id && s.seasonNumber === season
     );
 
-    // ✅ Check if the episode already exists
-    const episodeExists = existingSeason?.episodes.includes(episodeNumber);
-
-    if (episodeExists) {
-      return NextResponse.json(
-        { message: "Episode already exists." },
-        { status: 400 }
-      );
-    }
-
     let result;
 
     if (existingSeason) {
-      // result = await User.updateOne(
-      //     {
-      //         email: userEmail,
-      //         "season.seriesId": Id,
-      //         "season.seasonNumber": season
-      //     },
-      //     {
-      //         $addToSet: {
-      //             "season.$.episodes": episodeNumber
-      //         }
-      //     }
-      // );
+      // ✅ Check if the episode already exists
+      const episodeExists = existingSeason.episodes.find(
+        (ep: any) => ep.episodeNumber === episodeNumber
+      );
+
+      if (episodeExists) {
+        return NextResponse.json(
+          { message: "Episode already added." },
+          { status: 400 }
+        );
+      }
+
+      // ✅ Add the new episode with a specific value
       result = await User.updateOne(
         {
-            email: userEmail, // Match the user by email
+          email: userEmail,
+          // "season.seriesId": Id,
+          // "season.seasonNumber": season,
         },
         {
-            $addToSet: {
-                "season.$[element].episodes": episodeNumber  // Only update the matched season
-            }
+          $push: {
+            "season.$[element].episodes": {
+              episodeNumber: episodeNumber,
+              episodeValue: episodeValue, // ✅ New structure!
+            },
+          },
+          $inc: {
+            "season.$[element].progress": episodeValue, // ✅ Increment the progress directly in the database
+          },
         },
         {
-            arrayFilters: [
-                {
-                    "element.seriesId": Id,  // Ensure the series ID matches
-                    "element.seasonNumber": season // Ensure the season number matches
-                }
-            ]
+          arrayFilters: [
+            {
+              "element.seriesId": Id, // Ensure the series ID matches
+              "element.seasonNumber": season, // Ensure the season number matches
+            },
+          ],
         }
-    );
-  } else {
-      // ✅ New season, create the first entry
-      result =  await User.updateOne(
-          { email: userEmail },
-          {
-              $push: {
-                  season: {
-                      seriesId: Id,
-                      seasonNumber: season,
-                      episodes: [episodeNumber]
-                  }
-              }
-          }
       );
-  }
-
-    
+    } else {
+      // ✅ New season, create the first entry
+      // result = await User.updateOne(
+      //   { email: userEmail },
+      //   {
+      //     $push: {
+      //       season: {
+      //         seriesId: Id,
+      //         seasonNumber: season,
+      //         episodes: [episodeNumber],
+      //         progress: progressValue,
+      //       },
+      //     },
+      //   }
+      // );
+      // ✅ If the season doesn't exist, create it
+      result = await User.updateOne(
+        { email: userEmail },
+        {
+          $push: {
+            season: {
+              seriesId: Id,
+              seasonNumber: season,
+              episodes: [
+                {
+                  episodeNumber: episodeNumber,
+                  episodeValue: episodeValue, // ✅ Adding value directly
+                },
+              ],
+              progress: episodeValue,
+            },
+          },
+        }
+      );
+    }
 
     return NextResponse.json(
       { message: "Like added successfully.", result },
@@ -111,20 +173,21 @@ export const GET = async (request: any) => {
   try {
     const session: any = await getServerSession(authOptions);
 
-    //console.log("Session", session);
-
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const user = await User.findOne({ email: userEmail }, "season");
-    const season = user.season;
 
-    //console.log("season", season);
+    const userEmail = session.user.email;
+
+    // ✅ Correct the order of checking user existence
+    const user = await User.findOne({ email: userEmail }, "season");
 
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
+
+    // ✅ Now access the season after confirming the user exists
+    const season = user.season;
 
     return NextResponse.json(
       { message: "Likes retrieved successfully.", season },
@@ -139,7 +202,8 @@ export const GET = async (request: any) => {
 };
 
 export const DELETE = async (request: any) => {
-  const { season, userEmail, episodeNumber, Id } = await request.json();
+  const { season, userEmail, episodeNumber, Id, episodeValue } =
+    await request.json();
   //console.log("ID", Id);
   await connect();
 
@@ -157,23 +221,57 @@ export const DELETE = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    //console.log("ID", Id);
-
     // ✅ Remove the episode from the specified series and season
+    // const result = await User.updateOne(
+    //   {
+    //     email: userEmail, // Match the user by email
+    //   },
+    //   {
+    //     $pull: {
+    //       "season.$[element].episodes": episodeNumber, // Only update the matched season
+    //     },
+    //     $unset: {
+    //       "season.progress": progressValue,
+    //     },
+    //   },
+    //   {
+    //     arrayFilters: [
+    //       {
+    //         "element.seriesId": Id, // Ensure the series ID matches
+    //         "element.seasonNumber": season, // Ensure the season number matches
+    //       },
+    //     ],
+    //   }
+    // );
+
     const result = await User.updateOne(
       {
         email: userEmail,
-        "season.seriesId": Id, // ✅ Match the correct series
-        "season.seasonNumber": season,
+        // "season.seriesId": Id,
+        // "season.seasonNumber": season,
       },
+      // {
+      //   $pull: {
+      //     "season.$[element].episodes": { episodeNumber: episodeNumber }, // ✅ Remove the episode using the nested object
+      //   },
+      // }
       {
         $pull: {
-          "season.$.episodes": episodeNumber, // ✅ Remove the specific episode
+          "season.$[element].episodes": {
+            episodeNumber: episodeNumber,
+            //episodeValue: episodeValue, // ✅ New structure!
+          },
         },
+      },
+      {
+        arrayFilters: [
+          {
+            "element.seriesId": Id, // Ensure the series ID matches
+            "element.seasonNumber": season, // Ensure the season number matches
+          },
+        ],
       }
     );
-
-    //console.log(result);
 
     return NextResponse.json(
       { message: "Like removed successfully.", result },

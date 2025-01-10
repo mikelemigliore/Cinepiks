@@ -10,16 +10,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 //   type:string
 // }
 
-// interface Episode {
-//   episodeNumber: number;
-//   score: number;
-//   watched: boolean;
-// }
+interface Episode {
+  episodeNumber: number;
+  episodeValue: number;
+}
 
 interface Season {
   seriesId: number;
   seasonNumber: number;
-  episodes: number[];
+  episodes: Episode[];
+  progress: number;
 }
 
 interface QueryState {
@@ -101,66 +101,51 @@ const dbSlice = createSlice({
     setSeasonData: (state, action: PayloadAction<Season[]>) => {
       state.season = action.payload;
     },
-    // addEpisode: (
-    //   state,
-    //   action: PayloadAction<{
-    //     seasonNumber: number;
-    //     episodeNumber: number;
-    //     Id: number;
-    //   }>
-    // ) => {
-    //   const { Id, seasonNumber, episodeNumber } = action.payload;
-
-    //   // ✅ Find the correct index instead of just the first match
-    //   const seasonIndex = state.season.findIndex(
-    //     (season) =>
-    //       season.seriesId === Id && season.seasonNumber === seasonNumber
-    //   );
-
-    //   if (seasonIndex !== -1) {
-    //     // ✅ Update the found season correctly by index
-    //     if (!state.season[seasonIndex].episodes.includes(episodeNumber)) {
-    //       state.season[seasonIndex].episodes.push(episodeNumber);
-    //     }
-    //   } else {
-    //     // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
-    //     state.season.push({
-    //       seriesId: Id,
-    //       seasonNumber,
-    //       episodes: [episodeNumber],
-    //     });
-    //   }
-    // },
     addEpisode: (
       state,
       action: PayloadAction<{
         seasonNumber: number;
         episodeNumber: number;
         Id: number;
+        episodeValue: number;
+        progress: number;
+        //progressValue: number;
       }>
     ) => {
-      const { Id, seasonNumber, episodeNumber } = action.payload;
+      const { Id, seasonNumber, episodeNumber, episodeValue, progress } =
+        action.payload;
 
       // ✅ Find the correct index instead of just the first match
       const seasonEntry = state.season.find(
         (season) =>
           season.seriesId === Id && season.seasonNumber === seasonNumber
       );
-      
 
       if (seasonEntry) {
-        console.log("seasonIndex", seasonEntry);
+        // if (!seasonEntry.episodes.includes(episodeNumber)) {
+        //   seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
+        // }
+        const episodeExists = seasonEntry.episodes.find(
+          (ep) => ep.episodeNumber === episodeNumber
+        );
 
-        // ✅ Update the found season correctly by index
-        if (!seasonEntry.episodes.includes(episodeNumber)) {
-          seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
-    }
+        if (!episodeExists) {
+          seasonEntry.episodes.push({ episodeNumber, episodeValue });
+          // ✅ Increment progress only if the episode is new
+          seasonEntry.progress += episodeValue;
+        }
       } else {
         // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
+        // state.season.push({
+        //   seriesId: Id,
+        //   seasonNumber,
+        //   episodes: [episodeNumber],
+        // });
         state.season.push({
           seriesId: Id,
           seasonNumber,
-          episodes: [episodeNumber],
+          episodes: [{ episodeNumber, episodeValue }],
+          progress: episodeValue, // ✅ Initialize progress with the first episodeValue
         });
       }
     },
@@ -170,27 +155,29 @@ const dbSlice = createSlice({
         seasonNumber: number;
         episodeNumber: number;
         Id: number;
+        episodeValue: number;
       }>
     ) => {
-      const { Id, seasonNumber, episodeNumber } = action.payload;
+      const { Id, seasonNumber, episodeNumber, episodeValue } = action.payload;
 
       const season = state.season.find(
         (season) =>
           season.seriesId === Id && season.seasonNumber === seasonNumber
       );
 
+      // if (season) {
+      //   if (season.episodes.includes(episodeNumber)) {
+      //     season.episodes = season.episodes.filter(
+      //       (ep) => ep !== episodeNumber
+      //     );
+      //   }
+      // }
       if (season) {
-        console.log("HERE 1");
-        if (season.episodes.includes(episodeNumber)) {
-          console.log("HERE 2");
-          // If the episode exists, remove it
-          season.episodes = season.episodes.filter((ep) => {
-            console.log("ep", ep);
-            console.log("episodeNumber", episodeNumber);
-
-            ep !== episodeNumber;
-          });
-        }
+        // ✅ Decrease progress only when an episode is removed
+        season.progress -= episodeValue;
+        season.episodes = season.episodes.filter(
+          (ep) => ep.episodeNumber !== episodeNumber
+        );
       }
     },
   },

@@ -29,14 +29,19 @@ const scoreSchema = new mongoose.Schema({
   score: Number,
 });
 
-// const episodeSchema = new mongoose.Schema({
-//   episodeNumber: Number,
-// });
+const episodeSchema = new mongoose.Schema({
+  episodeNumber: Number,
+  episodeValue:Number
+});
 
 const seasonSchema = new mongoose.Schema({
   seriesId: Number,
   seasonNumber: Number,
-  episodes: [Number], 
+  episodes: [episodeSchema], //[Number]
+  progress: {
+    type: Number,
+    default: 0 // ✅ Ensure a numeric type with a default value
+  }
 });
 
 const userSchema = new Schema(

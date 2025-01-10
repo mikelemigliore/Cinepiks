@@ -30,6 +30,9 @@ interface SwiperEpisodeProps {
   onEpisodeWatched: (episodeNumber: number) => void;
   selectedSeason: number;
   Id:number
+  progressValue:number
+  progress:number
+  setProgress:any
 }
 
 function CarouselEpisode({
@@ -37,43 +40,13 @@ function CarouselEpisode({
   watchedEpisodes,
   onEpisodeWatched,
   selectedSeason,
-  Id
+  Id,
+  progressValue,
+  progress,
+  setProgress
 }: SwiperEpisodeProps) {
-  // const dispatch = useDispatch();
 
-  // const seasondb = useSelector((state: RootState) => state.content.season);
-
-  // const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
-
-  // // Fetch movie details when IDs are available
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     if (seasonSucces && seasonDB.length > 0) {
-  //       try {
-  //         //console.log("seasonDB", seasonDB);
-
-  //         const data = seasonDB.filter((item: any) => item.seriesId === Id);
-
-  //         if (data.length > 0) {
-  //           const res = data
-  //             .filter((item: any) => item.seasonNumber === selectedSeason)
-  //             .map((item: any) => item.episodes);
-
-  //           //console.log("res", res[0]);
-
-  //           dispatch(setSeasonData(seasonDB));
-  //           onEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching movie details:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchMovieDetails();
-  // }, [Id, selectedSeason]); // Trigger only when the movie IDs are fetched
-  
-
+  //console.log("progressValue",progressValue);
   return (
     <div>
       <div className="">
@@ -101,6 +74,9 @@ function CarouselEpisode({
                   //handleSeason={handleSeason}
                   selectedSeason={selectedSeason}
                   Id={Id}
+                  progressValue={progressValue}
+                  progress={progress}
+                  setProgress={setProgress}
                 />
               </CarouselItem>
             ))}
