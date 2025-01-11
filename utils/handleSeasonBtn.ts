@@ -1,3 +1,4 @@
+
 import { getSession } from "next-auth/react";
 //import ListView from "@/components/listview/ListView";
 import { getLike } from "@/app/pages/api/likesPage";
@@ -23,9 +24,7 @@ async function handleSeasonBtn(
   episodeNumber: any,
   Id: any,
   isWatched: any,
-  episodeValue: any,
-  progress: any
-  //progressValue:any
+  episodeWatched:any
 ) {
   const session = await getSession();
   const userEmail = session?.user?.email;
@@ -46,8 +45,7 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
-          episodeValue,
-          // progressValue
+          episodeWatched
         }),
       });
 
@@ -61,8 +59,7 @@ async function handleSeasonBtn(
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
             Id,
-            episodeValue: episodeValue,
-            //progress
+            episodeWatched
           })
         ); // ✅ Dispatch Redux action
       }
@@ -81,9 +78,7 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
-          episodeValue,
-          progress,
-          //progressValue
+          episodeWatched
         }),
       });
 
@@ -92,16 +87,12 @@ async function handleSeasonBtn(
       }
 
       if (res.status === 200) {
-        // console.log(Id);
-        // console.log(selectedSeason);
-        console.log("progress + episodeValue", progress + episodeValue);
         dispatch(
           addEpisode({
             Id,
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
-            episodeValue: episodeValue,
-            progress: progress + episodeValue, // Update state progress correctly
+            episodeWatched
           })
         ); // ✅ Dispatch Redux action
       }

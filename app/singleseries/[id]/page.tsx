@@ -94,6 +94,8 @@ function SingleSeriesPage() {
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
 
+  const dispatch = useDispatch();
+
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
       all: filter === "all",
@@ -119,6 +121,40 @@ function SingleSeriesPage() {
     Id,
     selectedSeason,
   });
+
+  //console.log("watchedEpisodes", watchedEpisodes);
+
+  //const seasondb = useSelector((state: RootState) => state.content.season);
+
+  const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+
+  // Fetch movie details when IDs are available
+  useEffect(() => {
+    //console.log("SeasonDB", seasonDB);
+
+    const fetchMovieDetails = async () => {
+      try {
+        const data = seasonDB.filter((item: any) => item.seriesId === Id);
+        //console.log("data",data);
+        if (data.length > 0) {
+          const res = data
+            .filter((item: any) => item.seasonNumber === selectedSeason)
+            .map((item: any) => item.episodes);
+
+          //console.log("res", res[0]);
+          //setProgress(seasonDB[0].progress);
+          dispatch(setSeasonData(seasonDB));
+          handleEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
+          // setWatchedEpisodes(res[0]);
+          //console.log("watchedEpisodes", watchedEpisodes.length);
+        }
+      } catch (error) {
+        console.error("Error fetching movie details:", error);
+      }
+    };
+
+    fetchMovieDetails();
+  }, [seasonDB]); // Trigger only when the movie IDs are fetched
 
   useEffect(() => {
     if (seriesDetails) {
@@ -233,19 +269,8 @@ function SingleSeriesPage() {
     setHightolow(false);
   };
 
-  // const handleEpisodeWatched = (episodeNumber: number) => {
-  //   setWatchedEpisodes((prevWatched) => ({
-  //     //Calls setWatchedEpisodes, the function that updates the watchedEpisodes state.
-  //     //The function takes prevWatched as an argument, which represents the previous state of watchedEpisodes.
-  //     ...prevWatched, //Uses the spread operator ... to copy all previous entries in prevWatched to the new object. This ensures any existing data in the state is retained.
-  //     [episodeNumber]: !prevWatched[episodeNumber], //Adds or updates the entry for episodeNumber in watchedEpisodes.
-  //     // !prevWatched[episodeNumber] toggles the current value for this episode:
-  //     // If it was true (watched), it becomes false.
-  //     // If it was false or undefined (not watched), it becomes true
-  //   }));
-  // };
-
   const handleEpisodeWatched = (episodeNumber: number) => {
+    //setWatchedEpisodes(episodeNumber);
     setWatchedEpisodes(
       (prev) =>
         prev.includes(episodeNumber)

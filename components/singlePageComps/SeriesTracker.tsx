@@ -89,76 +89,20 @@ function SeriesTracker({
   Id,
 }: SeriesTrackerProp) {
   const [progress, setProgress] = useState(0);
-  const dispatch = useDispatch();
-
-  // const progressValue =
-  //   watchedEpisodes.length > 0 && episodes.length > 0
-  //     ? (watchedEpisodes.length / episodes.length) * 100
-  //     : 0;
-
-  const progressValue = episodes.length > 0 ? 100 / episodes.length : 0;
 
   const seasondb = useSelector((state: RootState) => state.content.season);
 
-  const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
-
-  // Fetch movie details when IDs are available
   useEffect(() => {
-    const fetchMovieDetails = async () => {
-      //console.log("fetching...");
-      try {
-        //console.log("seasonDB", seasonDB);
-
-        //console.log(seasonDB);
-
-        const data = seasonDB.filter((item: any) => item.seriesId === Id);
-        console.log(data);
-        if (data.length > 0) {
-          const res = data
-            .filter((item: any) => item.seasonNumber === selectedSeason)
-            .map((item: any) => item.episodes);
-
-          // // ✅ Log each episodeValue correctly
-          // res[0].forEach((episode: any) =>
-          //   console.log("Episode Value:", episode.episodeValue)
-          // );
-
-          // ✅ Sum all episode values correctly
-          const episodeValueSum = res[0].reduce(
-            (sum: number, episode: any) => sum + (episode.episodeValue || 0),
-            0
-          );
-          //console.log("progress: " + seasonDB[0].progress);
-          setProgress(seasonDB[0].progress);
-          //setProgress(episodeValueSum)
-          console.log("episodeValueSum", episodeValueSum);
-          // console.log("seasonDB", seasonDB);
-          dispatch(setSeasonData(seasonDB));
-          onEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
-
-          console.log("finished...");
-        }
-      } catch (error) {
-        console.error("Error fetching movie details:", error);
-      }
-    };
-
-    fetchMovieDetails();
-  }, [seasonDB]); // Trigger only when the movie IDs are fetched
-
-  const numberOfWatchedEpisodes = useMemo(() => {
-    console.log("calculating");
-    console.log(Id);
+    //console.log("watchedEpisodes", watchedEpisodes.length);
     const data = seasondb
       .filter((item) => item.seriesId == Id)
       .filter((item) => item.seasonNumber === selectedSeason);
+    //console.log(data);
 
-    return data[0]?.episodes.length ?? 0;
-  }, [selectedSeason, seasondb, onEpisodeWatched]);
+    setProgress(data[0]?.episodes.length ?? 0);
+  }, [selectedSeason, seasondb, Id]);
 
-  //const numberOfWatchedEpisodes = watchedEpisodes.length;
-  const percentage = (numberOfWatchedEpisodes / episodes.length) * 100;
-  //console.log("Number of watched episodes:", numberOfWatchedEpisodes);
+  const percentage = (progress / episodes.length) * 100;
 
   return (
     <div className="ml-[13vw] max-w-[75vw] mt-[4vw] mb-[2vw]">
@@ -206,9 +150,7 @@ function SeriesTracker({
           episodes={episodes}
           watchedEpisodes={watchedEpisodes}
           onEpisodeWatched={onEpisodeWatched}
-          progressValue={progressValue}
-          progress={progress}
-          setProgress={setProgress}
+          //progressValue={progressValue}
         />
       </div>
     </div>

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Carousel,
@@ -30,9 +31,7 @@ interface SwiperEpisodeProps {
   onEpisodeWatched: (episodeNumber: number) => void;
   selectedSeason: number;
   Id:number
-  progressValue:number
-  progress:number
-  setProgress:any
+  //progressValue:number
 }
 
 function CarouselEpisode({
@@ -41,9 +40,7 @@ function CarouselEpisode({
   onEpisodeWatched,
   selectedSeason,
   Id,
-  progressValue,
-  progress,
-  setProgress
+ // progressValue,
 }: SwiperEpisodeProps) {
 
   //console.log("progressValue",progressValue);
@@ -74,9 +71,7 @@ function CarouselEpisode({
                   //handleSeason={handleSeason}
                   selectedSeason={selectedSeason}
                   Id={Id}
-                  progressValue={progressValue}
-                  progress={progress}
-                  setProgress={setProgress}
+                  //progressValue={progressValue}
                 />
               </CarouselItem>
             ))}

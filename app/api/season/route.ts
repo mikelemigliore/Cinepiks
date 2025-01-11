@@ -8,7 +8,7 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export const POST = async (request: any) => {
   // const { season, userEmail, episodeNumber, Id, progressValue } =
   //   await request.json();
-  const { season, userEmail, episodeNumber, Id, episodeValue, progress } =
+  const { season, userEmail, episodeNumber, Id, episodeValue, episodeWatched, } =
     await request.json();
 
   // ✅ Expect userId from the frontend
@@ -102,12 +102,13 @@ export const POST = async (request: any) => {
           $push: {
             "season.$[element].episodes": {
               episodeNumber: episodeNumber,
-              episodeValue: episodeValue, // ✅ New structure!
+              //episodeValue: episodeValue, // ✅ New structure!
+              episodeWatched: episodeWatched,
             },
           },
-          $inc: {
-            "season.$[element].progress": episodeValue, // ✅ Increment the progress directly in the database
-          },
+          // $inc: {
+          //   "season.$[element].progress": episodeValue, // ✅ Increment the progress directly in the database
+          // },
         },
         {
           arrayFilters: [
@@ -144,7 +145,8 @@ export const POST = async (request: any) => {
               episodes: [
                 {
                   episodeNumber: episodeNumber,
-                  episodeValue: episodeValue, // ✅ Adding value directly
+                  //episodeValue: episodeValue, // ✅ Adding value directly
+                  episodeWatched: episodeWatched,
                 },
               ],
               progress: episodeValue,
@@ -202,7 +204,7 @@ export const GET = async (request: any) => {
 };
 
 export const DELETE = async (request: any) => {
-  const { season, userEmail, episodeNumber, Id, episodeValue } =
+  const { season, userEmail, episodeNumber, Id, episodeWatched, } =
     await request.json();
   //console.log("ID", Id);
   await connect();
@@ -260,6 +262,7 @@ export const DELETE = async (request: any) => {
           "season.$[element].episodes": {
             episodeNumber: episodeNumber,
             //episodeValue: episodeValue, // ✅ New structure!
+            episodeWatched: episodeWatched,
           },
         },
       },

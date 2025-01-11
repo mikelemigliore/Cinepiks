@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -31,9 +32,7 @@ interface EpisodeCardProp {
   date: string;
   selectedSeason: number;
   Id: number;
-  progressValue: number;
-  progress: number;
-  setProgress:any
+  //progressValue: number;
 }
 
 function EpisodeCard({
@@ -48,47 +47,33 @@ function EpisodeCard({
   date,
   selectedSeason,
   Id,
-  progressValue,
-  progress,
-  setProgress
+ // progressValue,
 }: //handleSeason,
 EpisodeCardProp) {
-  //const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
   const [isWatched, setIsWatched] = useState(false);
+  const [episodeWatched, setEpisodeWatched] = useState(true);
   const dispatch = useDispatch();
 
- // const progress = 0
+  // const episodeWatched = false
 
   const seasondb = useSelector((state: RootState) => state.content.season);
 
-  //const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
-
-  //console.log("progressValue",progressValue);
-
-  // Fetch movie details when IDs are available
   useEffect(() => {
     const fetchMovieDetails = async () => {
       if (seasondb?.length > 0) {
-        // const data = seasondb.filter((item) => item.seriesId === Id);
-        // // Defensive fallback
-        // const res =
-        //   data
-        //     .filter((item) => item.seasonNumber === selectedSeason)
-        //     ?.map((item) => item.episodes) || [];
-        // setIsWatched(res[0]?.includes(episodeNumber) || false);
+
         const data = seasondb.filter((item) => item.seriesId === Id);
         const res =
           data
             .filter((item) => item.seasonNumber === selectedSeason)
             ?.flatMap((item) => item.episodes) || [];
 
-        // ✅ Corrected to check the property inside each episode object
         setIsWatched(res.some((ep: any) => ep.episodeNumber === episodeNumber));
       }
     };
 
     fetchMovieDetails();
-  }, [seasondb, selectedSeason, Id, episodeNumber]); // Trigger only when the movie IDs are fetched
+  }, [seasondb, selectedSeason, Id, episodeNumber]); 
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -127,17 +112,15 @@ EpisodeCardProp) {
   };
 
   const handleSeason = () => {
-    const episodeValue = progressValue; // ✅ Ensure episodeValue is defined correctly
-    //console.log("episodeValue", episodeValue);
-    setProgress((prevProgress:any) => prevProgress + episodeValue); // ✅ Update Progress Directly
+    //const episodeValue = progressValue; // ✅ Ensure episodeValue is defined correctly
+   // setEpisodeWatched(true)
     handleSeasonBtn(
       dispatch,
       selectedSeason,
       episodeNumber,
       Id,
       isWatched,
-      episodeValue,
-      progress
+      episodeWatched
     );
   };
 

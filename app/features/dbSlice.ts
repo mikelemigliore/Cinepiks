@@ -12,14 +12,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Episode {
   episodeNumber: number;
-  episodeValue: number;
+  episodeWatched: boolean;
 }
 
 interface Season {
   seriesId: number;
   seasonNumber: number;
   episodes: Episode[];
-  progress: number;
+  //progress: number;
 }
 
 interface QueryState {
@@ -101,84 +101,143 @@ const dbSlice = createSlice({
     setSeasonData: (state, action: PayloadAction<Season[]>) => {
       state.season = action.payload;
     },
+    // addEpisode: (
+    //   state,
+    //   action: PayloadAction<{
+    //     seasonNumber: number;
+    //     episodeNumber: number;
+    //     Id: number;
+    //     episodeValue: number;
+    //     progress: number;
+    //     //progressValue: number;
+    //   }>
+    // ) => {
+    //   const { Id, seasonNumber, episodeNumber, episodeValue, progress } =
+    //     action.payload;
+
+    //   // ✅ Find the correct index instead of just the first match
+    //   const seasonEntry = state.season.find(
+    //     (season) =>
+    //       season.seriesId === Id && season.seasonNumber === seasonNumber
+    //   );
+
+    //   if (seasonEntry) {
+    //     // if (!seasonEntry.episodes.includes(episodeNumber)) {
+    //     //   seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
+    //     // }
+    //     const episodeExists = seasonEntry.episodes.find(
+    //       (ep) => ep.episodeNumber === episodeNumber
+    //     );
+
+    //     if (!episodeExists) {
+    //       seasonEntry.episodes.push({ episodeNumber, episodeValue });
+    //       // ✅ Increment progress only if the episode is new
+    //       seasonEntry.progress += episodeValue;
+    //     }
+    //   } else {
+    //     // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
+    //     // state.season.push({
+    //     //   seriesId: Id,
+    //     //   seasonNumber,
+    //     //   episodes: [episodeNumber],
+    //     // });
+    //     state.season.push({
+    //       seriesId: Id,
+    //       seasonNumber,
+    //       episodes: [{ episodeNumber, episodeValue }],
+    //       progress: episodeValue, // ✅ Initialize progress with the first episodeValue
+    //     });
+    //   }
+    // },
     addEpisode: (
       state,
       action: PayloadAction<{
         seasonNumber: number;
         episodeNumber: number;
         Id: number;
-        episodeValue: number;
-        progress: number;
-        //progressValue: number;
+        episodeWatched: boolean;
       }>
     ) => {
-      const { Id, seasonNumber, episodeNumber, episodeValue, progress } =
+      const { Id, seasonNumber, episodeNumber, episodeWatched } =
         action.payload;
 
-      // ✅ Find the correct index instead of just the first match
       const seasonEntry = state.season.find(
         (season) =>
           season.seriesId === Id && season.seasonNumber === seasonNumber
       );
 
       if (seasonEntry) {
-        // if (!seasonEntry.episodes.includes(episodeNumber)) {
-        //   seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
-        // }
         const episodeExists = seasonEntry.episodes.find(
           (ep) => ep.episodeNumber === episodeNumber
         );
 
         if (!episodeExists) {
-          seasonEntry.episodes.push({ episodeNumber, episodeValue });
-          // ✅ Increment progress only if the episode is new
-          seasonEntry.progress += episodeValue;
+          seasonEntry.episodes.push({ episodeNumber, episodeWatched });
         }
       } else {
-        // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
-        // state.season.push({
-        //   seriesId: Id,
-        //   seasonNumber,
-        //   episodes: [episodeNumber],
-        // });
         state.season.push({
           seriesId: Id,
           seasonNumber,
-          episodes: [{ episodeNumber, episodeValue }],
-          progress: episodeValue, // ✅ Initialize progress with the first episodeValue
+          episodes: [{ episodeNumber, episodeWatched }],
+          //episodeWatched:episodeWatched
         });
       }
     },
+    // removeEpisode: (
+    //   state,
+    //   action: PayloadAction<{
+    //     seasonNumber: number;
+    //     episodeNumber: number;
+    //     Id: number;
+    //     episodeValue: number;
+    //   }>
+    // ) => {
+    //   const { Id, seasonNumber, episodeNumber, episodeValue } = action.payload;
+
+    //   const season = state.season.find(
+    //     (season) =>
+    //       season.seriesId === Id && season.seasonNumber === seasonNumber
+    //   );
+
+    //   if (season) {
+    //     // ✅ Decrease progress only when an episode is removed
+    //     season.progress -= episodeValue;
+    //     season.episodes = season.episodes.filter(
+    //       (ep) => ep.episodeNumber !== episodeNumber
+    //     );
+    //   }
+    // },
     removeEpisode: (
       state,
       action: PayloadAction<{
         seasonNumber: number;
         episodeNumber: number;
         Id: number;
-        episodeValue: number;
+        episodeWatched: boolean;
       }>
     ) => {
-      const { Id, seasonNumber, episodeNumber, episodeValue } = action.payload;
+      const { Id, seasonNumber, episodeNumber } = action.payload;
 
       const season = state.season.find(
         (season) =>
           season.seriesId === Id && season.seasonNumber === seasonNumber
       );
 
-      // if (season) {
-      //   if (season.episodes.includes(episodeNumber)) {
-      //     season.episodes = season.episodes.filter(
-      //       (ep) => ep !== episodeNumber
-      //     );
-      //   }
-      // }
       if (season) {
-        // ✅ Decrease progress only when an episode is removed
-        season.progress -= episodeValue;
         season.episodes = season.episodes.filter(
           (ep) => ep.episodeNumber !== episodeNumber
         );
       }
+    },
+    updateEmail: (
+      state,
+      action: PayloadAction<{
+        email: string;
+        newEmail: string;
+        confirmNewEmail: string;
+      }>
+    ) => {
+      const { Id, seasonNumber, episodeNumber } = action.payload;
     },
   },
 });
@@ -200,6 +259,7 @@ export const {
   // addSeason,
   removeEpisode,
   addEpisode,
+  updateEmail,
 } = dbSlice.actions;
 
 export default dbSlice.reducer;
