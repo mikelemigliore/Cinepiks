@@ -22,7 +22,6 @@ function EmailUpdate({ email }: EmailProp) {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  console.log("UPDATE EMAIL", email);
 
   const handleCancel = () => {
     setIsDialogOpen(false);
@@ -77,11 +76,6 @@ function EmailUpdate({ email }: EmailProp) {
       if (res.status === 200) {
         setError("");
         signOut({ callbackUrl: "/" });
-        // updateEmail(
-        //   email,
-        //   newEmail,
-        //   confirmNewEmail,
-        // )
       }
     } catch (error) {
       setError("Error, try again");

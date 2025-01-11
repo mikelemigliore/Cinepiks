@@ -36,9 +36,8 @@ const scoreSchema = new mongoose.Schema({
 
 const episodeSchema = new mongoose.Schema({
   episodeNumber: Number,
-  episodeWatched:Boolean
+  episodeWatched: Boolean,
 });
-
 
 const seasonSchema = new mongoose.Schema({
   seriesId: Number,
@@ -94,6 +93,11 @@ const userSchema = new Schema(
       type: [seasonSchema],
       default: [], // Initialize as an empty array
       required: false,
+    },
+    picture: {
+      type: String,
+      required: false,
+      default: ""
     },
     password: { type: String, required: false },
   },

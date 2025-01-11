@@ -11,12 +11,12 @@ import Link from "next/link";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoPersonSharp } from "react-icons/io5";
 import { useGetAccountQuery } from "../features/account/accountSlice";
+import ProfilePicture from "@/components/profilePicture/ProfilePicture";
 //import UsernameUpdate from "@/components/usernameUpdate/UsernameUpdate";
 
 function AccountPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
-  const [src, setSrc] = useState("");
   const [email, setEmail] = useState("");
   const [likes, setLikes] = useState(0);
   const [watchlist, setWatchlist] = useState(0);
@@ -28,7 +28,8 @@ function AccountPage() {
 
   useEffect(() => {
     if (isSuccess && accountDb) {
-      //console.log(accountDb?.email);
+      //console.log(accountDb);
+      setPreview(accountDb?.picture)
       setLikes(accountDb?.likes.length);
       setWatchlist(accountDb?.watchlist.length);
       setWatched(accountDb?.watched.length);
@@ -36,31 +37,14 @@ function AccountPage() {
     }
   }, [accountDb, isSuccess]);
 
-  // Called when the crop is complete, updates preview
-  const onCrop = (preview: string) => {
-    setPreview(preview);
-  };
+  // const onCrop = (preview: string) => {
+  //   setPreview(preview);
+  // };
 
-  // Called when the editor is closed
-  const onClose = () => {
-    setPreview(null);
-  };
-
-  const handleSave = () => {
-    if (preview) {
-      // Save logic here
-      console.log("Image saved:", preview);
-
-      // Example: Save to localStorage
-      localStorage.setItem("profilePicture", preview);
-
-      // Example: Call an API to update the user profile
-      // await api.updateProfilePicture({ image: preview });
-
-      //alert("Profile picture updated successfully!");
-    }
-    setIsDialogOpen(false);
-  };
+  // // Called when the editor is closed
+  // const onClose = () => {
+  //   setPreview(null);
+  // };
 
   return (
     <div className="">
@@ -68,21 +52,33 @@ function AccountPage() {
         <div className="">
           <h1 className="text-[2.5vw] font-bold mb-[4vh]">Profile</h1>
           {preview ? (
-            <img src={preview} alt="Preview" className="w-[16vw]" />
+            <img src={preview} alt="Preview" className="w-[16vw] h-[11vw] rounded-full object-cover" />
           ) : (
             <div className="w-[11vw] h-[11vw] bg-buttonColor flex items-center justify-center rounded-full">
               <IoPersonSharp className="w-[6vw] h-[6vw] text-customTextColor" />
             </div>
           )}
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <div>
+            <ProfilePicture
+              //isDialogOpen={isDialogOpen}
+              //setIsDialogOpen={setIsDialogOpen}
+              //handleSave={handleSave}
+              //preview={preview}
+              //onCrop={onCrop}
+              //onClose={onClose}
+              setPreview={setPreview}
+              email={email}
+            />
+          </div>
+          {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="md:w-[36vw] md:h-[33vw] bg-buttonColor pb-[4vw] ">
               <h1 className="ml-[2.2vw] mt-[1vw] text-[1vw]">
                 Update Profile Picture
               </h1>
               <div className="mt-[-2vw] flex items-center justify-center w-full h-full text-white">
-                {/* Dotted square container */}
+                
                 <div className="relative w-[600px] h-[350px] flex items-center justify-center overflow-hidden rounded-3xl border-[0.15vw] border-solid hover:bg-white/5 mb-[4vw]  mt-[4vw] mx-[2vw]">
-                  {/* <Avatar
+                   <Avatar
                     width={600}
                     height={350}
                     onCrop={onCrop}
@@ -100,7 +96,7 @@ function AccountPage() {
                       width: "100%", // Adjust to fit parent container
                       height: "100%",
                     }}
-                  /> */}
+                  /> 
                 </div>
               </div>
               <div className="flex justify-center items-center">
@@ -118,7 +114,7 @@ function AccountPage() {
                 <MdModeEditOutline className="w-[2vw] h-[2vh]" />
               </DialogTrigger>
             </div>
-          </Dialog>
+          </Dialog> */}
         </div>
         <div>
           <div className="flex space-x-[9vw] ml-[5vw]">

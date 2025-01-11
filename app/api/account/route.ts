@@ -100,20 +100,16 @@ export const GET = async (request: any) => {
 export const DELETE = async (request: any) => {
   const { email } = await request.json();
 
-  console.log("email", email);
-
   await connect();
 
   try {
-    console.log("I WAS SUCCESFULL");
-    // if (!email) {
-    //   return NextResponse.json(
-    //     { message: "User ID and like data are required." },
-    //     { status: 400 }
-    //   );
-    // }
+    if (!email) {
+      return NextResponse.json(
+        { message: "User ID and like data are required." },
+        { status: 400 }
+      );
+    }
 
-    // console.log("I WAS SUCCESFULL");
     const existingUser = await User.findOne({ email: email });
 
     if (!existingUser) {
@@ -129,7 +125,6 @@ export const DELETE = async (request: any) => {
         { status: 500 }
       );
     }
-    // console.log("I WAS SUCCESFULL");
 
     return NextResponse.json(
       { message: "Account deleted successfully." },

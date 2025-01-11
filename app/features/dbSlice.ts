@@ -28,6 +28,7 @@ interface QueryState {
   watched: any[];
   score: any[];
   season: Season[];
+  picture: string;
 }
 
 const initialState: QueryState = {
@@ -37,6 +38,7 @@ const initialState: QueryState = {
   watched: [],
   score: [],
   season: [],
+  picture: "",
 };
 //JSON.parse(localStorage.getItem("likesdb") || "[]"),
 const dbSlice = createSlice({
@@ -229,15 +231,11 @@ const dbSlice = createSlice({
         );
       }
     },
-    updateEmail: (
-      state,
-      action: PayloadAction<{
-        email: string;
-        newEmail: string;
-        confirmNewEmail: string;
-      }>
-    ) => {
-      const { Id, seasonNumber, episodeNumber } = action.payload;
+    setPicture: (state, action: PayloadAction<string>) => {
+      state.picture = action.payload;
+    },
+    updatePicture: (state, action: PayloadAction<{ picture: string }>) => {
+      state.picture = action.payload.picture;
     },
   },
 });
@@ -259,7 +257,9 @@ export const {
   // addSeason,
   removeEpisode,
   addEpisode,
-  updateEmail,
+  //updateEmail,
+  updatePicture,
+  setPicture,
 } = dbSlice.actions;
 
 export default dbSlice.reducer;

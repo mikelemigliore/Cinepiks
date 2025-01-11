@@ -399,7 +399,13 @@ import {
   useGetPrimeMoviesQuery,
 } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
-import { setLikes, setScore, setWatched, setWatchlists } from "../features/dbSlice";
+import {
+  setLikes,
+  setPicture,
+  setScore,
+  setWatched,
+  setWatchlists,
+} from "../features/dbSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../features/store";
 import { getLikes } from "../pages/api/likesPage";
@@ -408,6 +414,8 @@ import { getWatchlists } from "../pages/api/watchlistPage";
 import { useGetWatchedQuery } from "../features/watched/watchedSlice";
 import { getWatchedList } from "../pages/api/watchedPage";
 import { useGetScoreQuery } from "../features/score/scoreSlice";
+import { useGetPictureQuery } from "../features/picture/pictureSlice";
+import { useGetAccountQuery } from "../features/account/accountSlice";
 
 const services = [
   { id: 8, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -576,6 +584,9 @@ function HomePage() {
 
   const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
+  //const { data: pictureDB, isSuccess: pictureSucces } = useGetPictureQuery({});
+  //const { data: accountDb, isSuccess:imageSuccess } = useGetAccountQuery({});
+
   // Fetch movie details when IDs are available
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -620,7 +631,7 @@ function HomePage() {
 
       if (scoreSucces && scoreDB.length > 0) {
         try {
-          // const res = await getWatchedList(watchedtDB); 
+          // const res = await getWatchedList(watchedtDB);
           // const watchedContent = await res.json();
 
           dispatch(setScore(scoreDB));
@@ -628,10 +639,15 @@ function HomePage() {
           console.error("Error fetching movie details:", error);
         }
       }
+
+      // if (imageSuccess && accountDb) {
+      //   //console.log(accountDb);
+      //   dispatch(setPicture(accountDb?.picture))
+      // }
     };
 
     fetchMovieDetails();
-  }, [likesDB, watchlistDB, watchedtDB,scoreDB]); // Trigger only when the movie IDs are fetched
+  }, [likesDB, watchlistDB, watchedtDB, scoreDB]); // Trigger only when the movie IDs are fetched
 
   // // Fetch movie details when IDs are available
   // useEffect(() => {

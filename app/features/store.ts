@@ -9,24 +9,24 @@ import { searchApi } from "./search/searchSlice";
 import querySlice from "./querySlice";
 import dbSlice from "./dbSlice";
 import { likesDBApi } from "./likes/likesSlice";
-import { persistReducer, persistStore } from 'redux-persist';
+import { persistReducer, persistStore } from "redux-persist";
 import { watchlistDBApi } from "./watchlist/watchlistSlice";
-import storage from './storage';  // Import the storage created above
+import storage from "./storage"; // Import the storage created above
 import { watchedDBApi } from "./watched/watchedSlice";
 import { scoreDBApi } from "./score/scoreSlice";
 import { seasonDBApi } from "./season/seasonSlice";
 import { accountDBApi } from "./account/accountSlice";
+import { pictureDBApi } from "./picture/pictureSlice";
 //import rootReducer from './features/store';
 //import storage from 'redux-persist/lib/storage'
 
-
 // Combine reducers (if you have multiple slices)
-const rootReducer =  dbSlice // Add other reducers here as needed
+const rootReducer = dbSlice; // Add other reducers here as needed
 
 // Configure Redux Persist
 const persistConfig = {
-  key: 'root',
-  storage,  // Uses createWebStorage here
+  key: "root",
+  storage, // Uses createWebStorage here
 };
 
 // Wrap your slice reducer with persistReducer
@@ -50,12 +50,13 @@ export const store = configureStore({
     [movieDetailsApi.reducerPath]: movieDetailsApi.reducer,
     [loginApi.reducerPath]: loginApi.reducer,
     [searchApi.reducerPath]: searchApi.reducer,
-    [likesDBApi.reducerPath] : likesDBApi.reducer,
+    [likesDBApi.reducerPath]: likesDBApi.reducer,
     [watchlistDBApi.reducerPath]: watchlistDBApi.reducer,
-    [watchedDBApi.reducerPath]:watchedDBApi.reducer,
+    [watchedDBApi.reducerPath]: watchedDBApi.reducer,
     [scoreDBApi.reducerPath]: scoreDBApi.reducer,
-    [seasonDBApi.reducerPath]:seasonDBApi.reducer,
-    [accountDBApi.reducerPath]:accountDBApi.reducer,
+    [seasonDBApi.reducerPath]: seasonDBApi.reducer,
+    [accountDBApi.reducerPath]: accountDBApi.reducer,
+    [pictureDBApi.reducerPath]: pictureDBApi.reducer,
     content: persistedReducer,
     query: querySlice, // Register the querySlice reducer under the 'query' key
   },
@@ -63,7 +64,7 @@ export const store = configureStore({
     getDefaultMiddleware //This is a function provided by Redux Toolkit that includes default middleware like redux-thunk (uses for async code) for handling asynchronous actions.Middleware for serializable state checks and more.
   ) =>
     getDefaultMiddleware({
-      serializableCheck: false,  // Required for Redux Persist to avoid serialization issues
+      serializableCheck: false, // Required for Redux Persist to avoid serialization issues
     })
       .concat(movieApi.middleware)
       .concat(seriesApi.middleware)
@@ -77,11 +78,10 @@ export const store = configureStore({
       .concat(scoreDBApi.middleware)
       .concat(seasonDBApi.middleware)
       .concat(accountDBApi.middleware)
+      .concat(pictureDBApi.middleware)
       .concat(searchApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
 });
 // ✅ Export the store and persistor
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-
-

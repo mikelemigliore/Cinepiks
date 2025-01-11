@@ -751,9 +751,9 @@ MainDetailsProps) {
 
     const Score = scoredb.map((score) => score.id).includes(id);
 
-    console.log("SCPRE", Score);
+    // console.log("SCPRE", Score);
 
-    console.log("scoredb", scoredb);
+    // console.log("scoredb", scoredb);
 
     if (Liked) {
       setIsLiked(true);
