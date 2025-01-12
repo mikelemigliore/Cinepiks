@@ -93,6 +93,7 @@ function SingleSeriesPage() {
   });
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
+  const [missingSection, setMissingSetion] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -311,7 +312,11 @@ function SingleSeriesPage() {
         handlePause={handlePause}
         handleSetRelaod={handleSetRelaod}
       />
-      <div className="min-h-screen mb-[135vw] ">
+      <div
+        className={`min-h-screen ${
+          missingSection ? `mb-[100vw]` : `mb-[135vw]`
+        }`}
+      >
         <div
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
@@ -394,7 +399,11 @@ function SingleSeriesPage() {
               />
             </div>
             <div>
-              <RecommendationSwiper id={Id} mediaType={"series"} />
+              <RecommendationSwiper
+                id={Id}
+                mediaType={"series"}
+                setMissingSetion={setMissingSetion}
+              />
             </div>
           </div>
         </div>

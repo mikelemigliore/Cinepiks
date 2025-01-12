@@ -417,6 +417,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
+import { signOut, useSession } from "next-auth/react";
 
 interface Genre {
   id: number;
@@ -470,6 +471,8 @@ TeaserCardProps) {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // To manage hover delay
   // const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
   const [touchTimeout, setTouchTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const { data: session }: any = useSession();
 
   //const activeCardRef = useRef<string | null>(null); // To track the currently active card
 
@@ -692,6 +695,7 @@ TeaserCardProps) {
                 <div className="">
                   <div className="space-x-[0.5vw]">
                     <Button
+                      disabled={session === null}
                       onClick={() => handleAdded()}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 ${
                         isAdded ? "bg-white/90 text-black font-bold" : ""
@@ -705,6 +709,7 @@ TeaserCardProps) {
                     </Button>
                     <Button
                       type="submit"
+                      disabled={session === null}
                       onClick={() => handleLike()}
                       // onClick={() => setIsLiked(!isLiked)}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold transition-transform duration-300 ease-in-out active:bg-white active:scale-95 ${
@@ -720,21 +725,12 @@ TeaserCardProps) {
                   </div>
 
                   <div>
-                    {href === `/singlemovie` ? (
-                      <Link href={`${href}/${id}`}>
-                        <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
-                          View
-                          <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
-                        </Button>
-                      </Link>
-                    ) : (
-                      <Link href={`${href}/${id}`}>
-                        <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
-                          View
-                          <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
-                        </Button>
-                      </Link>
-                    )}
+                    <Link href={`${href}/${id}`}>
+                      <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
+                        View
+                        <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>

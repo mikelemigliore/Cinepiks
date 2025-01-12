@@ -1,6 +1,7 @@
-
 // export async function getUpcoming() {
-  
+
+import { getDetails } from "./singleMoviePage";
+
 //   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 //   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
 //   const url = `https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&region=US`;
@@ -181,23 +182,49 @@
 
 export async function getTmdbInfo(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const url = `https://api.themoviedb.org/3/movie/${id}/images?api_key=${apiKey}`;
+  const type = await getItemType(id);
+  const url = `https://api.themoviedb.org/3/${type}/${id}/images?api_key=${apiKey}`;
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    const englishPosters = data.posters.filter(
-      (poster: any) => poster.iso_639_1 === "en"
-    );
+    //console.log("DATA", data);
 
+    const id = data.id;
     //console.log(englishPosters);
+    const itemDetails = await getDetails(id);
+    const dataItem = await itemDetails.json();
+    //console.log("itemDetails", dataItem);
 
-    return new Response(JSON.stringify(englishPosters), { status: 200 });
+    return new Response(JSON.stringify(dataItem), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,
     });
   }
+}
+
+async function getItemType(id: number) {
+  const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  try {
+    const movieResponse = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}`
+    );
+    if (movieResponse.ok) {
+      return "movie";
+    }
+  } catch {}
+
+  try {
+    const tvResponse = await fetch(
+      `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}`
+    );
+    if (tvResponse.ok) {
+      return "tv";
+    }
+  } catch {}
+
+  return "unknown";
 }
 
 // export async function getNewOnHulu() {
@@ -241,7 +268,6 @@ export async function getTmdbInfo(id: number) {
 //     const validItems = normalizedItems.filter(
 //       (media) => media !== null && media !== undefined
 //     );
-
 
 //     return new Response(JSON.stringify(validItems), { status: 200 });
 //   } catch (error) {

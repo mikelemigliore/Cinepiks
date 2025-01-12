@@ -1,3 +1,5 @@
+import { getTrailerMovieVideo } from "@/app/pages/api/homePage";
+import { getImdbId } from "@/app/pages/api/singleSeriesPage";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -33,6 +35,18 @@ interface ItemsBigCardsProp {
 
 const time = 600;
 
+// Function to format a Date object as 'YYYY-MM-DD'
+function formatDate(date: any) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+// Calculate min_date (current date)
+const today = new Date();
+const min_date = formatDate(today);
+
 export const seriesApi = createApi({
   reducerPath: "seriesApi",
   baseQuery: fetchBaseQuery({ baseUrl: `https://api.themoviedb.org/3/` }),
@@ -41,12 +55,31 @@ export const seriesApi = createApi({
       query: () => `trending/tv/week?api_key=${apiKey}&region=US`,
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
-      transformResponse: (response: any) => {
+      transformResponse: async (response: any) => {
         const filteredData = response.results.filter(
           (movie: any) => movie.original_language === "en"
         );
+        const normalizedItems = await Promise.all(
+          filteredData.map(async (item: any) => {
+            try {
+              const id = item.id;
+              const response = await getImdbId(id);
+              const data = await response.json();
+              console.log("data", data);
+              
+              // const poster = dataImage.find((img: any) => img.file_path) || {};
+              return {
+                ...item,
+                imdb_id: data || null,
+              };
+            } catch (error) {
+              console.error(`Error normalizing item ${item.tmdbId}:`, error);
+              return null; // Or handle as needed
+            }
+          })
+        );
 
-        return filteredData;
+        return normalizedItems;
       },
     }),
     getNewSeriesReleases: builder.query<MediaProp[], void>({
@@ -240,6 +273,166 @@ export const seriesApi = createApi({
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
+        getNewSeriesOnNetflix: builder.query<MediaProp[], { page: number }>({
+          query: ({ page }: { page: number }) =>
+            `discover/tv?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&first_air_date.lte=${min_date}&sort_by=first_air_date.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=8`,
+          // Cache the data for 10 minutes
+          keepUnusedDataFor: time,
+          transformResponse: async (
+            response: any,
+            // meta: FetchBaseQueryMeta | undefined,
+            // arg: {
+            //   page: number;
+            // }
+          ) => {
+            //const { page } = arg;
+            // Enhance the data with video keys
+    
+            const filteredPoster = response.results.filter((item: any) => {
+              return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+            });
+            
+            //console.log(filteredPoster);
+            
+            const updatedResults = await Promise.all(
+              filteredPoster.map(async (media: any) => {
+                try {
+                  const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+                  const dataTrailer = await responseTrailer.json();
+                  return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+                } catch (error) {
+                  console.error(
+                    `Error fetching trailer for media ID ${media.id}:`,
+                    error
+                  );
+                  return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+                }
+              })
+            );
+    
+            return updatedResults;
+          },
+        }),
+        getNewSeriesOnHulu: builder.query<MediaProp[], { page: number }>({
+          query: ({ page }: { page: number }) =>
+            `discover/tv?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&first_air_date.lte=${min_date}&sort_by=first_air_date.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=15`,
+          // Cache the data for 10 minutes
+          keepUnusedDataFor: time,
+          transformResponse: async (
+            response: any,
+            // meta: FetchBaseQueryMeta | undefined,
+            // arg: {
+            //   page: number;
+            // }
+          ) => {
+            //const { page } = arg;
+            // Enhance the data with video keys
+    
+            const filteredPoster = response.results.filter((item: any) => {
+              return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+            });
+            
+            //console.log(filteredPoster);
+            
+            const updatedResults = await Promise.all(
+              filteredPoster.map(async (media: any) => {
+                try {
+                  const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+                  const dataTrailer = await responseTrailer.json();
+                  return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+                } catch (error) {
+                  console.error(
+                    `Error fetching trailer for media ID ${media.id}:`,
+                    error
+                  );
+                  return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+                }
+              })
+            );
+    
+            return updatedResults;
+          },
+        }),
+        getNewSeriesOnPrime: builder.query<MediaProp[], { page: number }>({
+          query: ({ page }: { page: number }) =>
+            `discover/tv?api_key=${apiKey}&page=${page}&include_adult=false&include_null_first_air_dates=false&language=en-US&first_air_date.lte=${min_date}&sort_by=popularity.desc&with_origin_country=US&with_original_language=en&with_watch_providers=119`,
+          // Cache the data for 10 minutes
+          keepUnusedDataFor: time,
+          transformResponse: async (
+            response: any,
+            // meta: FetchBaseQueryMeta | undefined,
+            // arg: {
+            //   page: number;
+            // }
+          ) => {
+            //const { page } = arg;
+            // Enhance the data with video keys
+    
+            const filteredPoster = response.results.filter((item: any) => {
+              return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+            });
+            
+            //console.log(filteredPoster);
+            
+            const updatedResults = await Promise.all(
+              filteredPoster.map(async (media: any) => {
+                try {
+                  const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+                  const dataTrailer = await responseTrailer.json();
+                  return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+                } catch (error) {
+                  console.error(
+                    `Error fetching trailer for media ID ${media.id}:`,
+                    error
+                  );
+                  return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+                }
+              })
+            );
+    
+            return updatedResults;
+          },
+        }),
+        getNewSeriesOnParamount: builder.query<MediaProp[], { page: number }>({
+          query: ({ page }: { page: number }) =>
+            `discover/tv?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&first_air_date.lte=${min_date}&sort_by=first_air_date.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=531`,
+          // Cache the data for 10 minutes
+          keepUnusedDataFor: time,
+          transformResponse: async (
+            response: any,
+            // meta: FetchBaseQueryMeta | undefined,
+            // arg: {
+            //   page: number;
+            // }
+          ) => {
+            //const { page } = arg;
+            // Enhance the data with video keys
+    
+            const filteredPoster = response.results.filter((item: any) => {
+              return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+            });
+            
+            //console.log(filteredPoster);
+            
+            const updatedResults = await Promise.all(
+              filteredPoster.map(async (media: any) => {
+                try {
+                  const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+                  const dataTrailer = await responseTrailer.json();
+                  return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+                } catch (error) {
+                  console.error(
+                    `Error fetching trailer for media ID ${media.id}:`,
+                    error
+                  );
+                  return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+                }
+              })
+            );
+    
+            return updatedResults;
+          },
+        }),
   }),
 });
 
@@ -260,5 +453,9 @@ export const {
   useGetSeriesCollectionQuery,
   useGetSeriesSimilarQuery,
   useGetSeriesRecommendationQuery,
-  useGetSeriesRecommendationFallBackQuery
+  useGetSeriesRecommendationFallBackQuery,
+  useGetNewSeriesOnNetflixQuery,
+  useGetNewSeriesOnHuluQuery,
+  useGetNewSeriesOnPrimeQuery,
+  useGetNewSeriesOnParamountQuery
 } = seriesApi;

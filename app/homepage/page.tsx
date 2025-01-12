@@ -387,17 +387,24 @@ import {
   useGetAdventureMoviesQuery,
   useGetHorrorMoviesQuery,
   useGetThrillerMoviesQuery,
+  useGetNewMoviesOnNetflixQuery,
+  useGetNewMoviesOnHuluQuery,
+  useGetNewMoviesOnPrimeQuery,
 } from "../features/homepage/movies/movieSlice";
 
 import {
   useGetTrendingSeriesQuery,
   useGetNewSeriesReleasesQuery,
+  useGetNewSeriesOnNetflixQuery,
+  useGetNewSeriesOnHuluQuery,
+  useGetNewSeriesOnPrimeQuery,
+  useGetNewSeriesOnParamountQuery,
 } from "../features/homepage/series/seriesSlice";
-import {
-  useGetNetflixMoviesQuery,
-  useGetHuluMoviesQuery,
-  useGetPrimeMoviesQuery,
-} from "../features/homepage/movies/moviesStreamServiceSlice";
+// import {
+//   useGetNetflixMoviesQuery,
+//   useGetHuluMoviesQuery,
+//   useGetPrimeMoviesQuery,
+// } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
 import {
   setLikes,
@@ -448,14 +455,17 @@ const swiperTitle = [
   { id: 4, title: "Trending Movies" },
   { id: 5, title: "What's New Series" },
   { id: 6, title: "Trending Series" },
-  { id: 7, title: "New On Netflix" },
-  { id: 8, title: "New On Hulu" },
-  { id: 9, title: "New On PrimeVideo" },
+  { id: 7, title: "New Movies On Netflix" },
+  { id: 8, title: "New Movies On Hulu" },
+  { id: 9, title: "New Movies On PrimeVideo" },
   { id: 10, title: "Action" },
   { id: 11, title: "Adventure" },
   { id: 12, title: "Horror" },
   { id: 13, title: "Thriller" },
-  { id: 14, title: "Crime Series" },
+  //{ id: 14, title: "Crime Series" },
+  { id: 14, title: "New Series On Netflix" },
+  { id: 15, title: "New Series On Hulu" },
+  { id: 16, title: "New Series On Paramount+" },
 ];
 
 const genres = [
@@ -685,11 +695,28 @@ function HomePage() {
 
   const { data: trendingSeries } = useGetTrendingSeriesQuery();
 
-  // const { data: newMoviesOnNetflix } = useGetNetflixMoviesQuery({});
+  const { data: newMoviesOnNetflix } = useGetNewMoviesOnNetflixQuery({
+    page: 1,
+  });
 
-  // const { data: newMoviesOnHulu } = useGetHuluMoviesQuery({});
+  const { data: newSeriesOnNetflix } = useGetNewSeriesOnNetflixQuery({
+    page: 1,
+  });
 
-  // const { data: newMoviesOnPrime } = useGetPrimeMoviesQuery({});
+  const { data: newMoviesOnHulu } = useGetNewMoviesOnHuluQuery({ page: 1 });
+  const { data: newSeriesOnHulu } = useGetNewSeriesOnHuluQuery({
+    page: 1,
+  });
+
+  const { data: newMoviesOnPrime } = useGetNewMoviesOnPrimeQuery({ page: 1 });
+  const { data: newSeriesOnPrime } = useGetNewSeriesOnPrimeQuery({
+    page: 1,
+  });
+
+  const { data: newSeriesOnParamount } = useGetNewSeriesOnParamountQuery({
+    page: 1,
+  });
+
 
   const { data: actionMovies } = useGetActionMoviesQuery();
 
@@ -771,32 +798,33 @@ function HomePage() {
             </div>
 
             <MovieSwiper
-              //medias={newMoviesOnNetflix}
+              medias={newMoviesOnNetflix}
               title={swiperTitle[6].title}
               mediaType={"movie"}
               description={"newMoviesOnNetflix"}
+              serviceId={8}
             />
 
             <MovieSwiper
-              //medias={newMoviesOnHulu}
+              medias={newMoviesOnHulu}
               title={swiperTitle[7].title}
               mediaType={"movie"}
               description={"newMoviesOnHulu"}
             />
 
             <MovieSwiper
-              //medias={newMoviesOnPrime}
+              medias={newMoviesOnPrime}
               title={swiperTitle[8].title}
               mediaType={"movie"}
               description={"newMoviesOnPrime"}
             />
 
-            {/* <div className="relative left-0 right-0 my-16 z-40">
+            <div className="relative left-0 right-0 my-16 z-40">
               <BigCardSwiper
                 itemBigCards={trendingSeries || []}
                 mediaType={"series"}
               />
-            </div> */}
+            </div>
 
             <MovieSwiper
               medias={actionMovies}
@@ -824,6 +852,30 @@ function HomePage() {
               title={swiperTitle[12].title}
               mediaType={"movie"}
               description={"thrillerMovies"}
+            />
+
+            <MovieSwiper
+              medias={newSeriesOnNetflix}
+              title={swiperTitle[13].title}
+              mediaType={"series"}
+              description={"newSeriesOnNetflix"}
+              serviceId={8}
+            />
+
+            <MovieSwiper
+              medias={newSeriesOnHulu}
+              title={swiperTitle[14].title}
+              mediaType={"series"}
+              description={"newSeriesOnHulu"}
+              serviceId={15}
+            />
+
+            <MovieSwiper
+              medias={newSeriesOnParamount}
+              title={swiperTitle[15].title}
+              mediaType={"series"}
+              description={"newSeriesOnParamount"}
+              serviceId={531}
             />
           </div>
         </div>

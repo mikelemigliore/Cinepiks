@@ -176,6 +176,7 @@ function MoreLikeThisSwiper({ mediaType, id }: MoreLikeThisSwiperProp) {
         medias={wholeCollection}
         title={title}
         mediaType={mediaType}
+        description={""}
       />
     </div>
   );

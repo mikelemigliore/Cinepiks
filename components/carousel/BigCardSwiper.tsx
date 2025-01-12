@@ -20,6 +20,7 @@ interface ItemsBigCardsProp {
   // rated: string;
   // time: string;
   description: string;
+  imdb_id?: string;
 }
 
 interface BigCardProps {
@@ -46,7 +47,7 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-const href = mediaType === "movie" ? "singlemovie" : "singleseries"
+  const href = mediaType === "movie" ? "singlemovie" : "singleseries";
 
   return (
     <div
@@ -55,25 +56,11 @@ const href = mediaType === "movie" ? "singlemovie" : "singleseries"
       className="relative z-80" //bottom-[3rem]
     >
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
-        <h1>
-          Popular
-          <Link href="/search">
-            <Button
-              variant="ghost"
-              className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
-          md:transition-all md:duration-500 md:ease-in-out md:transform
-          ${
-            showButtons
-              ? "opacity-100 md:translate-x-0 visible"
-              : "opacity-100 md:opacity-0 md:-translate-x-10 md:invisible"
-          }
-        `}
-            >
-              View All
-              <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
-            </Button>
-          </Link>
-        </h1>
+        {mediaType === "movie" ? (
+          <h1>Popular Movies</h1>
+        ) : (
+          <h1>Popular Series</h1>
+        )}
       </div>
 
       {itemBigCards.length > 0 ? (
@@ -143,8 +130,7 @@ const href = mediaType === "movie" ? "singlemovie" : "singleseries"
             );
           })} */}
 
-
-        {/* I am using this method so that i don't excee the api rate limit for the rating score, the rate is 6 request per minute */}
+          {/* I am using this method so that i don't excee the api rate limit for the rating score, the rate is 6 request per minute */}
           {itemBigCards.slice(0, 5).map((itemBigCard, index) => {
             // Define how to find the "8th" slide (partial one)
             const isPartialSlide =
@@ -152,6 +138,7 @@ const href = mediaType === "movie" ? "singlemovie" : "singleseries"
               index === (activeIndex - 1 + 5) % 5; // Previous partial slide on the left
 
             const isLastOne = index === 4; // Since we are slicing to 6 items, the last one is at index 5.
+            console.log(mediaType === "series" ? itemBigCard : "");
 
             return (
               <SwiperSlide className="pb-[8vh]" key={itemBigCard.id}>
@@ -161,6 +148,7 @@ const href = mediaType === "movie" ? "singlemovie" : "singleseries"
                   //title={itemBigCard.title}
                   isPartialSlide={isPartialSlide}
                   isLastOne={isLastOne}
+                  seriesImdbId={itemBigCard.imdb_id}
                   //genres={itemBigCard.genre_ids}
                   // rated={itemBigCard.rated}
                   // time={itemBigCard.time}

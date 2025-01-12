@@ -16,11 +16,16 @@ import {
 interface RecommendationSwiperProp {
   mediaType: string;
   id: number;
+  setMissingSetion: any;
 }
 
 const title = "Recomendations";
 
-function RecommendationSwiper({ mediaType, id }: RecommendationSwiperProp) {
+function RecommendationSwiper({
+  mediaType,
+  id,
+  setMissingSetion,
+}: RecommendationSwiperProp) {
   const [recommendation, setRecommendation] = useState([]);
 
   const { data: movieRecommendation } = useGetMovieRecommendationQuery(id);
@@ -54,6 +59,12 @@ function RecommendationSwiper({ mediaType, id }: RecommendationSwiperProp) {
     seriesRecommendation,
   ]);
 
+  useEffect(() => {
+    if (recommendation.length === 0) {
+      setMissingSetion(true);
+    }
+  }, [recommendation]);
+
   // useEffect(() => {
   //   if (id) {
   //     const fetchData = async () => {
@@ -79,11 +90,14 @@ function RecommendationSwiper({ mediaType, id }: RecommendationSwiperProp) {
 
   return (
     <div>
-      <MovieSwiper
-        medias={recommendation}
-        title={title}
-        mediaType={mediaType}
-      />
+      {recommendation === null && (
+        <MovieSwiper
+          medias={recommendation}
+          title={title}
+          mediaType={mediaType}
+          description={""}
+        />
+      )}
     </div>
   );
 }

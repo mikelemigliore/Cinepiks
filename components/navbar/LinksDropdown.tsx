@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -29,20 +28,21 @@ function LinksDropdown({ onClick }: Props) {
   const [src, setSrc] = useState<string | null>(null);
   const { data: session }: any = useSession();
 
-    const { data: accountDb, isSuccess } = useGetAccountQuery({});
-  
-    //console.log(email);
-  
-    useEffect(() => {
-      if (isSuccess && accountDb) {
-        //console.log(accountDb);
-        setSrc(accountDb?.picture)
-      }
-    }, [accountDb, isSuccess]);
+  //console.log("session", session);
 
+  const { data: accountDb, isSuccess } = useGetAccountQuery({});
 
-  console.log("picturedb", src);
-  
+  //console.log(email);
+
+  useEffect(() => {
+    if (isSuccess && accountDb) {
+      //console.log(accountDb);
+      setSrc(accountDb?.picture);
+    }
+  }, [accountDb, isSuccess]);
+
+  //console.log("picturedb", src);
+
   const handleLikesReload = () => {
     window.location.href = "/likes"; // Force page reload
   };
@@ -55,9 +55,7 @@ function LinksDropdown({ onClick }: Props) {
           className="flex gap-[1vw] rounded-full p-0 bg-black/10 hover:bg-white/30 text-white"
         >
           <Avatar>
-            <AvatarImage
-              src={src || undefined}
-            />
+            <AvatarImage src={src || undefined} />
             <AvatarFallback>MM</AvatarFallback>
           </Avatar>
         </Button>
@@ -178,28 +176,6 @@ export default LinksDropdown;
 // { href: "/likes", label: "Likes", icon: <AiFillLike size={25}/> },
 // { href: "/", label: "Log Out", icon: <IoMdLogOut  size={25}/> },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // "use client";
 // import React, { useEffect, useState } from "react";
 // import {
@@ -231,10 +207,10 @@ export default LinksDropdown;
 //   const { data: session }: any = useSession();
 
 //     //const { data: accountDb, isSuccess } = useGetAccountQuery({});
-  
+
 //     const picturedb = useSelector((state: RootState) => state.content.picture);
 //     //console.log(email);
-  
+
 //     useEffect(() => {
 //       if (picturedb) {
 //         //console.log(accountDb);
@@ -242,9 +218,8 @@ export default LinksDropdown;
 //       }
 //     }, [picturedb]);
 
-
 //   //console.log("picturedb", src);
-  
+
 //   const handleLikesReload = () => {
 //     window.location.href = "/likes"; // Force page reload
 //   };

@@ -23,8 +23,8 @@ export const StreamingServicesApi = createApi({
   }),
   endpoints: (builder) => ({
     getNetflixMovies: builder.query({
-      query: () =>
-        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=netflix&rating_min=60`,
+      query: () => //&year_min=2024&show_original_language=en&rating_min=60&show_type=movie
+        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&output_language=en&catalogs=netflix&rating_min=60`,
       keepUnusedDataFor: time, // Cache data for 10 minutes
       transformResponse: async (response: any) => {
         const items = response.shows;
@@ -38,11 +38,14 @@ export const StreamingServicesApi = createApi({
               const id = parseInt(item.tmdbId.split("/")[1], 10);
               const responseImage = await getTmdbInfo(id);
               const dataImage = await responseImage.json();
-              const poster = dataImage.find((img: any) => img.file_path) || {};
-              return {
-                ...item,
-                poster_path: poster.file_path || null,
-              };
+              //console.log("dataImage", dataImage);
+              
+              return dataImage
+              // const poster = dataImage.find((img: any) => img.file_path) || {};
+              // return {
+              //   ...item,
+              //   poster_path: poster.file_path || null,
+              // };
             } catch (error) {
               console.error(`Error normalizing item ${item.tmdbId}:`, error);
               return null; // Or handle as needed
@@ -58,8 +61,8 @@ export const StreamingServicesApi = createApi({
       },
     }),
     getHuluMovies: builder.query({
-      query: () =>
-        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=hulu&rating_min=60`,
+      query: () =>//&year_min=2024&show_original_language=en&rating_min=60
+        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&output_language=en&show_type=movie&catalogs=hulu&rating_min=60`,
       keepUnusedDataFor: time, // Cache data for 10 minutes
       transformResponse: async (response: any) => {
         const items = response.shows;
@@ -72,11 +75,13 @@ export const StreamingServicesApi = createApi({
               const id = parseInt(item.tmdbId.split("/")[1], 10);
               const responseImage = await getTmdbInfo(id);
               const dataImage = await responseImage.json();
-              const poster = dataImage.find((img: any) => img.file_path) || {};
-              return {
-                ...item,
-                poster_path: poster.file_path || null,
-              };
+
+              return dataImage
+              // const poster = dataImage.find((img: any) => img.file_path) || {};
+              // return {
+              //   ...item,
+              //   poster_path: poster.file_path || null,
+              // };
             } catch (error) {
               console.error(`Error normalizing item ${item.tmdbId}:`, error);
               return null; // Or handle as needed
@@ -93,7 +98,7 @@ export const StreamingServicesApi = createApi({
     }),
     getPrimeMovies: builder.query({
       query: () =>
-        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&year_min=2024&show_original_language=en&output_language=en&show_type=movie&catalogs=prime&rating_min=60`,
+        `shows/search/filters?country=us&order_direction=desc&order_by=release_date&output_language=en&show_type=movie&catalogs=prime&rating_min=60`,
       keepUnusedDataFor: time, // Cache data for 10 minutes
       transformResponse: async (response: any) => {
         const items = response.shows;
@@ -106,11 +111,13 @@ export const StreamingServicesApi = createApi({
               const id = parseInt(item.tmdbId.split("/")[1], 10);
               const responseImage = await getTmdbInfo(id);
               const dataImage = await responseImage.json();
-              const poster = dataImage.find((img: any) => img.file_path) || {};
-              return {
-                ...item,
-                poster_path: poster.file_path || null,
-              };
+
+              return dataImage
+              // const poster = dataImage.find((img: any) => img.file_path) || {};
+              // return {
+              //   ...item,
+              //   poster_path: poster.file_path || null,
+              // };
             } catch (error) {
               console.error(`Error normalizing item ${item.tmdbId}:`, error);
               return null; // Or handle as needed

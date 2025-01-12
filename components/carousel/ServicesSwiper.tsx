@@ -51,6 +51,7 @@ function ServicesSwiper({
       type: mediaType === "movie" ? "movie" : "tv",
       servicesParam: JSON.stringify(activeServiceIds), // Convert activeServices to a string
     });
+    console.log("queryParams.toString()", queryParams.toString());
 
     // Navigate to the search page with query parameters
     window.location.href = `/search?${queryParams.toString()}`;

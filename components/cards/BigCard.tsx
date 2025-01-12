@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
+import { signOut, useSession } from "next-auth/react";
+import { useGetSeriesDetailsQuery } from "@/app/features/homepage/series/seriesSlice";
 
 interface Genre {
   id: number;
@@ -32,6 +34,7 @@ interface BigCardProps {
   isLastOne: boolean;
   mediaType: string;
   href: string;
+  seriesImdbId?:string
   //genres: Genre[];
 }
 
@@ -46,6 +49,7 @@ function BigCard({
   id,
   mediaType,
   href,
+  seriesImdbId
 }: BigCardProps) {
   const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -54,7 +58,7 @@ function BigCard({
   const [image, setImage] = useState();
   const [runtime, setRuntime] = useState();
   const [description, setDescription] = useState();
-  const [imdbId, setImdbId] = useState();
+  const [imdbId, setImdbId] = useState<string | null>(null);
   const [certification, setCertification] = useState();
   const [rottenTomatoesAudience, setRottenTomatoesAudience] = useState<
     number | null
@@ -66,7 +70,11 @@ function BigCard({
   const [tmdbScore, setTMDbScore] = useState<number | null>(null);
   const [likes, setLikes] = useState<number[]>([]);
 
+  const { data: session }: any = useSession();
+
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
+
+  const { data: seriesDetails } = useGetSeriesDetailsQuery(id || 0);
 
   const { data: rating } = useGetRatingsQuery(imdbId || "");
 
@@ -82,14 +90,14 @@ function BigCard({
   //Temporarly commented because it was causing an error
   useEffect(() => {
     //console.log(likesdb[0].id);
-    
+
     const Liked = likesdb.map((like) => like.id).includes(id);
     if (Liked) {
       setIsLiked(true);
     } else {
       setIsLiked(false);
     }
-  }, [id, likesdb]); 
+  }, [id, likesdb]);
 
   useEffect(() => {
     const Watchlisted = watchlistdb
@@ -105,32 +113,60 @@ function BigCard({
   }, [id, watchlistdb]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
-    if (movieDetails) {
-      setGenres(movieDetails?.genres || []);
-      setRuntime(movieDetails?.runtime || "N/A");
-      setDescription(movieDetails?.overview || "No description available");
-      setTMDbScore(movieDetails?.vote_average || null);
-      setImdbId(movieDetails.imdb_id || null);
-      setTitle(
-        movieDetails.original_title || movieDetails.name || "Unknown Title"
-      );
-      setImage(movieDetails.backdrop_path || null);
-    }
+    if (mediaType === "movie") {
+      if (movieDetails) {
+        setGenres(movieDetails?.genres || []);
+        setRuntime(movieDetails?.runtime || "N/A");
+        setDescription(movieDetails?.overview || "No description available");
+        setTMDbScore(movieDetails?.vote_average || null);
+        setImdbId(movieDetails.imdb_id || null);
+        setTitle(
+          movieDetails.original_title || movieDetails.name || "Unknown Title"
+        );
+        setImage(movieDetails.backdrop_path || null);
+      }
 
-    if (movieCertification) {
-      setCertification(movieCertification);
-    }
+      if (movieCertification) {
+        setCertification(movieCertification);
+      }
 
-    if (rating) {
-      setRottenTomatoesAudience(
-        rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
-      );
-      setRottenTomatoesCritics(
-        rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
-      );
-      setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+      if (rating) {
+        setRottenTomatoesAudience(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+        );
+        setRottenTomatoesCritics(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+        );
+        setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+      }
+    } else {
+      if (seriesDetails) {
+        setGenres(seriesDetails?.genres || []);
+        setRuntime(seriesDetails?.runtime || "N/A");
+        setDescription(seriesDetails?.overview || "No description available");
+        setTMDbScore(seriesDetails?.vote_average || null);
+        setImdbId(seriesImdbId||null);
+        setTitle(
+          seriesDetails.original_title || seriesDetails.name || "Unknown Title"
+        );
+        setImage(seriesDetails.backdrop_path || null);
+      }
+
+      if (movieCertification) {
+        setCertification(movieCertification);
+      }
+
+      if (rating) {
+        setRottenTomatoesAudience(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.audience?.rating || null
+        );
+        setRottenTomatoesCritics(
+          rating?.result?.ratings?.["Rotten Tomatoes"]?.critics?.rating || null
+        );
+        setIMDb(rating?.result?.ratings?.["IMDb"]?.audience?.rating || null);
+      }
     }
-  }, [rating, movieDetails]);
+  }, [rating, movieDetails, seriesDetails]);
 
   const formatRuntime = (minutes: number): string => {
     const hours = Math.floor(minutes / 60);
@@ -145,7 +181,7 @@ function BigCard({
   };
 
   const handleAdded = async () => {
-    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id,mediaType);
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
   };
 
   return (
@@ -175,12 +211,16 @@ function BigCard({
               <span className="pr-[0.6vw]">
                 {genres[2]?.name || "Undefined"}
               </span>
-              <span className="mx-[0.6vw] text-customTextColor font-bold">
-                {certification}
-              </span>
-              <span className="mx-[0.6vw] text-customTextColor font-bold">
-                {runtime !== undefined ? formatRuntime(runtime) : "N/A"}
-              </span>
+              {mediaType === "movie" && (
+                <>
+                  <span className="mx-[0.6vw] text-customTextColor font-bold">
+                    {certification}
+                  </span>
+                  <span className="mx-[0.6vw] text-customTextColor font-bold">
+                    {runtime !== undefined ? formatRuntime(runtime) : "N/A"}
+                  </span>
+                </>
+              )}
             </div>
           </div>
 
@@ -297,6 +337,7 @@ function BigCard({
 
             <Button
               onClick={() => handleAdded()}
+              disabled={session === null}
               className={`h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
               }`}
@@ -311,6 +352,7 @@ function BigCard({
 
             <Button
               onClick={() => handleLike()}
+              disabled={session === null}
               className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""
               }`}

@@ -56,8 +56,8 @@ const pickPlatform = (withFilterPlatform: string[] | undefined) => {
     const platforms = withFilterPlatform.join("|");
     //const platforms = withFilterPlatform.map(String).join("|");
     console.log("PickPlatform", platforms);
-
-    return `&with_watch_providers=${platforms}&watch_region=US`; //add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
+//${platforms.includes("119")? '': `watch_region=US`}
+    return `&with_watch_providers=${platforms}&${(platforms.includes("119") || platforms.includes("384")) ? '' : `watch_region=US`}`; //add &watch_region=US to get US accurate data, but they are much less. Better without but more confusion
   } else {
     // Return an empty string if no platforms are provided
     return "";
@@ -148,9 +148,9 @@ export const searchApi = createApi({
           }${pickGenres(withFilterGenre)}${pickPlatform(
             withFilterPlatform
           )}${pickAvailability(withAvailability)}${pickRuntime(withRuntime)}`,
-          series: `discover/tv?api_key=${apiKey}&region=US&sort_by=${sortBy}&vote_count.gte=100&vote_average.gte=7&page=${page}&primary_release_date.lte=${min_date}${pickGenres(
+          series: `discover/tv?api_key=${apiKey}&include_adult=false&include_null_first_air_dates=false&language=en-US&sort_by=${sortBy}&page=${page}&first_air_date.lte=${min_date}${pickGenres( //&vote_count.gte=100&vote_average.gte=7
             withFilterGenre
-          )}${pickPlatform(withFilterPlatform)}`,
+          )}${pickPlatform(withFilterPlatform)}&with_original_language=en&with_watch_monetization_types=flatrate`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,
         };
         //console.log(endpoints[type]);

@@ -691,6 +691,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
+import { signOut, useSession } from "next-auth/react";
 
 interface GenresType {
   id: number;
@@ -772,8 +773,8 @@ function ListView({
   overview,
   backdrop_path,
   mediaType,
-  //handleValue
-}: ListViewProp) {
+}: //handleValue
+ListViewProp) {
   const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
   const [isLiked, setIsLiked] = useState(false);
   const [scores, setScores] = useState<Record<number, number | null>>({}); //Purpose: This state variable, scores, keeps track of the rating (or score) for each movie.
@@ -800,6 +801,10 @@ function ListView({
   const [videoKey, setVideoKey] = useState("");
   //const [likes, setLikes] = useState<number[]>([]);
   const [value, setValue] = React.useState<number>(0);
+
+  const { data: session }: any = useSession();
+
+  const href = media_type === "movie" ? `/singlemovie` : `/singleseries`;
 
   const { data: movieDetails } = useGetMovieDetailsQuery(id || 0);
 
@@ -853,7 +858,6 @@ function ListView({
     } else {
       setValue(0);
     }
-
   }, [id]); // Run only once when the component mounts or id changes
 
   useEffect(() => {
@@ -973,7 +977,7 @@ function ListView({
               </div>
 
               <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[2vh] md:mb-[2vh]">
-                <Link href="/singlemovie">
+                <Link href={`${href}/${id}`}>
                   <Button
                     className={`h-10 w-28 md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                       watched ? "" : "md:mr-[1vw]"
@@ -989,6 +993,7 @@ function ListView({
                 ) : (
                   <Button
                     onClick={() => handleAdded()}
+                    disabled={session === null}
                     className={`h-10 w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                       isAdded ? "bg-white/90 text-black font-bold" : ""
                     }`}
@@ -1025,6 +1030,7 @@ function ListView({
                 <Button
                   type="submit"
                   onClick={() => handleLike()}
+                  disabled={session === null}
                   className={`flex justify-center items-center h-10 w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                     isLiked ? "bg-white/90 text-black font-bold" : ""
                   }`}

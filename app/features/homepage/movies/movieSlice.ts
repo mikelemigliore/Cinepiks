@@ -1,4 +1,8 @@
-import { createApi, fetchBaseQuery, FetchBaseQueryMeta } from "@reduxjs/toolkit/query/react";
+import {
+  createApi,
+  fetchBaseQuery,
+  FetchBaseQueryMeta,
+} from "@reduxjs/toolkit/query/react";
 import { getTrailerMovieVideo } from "../../../pages/api/homePage";
 
 const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -76,7 +80,7 @@ export const movieApi = createApi({
       // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (
-        response: any,
+        response: any
         // meta: FetchBaseQueryMeta | undefined,
         // arg: {
         //   page: number;
@@ -88,9 +92,9 @@ export const movieApi = createApi({
         const filteredPoster = response.results.filter((item: any) => {
           return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
         });
-        
+
         //console.log(filteredPoster);
-        
+
         const updatedResults = await Promise.all(
           filteredPoster.map(async (media: any) => {
             try {
@@ -119,8 +123,11 @@ export const movieApi = createApi({
         // Enhance the data with video keys
         // Filter results to ensure the original language is English
         const filteredData = response.results.filter(
-          (movie: any) => movie.original_language === "en" && !!movie.poster_path
+          (movie: any) =>
+            movie.original_language === "en" && !!movie.poster_path
         );
+
+        console.log("filteredData", filteredData);
 
         return filteredData;
       },
@@ -130,7 +137,7 @@ export const movieApi = createApi({
 
       query: () =>
         `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=${max_date_back}&release_date.lte=${max_date}`,
-        // `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
+      // `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -139,7 +146,8 @@ export const movieApi = createApi({
       },
     }),
     getTrending: builder.query<MediaProp[], { page: number }>({
-      query: ({ page }: { page: number }) => `trending/movie/week?api_key=${apiKey}&region=US&page=${page}`,
+      query: ({ page }: { page: number }) =>
+        `trending/movie/week?api_key=${apiKey}&region=US&page=${page}`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -263,6 +271,126 @@ export const movieApi = createApi({
         return firstTeaser;
       },
     }),
+    getNewMoviesOnNetflix: builder.query<MediaProp[], { page: number }>({
+      query: ({ page }: { page: number }) =>
+        `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&page=1&primary_release_date.lte=${min_date}&sort_by=popularity.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=8`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: async (
+        response: any
+        // meta: FetchBaseQueryMeta | undefined,
+        // arg: {
+        //   page: number;
+        // }
+      ) => {
+        //const { page } = arg;
+        // Enhance the data with video keys
+
+        const filteredPoster = response.results.filter((item: any) => {
+          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+        });
+
+        //console.log(filteredPoster);
+
+        const updatedResults = await Promise.all(
+          filteredPoster.map(async (media: any) => {
+            try {
+              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const dataTrailer = await responseTrailer.json();
+              return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+            } catch (error) {
+              console.error(
+                `Error fetching trailer for media ID ${media.id}:`,
+                error
+              );
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+            }
+          })
+        );
+
+        return updatedResults;
+      },
+    }),
+    getNewMoviesOnHulu: builder.query<MediaProp[], { page: number }>({
+      query: ({ page }: { page: number }) =>
+        `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&primary_release_date.lte=${min_date}&sort_by=popularity.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=15`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: async (
+        response: any
+        // meta: FetchBaseQueryMeta | undefined,
+        // arg: {
+        //   page: number;
+        // }
+      ) => {
+        //const { page } = arg;
+        // Enhance the data with video keys
+
+        const filteredPoster = response.results.filter((item: any) => {
+          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+        });
+
+        //console.log(filteredPoster);
+
+        const updatedResults = await Promise.all(
+          filteredPoster.map(async (media: any) => {
+            try {
+              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const dataTrailer = await responseTrailer.json();
+              return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+            } catch (error) {
+              console.error(
+                `Error fetching trailer for media ID ${media.id}:`,
+                error
+              );
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+            }
+          })
+        );
+
+        return updatedResults;
+      },
+    }),
+    getNewMoviesOnPrime: builder.query<MediaProp[], { page: number }>({
+      query: ({ page }: { page: number }) =>
+        `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&primary_release_date.lte=${min_date}&sort_by=popularity.desc&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=119`,
+      // Cache the data for 10 minutes
+      keepUnusedDataFor: time,
+      transformResponse: async (
+        response: any
+        // meta: FetchBaseQueryMeta | undefined,
+        // arg: {
+        //   page: number;
+        // }
+      ) => {
+        //const { page } = arg;
+        // Enhance the data with video keys
+
+        const filteredPoster = response.results.filter((item: any) => {
+          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+        });
+
+        //console.log(filteredPoster);
+
+        const updatedResults = await Promise.all(
+          filteredPoster.map(async (media: any) => {
+            try {
+              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const dataTrailer = await responseTrailer.json();
+              return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
+            } catch (error) {
+              console.error(
+                `Error fetching trailer for media ID ${media.id}:`,
+                error
+              );
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+            }
+          })
+        );
+
+        return updatedResults;
+      },
+    }),
   }),
 });
 
@@ -277,4 +405,7 @@ export const {
   useGetThrillerMoviesQuery,
   useGetTeaserMovieVideoQuery,
   useGetTeaserSeriesVideoQuery,
+  useGetNewMoviesOnNetflixQuery,
+  useGetNewMoviesOnHuluQuery,
+  useGetNewMoviesOnPrimeQuery,
 } = movieApi;

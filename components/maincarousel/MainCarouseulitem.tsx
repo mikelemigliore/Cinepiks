@@ -266,6 +266,7 @@ import Link from "next/link";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
+import { signOut, useSession } from "next-auth/react";
 
 interface MediaProp {
   id: number;
@@ -288,7 +289,7 @@ interface MainCarouselItemProps {
   isDesktop: boolean;
   formatDate: (date: string | undefined) => string;
   //watchlistdb: any[];
-  mediaType:string
+  mediaType: string;
 }
 
 function MainCarouseulitem({
@@ -301,7 +302,7 @@ function MainCarouseulitem({
   formatDate,
   //watchlistdb,
   setActiveSlide,
-  mediaType
+  mediaType,
 }: MainCarouselItemProps) {
   const [isAdded, setIsAdded] = useState(false);
   const [pause, setPause] = useState(false);
@@ -310,10 +311,12 @@ function MainCarouseulitem({
   const [unmute, setUnmute] = useState(false);
   const [isCarouselPlaying, setIsCarouselPlaying] = useState(true);
 
+  const { data: session }: any = useSession();
+
   const dispatch = useDispatch();
-    const watchlistdb = useSelector(
-      (state: RootState) => state.content.watchlist
-    );
+  const watchlistdb = useSelector(
+    (state: RootState) => state.content.watchlist
+  );
 
   useEffect(() => {
     console.log(" started:", started);
@@ -376,7 +379,7 @@ function MainCarouseulitem({
   };
 
   const handleAdded = async () => {
-    handleWatchlistBtn(dispatch, setIsAdded, isAdded, media.id,mediaType);
+    handleWatchlistBtn(dispatch, setIsAdded, isAdded, media.id, mediaType);
   };
 
   return (
@@ -466,6 +469,7 @@ function MainCarouseulitem({
           <div>
             <Button
               onClick={() => handleAdded()}
+              disabled={session === null}
               className={`h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
               }`}

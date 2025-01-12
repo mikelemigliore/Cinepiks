@@ -32,7 +32,8 @@ interface Props {
     name: string;
   }>;
   //getGenreNames: () => void;
-  description:string
+  description: string;
+  serviceId?: number;
 }
 
 interface Props {
@@ -46,7 +47,8 @@ function MovieSwiper({
   itemsGenres = [],
   mediaType,
   onClick,
-  description
+  description,
+  serviceId,
 }: //image = [],
 //tmdbId = []
 // mediaRapid = [],
@@ -58,15 +60,24 @@ Props) {
   const handleReload = () => {
     // Serialize the medias array and store it in sessionStorage
     //sessionStorage.setItem("movieData", JSON.stringify(medias));
-  
-    // Define the query parameters
-    const queryParams = new URLSearchParams({
-      type: mediaType === "movie" ? "movie" : "series",
-      customParam: description, // Add your custom parameter here
-    });
-  
-    // Navigate to the search page with query parameters
-    window.location.href = `/search?${queryParams.toString()}`;
+    if (serviceId) {
+      // Define the query parameters
+      const queryParams = new URLSearchParams({
+        type: mediaType === "movie" ? "movie" : "series",
+        servicesParam: JSON.stringify([serviceId]), // Hulu 15 , Prime 119
+      });
+      // Navigate to the search page with query parameters
+      window.location.href = `/search?${queryParams.toString()}`;
+    } else {
+      // Define the query parameters
+      const queryParams = new URLSearchParams({
+        type: mediaType === "movie" ? "movie" : "series",
+        customParam: description, // Add your custom parameter here
+      });
+
+      // Navigate to the search page with query parameters
+      window.location.href = `/search?${queryParams.toString()}`;
+    }
   };
 
   return (
@@ -78,7 +89,9 @@ Props) {
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
         <h1 className="flex">
           <div>{title}</div>
-          {logInPage ? (
+          {logInPage ||
+          title === "More Like This" ||
+          title === "Recomendations" ? (
             <div></div>
           ) : (
             <div>
@@ -150,6 +163,9 @@ Props) {
           >
             {medias.map((media, index) => {
               // Define how to find the "8th" slide (partial one)
+
+              //console.log(description === "newMoviesOnNetflix" ? media: "");
+
               const isPartialSlide =
                 index === (activeIndex + 7) % medias.length || // Next partial slide on the right
                 index === (activeIndex - 1 + medias.length) % medias.length; // Previous partial slide on the left
