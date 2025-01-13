@@ -102,8 +102,8 @@ function EmailUpdate({ email }: EmailProp) {
           <div className="flex flex-col mt-[1vw] ml-[2vw] space-y-[3vh]">
             <h1 className="text-[1vw]">Update Email</h1>
 
-            <form className="space-y-[1.5vw]" onSubmit={handleSubmit}>
-              <h1 className="mb-[1vh]">Current Email</h1>
+            <form className="space-y-[1.1vw]" onSubmit={handleSubmit}>
+              <h1 className="mb-[1vh] text-[0.9vw]">Current Email</h1>
               <div>
                 {/* Search Input */}
                 <input
@@ -113,24 +113,24 @@ function EmailUpdate({ email }: EmailProp) {
                 />
               </div>
               <div>
-                <h1 className="mb-[1vh]">New Email</h1>
+                <h1 className="mb-[1vh] text-[0.9vw]">New Email</h1>
                 <div>
                   {/* Search Input */}
                   <input
                     type="text"
                     className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
-                    placeholder="Search..."
+                    placeholder="New Email..."
                   />
                 </div>
               </div>
               <div>
-                <h1 className="mb-[1vh]">Confirm New Email</h1>
+                <h1 className="mb-[1vh] text-[0.9vw]">Confirm New Email</h1>
                 <div>
                   {/* Search Input */}
                   <input
                     type="text"
                     className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
-                    placeholder="Search..."
+                    placeholder="Confirm New Email..."
                   />
                 </div>
               </div>

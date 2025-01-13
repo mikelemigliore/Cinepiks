@@ -208,14 +208,14 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
                   </div>
                   <div className="flex w-[29vw] justify-between">
                     <div className="flex flex-col">
-                      <div className="line-clamp-1">
+                      <div className="line-clamp-1 text-[0.9vw]">
                         {reviewsItem.author_details.username}
                       </div>
                       <div className="text-[0.7vw] text-customTextColor">
                         {formatDate(reviewsItem.created_at)}
                       </div>
                     </div>
-                    <div className="h-[1.7vw] w-[4vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full">
+                    <div className="text-[0.9vw] h-[1.7vw] w-[4vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full">
                       <GoStarFill className="w-[2.5vw] h-[2.5vh]" />
                       {reviewsItem.author_details.rating === 0
                         ? "0%"
@@ -224,10 +224,10 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
                   </div>
                 </div>
               </div>
-              <div className="ml-[1vw] mt-[0.5vw] text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[32vw] line-clamp-3 leading-[2] md:leading-[1.5]">
+              <div className="ml-[1vw] mt-[0.5vw] text-white text-base md:text-[0.8vw] text-start max-w-[23rem] md:max-w-[32vw] line-clamp-3 leading-[2] md:leading-[1.5]">
                 {reviewsItem.content}
               </div>
-              <div className="w-full flex justify-start mt-[1vh] pl-[1vw]">
+              <div className="w-full flex justify-start mt-[1.5vh] pl-[1vw]">
                 <Dialog>
                   <DialogTrigger className="rounded-full py-1 px-3 md:text-[0.8vw] bg-backgroundButton hover:bg-white/90 hover:text-black text-customTextColor">
                     Real All

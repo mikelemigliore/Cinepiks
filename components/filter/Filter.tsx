@@ -584,7 +584,7 @@ function Filter({
 
   return (
     <div
-      className={`flex justify-end mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out -mt-[2vh] ${
+      className={`flex justify-end mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out -mt-[1.5vh] ${
         filter
           ? "w-[17vw] h-full bg-customServicesColor rounded-[2vh] ml-[1vw]"
           : "ml-[2.5vw] w-[2vw] "

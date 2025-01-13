@@ -26,7 +26,7 @@ function RecommendationSwiper({
   id,
   setMissingSetion,
 }: RecommendationSwiperProp) {
-  const [recommendation, setRecommendation] = useState([]);
+  const [recommendation, setRecommendation] = useState<any[]>([]);
 
   const { data: movieRecommendation } = useGetMovieRecommendationQuery(id);
 
@@ -37,6 +37,8 @@ function RecommendationSwiper({
 
   const { data: seriesRecommendationFallBack } =
     useGetSeriesRecommendationFallBackQuery({});
+
+  console.log("recommendation", recommendation);
 
   useEffect(() => {
     if (mediaType === "movie") {
@@ -60,8 +62,10 @@ function RecommendationSwiper({
   ]);
 
   useEffect(() => {
-    if (recommendation.length === 0) {
+    if (!recommendation || recommendation.length === 0) {
       setMissingSetion(true);
+    } else {
+      setMissingSetion(false);
     }
   }, [recommendation]);
 
@@ -90,7 +94,7 @@ function RecommendationSwiper({
 
   return (
     <div>
-      {recommendation === null && (
+      {recommendation && recommendation.length > 0 && (
         <MovieSwiper
           medias={recommendation}
           title={title}

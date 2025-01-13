@@ -598,7 +598,7 @@ TeaserCardProps) {
           <div
             className={`transition-all duration-500 ease-in-out transform ${
               expandCard && isDesktop
-                ? "md:w-[22vw] md:h-[43vh] relative bg-customColorCard w-full h-full shadow-xl md:rounded-3xl group-hover:scale-105 md:group-hover:z-10"
+                ? "md:w-[23vw] md:h-[44vh] relative bg-customColorCard w-full h-full shadow-xl md:rounded-3xl group-hover:scale-105 md:group-hover:z-10"
                 : "md:w-[22vw] md:h-[44vh]"
             }  ${
               isLastThreeSlides || isLastOne
@@ -631,13 +631,13 @@ TeaserCardProps) {
 
             {/* Mute Button (conditionally shown for desktop) */}
             {isDesktop && (
-              <div className="absolute top-0 left-0 md:ml-[1rem] md:mt-[1rem] z-[1010]">
+              <div className={`absolute top-0 left-0 md:ml-[1rem] md:mt-[1rem] z-[10] ${videoKey ? `opacity-100`:`opacity-0`}`}>
                 <Button
                   onClick={() => setUnmute(!unmute)}
                   className="flex items-center justify-center w-[3vw] h-[3vw] rounded-full border-2 border-white bg-slate-300 bg-transparent hover:bg-slate-300 hover:bg-opacity-5"
                 >
                   {unmute ? (
-                    <GoUnmute className="w-[4vw] h-[4vw] min-w-[17px] min-h-[17px]" />
+                    <GoUnmute className={`w-[4vw] h-[4vw] min-w-[17px] min-h-[17px]`} />
                   ) : (
                     <GoMute className="w-[4vw] h-[4vw] min-w-[17px] min-h-[17px]" />
                   )}
@@ -662,7 +662,7 @@ TeaserCardProps) {
                         {runtime !== undefined ? formatRuntime(runtime) : "N/A"}
                       </span>
                     </h2>
-                    <h2 className="flex justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw]">
+                    <h2 className="flex w-[14vw] justify-start m-[1vh] text-customTextColor font-bold text-[0.7vw] whitespace-nowrap  overflow-hidden text-ellipsis">
                       <span>{genres[0]?.name || ""}</span>
                       <GoDotFill className="bg-customTextColor w-[0.3vw] h-[0.3vw] m-[0.7vh] rounded-full" />
                       <span>{genres[1]?.name || ""}</span>

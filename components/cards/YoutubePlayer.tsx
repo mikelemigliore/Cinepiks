@@ -190,7 +190,7 @@ const YoutubePlayer = ({
         onEnd={VideoEnd}
         onError={onError}
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
-        style={{ transform: "scale(1.7)", objectFit: "cover", zIndex: 1 }}
+        style={{ transform: "scale(1.8)", objectFit: "cover", zIndex: 1 }}
       />
     </div>
   );

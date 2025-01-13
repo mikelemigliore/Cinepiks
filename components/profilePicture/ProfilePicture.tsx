@@ -78,11 +78,17 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
           croppingValidateDimensions: true,
           multiple: false,
           clientAllowedFormats: ["png", "jpg", "jpeg"],
-          styles: {
-            palette: {
-              sourceBg: "#2E2E2E", // Source area background
-            },
-          },
+          // styles: {
+          //   palette: {
+          //     sourceBg: "#2E2E2E", // Source area background
+          //   },
+          //   fonts: {
+          //     default: {
+          //         active: true,
+          //         color: "#FFFFFF", // Text color while typing
+          //     },
+          // },
+          // },
         }}
         onSuccess={handleImageUpload}
       >

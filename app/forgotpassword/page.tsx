@@ -91,9 +91,10 @@ function ForgotPassword() {
     sessionStatus !== "authenticated" && (
       <div className="background">
         <div className="w-full h-screen flex justify-center items-center">
-          <div className="w-[19vw] h-[15vw] bg-buttonColor pb-[4vw] rounded-3xl">
-            <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[3vh]">
-              <h1 className="text-[1.5vw]">Reset</h1>
+          <div className="w-[19vw] h-[18vw] bg-buttonColor pb-[4vw] rounded-3xl">
+            <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[2vh]">
+              <h1 className="text-[1.5vw]">Reset Password</h1>
+              <p className="text-[0.8vw] text-customTextColor w-[15vw]">Please enter your current email address to receive a link for resetting your password.</p>
               <form onSubmit={handleSubmit}>
                 <div className="space-y-[1.5vw]">
                   {/* <div>
@@ -107,7 +108,7 @@ function ForgotPassword() {
                     />
                   </div> */}
                   <div>
-                    <h1 className="mb-[1vh]">Email</h1>
+                    <h1 className="mb-[1vh] text-[0.9vw]">Email</h1>
                     <input
                       type="text"
                       className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
@@ -172,7 +173,7 @@ function ForgotPassword() {
                     </Link>
                     <button
                       type="submit"
-                      className="bg-customColorCard rounded-full px-[1.5vw] py-[0.7vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                      className="bg-customColorCard rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
                     >
                       Send
                     </button>

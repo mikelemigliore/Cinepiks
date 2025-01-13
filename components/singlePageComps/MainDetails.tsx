@@ -885,7 +885,7 @@ MainDetailsProps) {
 
   return (
     <div
-      className={`flex w-full ml-[1vw] transition-transform duration-700 justify-center`}
+      className={`flex w-full transition-transform duration-700 justify-center`}
       //style={{ width: "12.6vw", height: "40vh" }}
     >
       <MovieCard

@@ -99,7 +99,7 @@ function SignUp() {
               <form onSubmit={handleSubmit}>
                 <div className="space-y-[1.5vw]">
                   <div>
-                    <h1 className="mb-[1vh]">Username</h1>
+                    <h1 className="mb-[1vh] text-[0.9vw]">Username</h1>
 
                     {/* Search Input */}
                     <input
@@ -110,7 +110,7 @@ function SignUp() {
                     />
                   </div>
                   <div>
-                    <h1 className="mb-[1vh]">Email</h1>
+                    <h1 className="mb-[1vh] text-[0.9vw]">Email</h1>
 
                     {/* Search Input */}
                     <input
@@ -121,7 +121,7 @@ function SignUp() {
                     />
                   </div>
                   <div>
-                    <h1 className="mb-[1vh]">Password</h1>
+                    <h1 className="mb-[1vh] text-[0.9vw]">Password</h1>
                     <div className="flex relative">
                       {/* Search Input */}
                       <input
@@ -146,7 +146,7 @@ function SignUp() {
                     </div>
                   </div>
                   <div>
-                    <h1 className="mb-[1vh]">Confirm Password</h1>
+                    <h1 className="mb-[1vh] text-[0.9vw]">Confirm Password</h1>
                     <div className="flex relative">
                       {/* Search Input */}
                       <input

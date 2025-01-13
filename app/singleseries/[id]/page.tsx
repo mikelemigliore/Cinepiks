@@ -314,7 +314,7 @@ function SingleSeriesPage() {
       />
       <div
         className={`min-h-screen ${
-          missingSection ? `mb-[100vw]` : `mb-[135vw]`
+          missingSection ? `mb-[100vw]` : `mb-[125vw]`
         }`}
       >
         <div

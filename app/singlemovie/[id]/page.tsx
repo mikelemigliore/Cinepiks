@@ -56,6 +56,7 @@ function SingleMoviePage() {
   });
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
+  const [missingSection, setMissingSetion] = useState(false);
   const type = "movie";
 
   //const router = useRouter();
@@ -196,7 +197,11 @@ function SingleMoviePage() {
         handlePause={handlePause}
         handleSetRelaod={handleSetRelaod}
       />
-      <div className="min-h-screen mb-[110vw] ">
+      <div
+        className={`min-h-screen ${
+          missingSection ? `mb-[85vw]` : `mb-[105vw]`
+        }`}
+      >
         <div
           className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
@@ -216,7 +221,7 @@ function SingleMoviePage() {
               handleReload={handleReload}
               handleEnd={handleEnd}
             />
-            <div className="flex gap-[4vw] mt-[3vw] h-[4vw] w-full justify-start ml-[14vw]">
+            {/* <div className="flex gap-[4vw] mt-[3vw] h-[4vw] w-full justify-start ml-[14vw]">
               <div className="h-[2vw]">
                 <div className="text-[1vw]">Ratings Websites</div>
                 <div className="flex mb-[2vh] mt-[1vh]">
@@ -248,8 +253,8 @@ function SingleMoviePage() {
                   </Link>
                 </div>
               </div>
-            </div>
-            <div className="flex gap-[4vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
+            </div> */}
+            <div className="flex gap-[4vw] mt-[3vw] h-[22vw] w-full justify-center ml-[1vw]">
               <div className="h-[2vw]">
                 <div className="text-[1vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
@@ -286,16 +291,16 @@ function SingleMoviePage() {
                 </div>
               </div>
             </div>
-            <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[14vw]">
+            <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[13vw]">
               <div className="text-[1vw] mt-[-2vw]">More Info</div>
               <MoreInfo id={Id} type={type} />
             </div>
             {/* <div className="mt-[6vw] max-w-[50vw]"> */}
-            <div className="mt-[4vw] max-w-[75vw] ml-[14vw]">
+            <div className="mt-[4vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
             {/* Divider line */}
-            <div className="max-w-[75vw] ml-[15vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
+            <div className="max-w-[75vw] ml-[14vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
             <div className="mt-[6vw]">
               {/* mx-auto max-w-full */}
               <MoreLikeThisSwiper
@@ -306,7 +311,11 @@ function SingleMoviePage() {
             </div>
             <div>
               {/* mx-auto max-w-full */}
-              <RecommendationSwiper id={Id} mediaType={"movie"} />
+              <RecommendationSwiper
+                id={Id}
+                mediaType={"movie"}
+                setMissingSetion={setMissingSetion}
+              />
             </div>
           </div>
         </div>

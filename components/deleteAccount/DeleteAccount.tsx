@@ -16,7 +16,7 @@ interface DeleteProp {
 }
 
 function DeleteAccount({ email }: DeleteProp) {
-  console.log(email);
+  //console.log(email);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState("");
@@ -62,7 +62,7 @@ function DeleteAccount({ email }: DeleteProp) {
   return (
     <div>
       <h1 className="mb-[1vh] text-[0.9vw]">Delete Account</h1>
-      <h2 className="text-customTextColor ">
+      <h2 className="text-[0.9vw] text-customTextColor ">
         By deleting your account, all of your data and related profiles will be
         canceled and will be permanently lost.
       </h2>

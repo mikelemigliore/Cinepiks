@@ -52,10 +52,10 @@ function Password() {
         <DialogTrigger className="mt-[1.5vh] px-[1vw] py-[0.5vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
           Update
         </DialogTrigger>
-        <DialogContent className="w-[19vw] h-[13vw] bg-buttonColor pb-[4vw]">
+        <DialogContent className="w-[21vw] h-[13vw] bg-buttonColor pb-[4vw]">
           <div className="flex flex-col mt-[1vw] ml-[2vw] space-y-[3vh]">
             <h1 className="text-[1vw]">Update Passowrd</h1>
-            <h1 className="mb-[1vh]">
+            <h1 className="mb-[1vh] text-[0.9vw]">
               To update your password, you'll be signed <br /> out and
               redirected to the appropraite page
             </h1>

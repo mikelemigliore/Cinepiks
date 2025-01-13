@@ -316,7 +316,7 @@ function LoginIn() {
             </Carousel>
           </div>
 
-          <div className="mt-[1vw] ml-[8vw]">
+          <div className="mt-[1vw] ml-[7vw]">
             <img
               src="/MovieLogo.png"
               alt="Movie Logo"
@@ -367,32 +367,19 @@ function LoginIn() {
                     </button>
                   </div>
                 </form>
-                <div className="flex items-center space-x-2">
-                  <div>
-                    <div className="flex items-center">
-                      <Checkbox
-                        id="terms1"
-                        className="border border-white m-[0.5vw]"
-                      />
-                      <div>
-                        <label
-                          htmlFor="terms1"
-                          className="text-customTextColor text-[0.7vw] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Remind Me
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pl-[1.5vw]">
+                <div className="flex items-center space-x-5">
+                  <div className="w-full h-[0.1vh]  bg-white/20"></div>
+                  <div className="items-center mt-[0.5vw] mb-[0.5vw]">
                     <Link
                       href="/forgotpassword"
-                      className="text-[0.7vw] font-medium leading-none text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
+                      className="items-center justify-center flex w-[6vw] text-[0.7vw] font-medium text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
                     >
-                      Forgot Password?
+                      Forgot Password ?
                     </Link>
                   </div>
+                  <div className="w-full h-[0.1vh]  bg-white/20"></div>
                 </div>
+
                 <div>
                   {/* <Link href={{ pathname: "/homepage", query: { guest: "true" } }}> */}
                   <Link href="/homepage">
@@ -485,9 +472,14 @@ function LoginIn() {
                 </h2>
               </div>
               <div>
-                <Button className="font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                <Link
+                  href="/disclaimer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold rounded-full md:h-[5.5vh] md:py-[1vw] md:px-[4vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
+                >
                   Discalimer
-                </Button>
+                </Link>
               </div>
             </div>
           </div>
