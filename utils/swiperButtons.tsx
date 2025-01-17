@@ -39,7 +39,7 @@ function SwiperNavButtons({ swiper, showButtons }: SwiperNavButtonsProps) {
         <Button
           onClick={() => swiper?.slideNext()}
           variant="ghost"
-          className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 !bg-transparent hover:text-white text-white/70 border-none"
+          className="absolute top-1/2 right-0 transform -translate-y-1/2 z-10 !bg-transparent hover:text-white text-white/70 border-none hidden md:block"
         >
           <SlArrowRight className="w-9 h-9" />
         </Button>
@@ -50,7 +50,7 @@ function SwiperNavButtons({ swiper, showButtons }: SwiperNavButtonsProps) {
         <Button
           onClick={() => swiper?.slidePrev()}
           variant="ghost"
-          className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 !bg-transparent hover:text-white text-white/70 border-none"
+          className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10 !bg-transparent hover:text-white text-white/70 border-none hidden md:block"
         >
           <SlArrowLeft className="w-9 h-9" />
         </Button>

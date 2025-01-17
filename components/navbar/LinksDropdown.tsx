@@ -61,7 +61,7 @@ function LinksDropdown({ onClick }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="rounded-[2vh] w-[14vw] bg-customColor text-white border-none drop-shadow-xl"
+        className="rounded-[2vh] md:w-[14vw] w-[vw] bg-customColor text-white border-none drop-shadow-xl"
         align="end"
         sideOffset={10}
       >
@@ -80,7 +80,7 @@ function LinksDropdown({ onClick }: Props) {
             >
               <Button
                 variant="ghost"
-                className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
+                className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
               >
                 <IoPersonSharp size={20} />
                 Account
@@ -94,7 +94,7 @@ function LinksDropdown({ onClick }: Props) {
           >
             <Button
               variant="ghost"
-              className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
+              className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <LuPlus size={25} />
               Watchlist
@@ -106,7 +106,7 @@ function LinksDropdown({ onClick }: Props) {
           >
             <Button
               variant="ghost"
-              className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
+              className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <IoCheckmark size={25} />
               Watched
@@ -123,7 +123,7 @@ function LinksDropdown({ onClick }: Props) {
                 if (onClick) onClick(e); // Call the passed onClick handler if provided
                 handleLikesReload(); // Reload the page
               }}
-              className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
+              className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <AiFillLike size={25} />
               Likes
@@ -140,7 +140,7 @@ function LinksDropdown({ onClick }: Props) {
               <Button
                 onClick={() => signOut({ callbackUrl: "/" })}
                 variant="ghost"
-                className="justify-start w-full text-[0.8vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
+                className="justify-start w-full md:text-[0.8vw] text-[3vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
               >
                 <IoMdLogOut size={25} />
                 Log Out

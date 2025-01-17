@@ -185,7 +185,7 @@ function BigCard({
   };
 
   return (
-    <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[80vw] md:w-[90vw] h-[80vh] md:h-[71vh] rounded-3xl shadow-2xl">
+    <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[96vw] md:w-[90vw] h-[74vh] md:h-[71vh] rounded-3xl shadow-2xl">
       <div className="flex flex-col md:flex-row md:h-full h-[38rem]">
         {/* Left Side: Image */}
         <img
@@ -197,13 +197,13 @@ function BigCard({
 
         {/* Right Side: Movie Info */}
         <div className="flex flex-col justify-center items-center ml-[1vw]">
-          <div className=" w-[27vw] text-4xl md:text-[2.5vw] font-semibold text-center line-clamp-1">
+          <div className="w-full md:w-[27vw] text-2xl md:text-[2.5vw] font-semibold text-center line-clamp-1 md:mt-[0vh] mt-[2vh]">
             {title}
           </div>
 
           {/* Add more info below the title */}
-          <div className="mt-[2vh] text-center">
-            <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.8vw]">
+          <div className="md:mt-[2vh] text-center">
+            <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.8vw] text-[3vw] md:space-x-[0.5vw] space-x-[2vw]">
               <span>{genres[0]?.name || "Undefined"}</span>
               <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
               <span>{genres[1]?.name || "Undefined"}</span>
@@ -327,41 +327,41 @@ function BigCard({
             </div>
           </div>
 
-          <div className="flex justify-center md:justify-start mt-[2rem] md:mt-[6vh]">
+          <div className="flex justify-center md:justify-start mt-[2rem] md:mt-[6vh] md:space-x-[1vw] space-x-[2vw]">
             <Link href={`/${href}/${id}`}>
-              <Button className="h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+              <Button className="h-12 w-28 md:w-[8vw] md:h-[6vh]  rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                 View
-                <SlArrowRight className="w-[2vw] h-[2vh] ml-6 md:ml-[2vw]" />
+                <SlArrowRight className="w-[4vw] h-[4vh] md:w-[2vw] md:h-[2vh] ml-6 md:ml-[2vw]" />
               </Button>
             </Link>
 
             <Button
               onClick={() => handleAdded()}
               disabled={session === null}
-              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] md:mr-[1vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+              className={`h-12 w-28 md:w-[8vw] md:h-[6vh]  rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
               }`}
             >
               Watchlist
               {isAdded ? (
-                <IoCheckmark className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
+                <IoCheckmark className="w-[4vw] h-[4vh] md:w-[2.5vw] md:h-[2.5vh] md:ml-[1vw]" />
               ) : (
-                <LuPlus className="w-[2.5vw] h-[2.5vh] md:ml-[1vw]" />
+                <LuPlus className="w-[4vw] h-[4vh] md:w-[2.5vw] md:h-[2.5vh] md:ml-[1vw]" />
               )}
             </Button>
 
             <Button
               onClick={() => handleLike()}
               disabled={session === null}
-              className={`h-10 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+              className={`h-12 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""
               }`}
             >
               Like
               {isLiked ? (
-                <AiFillLike className="w-[2.5vw] h-[2.5vh] ml-[2vw]" />
+                <AiFillLike className="w-[4vw] h-[4vh] md:w-[2.5vw] md:h-[2.5vh] ml-[2vw]" />
               ) : (
-                <AiOutlineLike className="w-[2.5vw] h-[2.5vh] ml-[2vw]" />
+                <AiOutlineLike className="w-[4vw] h-[4vh] md:w-[2.5vw] md:h-[2.5vh] ml-[2vw]" />
               )}
             </Button>
           </div>

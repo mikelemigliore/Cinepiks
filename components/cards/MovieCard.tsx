@@ -255,44 +255,46 @@ function MovieCard({
               <div className="flex flex-col justify-start items-start">
                 <img
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className="w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
+                  className="w-[46vw] md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300"
                 />
-                <h1 className="pt-[1vw] pl-[0.5vw] text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+                <h1 className="md:pt-[1vw] pt-[2vw] pl-[0.5vw] md:text-[0.8vw] text-[3.5vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
                   {title}
                 </h1>
               </div>
             </DialogTrigger>
-            <DialogContent className=" md:w-[35vw] md:h-[33vw] bg-customColorCard rounded-full">
+            <DialogContent className="w-[93vw] md:w-[35vw] md:h-[33vw] h-[118vw] bg-customColorCard rounded-3xl">
               <img
                 className="w-full rounded-3xl"
                 src={`${BASE_IMAGE_URL}${imgBackdrop}`}
               />
               <div
-                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full md:h-[15vw] h-[60vw] md:mt-[5vw]`}
               />
               <div
-                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full md:h-[15vw] h-[60vw] md:mt-[5vw]`}
               />
 
-              <div className="ml-[1.5vw] mt-[-1.5vw]">
+              <div className="md:ml-[1.5vw] ml-[4vw] md:mt-[-1.5vw] mt-[-9vw]">
                 <div className="flex justify-between relative z-[100]">
                   <div>
                     <div className="flex mt-[1vh]">
-                      <div className="text-[1.3vw] line-clamp-1">{title}</div>
+                      <div className="md:text-[1.3vw] text-[5vw] line-clamp-1">
+                        {title}
+                      </div>
                     </div>
-                    <div className="text-[0.8vw] text-customTextColor flex">
+                    <div className="md:text-[0.8vw] text-[3vw] text-customTextColor flex">
                       <span>{genres[0]?.name || ""}</span>
-                      <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                      <GoDotFill className="bg-customTextColor w-1.5 h-1.5 md:mx-[0.4vw] mx-[2vw] rounded-full md:mt-[0.5vw] mt-[1.5vw]" />
                       <span>{genres[1]?.name || ""}</span>
                       {genres[2]?.name ? (
-                        <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full mt-[0.5vw]" />
+                        <GoDotFill className="bg-customTextColor w-1.5 h-1.5 md:mx-[0.4vw] mx-[2vw] rounded-full md:mt-[0.5vw] mt-[1.5vw]" />
                       ) : (
                         <div></div>
                       )}
-                      <span className="pr-[0.6vw]">
+                      <span className="md:pr-[0.6vw] pr-[2vw]">
                         {genres[2]?.name || ""}
                       </span>
-                      <span className="mx-[0.6vw] text-customTextColor font-bold">
+                      <span className="md:mx-[0.6vw] mx-[2vw] text-customTextColor font-bold">
                         {certification}
                       </span>
                       <span>
@@ -302,21 +304,21 @@ function MovieCard({
                   </div>
                 </div>
 
-                <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
-                  <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
+                <ScrollArea className="md:h-[5.5vw] h-[36vw] md:mr-[1vw] md:mt-[1vw] mt-[3vw]">
+                  <div className=" text-white text-[3.7vw] md:text-[0.9vw] text-start max-w-[22rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
                     {description}
                   </div>
                 </ScrollArea>
-                <div className="flex justify-end mt-[1.5vw] mr-[1vw] space-x-[0.5vw]">
+                <div className="flex justify-end md:mt-[1.5vw] mt-[5vw] md:mr-[1vw] mr-[6vw] md:space-x-[0.5vw] space-x-[6vw]">
                   <Link
                     href="/homepage"
-                    className="flex justify-center items-center active:scale-95 md:w-[9vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-slate-300 hover:bg-opacity-20"
+                    className="flex justify-center items-center active:scale-95 md:w-[9vw] w-[40vw] md:h-[4.5vh] h-[6vh] rounded-full text-sm md:text-[0.8vw] text-[3.5vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-slate-300 hover:bg-opacity-20"
                   >
                     Continue As Guest
                   </Link>
                   <Link
                     href="/singup"
-                    className="flex justify-center items-center active:scale-95 md:w-[6vw] md:h-[4.5vh] rounded-full text-sm md:text-[0.8vw] bg-white/70 hover:bg-white/90 text-black font-bold"
+                    className="flex justify-center items-center active:scale-95 md:w-[6vw] w-[40vw] md:h-[4.5vh] h-[6vh] rounded-full text-sm md:text-[0.8vw] text-[3.5vw] bg-white/70 hover:bg-white/90 text-black font-bold"
                   >
                     Sign Up
                   </Link>
@@ -326,80 +328,79 @@ function MovieCard({
           </Dialog>
         ) : (
           <Link href={`${href}/${id}`} passHref>
-            
             {/* <div className="hover:cursor-pointer"> */}
-              <div
-                className="relative"
-                onClick={handleClick} // Handle click event for conditional navigation
-              >
-                {/* Poster Image */}
-                {list ? (
-                  <img
-                    src={`${BASE_IMAGE_URL}${imgUrl}`}
-                    className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
-                  />
-                ) : watchlist ? (
-                  <WatchListOpt
-                    src={`${BASE_IMAGE_URL}${imgUrl}`}
-                    watchlistOptions={watchlistOptions}
-                    mediaType={mediaType}
+            <div
+              className="relative"
+              onClick={handleClick} // Handle click event for conditional navigation
+            >
+              {/* Poster Image */}
+              {list ? (
+                <img
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                />
+              ) : watchlist ? (
+                <WatchListOpt
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  watchlistOptions={watchlistOptions}
+                  mediaType={mediaType}
+                  id={id}
+                />
+              ) : watched ? (
+                <WatchedOpt
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  watchedOptions={watchedOptions}
+                  mediaType={mediaType}
+                  //type={type}
+                  id={id}
+                />
+              ) : single ? (
+                <img
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    watchlistOptions ? "opacity-25" : ""
+                  }`}
+                />
+              ) : (
+                <img
+                  src={`${BASE_IMAGE_URL}${imgUrl}`}
+                  className={`w-[46vw] md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    expandCard ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+              )}
+              <div>
+                <div
+                  className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
+                    expandCard
+                      ? "opacity-100 z-10 cursor-default"
+                      : "opacity-0 z-0"
+                  }`}
+                >
+                  <TeaserCard
+                    type={type}
+                    href={href}
+                    title={title}
+                    name={name}
+                    imgUrl={imgUrl}
+                    imgBackdrop={imgBackdrop}
+                    genres={genres}
+                    runtime={runtime}
+                    season={season}
+                    isLastThreeSlides={isLastThreeSlides}
+                    isLastOne={isLastOne}
+                    expandCard={expandCard}
+                    //showContent={showContent}
+                    isDesktop={isDesktop}
                     id={id}
                   />
-                ) : watched ? (
-                  <WatchedOpt
-                    src={`${BASE_IMAGE_URL}${imgUrl}`}
-                    watchedOptions={watchedOptions}
-                    mediaType={mediaType}
-                    //type={type}
-                    id={id}
-                  />
-                ) : single ? (
-                  <img
-                    src={`${BASE_IMAGE_URL}${imgUrl}`}
-                    className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                      watchlistOptions ? "opacity-25" : ""
-                    }`}
-                  />
-                ) : (
-                  <img
-                    src={`${BASE_IMAGE_URL}${imgUrl}`}
-                    className={`w-[30vw] md:w-[12.6vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                      expandCard ? "opacity-0" : "opacity-100"
-                    }`}
-                  />
-                )}
-                <div>
-                  <div
-                    className={`absolute inset-0 md:w-[16.5rem] transition-all duration-500 ease-in-out transform ${
-                      expandCard
-                        ? "opacity-100 z-10 cursor-default"
-                        : "opacity-0 z-0"
-                    }`}
-                  >
-                    <TeaserCard
-                      type={type}
-                      href={href}
-                      title={title}
-                      name={name}
-                      imgUrl={imgUrl}
-                      imgBackdrop={imgBackdrop}
-                      genres={genres}
-                      runtime={runtime}
-                      season={season}
-                      isLastThreeSlides={isLastThreeSlides}
-                      isLastOne={isLastOne}
-                      expandCard={expandCard}
-                      //showContent={showContent}
-                      isDesktop={isDesktop}
-                      id={id}
-                    />
-                  </div>
                 </div>
               </div>
-              <h1 className="w-[12vw] pt-4 text-[0.8vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
-                {title || name}
-              </h1>
-              
+            </div>
+            <h1 className="md:w-[12vw] w-[40vw] pt-4 md:text-[0.8vw] text-[3.5vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+              {title || name}
+            </h1>
+
             {/* </div> */}
           </Link>
         )}

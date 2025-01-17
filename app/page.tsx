@@ -81,6 +81,7 @@ function LoginIn() {
   const [logInPage, setLogInPage] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [hovered, setHovered] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const totalSlides = items.length; // Set the total number of slides
 
   const { data: loginmainCaraseul } = useGetNowPlayingQuery();
@@ -90,6 +91,14 @@ function LoginIn() {
   const { data: moviesUpcoming } = useGetUpcomingQuery({});
 
   const { data: moviesPopular } = useGetPopularQuery({});
+
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (loginmainCaraseul) {
@@ -260,8 +269,8 @@ function LoginIn() {
   return (
     sessionStatus !== "authenticated" && (
       <div className="">
-        <div className="flex">
-          <div className="w-[70vw] rounded-tr-custom rounded-br-custom overflow-hidden">
+        <div className="md:flex">
+          <div className="md:w-[70vw] w-[150vw] ml-[-25vw] md:ml-[0vw] md:rounded-tr-custom md:rounded-br-custom md:rounded-bl-[0] overflow-hidden rounded-br-custom rounded-bl-custom">
             {/* The overflow-hidden property solved the issue because it ensures that any content (such as the CarouselContent, CarouselItem, or img elements) 
       that extends outside the boundaries of the parent container (div.w-[70vw]) is clipped and confined within those boundaries. */}
             <Carousel
@@ -276,17 +285,18 @@ function LoginIn() {
                         src={`${BASE_IMAGE_URL}${item.backdrop_path}`}
                         className="bg-cover bg-center md:bg-top bg-no-repeat"
                       />
-                      <div className="absolute inset-0 flex flex-col justify-between ml-[7vw] my-[4vw]">
+                      <div className="absolute inset-0 flex flex-col justify-between md:ml-[7vw] my-[4vw]">
                         <div>
-                          <h1 className="text-[1.7vw] font-semibold line-clamp-1">
-                            Now Playing
+                          <h1 className="md:text-[1.7vw] text-[5vw] font-semibold line-clamp-1 ml-[35vw] md:ml-[0vw]">
+                            {isDesktop ? <>Now Playing</> : <>{item.title}</>}
                           </h1>
                         </div>
-                        <div>
-                          <h1 className="text-[2.5vw] font-semibold line-clamp-1">
+                        <div className="ml-[50vw] md:ml-[0vw] hidden md:block">
+                          <h1 className="md:text-[2.5vw] font-semibold line-clamp-1">
                             {item.title}
                           </h1>
-                          <div className="text-[1vw] flex justify-start items-center">
+                          <div className="text-[1vw] md:flex justify-start items-center">
+                            {/* hidden md:block: This will only show on medium screens and above (desktop). */}
                             <span>
                               {getGenreNames(item.genre_ids[0], itemsGenres)}
                             </span>
@@ -307,52 +317,54 @@ function LoginIn() {
               </CarouselContent>
               <CarouselPrevious
                 onClick={handlePrevious}
-                className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
+                className="md:mx-[4vw] ml-[40vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
               />
               <CarouselNext
                 onClick={handleNext}
-                className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
+                className=" md:mx-[4vw] mr-[40vw] !bg-transparent hover:text-white text-white/70 border-none z-50"
               />
             </Carousel>
           </div>
 
-          <div className="mt-[1vw] ml-[7vw]">
+          <div className="md:mt-[1vw] md:ml-[7vw]">
             <img
               src="/MovieLogo.png"
               alt="Movie Logo"
-              className="w-[8vw] m-[2vw]"
+              className="md:w-[8vw] md:m-[2vw] w-[30vw] ml-[36vw] mt-[10vw]  md:mb-[1vw] mb-[5vw]"
             />
             <div className="flex flex-col items-center">
-              <div className="space-y-[1vw]">
-                <h1 className="mb-[1vh] text-[1.2vw] font-bold">Log In</h1>
+              <div className="md:space-y-[1vw] space-y-[5vw]">
+                <h1 className="mb-[1vh]  md:text-[1.2vw] text-[5vw] font-bold">
+                  Log In
+                </h1>
                 <form onSubmit={handleSubmit}>
-                  <div className="mb-[1vw]">
+                  <div className="md:mb-[1vw] mb-[5vw]">
                     <input
                       type="text"
-                      className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor`}
+                      className={`bg-transparent md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] placeholder-customTextColor rounded-full md:text-[0.8vw] text-[4vw] border border-customTextColor`}
                       placeholder="Enter email"
                       required
                     />
                   </div>
-                  <div className="mb-[1vw]">
+                  <div className="md:mb-[1vw] mb-[5vw]">
                     <div className="flex relative">
                       {/* Search Input */}
                       <input
                         type={showPassword ? "text" : "password"}
-                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[14vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
+                        className={`bg-transparent md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] placeholder-customTextColor rounded-full md:text-[0.8vw] text-[4vw] border border-customTextColor ${
                           showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
                         }`}
                         placeholder="Enter password"
                         required
                       />
                       <div
-                        className="absolute right-[1vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-customColor pl-[0.5vw]"
+                        className="absolute md:right-[1vw] right-[2vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-customColor pl-[0.5vw]"
                         onClick={togglePasswordVisibility}
                       >
                         {showPassword ? (
-                          <AiOutlineEyeInvisible className="bg-customColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEyeInvisible className="bg-customColor md:w-[1.3vw] md:h-[1.3vw] w-[12vw] h-[7vw]" />
                         ) : (
-                          <AiOutlineEye className="bg-customColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEye className="bg-customColor md:w-[1.3vw] md:h-[1.3vw] w-[12vw] h-[7vw]" />
                         )}
                       </div>
                     </div>
@@ -361,7 +373,7 @@ function LoginIn() {
                     <button
                       type="submit"
                       //onClick={handleRedirect}
-                      className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
+                      className=" font-bold rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
                     >
                       Log In
                     </button>
@@ -369,12 +381,16 @@ function LoginIn() {
                 </form>
                 <div className="flex items-center space-x-5">
                   <div className="w-full h-[0.1vh]  bg-white/20"></div>
-                  <div className="items-center mt-[0.5vw] mb-[0.5vw]">
+                  <div className="flex flex-col justify-center items-center mt-[0.5vw] mb-[0.5vw]">
+                    <div className="items-center justify-center flex md:w-[6vw] w-[35vw] md:text-[0.7vw] text-[4vw] font-medium text-customTextColor">
+                      Forgot Password ?
+                    </div>
+
                     <Link
                       href="/forgotpassword"
-                      className="items-center justify-center flex w-[6vw] text-[0.7vw] font-medium text-customTextColor  border-b-[0.1vw] border-transparent hover:border-customTextColor"
+                      className=" md:text-[0.7vw] text-[4vw] font-medium text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
                     >
-                      Forgot Password ?
+                      Click Here
                     </Link>
                   </div>
                   <div className="w-full h-[0.1vh]  bg-white/20"></div>
@@ -383,24 +399,26 @@ function LoginIn() {
                 <div>
                   {/* <Link href={{ pathname: "/homepage", query: { guest: "true" } }}> */}
                   <Link href="/homepage">
-                    <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                    <Button className=" font-bold rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                       Continue As Guest
                     </Button>
                   </Link>
                 </div>
-                <div className="flex">
+                {/* <div className="flex">
                   <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                  <h1 className="flex mx-[1vw] mt-[0.5vw] text-[0.7vw]">Or</h1>
+                  <h1 className="flex md:mx-[1vw] mx-[10vw] mt-[0.5vw] md:text-[0.7vw] text-[4vw]">
+                    Or
+                  </h1>
                   <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                </div>
+                </div> */}
                 <div className="">
                   <Button
                     onClick={() => {
                       signIn("google");
                     }}
-                    className=" rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-transparent hover:bg-white text-white/90 hover:text-black active:bg-white active:scale-95 border border-customTextColor"
+                    className=" rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-transparent hover:bg-white text-white/90 hover:text-black active:bg-white active:scale-95 border border-customTextColor"
                   >
-                    <FcGoogle className="w-[1.3vw] h-[1.3vw] ml-[-1vw] mr-[1vw]" />
+                    <FcGoogle className="md:w-[1.3vw] w-[7vw] h-[7vw] md:h-[1.3vw]  md:mr-[2vw]  mr-[8vw]" />
                     Continue with Google
                   </Button>
                 </div>
@@ -420,17 +438,17 @@ function LoginIn() {
                     }}
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
-                    className="rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor"
+                    className="rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor"
                   >
                     {hovered ? (
                       <img
                         src="/genresIcons/github-mark.svg"
-                        className="w-[1.4vw] h-[1.4vw]  mr-[1vw] text-blue-500"
+                        className="md:w-[1.3vw] w-[7vw] h-[7vw] md:h-[1.3vw]  md:mr-[2vw]  mr-[8vw] "
                       />
                     ) : (
                       <img
                         src="/genresIcons/github-mark-white.svg"
-                        className="w-[1.4vw] h-[1.4vw]  mr-[1vw] text-blue-500"
+                        className="md:w-[1.3vw] w-[7vw] h-[7vw] md:h-[1.3vw]  md:mr-[2vw]  mr-[8vw] "
                       />
                     )}
                     Continue with GitHub
@@ -441,14 +459,14 @@ function LoginIn() {
                 </p>
                 <div className="flex items-center space-x-2 ml-[2.5vw]">
                   <div>
-                    <h1 className="text-[0.8vw] font-medium leading-none text-customTextColor">
+                    <h1 className="md:text-[0.8vw] text-[4vw] font-medium leading-none text-customTextColor">
                       Don't have one?
                     </h1>
                   </div>
                   <div>
                     <Link
                       href="/singup"
-                      className="text-[0.8vw] font-medium leading-none text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
+                      className="md:text-[0.8vw] text-[4vw] font-medium leading-none text-blue-500  border-b-[0.1vw] border-transparent hover:border-blue-500"
                     >
                       Sign Up
                     </Link>
@@ -458,12 +476,14 @@ function LoginIn() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center mt-[6vw]">
-          <div className="w-[90vw] h-[7vw] bg-customServicesColor rounded-3xl">
-            <div className="m-[1.5vw] flex justify-between items-center">
-              <div>
-                <h1 className="font-bold text-[1vw]">Disclaimer</h1>
-                <h2 className="text-[0.9vw] font-medium text-gray-300">
+        <div className="flex justify-center items-center md:mt-[6vw] mt-[20vw]">
+          <div className="md:w-[90vw] md:h-[7vw] w-[80vw] h-[70vw] bg-customServicesColor rounded-3xl">
+            <div className="md:m-[1.5vw] m-[4vw] md:flex justify-between items-center">
+              <div className="md:space-y-0 space-y-5">
+                <h1 className="font-bold md:text-[1vw] text-[4vw] text-center md:text-start">
+                  Disclaimer
+                </h1>
+                <h2 className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center md:text-start">
                   The following website is for informational purposes. This
                   website is not affiliated with or endorsed by Netflix, Hulu,
                   Amazon Prime, <br />
@@ -471,14 +491,14 @@ function LoginIn() {
                   marks are the property of their respective owners.
                 </h2>
               </div>
-              <div>
+              <div className="mt-[10vw] md:mt-[0vw]">
                 <Link
                   href="/disclaimer"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-bold rounded-full md:h-[5.5vh] md:py-[1vw] md:px-[4vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
+                  className="ml-[16vw] md:ml-[0vw] font-bold rounded-full md:h-[5.5vh] h-[7vh] md:py-[1vw] py-[4vw] md:px-[4vw] px-[12vw] md:w-[14vw] w-[70vw] md:text-[0.8vw] text-[3.5vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
                 >
-                  Discalimer
+                  Disclaimer
                 </Link>
               </div>
             </div>
@@ -486,97 +506,99 @@ function LoginIn() {
         </div>
         <div>
           <div className="relative z-50">
-            <h1 className="text-[2vw] font-semibold w-full text-center mt-[6vw] mb-[6vw]">
+            <h1 className="md:text-[2vw] text-[5vw] font-semibold w-full text-center md:mt-[6vw] mt-[20vw] md:mb-[6vw] mb-[12vw]">
               What You'll Be Able To Do
             </h1>
             <div className="mt-[4vw]">
-              <div className="flex justify-center items-center space-x-[15vw]">
-                <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Compass.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      Explore Your Favorite Titles
-                    </h1>
-                    Search for movies and TV shows by title, genre, or platform.
-                    Use Filter and Sort to personalinze your search.
+              <>
+                <div className="md:flex md:justify-center md:items-center md:space-x-[15vw] md:space-y-0 space-y-[10vh]">
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw]">
+                    <img src="/Compass.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        Explore Your Favorite Titles
+                      </h1>
+                      Search for movies and TV shows by title, genre, or
+                      platform. Use Filter and Sort to personalinze your search.
+                    </div>
+                  </div>{" "}
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
+                    <img src="/Star.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        Rate and Review Content
+                      </h1>
+                      Give a score using a star system to movies or TV shows you
+                      have watched.
+                    </div>
                   </div>
-                </div>{" "}
-                <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Star.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      Rate and Review Content
-                    </h1>
-                    Give a score using a star system to movies or TV shows you
-                    have watched.
-                  </div>
-                </div>
-                <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Bookmark.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      Create Personalized Watchlist
-                    </h1>
-                    Add movies or TV shows to a watchlist, mark items as
-                    watched, and track viewing progress.
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-center items-center w-full space-x-[15vw] mt-[3vw]">
-                <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Stats.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      All The Info In One Place
-                    </h1>
-                    Explore trailer, cast, ratings,synopsis, reviews, and where
-                    to watch—all in one place.
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
+                    <img src="/Bookmark.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        Create Personalized Watchlist
+                      </h1>
+                      Add movies or TV shows to a watchlist, mark items as
+                      watched, and track viewing progress.
+                    </div>
                   </div>
                 </div>
-                <div className="text-[0.9vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Like.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      Like Your Favorites
-                    </h1>
-                    Show your love for movies and shows by liking them with a
-                    single click.
+                <div className="md:flex md:justify-center md:items-center w-full md:space-x-[15vw] md:mt-[3vw] mt-[10vh] md:space-y-0 space-y-[10vh]">
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
+                    <img src="/Stats.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        All The Info In One Place
+                      </h1>
+                      Explore trailer, cast, ratings,synopsis, reviews, and
+                      where to watch—all in one place.
+                    </div>
+                  </div>
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
+                    <img src="/Like.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        Like Your Favorites
+                      </h1>
+                      Show your love for movies and shows by liking them with a
+                      single click.
+                    </div>
+                  </div>
+                  <div className="md:text-[0.9vw] text-[3.5vw] font-medium  text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
+                    <img src="/Camera.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <div className="mt-[1vw] md:w-full w-[80vw]">
+                      <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
+                        Track Entertainment
+                      </h1>
+                      Your go-to place for exploring movie and TV details,
+                      tracking what you love, and planning your next watch.
+                    </div>
                   </div>
                 </div>
-                <div className="text-[0.9vw] font-medium  text-gray-300 text-center break-words flex flex-col justify-center items-center w-[15vw] h-[15vw] ">
-                  <img src="/Camera.png" className="h-[6vw]"></img>
-                  <div className="mt-[1vw]">
-                    <h1 className="font-bold text-[1vw] text-white">
-                      Track Entertainment
-                    </h1>
-                    Your go-to place for exploring movie and TV details,
-                    tracking what you love, and planning your next watch.
-                  </div>
-                </div>
-              </div>
+              </>
             </div>
           </div>
-          <div className=" flex justify-center items-center">
+          <div className="flex justify-center items-center">
             <img
               src="/Ellipse2.png"
-              className="absolute w-[65vw] h-[65vw]  mt-[-30vw]"
+              className="absolute md:w-[65vw] md:h-[65vw] h-[505vw]  md:mt-[-30vw] mt-[-300vw]"
             ></img>
           </div>
           {/* <div className=" flex justify-center items-center">
           <div className="absolute bg-ellipseColor w-[30vw] h-[30vw] rounded-full opacity-100 filter blur-[200px] mt-[-25vw]"></div>
         </div> */}
         </div>
-        <div className="flex justify-center mt-[10vw] w-full h-full rounded-3xl overflow-hidden ">
+        <div className="flex justify-center md:mt-[10vw] mt-[30vw] w-full h-full rounded-3xl overflow-hidden ">
           <img
             src="/obliqueCollage.jpg"
-            className="relative w-[93vw] h-[30vw] rounded-3xl object-cover opacity-35 filter blur-[1px]"
+            className="relative md:w-[93vw] md:h-[30vw] w-[93vw] h-[150vw] rounded-3xl object-cover opacity-35 filter blur-[1px]"
             alt="Oblique Collage"
           />
-          <div className="absolute flex flex-col justify-center items-center w-[40vw] h-[30vw]">
-            <h1 className="text-[1.3vw] font-semibold">
+          <div className="absolute flex flex-col justify-center items-center md:w-[40vw] md:h-[30vw] h-[150vw] w-[80vw] text-center">
+            <h1 className="md:text-[1.3vw] text-[5vw] font-semibold">
               Explore, Rate, and Track All Your Favorite Movies and Shows
             </h1>
-            <h2 className="text-[0.9vw] pt-[2vh] pb-[2vh] font-medium text-center leading-[2]">
+            <h2 className="md:text-[0.9vw] text-[3.5vw] pt-[2vh] pb-[2vh] font-medium text-center leading-[2]">
               Discover, organize, and track your favorite movies and TV shows
               all in one place! Create personalized watchlists, explore content
               by genre or platform, and watch trailers directly on the site.
@@ -585,18 +607,18 @@ function LoginIn() {
             </h2>
             <div className="flex justify-center items-center mt-[3vh] mb-[3vh]">
               <Link href="/singup">
-                <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                <Button className=" font-bold rounded-full md:h-[5.5vh] h-[6vh] md:px-[1.5vw] md:w-[14vw] md:text-[0.8vw] text-[3.5vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                   Sign Up Now
                 </Button>
               </Link>
-              <h1 className="px-[1vw] font-bold">Or</h1>
+              <h1 className="md:px-[1vw] px-[5vw] font-bold">Or</h1>
               <Link href="/homepage">
-                <Button className=" font-bold rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
+                <Button className=" font-bold rounded-full md:h-[5.5vh] h-[6vh] md:px-[1.5vw] md:w-[14vw] md:text-[0.8vw] text-[3.5vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                   Explore As Guest
                 </Button>
               </Link>
             </div>
-            <h2 className="text-[0.8vw] mt-[4vh] text-center">
+            <h2 className="md:text-[0.8vw] text-[3vw] mt-[4vh] text-center">
               non-affiliation disclaimer: The following website is for
               informational purposes. This website is not affiliated with or
               endorsed by Netflix, Hulu, Amazon Prime, or any other streaming
@@ -606,17 +628,17 @@ function LoginIn() {
           </div>
         </div>
 
-        <div className="mt-[7vw]">
+        <div className="md:mt-[7vw] mt-[20vw]">
           <ServicesSwiper logInPage={logInPage} services={services} />
         </div>
-        <div className="mt-[2vw] mb-[4vw]">
+        <div className="ml-2 md:ml-0 md:mt-[2vw] mt-[10vw] mb-[4vw]">
           <div
             className={`ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.3vw] font-semibold`}
           >
             <h1>See What's Waiting for You</h1>
 
             <div
-              className={`text-[2vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300`}
+              className={`text-[3.5vw] md:text-[0.9vw]  pt-[1vh] pb-[1vh] font-medium text-gray-300`}
             >
               <h2>
                 Get a sneak peek at trending movies and series available to
@@ -626,7 +648,7 @@ function LoginIn() {
           </div>
           {/* {swiperTitles.map((swiperTitle) => ( */}
           <div>
-            <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">
+            <h1 className="ml-2 mb-4 md:ml-[3vw] md:mb-[1vh] text-white md:text-[1.5vw] text-xl font-semibold">
               Upcoming
             </h1>
             <MovieSwiper
@@ -640,7 +662,7 @@ function LoginIn() {
             />
           </div>
           <div>
-            <h1 className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[1vh] text-white text-[1.5vw] font-semibold">
+            <h1 className="ml-2 mb-4 md:ml-[3vw] md:mb-[1vh] text-white md:text-[1.5vw] text-xl font-semibold">
               Popular
             </h1>
             <MovieSwiper

@@ -55,7 +55,7 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80" //bottom-[3rem]
     >
-      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
+      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white md:text-[1.5vw] text-[5vw] font-semibold">
         {mediaType === "movie" ? (
           <h1>Popular Movies</h1>
         ) : (

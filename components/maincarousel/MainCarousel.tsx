@@ -512,7 +512,7 @@ Props) {
 
   return (
     <div>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[5vh] top-[25vh] z-20 md:h-[15vh] md:top-[90vh] md:z-40" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[5vh] top-[53.1vh] z-20 md:h-[15vh] md:top-[90vh] md:z-40" />
       {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[2rem] top-[19rem] z-10 md:h-[10rem] md:top-[53.5rem] md:z-30" /> */}
       {/* // In the MainCarousel component, we pass the activeSlide, setActiveSlide, and totalSlides to the Carousel. This allows the Carousel component 
       to use and modify the state (activeSlide) that tracks which slide is currently active. 
@@ -545,23 +545,23 @@ Props) {
         </CarouselContent>
 
         {/* Position the dots at the bottom center of the carousel */}
-        <div className="absolute bottom-[20vh] md:bottom-[17vh] left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
+        <div className="absolute bottom-[40vh] md:bottom-[17vh] left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <div
               key={index}
               className={`h-[1vh] md:h-[1.5vh] rounded-full transition-all duration-300 ${
                 index === activeSlide
                   ? "w-[5vw] md:w-[4vw] bg-white"
-                  : "w-[1vw] md:w-[0.75vw] bg-gray-500"
+                  : "w-[2vw] md:w-[0.75vw] bg-gray-500"
               }`}
             />
           ))}
           <CarouselPrevious
-            className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 w-[1vw]"
+            className=" mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 md:w-[2vw] w-[6vw]"
             onClick={handlePrev}
           />
           <CarouselNext
-            className="hidden md:block mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 w-[2vw]"
+            className=" mx-[4vw] !bg-transparent hover:text-white text-white/70 border-none z-50 md:w-[2vw] w-[6vw]"
             onClick={handleNext}
           />
         </div>

@@ -64,23 +64,23 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
     <div
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}
-      className="relative z-80"
+      className="relative z-80 ml-2 md:ml-0"
     >
       <div className="ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.5vw] font-semibold">
         <h1>What's Your Genre?</h1>
-        <h2 className="text-[2vw] md:text-[1vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
+        <h2 className="text-[3.5vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300">
           Select one or more tags, then click on 'Explore All' to view content
           from your favorite genres :
         </h2>
       </div>
 
-      <div className="ml-[1vw] md:ml-[3vw]">
+      <div className="ml-[2vw] md:ml-[3vw]">
         <Swiper
           speed={1000}
           modules={[Navigation, Pagination]}
           slidesPerView={2}
           slidesPerGroup={2}
-          spaceBetween={-5}
+          spaceBetween={-40}
           loop={false}
           pagination={{ clickable: true }}
           onSwiper={(swiper) => {
@@ -94,6 +94,11 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
               slidesPerView: 9,
               slidesPerGroup: 9,
               spaceBetween: -140,
+            },
+            768: {
+              slidesPerView: 6,
+              slidesPerGroup: 6,
+              spaceBetween: -240,
             },
           }}
         >
@@ -133,16 +138,16 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
             handleReload(); // Reload the page
           }}
           onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
-          className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
+          className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
         >
           Explore All
-          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
+          <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </Button>
       ) : (
         // </Link>
-        <div className="ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
+        <div className="ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
           Explore All
-          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
+          <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </div>
       )}
     </div>

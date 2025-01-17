@@ -76,10 +76,10 @@ function ServicesSwiper({
     <div
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}
-      className="relative z-80"
+      className="relative z-80 ml-2 md:ml-0"
     >
       <div
-        className={`ml-2 mb-4 md:ml-[3vw] text-white text-xl md:text-[1.3vw] font-semibold`}
+        className={`ml-2 mb-4 md:ml-[3vw]  text-white text-xl md:text-[1.3vw] font-semibold`}
       >
         {logInPage ? (
           <h1>Discover What Your Favorite Streaming Services Have to Offer</h1>
@@ -88,7 +88,7 @@ function ServicesSwiper({
         )}
 
         <div
-          className={`text-[2vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300`}
+          className={`text-[3.5vw] md:text-[0.9vw] pt-[1vh] pb-[1vh] font-medium text-gray-300`}
         >
           {logInPage ? (
             <h2>
@@ -105,7 +105,7 @@ function ServicesSwiper({
         </div>
       </div>
 
-      <div className="ml-[1vw] md:ml-[3vw]">
+      <div className="ml-[2vw] md:ml-[3vw]">
         <Swiper
           speed={1000}
           modules={[Navigation, Pagination]}
@@ -126,6 +126,11 @@ function ServicesSwiper({
               slidesPerGroup: 6,
               spaceBetween: -140,
             },
+            768: {
+              slidesPerView: 6,
+              slidesPerGroup: 6,
+              spaceBetween: -70,
+            },
           }}
         >
           {services.map((service, index) => {
@@ -141,7 +146,7 @@ function ServicesSwiper({
             //console.log(activeServices);
 
             return (
-              <SwiperSlide key={service.id} className="pb-[5vh] md:pb-[8vh]">
+              <SwiperSlide key={service.id} className="pb-[7vh] md:pb-[8vh]">
                 <ServicesCard
                   logInPage={logInPage}
                   img={service.img}
@@ -169,20 +174,20 @@ function ServicesSwiper({
             handleReload(); // Reload the page
           }}
           onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
-          className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
+          className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
         >
           Explore All
-          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
+          <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </Button>
       ) : (
         // </Link>
         <div
-          className={`ml-[1vw] h-[6vh] w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] text-[0.9vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center ${
+          className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center ${
             logInPage ? "hidden" : ""
           }`}
         >
           Explore All
-          <SlArrowRight className="w-[1vw] h-[1vw] ml-[1vw] md:ml-[1vw]" />
+          <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </div>
       )}
     </div>

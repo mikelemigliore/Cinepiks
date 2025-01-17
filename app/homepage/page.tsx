@@ -730,7 +730,7 @@ function HomePage() {
     <div className="relative">
       <div>
         <MainCarousel medias={inTheaters || []} mediaType={"movie"} />
-        <div className="relative -mt-[26rem] md:-mt-[9rem]">
+        <div className="relative -mt-[20rem] md:-mt-[9rem]">
           <div className="relative left-0 my-12 right-0 z-40">
             <MovieSwiper
               //itemsGenres={itemsGenres}

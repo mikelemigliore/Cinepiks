@@ -86,7 +86,7 @@ Props) {
       onMouseLeave={() => setShowButtons(false)}
       className="relative z-80" //bottom-[3rem]
     >
-      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white text-[1.5vw] font-semibold">
+      <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white md:text-[1.5vw] text-[5vw] font-semibold">
         <h1 className="flex">
           <div>{title}</div>
           {logInPage ||
@@ -102,7 +102,7 @@ Props) {
                   if (onClick) onClick(e); // Call the passed onClick handler if provided
                   handleReload(); // Reload the page
                 }}
-                className={`md:w-[7vw] ml-4 rounded-full text-[1vw] !bg-transparent hover:text-white 
+                className={`md:w-[7vw] ml-4 rounded-full md:text-[1vw] text-[3vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
           ${
             showButtons
@@ -112,7 +112,7 @@ Props) {
         `}
               >
                 View All
-                <SlArrowRight className="w-5 h-5 md:w-4 md:h-4 md:ml-[.5vw] " />
+                <SlArrowRight className="w-4 h-4 md:w-4 md:h-4 md:ml-[.5vw] ml-[2vw]" />
               </Button>
               {/* </Link> */}
             </div>
@@ -120,7 +120,7 @@ Props) {
         </h1>
       </div>
 
-      <div className="ml-[2.5vw] mr-[3vw]">
+      <div className="lg:ml-[2.5vw] lg:mr-[3vw] md:ml-[-3vw] md:mr-[12vw] mb-[5vh] md:mb-[0vh]">
         {medias.length > 0 ? (
           <Swiper
             speed={1000}
@@ -146,6 +146,11 @@ Props) {
                 slidesPerView: 7,
                 slidesPerGroup: 7,
                 spaceBetween: -5,
+              },
+              768: {
+                slidesPerView: 6,
+                slidesPerGroup: 6,
+                spaceBetween: -70,
               },
               // // when window width is >= 768px
               // 768: {
@@ -179,7 +184,7 @@ Props) {
               const isLastOne = index === medias.length - 1;
 
               return (
-                <SwiperSlide className="pb-[8vh]" key={media.id}>
+                <SwiperSlide className="md:pb-[8vh] pb-[6vh]" key={media.id}>
                   <MovieCard
                     logInPage={logInPage}
                     type={mediaType}

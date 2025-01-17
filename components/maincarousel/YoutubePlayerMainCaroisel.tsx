@@ -151,7 +151,7 @@ function YoutubePlayerMainCaroisel({
 
       <img
         src={src}
-        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:h-[120vh] w-full mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
+        className={`absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[25rem] md:h-[120vh] object-cover w-full mt-[4rem] md:mt-0 z-10 transition-opacity duration-500 ease-in-out ${
           fadeOut ? "opacity-100" : "opacity-0"
         }`}
       />

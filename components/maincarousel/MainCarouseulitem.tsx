@@ -402,7 +402,7 @@ function MainCarouseulitem({
         ) : (
           <img
             src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
-            className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[30vh] md:h-[120vh] w-full"
+            className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[50vh] object-cover md:h-[120vh] w-full"
           />
         )}
       </div>
@@ -444,11 +444,11 @@ function MainCarouseulitem({
         </div>
       )}
 
-      <div>
-        <h1 className="absolute top-[20vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-sm md:text-lg">
+      <div className=''>
+        <h1 className="ml-[4vw] md:ml-[0vw] absolute top-[38vh] md:top-[30vh] left-[5%] md:left-[4%] z-50 text-white font-bold text-[4vw] md:text-lg">
           Release Date: {formatDate(media.release_date)}
         </h1>
-        <h1 className="absolute top-[22vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
+        <h1 className="ml-[4vw] md:ml-[0vw] absolute top-[41vh] md:top-[33vh] left-[5%] md:left-[4%] z-50 text-white text-[5vw] md:text-[3vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
           {media.title}
         </h1>
         <div className="absolute top-[30vh] md:top-[42vh] left-[5%] md:left-[4%] z-50 max-w-[90%] md:max-w-[35vw] mt-[0.4vw]">
@@ -457,12 +457,12 @@ function MainCarouseulitem({
           </h1>
         </div>
 
-        <div className="absolute top-[30vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
+        <div className="ml-[4vw] md:ml-[0vw] absolute top-[47vh] md:top-[57vh] left-[5%] md:left-[4%] z-50 flex justify-center md:flex-row">
           <div className="mb-4 md:mb-0">
             <Link href={`/singlemovie/${media.id}`}>
-              <Button className="h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+              <Button className="h-[6vh] w-[30vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full mr-3 md:text-[1vw] text-[4vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                 View
-                <SlArrowRight className="w-5 h-5 md:w-5 md:h-5 ml-[2vw]" />
+                <SlArrowRight className="w-4 h-4 md:w-5 md:h-5 ml-[2vw]" />
               </Button>
             </Link>
           </div>
@@ -470,15 +470,15 @@ function MainCarouseulitem({
             <Button
               onClick={() => handleAdded()}
               disabled={session === null}
-              className={`h-[7vh] w-[25vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full text-[1vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+              className={`h-[6vh] w-[35vw] max-w-[10rem] md:w-[8vw] md:h-[6vh] max-w-[15rem] rounded-full md:text-[1vw] text-[4vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
               }`}
             >
               Watchlist
               {isAdded ? (
-                <IoCheckmark className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                <IoCheckmark className="w-4 h-4 md:w-6 md:h-6 ml-[1vw]" />
               ) : (
-                <LuPlus className="w-5 h-5 md:w-6 md:h-6 ml-[1vw]" />
+                <LuPlus className="w-4 h-4 md:w-6 md:h-6 ml-[1vw]" />
               )}
             </Button>
           </div>
