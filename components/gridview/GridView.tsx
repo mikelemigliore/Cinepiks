@@ -43,7 +43,7 @@ function GridView({
         return (
           <div
             key={media.id}
-            className={`m-[1vw] transition-transform duration-700 ml-[-0.2vw]`}
+            className={`m-[1vw] transition-transform duration-700 md:ml-[-0.2vw]`}
             //style={{ width: "12.6vw", height: "40vh" }}
           >
             {/* <Link

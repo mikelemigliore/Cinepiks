@@ -167,7 +167,7 @@ function Filter({
   typeQuery,
   typeContent,
   typeService,
-  typeGenres
+  typeGenres,
 }: FilterProp) {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     availability: {
@@ -251,6 +251,7 @@ function Filter({
   });
 
   const [showTags, setShowTags] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     if (filter) {
@@ -262,6 +263,14 @@ function Filter({
       setShowTags(false);
     }
   }, [filter]);
+
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
 
   const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
@@ -383,12 +392,12 @@ function Filter({
         const platformMatch = Object.values(selectedFilters.platforms).find(
           (platform) => platform.id === Number(item)
         );
-    
+
         if (platformMatch) {
-          const platformTag = platformMatch.tag as keyof typeof selectedFilters.platforms;
-        
+          const platformTag =
+            platformMatch.tag as keyof typeof selectedFilters.platforms;
+
           setSelectedFilters((prevState) => {
-        
             return {
               ...prevState,
               platforms: {
@@ -409,12 +418,12 @@ function Filter({
         const genresMatch = Object.values(selectedFilters.genresMovie).find(
           (genre) => genre.id === Number(item)
         );
-    
+
         if (genresMatch) {
-          const genreTag = genresMatch.tag as keyof typeof selectedFilters.genresMovie;
-        
+          const genreTag =
+            genresMatch.tag as keyof typeof selectedFilters.genresMovie;
+
           setSelectedFilters((prevState) => {
-        
             return {
               ...prevState,
               genresMovie: {
@@ -584,32 +593,32 @@ function Filter({
 
   return (
     <div
-      className={`flex justify-end mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out -mt-[1.5vh] ${
+      className={`flex md:justify-end md:mr-[0.5vw] p-[0.7vw] transition-all duration-700 ease-in-out md:-mt-[1.5vh] -mt-[1.5vh] ${
         filter
-          ? "w-[17vw] h-full bg-customServicesColor rounded-[2vh] ml-[1vw]"
-          : "ml-[2.5vw] w-[2vw] "
+          ? "md:w-[17vw] md:h-full md:bg-customServicesColor md:rounded-[2vh] md:ml-[1vw]"
+          : "md:ml-[2.5vw] md:w-[2vw] "
       }`}
     >
       <div className="w-full">
-        <div className="flex justify-end">
+        <div className="flex md:justify-end">
           <Button
             onClick={handleFilter}
             disabled={typeContent === "trendingMovies" || typeQuery === "all"}
-            className={`bg-customServicesColor rounded-[0.4vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 w-[2.5vw] h-[2.5vw] ${
+            className={`mr-[-14vw] ml-[3vw] md:ml-[0vw] md:mr-[0vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 w-[12vw] h-[6vh] md:w-[2.5vw] md:h-[2.5vw] z-50 ${
               filter ? "bg-white/90" : ""
             }`}
           >
             <FaFilter
-              className={`w-[1.4vw] h-[1.4vw] min-w-[17px] min-h-[17px] ${
+              className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] min-w-[17px] min-h-[17px] ${
                 filter ? "text-black" : ""
               }`}
             />
           </Button>
         </div>
 
-        {filter && (
+        {filter && isDesktop ? (
           <div
-            className={`w-full mt-[2vh] transition-opacity duration-700 ${
+            className={` w-full mt-[2vh] transition-opacity duration-700 ${
               showTags ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -766,6 +775,171 @@ function Filter({
               >
                 Apply
               </Button>
+            </div>
+          </div>
+        ) : (
+          <div
+            className={`fixed bg-customColor w-full overflow-y-auto h-[60vh] pb-[12vh] pt-[5vh] z-[100] ${
+              showTags ? "opacity-100 " : "opacity-0"
+            }`}
+          >
+            <div className="mx-[2vw]">
+              {typeQuery !== "series" && (
+                <div>
+                  <div className="flex justify-start md:text-[1.2vw] text-[5vw] mb-[1vh] ml-[0.5vw]">
+                    Availability
+                  </div>
+                  <div>
+                    {availability.map((item) => (
+                      <Button
+                        key={item.id} //Each <Button> needs a unique key prop when mapping to help React manage its updates efficiently. Here, tag is used as the unique identifier
+                        onClick={() =>
+                          handleFilterClick("availability", item.tag)
+                        }
+                        className={`bg-customColorCard rounded-full md:p-[1.1vw] p-[5vw] md:text-[0.8vw] text-[4vw] md:m-[0.2vw] m-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                          selectedFilters.availability[item.tag]?.selected
+                            ? "bg-white/90 text-black"
+                            : ""
+                        }`}
+                      >
+                        {item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="w-full p-[0.1vh] mt-[2vh] bg-white/20"></div>
+                </div>
+              )}
+              {typeQuery !== "series" ? (
+                <div>
+                  <div className="flex justify-start md:text-[1.2vw] text-[5vw] mb-[1vh] ml-[0.5vw] mt-[2vh]">
+                    Genres
+                  </div>
+                  <div>
+                    {genresMovie.map((item) => (
+                      <Button
+                        key={item.id}
+                        onClick={() =>
+                          handleFilterClick("genresMovie", item.tag)
+                        }
+                        className={`bg-customColorCard rounded-full md:p-[1.1vw] p-[5vw] md:text-[0.8vw] text-[4vw] md:m-[0.2vw] m-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                          selectedFilters.genresMovie[item.tag]?.selected
+                            ? "bg-white/90 text-black"
+                            : ""
+                        }`}
+                      >
+                        {displayNames[item.tag] ||
+                          item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="w-full p-[0.1vh] mt-[2vh] bg-white/20"></div>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex justify-start md:text-[1.2vw] text-[5vw] mb-[1vh] ml-[0.5vw] mt-[2vh]">
+                    Genres
+                  </div>
+                  <div>
+                    {genresSeries.map((item) => (
+                      <Button
+                        key={item.id}
+                        onClick={() =>
+                          handleFilterClick("genresSeries", item.tag)
+                        }
+                        className={`bg-customColorCard rounded-full md:p-[1.1vw] p-[5vw] md:text-[0.8vw] text-[4vw] md:m-[0.2vw] m-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                          selectedFilters.genresSeries[item.tag]?.selected
+                            ? "bg-white/90 text-black"
+                            : ""
+                        }`}
+                      >
+                        {displayNames[item.tag] ||
+                          item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="w-full p-[0.1vh] mt-[2vh] bg-white/20"></div>
+                </div>
+              )}
+              <div className="flex justify-start md:text-[1.2vw] text-[5vw] mb-[1vh] ml-[0.5vw] mt-[2vh]">
+                Platforms
+              </div>
+              <div>
+                {platforms.map((item) => (
+                  <Button
+                    key={item.id}
+                    onClick={() => handleFilterClick("platforms", item.tag)}
+                    className={`bg-customColorCard rounded-full md:p-[1.1vw] p-[5vw] md:text-[0.8vw] text-[4vw] md:m-[0.2vw] m-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                      selectedFilters.platforms[item.tag]?.selected
+                        ? "bg-white/90 text-black"
+                        : ""
+                    }`}
+                  >
+                    {displayNames[item.tag] ||
+                      item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                  </Button>
+                ))}
+              </div>
+              {/*  <div className="w-full p-[0.1vh] mt-[2vh] bg-white/20"></div>
+           <div className="flex justify-start text-[1.2vw] mb-[1vh] ml-[0.5vw] mt-[2vh]">
+            Ratings
+          </div>
+          <div>
+            {ratings.map((item) => (
+              <Button
+                key={item.id}
+                onClick={() => handleFilterClick("ratings", item.tag)}
+                className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  selectedFilters.ratings[item.tag]
+                    ? "bg-white/90 text-black"
+                    : ""
+                }`}
+              >
+                {displayNames[item.tag] ||
+                  item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+              </Button>
+            ))}
+          </div> */}
+              {typeQuery !== "series" && (
+                <div>
+                  <div className="w-full p-[0.1vh] mt-[2vh] bg-white/20"></div>
+                  <div className="flex justify-start md:text-[1.2vw] text-[5vw] mb-[1vh] ml-[0.5vw] mt-[2vh]">
+                    Runtime
+                  </div>
+                  <div>
+                    {runtime.map((item) => (
+                      <Button
+                        key={item.id}
+                        onClick={() => handleFilterClick("runtime", item.tag)}
+                        className={`bg-customColorCard rounded-full md:p-[1.1vw] p-[5vw] md:text-[0.8vw] text-[4vw] md:m-[0.2vw] m-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                          selectedFilters.runtime[item.tag]?.selected
+                            ? "bg-white/90 text-black"
+                            : ""
+                        }`}
+                      >
+                        {displayNames[item.tag] ||
+                          item.tag.charAt(0).toUpperCase() + item.tag.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex md:justify-between md:mt-[3vh] mt-[6vh]">
+                <Button
+                  onClick={handleClick}
+                  disabled={isApplyDisabled}
+                  className="bg-transparent rounded-full md:p-[1.5vw] p-[7vw] md:text-[1vw] text-[5vw] m-[0.2vw] hover:bg-transparent"
+                >
+                  Clear
+                </Button>
+                <Button
+                  onClick={handleClickParams}
+                  disabled={isApplyDisabled}
+                  className={`bg-customColorCard hover:bg-white/90 hover:text-black rounded-full md:p-[1.5vw] p-[7vw] md:text-[1vw] text-[5vw] m-[0.2vw]`}
+                >
+                  Apply
+                </Button>
+              </div>
             </div>
           </div>
         )}

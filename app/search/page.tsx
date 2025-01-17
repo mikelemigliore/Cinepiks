@@ -64,14 +64,12 @@ function SearchPage() {
     ? JSON.parse(typeService.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
     : []; // Fallback if null or undefined
 
-    
-
-    // Memoize parsedTypeGenres
-    const parsedTypeGenres = useMemo(() => {
-      return typeGenres
-        ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
-        : []; // Fallback if null or undefined
-    }, [typeGenres]);
+  // Memoize parsedTypeGenres
+  const parsedTypeGenres = useMemo(() => {
+    return typeGenres
+      ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
+      : []; // Fallback if null or undefined
+  }, [typeGenres]);
 
   //console.log("parsedTypeGenres", parsedTypeGenres);
 
@@ -83,6 +81,7 @@ function SearchPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  //const [isDesktop, setIsDesktop] = useState(false);
   // const [value, setValue] = React.useState<number | null>(0);
   const [loading, setLoading] = useState(true);
   // Inside your component
@@ -121,6 +120,8 @@ function SearchPage() {
   //   }
   // }, [typeContent]);
 
+
+
   useEffect(() => {
     if (typeQuery) {
       dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
@@ -148,7 +149,7 @@ function SearchPage() {
     dispatch(setPage(1)); // Reset page
     dispatch(setContent([]));
     console.log(newGenreFilters);
-    
+
     dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
     dispatch(setFilterPlatform(newPlatformFilters)); // Update platform filters
     dispatch(setAvailability(newAvailability));
@@ -203,9 +204,7 @@ function SearchPage() {
 
   useEffect(() => {
     if (
-      (isSuccess &&
-        contentSearch &&
-        parsedTypeSearch === null) ||
+      (isSuccess && contentSearch && parsedTypeSearch === null) ||
       (contentSearch &&
         parsedTypeSearch === null &&
         typeContent === "popularMovies")
@@ -223,10 +222,7 @@ function SearchPage() {
     } else if (typeContent === "nowPlaying") {
       //console.log("nowPlaying");
       handleFilterParams([], [], [{ id: "2|3", tag: "inTheaters" }], []);
-    } else if (
-      parsedTypeService.length > 0 &&
-      parsedTypeSearch === null
-    ) {
+    } else if (parsedTypeService.length > 0 && parsedTypeSearch === null) {
       //console.log("parsedTypeService");
       handleFilterParams([], parsedTypeService, [], []);
     } else if (search && parsedTypeSearch !== null) {
@@ -332,39 +328,45 @@ function SearchPage() {
   };
 
   return (
-    <div className="mt-[20vh] mb-[5vh]">
-      <div className="flex justify-between ml-[5vw]">
+    <div
+      className={` md:mt-[20vh] mt-[10vh] mb-[5vh]`}
+    >
+      <div className="flex justify-between md:ml-[5vw] ml-[3vw]">
         <div
           className={`${
-            filter ? "translate-x-[15vw]" : ""
-          } transition-transform duration-700 ease-in-out`}
+            filter ? "md:translate-x-[15vw]" : ""
+          } md:transition-transform md:duration-700 md:ease-in-out`}
         >
-          <div className="text-[2.5vw] font-bold">Search</div>
-          <div className="h-[5vh] text-[0.7vw] md:text-[0.9vw] text-gray-300">
+          <div className="md:text-[2.5vw] text-[10vw] font-bold">Search</div>
+          <div className="absolute h-[5vh] text-[4vw] md:text-[0.9vw] text-gray-300 md:w-[20vw]">
             Use filter on the left to refine your search
           </div>
         </div>
 
         <div className="relative flex flex-col mr-[2vw]" style={{ top: "3vh" }}>
-          <div className="flex justify-end mb-[2vh] mt-[2vh]">
+          <div className="flex justify-end md:mb-[2vh] mb-[7vh] md:mt-[2vh] mt-[-2vh]">
             <Button
               onClick={handleGrid}
-              className={`p-0 w-[2.5vw] h-[2.5vw] bg-customServicesColor rounded-[0.4vw] mr-[1vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
+              className={`p-0 md:w-[2.5vw] md:h-[2.5vw] w-[10vw] h-[10vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg md:mr-[1vw] mr-[2vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
                 grid ? "bg-white/90" : ""
               }`}
             >
               <BsFillGrid3X3GapFill
-                className={`w-[1.4vw] h-[1.4vw] ${grid ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${
+                  grid ? "text-black" : ""
+                }`}
               />
             </Button>
             <Button
               onClick={handleList}
-              className={`p-0 w-[2.5vw] h-[2.5vw] bg-customServicesColor rounded-[0.4vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
+              className={`p-0 md:w-[2.5vw] md:h-[2.5vw] w-[10vw] h-[10vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg md:mr-[1vw] mr-[2vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
                 list ? "bg-white/90" : ""
               }`}
             >
               <FaList
-                className={`w-[1.4vw] h-[1.4vw] ${list ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${
+                  list ? "text-black" : ""
+                }`}
               />
             </Button>
           </div>
@@ -380,7 +382,9 @@ function SearchPage() {
 
       <div className="flex flex-col">
         <div
-          className={`flex justify-start mt-[-2vh] ${filter ? "mr-[2vw]" : ""}`}
+          className={`flex justify-start mt-[-2vh] ${
+            filter ? "md:mr-[2vw]" : ""
+          }`}
         >
           {/* Filter component */}
           <Filter
@@ -396,16 +400,16 @@ function SearchPage() {
 
           {/* Apply the transition to the entire buttons and cards container */}
           <div
-            className={`transition-transform duration-700 ease-in-out flex flex-col ${
-              filter ? "translate-x-[1vw]" : ""
+            className={`md:transition-transform md:duration-700 md:ease-in-out flex flex-col ${
+              filter ? "md:translate-x-[1vw]" : ""
             }`}
           >
-            <div className="flex transition-transform duration-700 ease-in-out">
+            <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0vw] space-x-[1.5vw]">
               <Link href={{ pathname: "/search", query: { type: "all" } }}>
                 <Button
                   //key="all"
                   onClick={() => handleAll("all")}
-                  className={`w-[3vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  className={` h-[6vh] w-24 md:w-[3vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     all ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
@@ -416,7 +420,7 @@ function SearchPage() {
                 <Button
                   //key="movie"
                   onClick={() => handleMovies("movie")}
-                  className={`w-[7vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     movies ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
@@ -427,7 +431,7 @@ function SearchPage() {
                 <Button
                   //key="series"
                   onClick={() => handleSeries("series")}
-                  className={`w-[7vw] h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     series ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
