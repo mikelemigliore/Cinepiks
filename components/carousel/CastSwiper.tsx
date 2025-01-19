@@ -25,7 +25,7 @@ function CastSwiper({ cast }: CastProp) {
 
   return (
     <div>
-      <div className="text-[1.2vw] mb-[0.7vw]">
+      <div className="md:text-[1.2vw] text-[5vw] mb-[0.7vw] md:ml-[0vw] ml-[-8vw]">
         <h1>Cast</h1>
       </div>
 
@@ -37,7 +37,7 @@ function CastSwiper({ cast }: CastProp) {
         >
           <CarouselContent>
             {cast.map((castItem) => (
-              <CarouselItem className="basis-1/9 md:basis-1/9">
+              <CarouselItem className="basis-2/9 md:basis-1/9">
                 <CastCard picture={castItem.picture} name={castItem.name} character={castItem.character}/>
               </CarouselItem>
             ))}

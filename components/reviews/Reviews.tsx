@@ -194,10 +194,10 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
           {getOrderOfSort().map((reviewsItem) => (
             <div
               key={reviewsItem.id}
-              className="md:w-[34.5vw] w-[95vw] md:h-[10.5vw] h-[28vh] bg-buttonColor rounded-2xl md:mb-[0.4vw] mb-[2vw] mr-[1vw]"
+              className="md:w-[34.5vw] w-[92vw] md:h-[10.5vw] h-[28vh] bg-buttonColor rounded-2xl md:mb-[0.4vw] mb-[2vw] mr-[1vw]"
             >
               <div className="flex mx-[1vw]">
-                <div className="flex md:gap-x-[1vw] gap-x-[10vw] md:mt-[1vw] mt-[3vw]">
+                <div className="flex md:gap-x-[1vw] gap-x-[8vw] md:mt-[1vw] mt-[3vw]">
                   <div className="h-[2vw] w-[2vw] md:ml-[0vw] ml-[1vw] ">
                     <Avatar>
                       <AvatarImage

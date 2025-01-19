@@ -185,7 +185,7 @@ function SingleMoviePage() {
       />
       <div
         className={`min-h-screen ${
-          missingSection ? `mb-[85vw]` : `mb-[105vw]`
+          missingSection ? `md:mb-[85vw]` : `md:mb-[105vw]`
         }`}
       >
         <div
@@ -210,16 +210,17 @@ function SingleMoviePage() {
               handleEnd={handleEnd}
               isDesktop={isDesktop}
             />
-            <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[3vw]">
+            <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[2vw]">
               <div className=" md:h-[2vw] md:mt-[0vh] mt-[6vh]">
-                <div className="md:text-[1vw] text-[4vw]">How To Watch</div>
+                <div className="md:text-[1vw] text-[5vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
                   <TagsHowToWatch
                     selectedFilters={selectedFilters}
                     toggleFilter={toggleFilter}
                   />
                 </div>
-                <div className="w-full">
+                {/* it was just w-full in order to remove the bg color */}
+                <div className="md:w-full w-[96vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <HowToWatchCard
                     id={Id}
                     selectedFilters={selectedFilters}
@@ -228,7 +229,7 @@ function SingleMoviePage() {
                 </div>
               </div>
               <div className="md:h-[2vw]">
-                <div className="md:text-[1vw] text-[4vw]">Reviews</div>
+                <div className="md:text-[1vw] text-[5vw]">Reviews</div>
                 <div className="my-[1vh] mb-[2vh]">
                   <TagsHighToLow
                     hightolow={hightolow}
@@ -237,7 +238,8 @@ function SingleMoviePage() {
                     handleLowtohigh={handleLowtohigh}
                   />
                 </div>
-                <div className="w-full md:h-[22vw] h-[110vw]">
+                {/* it was just w-full md:h-[22vw] h-[110vw] in order to remove the bg color */}
+                <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[110vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <Reviews
                     id={Id}
                     hightolow={hightolow}
@@ -247,12 +249,12 @@ function SingleMoviePage() {
                 </div>
               </div>
             </div>
-            <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[75vw] ml-[13vw]">
-              <div className="text-[1vw] mt-[-2vw]">More Info</div>
+            <div className="md:h-[6vw] md:mt-[10vw] h-[50vh] mt-[20vw] bg-buttonColor md:rounded-[1vw] rounded-2xl max-w-[75vw] md:ml-[13vw] ml-[3vw]">
+              <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">More Info</div>
               <MoreInfo id={Id} type={type} />
             </div>
             {/* <div className="mt-[6vw] max-w-[50vw]"> */}
-            <div className="mt-[4vw] max-w-[75vw] ml-[13vw]">
+            <div className="md:mt-[4vw] mt-[6vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
             {/* Divider line */}

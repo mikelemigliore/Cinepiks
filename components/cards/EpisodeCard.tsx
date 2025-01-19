@@ -32,6 +32,7 @@ interface EpisodeCardProp {
   date: string;
   selectedSeason: number;
   Id: number;
+  isDesktop:boolean
   //progressValue: number;
 }
 
@@ -47,6 +48,7 @@ function EpisodeCard({
   date,
   selectedSeason,
   Id,
+  isDesktop
  // progressValue,
 }: //handleSeason,
 EpisodeCardProp) {
@@ -130,12 +132,12 @@ EpisodeCardProp) {
   };
 
   return (
-    <div className=" relative w-[18vw] h-[17vw] rounded-2xl">
+    <div className=" relative md:w-[18vw] w-[75vw] md:h-[17vw] h-[70vw] rounded-2xl">
       <img className="rounded-2xl shadow-lg" src={img}></img>
-      <div className="absolute top-0 right-[1vw] md:ml-[1rem] md:mt-[1rem] z-[1010]">
+      <div className="absolute top-0 md:right-[1vw] right-[5vw] md:ml-[1rem] md:mt-[1rem] mt-[1rem] z-[1010]">
         <Button
           onClick={() => handleClick()}
-          className={`flex items-center justify-center  w-[2vw] h-[2vw] rounded-full bg-opacity-35 border-none bg-slate-300  hover:bg-slate-300  hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+          className={`flex items-center justify-center  md:w-[2vw] md:h-[2vw] w-[10vw] h-[10vw] rounded-full bg-opacity-35 border-none bg-slate-300  hover:bg-slate-300  hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
             isWatched ? "bg-white/90" : ""
           }`}
         >
@@ -146,48 +148,48 @@ EpisodeCardProp) {
           />
         </Button>
       </div>
-      <div className="flex mt-[0.8vw] justify-between">
+      <div className="flex md:mt-[0.8vw] justify-between  mt-[3vw]">
         <div className="flex">
-          <div className="text-[1vw] mr-[0.5vw]">{episodeNumber}.</div>
-          <div className="text-[1vw] line-clamp-1">{title}</div>
+          <div className="md:text-[1vw] text-[4vw] mr-[0.5vw]">{episodeNumber}.</div>
+          <div className="md:text-[1vw] text-[4vw] line-clamp-1">{title}</div>
         </div>
 
         <div className="mr-[1vw]">
           <Dialog>
-            <DialogTrigger className="flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[5vw] md:h-[3.8vh] rounded-full text-sm md:text-[0.7vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+            <DialogTrigger className="flex justify-center items-center h-[4vh] w-[20vw] md:pl-[0.4vw] md:w-[5vw] md:h-[3.8vh] rounded-full text-sm md:text-[0.7vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
               View
-              <SlArrowRight className="w-[1.7vw] h-[1.7vh] md:ml-[0.4vw]" />
+              <SlArrowRight className="w-[1.7vw] h-[1.7vh] md:ml-[0.4vw] ml-[3vw]" />
             </DialogTrigger>
-            <DialogContent className=" md:w-[35vw] md:h-[30vw] bg-customColorCard rounded-full">
+            <DialogContent className=" md:w-[35vw] md:h-[30vw]  h-[52vh] bg-customColorCard rounded-2xl">
               <img className="rounded-3xl shadow-lg w-full" src={img} />
               <div
-                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full md:h-[15vw] md:mt-[5vw] h-[30vw] mt-[27vw]`}
               />
               <div
-                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
+                className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full md:h-[15vw] md:mt-[5vw] h-[30vw] mt-[27vw]`}
               />
-              <div className="ml-[1.5vw] mt-[-1.5vw]">
+              <div className="md:ml-[1.5vw] md:mt-[-1.5vw] ml-[3vw] mt-[-3vw]">
                 <div className="flex justify-between relative z-[100]">
                   <div>
                     <div className="flex mt-[1vh]">
-                      <div className="text-[1.3vw] mr-[0.5vw]">
+                      <div className="md:text-[1.3vw] text-[4vw] mr-[0.5vw]">
                         {episodeNumber}.
                       </div>
-                      <div className="text-[1.3vw] line-clamp-1">{title}</div>
+                      <div className="md:text-[1.3vw] text-[4vw] line-clamp-1">{title}</div>
                     </div>
-                    <div className="text-[0.8vw] text-customTextColor flex">
+                    <div className="md:text-[0.8vw] text-[3vw] text-customTextColor flex">
                       <div className="mr-[1.5vw]">{formatDate(date)}</div>
                       <div>{duration}</div>
                     </div>
                   </div>
 
-                  <div className="h-[1.7vw] w-[4vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full mr-[2vw] mt-[1.5vw]">
-                    <GoStarFill className="w-[2.5vw] h-[2.5vh]" />
+                  <div className="md:h-[1.7vw] md:w-[4vw] h-[9vw] w-[20vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full md:mr-[2vw] mr-[6vw] mt-[1.5vw]">
+                    <GoStarFill className="md:w-[2.5vw] md:h-[2.5vh] w-[5vw] h-[5vh] md:mr-[0vw] mr-[2vw]" />
                     {score}
                   </div>
                 </div>
 
-                <ScrollArea className="h-[5.5vw] mr-[1vw] mt-[1vw]">
+                <ScrollArea className="md:h-[5.5vw] h-[70vh] mr-[1vw] mt-[1vw]">
                   <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
                     {description}
                   </div>
@@ -197,8 +199,8 @@ EpisodeCardProp) {
           </Dialog>
         </div>
       </div>
-      <div className="text-[0.7vw] text-customTextColor">{duration}</div>
-      <p className="mt-[0.5vh] text-white text-[0.8vw]  max-w-[23rem] md:max-w-[17vw] line-clamp-2">
+      <div className="md:text-[0.7vw] text-[3vw] text-customTextColor">{duration}</div>
+      <p className="mt-[0.5vh] text-white md:text-[0.8vw] text-[3.5vw]  max-w-[23rem] md:max-w-[17vw] line-clamp-2">
         {" "}
         {description}
       </p>

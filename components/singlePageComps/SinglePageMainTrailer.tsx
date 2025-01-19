@@ -65,7 +65,7 @@ function SinglePageMainTrailer({
         <div className={`relative w-full md:h-full h-[50vh] overflow-hidden`}>
           <img
             src={src}
-            className={`absolute inset-0 md:w-full  z-10 transition-opacity duration-500 ease-in-out`}
+            className={`absolute inset-0 md:w-full w-full md:h-full h-[50vh] object-cover z-10 transition-opacity duration-500 ease-in-out`}
           />
         </div>
       )}
@@ -85,7 +85,12 @@ function SinglePageMainTrailer({
         {isLoading ? (
           <Rings color="#ffffff" height={40} width={40} />
         ) : (
-          <CiPlay1 className="md:w-[2vw] md:h-[2vw] w-[7vw] h-[7vw]" />
+          <>
+            <div className="">
+              <CiPlay1 className="md:w-[2vw] md:h-[2vw] w-[7vw] h-[7vw]" />
+              <h1 className="absolute md:text-[1.1vw] text-[4vw]  md:mt-[2vw] md:ml-[-1.5vw] mt-[6vw] ml-[-6vw] ">Play Trailer</h1>
+            </div>
+          </>
         )}
       </Button>
       {isDesktop && (

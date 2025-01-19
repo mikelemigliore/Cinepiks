@@ -207,7 +207,7 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
     } else if (type === "series") {
       const hours = Math.floor(minutes / 60); // Get the hours
       const remainingMinutes = minutes % 60; // Get the remaining minutes
-      return hours ? `Average: ${hours}h ${remainingMinutes}m` : `Average: ${remainingMinutes}m`;
+      return hours ? `Avg: ${hours}h ${remainingMinutes}m` : `Avg: ${remainingMinutes}m`;
     } else {
       return "N/A";
     }
@@ -220,7 +220,7 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
           {getFilteredServices().map((watchItem) => (
             <div
               key={watchItem.provider_id}
-              className="md:w-[34.5vw] w-[95vw] md:h-[5vw] h-[10vh] bg-buttonColor md:rounded-[1vw] rounded-2xl md:mb-[0.4vw] mb-[2vw] md:mr-[1vw]"
+              className="md:w-[34.5vw] w-[92vw] md:h-[5vw] h-[10vh] bg-buttonColor md:rounded-[1vw] rounded-2xl md:mb-[0.4vw] mb-[2vw] md:mr-[1vw]"
             >
               <div className="flex h-full items-center gap-x-[1vw] mx-[1vw]">
                 <div className="md:w-[18vw] md:h-[3.3vw] w-[70vw] h-[12vw] bg-buttonColor md:rounded-[1vw] rounded-xl flex items-center justify-center">
@@ -238,7 +238,7 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
                     {watchItem.provider_name}
                   </div>
                 </div>
-                <div className="w-full text-start md:text-[0.9vw] text-[3vw]">
+                <div className="md:w-full w-[60vw] text-start md:text-[0.9vw] text-[3vw]">
                   Rated
                   <div className="text-customTextColor md:text-[0.9vw] text-[3vw]">
                     {certification}

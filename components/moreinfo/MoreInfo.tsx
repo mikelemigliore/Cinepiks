@@ -125,16 +125,16 @@ function MoreInfo({ id,type }: MoreInfoProp) {
   };
 
   return (
-    <div className="flex justify-between items-center mx-[4vw] h-full mt-[0.5vw]">
+    <div className="md:flex justify-between items-center mx-[4vw] h-full md:mt-[0.5vw] mt-[2vh] md:space-y-[0vh] space-y-[2vh]">
       <div>
-        <div className="text-[0.9vw]">Release</div>
-        <div className="text-customTextColor text-[0.9vw]">
+        <div className="md:text-[0.9vw] text-[4vw]">Release</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">
           {formatDate(releaseDate)}
         </div>
       </div>
       <div>
-        <div className="text-[0.9vw]">Genres</div>
-        <div className="text-customTextColor text-[0.9vw]">
+        <div className="md:text-[0.9vw] text-[4vw]">Genres</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">
           {genres
             .slice(0, 3)
             .map((genre) => genre.name)
@@ -142,20 +142,20 @@ function MoreInfo({ id,type }: MoreInfoProp) {
         </div>
       </div>
       <div>
-        <div className="text-[0.9vw]">Origins</div>
-        <div className="text-customTextColor text-[0.9vw]">{origins}</div>
+        <div className="md:text-[0.9vw] text-[4vw]">Origins</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">{origins}</div>
       </div>
       <div>
-        <div className="text-[0.9vw]">Languages</div>
-        <div className="text-customTextColor text-[0.9vw]">{language}</div>
+        <div className="md:text-[0.9vw] text-[4vw]">Languages</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">{language}</div>
       </div>
       <div>
-        <div className="text-[0.9vw]">Budget</div>
-        <div className="text-customTextColor text-[0.9vw]">{`$${budget}`}</div>
+        <div className="md:text-[0.9vw] text-[4vw]">Budget</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">{`$${budget}`}</div>
       </div>
       <div>
-        <div className="text-[0.9vw]">Box Office</div>
-        <div className="text-customTextColor text-[0.9vw]">{`$${boxOffice}`}</div>
+        <div className="md:text-[0.9vw] text-[4vw]">Box Office</div>
+        <div className="text-customTextColor md:text-[0.9vw] text-[4vw]">{`$${boxOffice}`}</div>
       </div>
     </div>
   );

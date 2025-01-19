@@ -902,7 +902,7 @@ MainDetailsProps) {
             <div>
               <div className="">
                 <div className="flex">
-                  <div className=" text-[3.5vw] z-[50]">Your Score</div>
+                  <div className=" md:text-[1vw] text-[1vw] text-[3.5vw] z-[50]">Your Score</div>
                   <StarRating
                     title={title}
                     value={value}
@@ -912,24 +912,24 @@ MainDetailsProps) {
                   />
                 </div>
 
-                <div className="flex items-end text-[4vw] mt-[1vh]">
+                <div className="flex items-end md:text-[1vw] text-[4vw] mt-[1vh]">
                   <img
-                    className="mr-[0.5vw] w-[6vw] h-[6vw] z-[50]"
+                    className="mr-[0.5vw] md:w-[1.7vw] md:h-[1.7vw] w-[6vw] h-[6vw] z-[50]"
                     src="/genresIcons/icons8-star.svg"
                   />{" "}
-                  <div className="z-[50]">{value ? value : "--"} / 5</div>
+                  <div className="md:text-[1vw] z-[50]">{value ? value : "--"} / 5</div>
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="text-[3.5vw]">Director</h2>
-              <span className="text-[3.5vw] text-customTextColor">
+              <h2 className="md:text-[1vw] text-[3.5vw]">Director</h2>
+              <span className="md:text-[1vw] text-[3.5vw] text-customTextColor">
                 {director}
               </span>
             </div>
             <div>
-              <h2 className="text-[3.5vw]">Starring</h2>
-              <span className="text-[3.5vw] text-customTextColor">
+              <h2 className="md:text-[1vw] text-[3.5vw]">Starring</h2>
+              <span className="md:text-[1vw] text-[3.5vw] text-customTextColor">
                 {cast[0]?.name},
                 <br />
                 {cast[1]?.name},
@@ -938,14 +938,14 @@ MainDetailsProps) {
               </span>
             </div>
             <div>
-              <h2 className="text-[3.5vw] mb-[1vh]">Socials</h2>
+              <h2 className="md:text-[1vw] text-[3.5vw] mb-[1vh]">Socials</h2>
               <div className="text-customTextColor flex space-x-[2vw]">
                 <Link
                   href={homepage ? homepage : "N/A"}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaLink className="w-[6vw] h-[6vw] mr-[0.5vw]" />
+                  <FaLink className="md:w-[1.5vw] md:h-[1.5vw] w-[6vw] h-[6vw] mr-[0.5vw]" />
                 </Link>
                 <Link
                   href={`${
@@ -956,7 +956,7 @@ MainDetailsProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaFacebook className="w-[6vw] h-[6vw] mr-[0.5vw]" />
+                  <FaFacebook className="md:w-[1.5vw] md:h-[1.5vw] w-[6vw] h-[6vw] mr-[0.5vw]" />
                 </Link>
                 <Link
                   href={`${
@@ -965,7 +965,7 @@ MainDetailsProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaXTwitter className="w-[6vw] h-[6vw] mr-[0.5vw]" />
+                  <FaXTwitter className="md:w-[1.5vw] md:h-[1.5vw] w-[6vw] h-[6vw] mr-[0.5vw]" />
                 </Link>
                 <Link
                   href={`${
@@ -976,7 +976,7 @@ MainDetailsProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <AiFillInstagram className="w-[6vw] h-[6vw]" />
+                  <AiFillInstagram className="md:w-[1.5vw] md:h-[1.5vw] w-[6vw] h-[6vw]" />
                 </Link>
               </div>
             </div>
@@ -998,7 +998,7 @@ MainDetailsProps) {
             {title}
           </h2>
           <div className="text-center">
-            <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.9vw] text-[3vw]">
+            <div className="flex flex-wrap justify-start items-center text-customTextColor font-bold md:text-[0.9vw] text-[3vw]">
               <span>{genres[0]?.name || "Undefined"}</span>
               <GoDotFill className="bg-customTextColor w-1.5 h-1.5 md:mx-[0.4vw] mx-[1vw] rounded-full" />
               <span>{genres[1]?.name || "Undefined"}</span>
@@ -1029,13 +1029,13 @@ MainDetailsProps) {
           {!isDesktop && (
             <div className="w-full">
               <div className="w-full mt-[6vw]">
-                <h1 className="text-white text-[4vw] font-bold">Ratings</h1>
+                <h1 className="text-white md:text-[1vw] text-[4vw] font-bold">Ratings</h1>
               </div>
 
               {/* Box for Three Titles */}
               <div className="w-full flex justify-between items-start mt-[1.7vh]">
                 <div className="flex justify-between">
-                  <div className="text-customTextColor text-[4vw]">
+                  <div className="text-customTextColor md:text-[1vw] text-[4vw]">
                     <Link
                       href={`https://www.rottentomatoes.com/m/${formatTitle(
                         title
@@ -1044,12 +1044,12 @@ MainDetailsProps) {
                       rel="noopener noreferrer"
                     >
                       <span>Rotten&nbsp;Tomatoes</span>
-                      <div className="flex items-center space-x-[2.5vw]">
+                      <div className="flex items-center space-x-[2.5vw] md:space-x-[0vw]">
                         <div className="flex flex-col">
                           <div className="flex items-center mt-[1.5vh]">
                             {rottenTomatoesCritics && (
                               <img
-                                className="w-[7vw] h-[7vh]"
+                                className="md:w-[3vw] md:h-[3vh] w-[7vw] h-[7vh]"
                                 src={`/genresIcons/${
                                   rottenTomatoesCritics >= 60
                                     ? "Rotten_Tomatoes_Critics_Positive.svg"
@@ -1058,14 +1058,14 @@ MainDetailsProps) {
                                 alt="Rotten Tomatoes Icon"
                               />
                             )}
-                            <span className="ml-[2vw] text-[4vw] text-white text-bold">
+                            <span className="ml-[2vw] md:text-[1vw] text-[4vw] text-white text-bold">
                               {rottenTomatoesCritics !== null
                                 ? `${rottenTomatoesCritics}%`
                                 : "N/A"}
                             </span>
                           </div>
                           <h1
-                            className={`text-[3.5vw] ${
+                            className={`md:text-[1vw] text-[3.5vw] ${
                               rottenTomatoesCritics === null
                                 ? "mb-[-0.5vw] mt-[0.5vw]"
                                 : "mt-[0.5vw]"
@@ -1078,7 +1078,7 @@ MainDetailsProps) {
                           <div className="flex items-center mt-[1.5vh]">
                             {rottenTomatoesAudience && (
                               <img
-                                className="w-[7vw] h-[7vh]"
+                                className="md:w-[3vw] md:h-[3vh] w-[7vw] h-[7vh]"
                                 src={`/genresIcons/${
                                   rottenTomatoesAudience >= 60
                                     ? "Rotten_Tomatoes_positive_audience.svg"
@@ -1087,7 +1087,7 @@ MainDetailsProps) {
                                 alt="Rotten Tomatoes Icon"
                               />
                             )}
-                            <span className="ml-[2vw] text-[4vw] text-white text-bold pr-[2.5vw]">
+                            <span className="ml-[2vw] md:text-[1vw] text-[4vw] text-white text-bold pr-[2.5vw]">
                               {rottenTomatoesAudience !== null
                                 ? `${rottenTomatoesAudience}%`
                                 : "N/A"}
@@ -1095,7 +1095,7 @@ MainDetailsProps) {
                           </div>
 
                           <h1
-                            className={`text-[3.5vw] ${
+                            className={`md:text-[1vw] text-[3.5vw] ${
                               rottenTomatoesAudience === null
                                 ? "mb-[-0.5vw] mt-[0.5vw]"
                                 : "mt-[0.5vw]"
@@ -1112,21 +1112,21 @@ MainDetailsProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <div className="text-customTextColor mt-0 text-[4vw] ml-[4vw]">
+                    <div className="text-customTextColor mt-0 md:text-[1vw] text-[4vw] md:ml-[0vw] ml-[4vw]">
                       iMDB
                       <div className="flex items-center mt-[2.8vh]">
                         <img
-                          className="w-[10vw]"
+                          className=" md:w-[4vw] w-[10vw]"
                           src="/genresIcons/icons8-imdb.svg"
                           alt="Rotten Tomatoes Icon"
                         />
-                        <span className="ml-[2vw] text-[4vw] text-white text-bold">
+                        <span className="ml-[2vw] md:text-[1vw] text-[4vw] text-white text-bold">
                           {imdb !== null ? imdb : "N/A"}
                         </span>
                       </div>
                     </div>
                   </Link>
-                  <div className="text-customTextColor mt-0 text-[4vw] ml-[8vw]">
+                  <div className="text-customTextColor mt-0 md:text-[1vw] text-[4vw] ml-[8vw] md:ml-[0vw]">
                     <Link
                       href={`https://www.themoviedb.org/movie/${id}`}
                       target="_blank"
@@ -1136,11 +1136,11 @@ MainDetailsProps) {
                       <div className="flex items-center mt-[1.5vh]">
                         <div className="flex items-center">
                           <img
-                            className="w-[8vw] h-[8vh]"
+                            className="md:w-[3vw] md:h-[3vh] w-[8vw] h-[8vh]"
                             src="/genresIcons/5c2d24739a206a1df3d19e60c801c494 1.svg"
                             alt="Popularity"
                           />
-                          <span className="ml-[2vw] text-[4vw] text-white text-bold pr-[1vw]">
+                          <span className="ml-[2vw] md:text-[1vw] text-[4vw] text-white text-bold pr-[1vw]">
                             {tmdbScore
                               ? Math.round(tmdbScore * 10) / 10
                               : "Undefined"}
@@ -1154,7 +1154,7 @@ MainDetailsProps) {
             </div>
           )}
 
-          <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[2vw]">
+          <div className="md:ml-[0vw] ml-[-4vw] flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[2vw]">
             <Button
               onClick={() => handleAdded()}
               className={` h-[7vh] w-48 md:w-[7vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${

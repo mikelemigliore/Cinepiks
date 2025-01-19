@@ -94,6 +94,7 @@ function SingleSeriesPage() {
   const [hightolow, setHightolow] = useState(true);
   const [lowtohigh, setLowtohigh] = useState(false);
   const [missingSection, setMissingSetion] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -128,6 +129,14 @@ function SingleSeriesPage() {
   //const seasondb = useSelector((state: RootState) => state.content.season);
 
   const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
+
+    useEffect(() => {
+      if (window.innerWidth >= 1024) {
+        setIsDesktop(true);
+      } else {
+        setIsDesktop(false);
+      }
+    }, []);
 
   // Fetch movie details when IDs are available
   useEffect(() => {
@@ -311,14 +320,15 @@ function SingleSeriesPage() {
         handleUnmute={handleUnmute}
         handlePause={handlePause}
         handleSetRelaod={handleSetRelaod}
+        isDesktop={isDesktop}
       />
       <div
         className={`min-h-screen ${
-          missingSection ? `mb-[100vw]` : `mb-[125vw]`
+          missingSection ? `md:mb-[100vw]` : `md:mb-[8vw]`
         }`}
       >
         <div
-          className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
+          className={`w-full mt-[-6vw] z-[50] transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
           }`}
         >
@@ -335,6 +345,7 @@ function SingleSeriesPage() {
               setIsLoading={setIsLoading}
               handleReload={handleReload}
               handleEnd={handleEnd}
+              isDesktop={isDesktop}
             />
             <SeriesTracker
               handleOnValueChange={handleOnValueChange}
@@ -345,17 +356,18 @@ function SingleSeriesPage() {
               watchedEpisodes={watchedEpisodes}
               onEpisodeWatched={handleEpisodeWatched}
               Id={Id}
+              isDesktop={isDesktop}
             />
-            <div className="flex gap-[6vw] mt-[3vw] h-[22vw] w-full justify-center ml-[2vw]">
-              <div className="h-[2vw]">
-                <div className="text-[1vw]">How To Watch</div>
+            <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[2vw]">
+              <div className=" md:h-[2vw] md:mt-[0vh] mt-[3vh]">
+                <div className="md:text-[1vw] text-[5vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
                   <TagsHowToWatch
                     selectedFilters={selectedFilters}
                     toggleFilter={toggleFilter}
                   />
                 </div>
-                <div className="w-full">
+                <div className="md:w-full w-[96vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <HowToWatchCard
                     id={Id}
                     selectedFilters={selectedFilters}
@@ -363,8 +375,8 @@ function SingleSeriesPage() {
                   />
                 </div>
               </div>
-              <div className="h-[2vw]">
-                <div className="text-[1vw]">Reviews</div>
+              <div className="md:h-[2vw]">
+                <div className="md:text-[1vw] text-[5vw]">Reviews</div>
                 <div className="my-[1vh] mb-[2vh]">
                   <TagsHighToLow
                     hightolow={hightolow}
@@ -373,7 +385,7 @@ function SingleSeriesPage() {
                     handleLowtohigh={handleLowtohigh}
                   />
                 </div>
-                <div className="w-full h-[22vw]">
+                <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[115vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <Reviews
                     id={Id}
                     hightolow={hightolow}
@@ -383,11 +395,11 @@ function SingleSeriesPage() {
                 </div>
               </div>
             </div>
-            <div className="h-[6vw] mt-[10vw] bg-buttonColor rounded-[1vw] max-w-[76vw] ml-[13vw]">
-              <div className="text-[1vw] mt-[-2vw]">More Info</div>
+            <div className="md:h-[6vw] md:mt-[10vw] h-[50vh] mt-[20vw] bg-buttonColor md:rounded-[1vw] rounded-2xl max-w-[75vw] md:ml-[13vw] ml-[3vw]">
+              <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">More Info</div>
               <MoreInfo id={Id} type={type} />
             </div>
-            <div className="mt-[4vw] max-w-[75vw] ml-[13vw]">
+            <div className="md:mt-[4vw] mt-[6vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
             <div className="max-w-[75vw] ml-[13vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>

@@ -31,6 +31,7 @@ interface SwiperEpisodeProps {
   onEpisodeWatched: (episodeNumber: number) => void;
   selectedSeason: number;
   Id:number
+  isDesktop:boolean
   //progressValue:number
 }
 
@@ -40,6 +41,7 @@ function CarouselEpisode({
   onEpisodeWatched,
   selectedSeason,
   Id,
+  isDesktop
  // progressValue,
 }: SwiperEpisodeProps) {
 
@@ -56,7 +58,7 @@ function CarouselEpisode({
             {episodes.map((episodesItem) => (
               <CarouselItem
                 key={episodesItem.id}
-                className="basis-1/4 md:basis-1/4"
+                className="basis-1/1 md:basis-1/4"
               >
                 <EpisodeCard
                   watched={watchedEpisodes.includes(episodesItem.episode)}//This line ensures the value is always a boolean.
@@ -71,6 +73,7 @@ function CarouselEpisode({
                   //handleSeason={handleSeason}
                   selectedSeason={selectedSeason}
                   Id={Id}
+                  isDesktop={isDesktop}
                   //progressValue={progressValue}
                 />
               </CarouselItem>
