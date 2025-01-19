@@ -22,7 +22,7 @@ interface SortProp {
 
 function Sort({ handleSortBy, type, typeContent,typeQuery }: SortProp) {
   return (
-    <div className="md:mt-[0vh] mt-[8vh] md:w-[15vw] md:h-[6vh] w-[55vw] h-[6vh] bg-customServicesColor md:rounded-[0.4vw] rounded-lg flex justify-center items-center z-[100] pr-[2vw] md:pr-[0.5vw]">
+    <div className="md:mt-[0vh] mt-[8vh] md:w-[15vw] md:h-[6vh] w-[55vw] h-[6vh] bg-customServicesColor md:rounded-[0.4vw] rounded-lg flex justify-center items-center z-[50] pr-[2vw] md:pr-[0.5vw]">
       <Select
         disabled={typeContent === "trendingMovies" || typeQuery === "all"}
         onValueChange={(value: string) => handleSortBy(value)}

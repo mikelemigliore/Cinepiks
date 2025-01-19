@@ -20,7 +20,7 @@ function TagsHowToWatch({
       <div className="flex">
         <Button
           onClick={handleHightolow}
-          className={`px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+          className={`md:px-[1vw] md:h-[4.5vh] px-[3vw] h-[5vh]  bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] mr-[1.5vw] text-[4vw] md:text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
             hightolow ? "bg-white/90 text-black " : ""
           }`}
         >
@@ -28,7 +28,7 @@ function TagsHowToWatch({
         </Button>
         <Button
           onClick={handleLowtohigh}
-          className={`px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+          className={`md:px-[1vw] md:h-[4.5vh] px-[3vw] h-[5vh]  bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] mr-[1.5vw] text-[4vw] md:text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
             lowtohigh ? "bg-white/90 text-black" : ""
           }`}
         >

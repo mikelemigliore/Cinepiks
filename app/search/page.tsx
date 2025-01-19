@@ -81,7 +81,7 @@ function SearchPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
-  //const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   // const [value, setValue] = React.useState<number | null>(0);
   const [loading, setLoading] = useState(true);
   // Inside your component
@@ -120,6 +120,13 @@ function SearchPage() {
   //   }
   // }, [typeContent]);
 
+    useEffect(() => {
+      if (window.innerWidth >= 1024) {
+        setIsDesktop(true);
+      } else {
+        setIsDesktop(false);
+      }
+    }, []);
 
 
   useEffect(() => {
@@ -396,6 +403,7 @@ function SearchPage() {
             typeContent={typeContent}
             typeService={parsedTypeService}
             typeGenres={parsedTypeGenres}
+            isDesktop={isDesktop}
           />
 
           {/* Apply the transition to the entire buttons and cards container */}
@@ -456,6 +464,7 @@ function SearchPage() {
                     backdrop_path={media.backdrop_path}
                     overview={media.overview}
                     list={list}
+                    isDesktop={isDesktop}
                     //value={value}
                     //handleValue={handleValue}
                   />

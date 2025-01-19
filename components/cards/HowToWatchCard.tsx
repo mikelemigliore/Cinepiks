@@ -214,39 +214,39 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
   };
 
   return (
-    <ScrollArea className="h-[21.5vw]">
+    <ScrollArea className="md:h-[21.5vw] h-[62vw]">
       {getFilteredServices().length > 0 ? (
         <div>
           {getFilteredServices().map((watchItem) => (
             <div
               key={watchItem.provider_id}
-              className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]"
+              className="md:w-[34.5vw] w-[95vw] md:h-[5vw] h-[10vh] bg-buttonColor md:rounded-[1vw] rounded-2xl md:mb-[0.4vw] mb-[2vw] md:mr-[1vw]"
             >
               <div className="flex h-full items-center gap-x-[1vw] mx-[1vw]">
-                <div className="w-[18vw] h-[3.3vw] bg-black rounded-[1vw] flex items-center justify-center">
+                <div className="md:w-[18vw] md:h-[3.3vw] w-[70vw] h-[12vw] bg-buttonColor md:rounded-[1vw] rounded-xl flex items-center justify-center">
                   {watchItem.logo_path && (
                     <img
                       src={`${BASE_IMAGE_URL}${watchItem.logo_path}`}
                       alt={`${watchItem.provider_name} logo`}
-                      className={`h-[3.5vw] w-[3.5vw] border-buttonColor border-2 object-contain rounded-[1vw]`}
+                      className={`md:h-[3.5vw] md:w-[3.5vw] h-[12vw] w-[12vw] border-buttonColor border-2 object-contain md:rounded-[1vw] rounded-xl`}
                     />
                   )}
                 </div>
-                <div className="w-full text-start text-[0.9vw]">
+                <div className="w-full text-start md:text-[0.9vw] text-[3vw] md:ml-0 ml-2">
                   Platform
-                  <div className="text-customTextColor text-[0.9vw] line-clamp-1">
+                  <div className="text-customTextColor md:text-[0.9vw] text-[3vw] line-clamp-1">
                     {watchItem.provider_name}
                   </div>
                 </div>
-                <div className="w-full text-start text-[0.9vw]">
+                <div className="w-full text-start md:text-[0.9vw] text-[3vw]">
                   Rated
-                  <div className="text-customTextColor text-[0.9vw]">
+                  <div className="text-customTextColor md:text-[0.9vw] text-[3vw]">
                     {certification}
                   </div>
                 </div>
-                <div className="w-full text-start text-[0.9vw]">
+                <div className="w-full text-start md:text-[0.9vw] text-[3vw]">
                   Runtime
-                  <div className="text-customTextColor text-[0.9vw]">
+                  <div className="text-customTextColor md:text-[0.9vw] text-[3vw]">
                     {runtime ? formatRuntime(runtime) : "N/A"}
                   </div>
                 </div>
@@ -256,9 +256,9 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button className="flex justify-center items-center h-10 w-28 md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+                    <Button className="md:mr-[0vw] mr-[1vw] flex justify-center items-center h-10 w-22 md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
                       Watch
-                      <CiPlay1 className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
+                      <CiPlay1 className="md:w-[2.5vw] md:h-[2.5vh] w-[4vw] h-[4vh] md:ml-[0.4vw] ml-[1vw]" />
                     </Button>
                   </Link>
                 </div>

@@ -753,6 +753,7 @@ interface ListViewProp {
   id: number;
   //likes?: number[];
   // genresMovie?: GenresType[];
+  isDesktop: boolean;
 }
 
 interface CastMember {
@@ -773,6 +774,7 @@ function ListView({
   overview,
   backdrop_path,
   mediaType,
+  isDesktop,
 }: //handleValue
 ListViewProp) {
   const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
@@ -941,28 +943,89 @@ ListViewProp) {
     >
       <div className="flex flex-col w-full">
         <div
-          className={`flex w-full m-[1vw] transition-transform duration-700`}
+          className={`md:flex w-full m-[1vw] transition-transform duration-700`}
         >
-          <MovieCard
-            type={media_type}
-            imgUrl={poster_path}
-            list={list}
-            id={id}
-          />
+          {!isDesktop ? (
+            <div className="flex">
+              <MovieCard
+                type={media_type}
+                imgUrl={poster_path}
+                list={list}
+                id={id}
+              />
+
+              <div className="flex flex-col justify-center gap-[3vh] content-between p-[1vw] ml-[10vw]">
+                <div>
+                  <div className="">
+                    <div className="flex">
+                      <div className=" text-[3.5vw]">Your Score</div>
+                      <StarRating
+                        title={title}
+                        value={value}
+                        handleValue={handleValue}
+                        id={id}
+                        mediaType={media_type}
+                      />
+                      {/* <StarRating
+                      title={title || undefined}
+                      //name={name}
+                      value={scores[id] || null}
+                      handleValue={(newValue) =>
+                        handleScoreChange(id, newValue)
+                      }
+                    /> */}
+                    </div>
+
+                    <div className="flex items-end text-[4vw] mt-[1vh]">
+                      <img
+                        className="mr-[0.5vw] w-[6vw] h-[6vw]"
+                        src="genresIcons/icons8-star.svg"
+                      />{" "}
+                      <div className="z-[50]">{value ? value : "--"} / 5</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h2 className="text-[3.5vw]">Director</h2>
+                  <span className="text-[3.5vw] text-customTextColor">
+                    {director}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="text-[3.5vw]">Starring</h2>
+                  <span className="text-[3.5vw] text-customTextColor">
+                    {cast[0]?.name},
+                    <br />
+                    {cast[1]?.name},
+                    <br />
+                    {cast[2]?.name}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <MovieCard
+              type={media_type}
+              imgUrl={poster_path}
+              list={list}
+              id={id}
+            />
+          )}
+
           <div className="flex">
             <div className="flex flex-col pl-[3vw]">
               {/* Movie info here */}
-              <h2 className="text-[1.5vw] font-bold">{title}</h2>
+              <h2 className="md:text-[1.5vw] text-[5vw] font-bold">{title}</h2>
               <div className="text-center">
-                <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.7vw]">
+                <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.7vw] text-[3vw] ">
                   <span> {genres[0]?.name || "Undefined"}</span>
-                  <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
+                  <GoDotFill className="bg-customTextColor w-1.5 h-1.5 md:mx-[0.4vw] mx-[1vw] rounded-full" />
                   <span>{genres[1]?.name || "Undefined"}</span>
-                  <GoDotFill className="bg-customTextColor w-1.5 h-1.5 mx-[0.4vw] rounded-full" />
-                  <span className="pr-[0.6vw]">
+                  <GoDotFill className="bg-customTextColor w-1.5 h-1.5 md:mx-[0.4vw] mx-[1vw] rounded-full" />
+                  <span className="md:pr-[0.6vw] pr-[3vw]">
                     {genres[2]?.name || "Undefined"}
                   </span>
-                  <span className="mx-[0.6vw] text-customTextColor font-bold">
+                  <span className="md:mx-[0.6vw] mx-[2vw] text-customTextColor font-bold">
                     {certification}
                   </span>
                   <span className="mx-[0.6vw] text-customTextColor font-bold">
@@ -971,20 +1034,20 @@ ListViewProp) {
                 </div>
               </div>
               <div>
-                <p className="mt-[1vh] text-white text-base md:text-[0.9vw]  max-w-[23rem] md:max-w-[33vw] line-clamp-4 leading-[2] md:leading-[2]">
+                <p className="mt-[1vh] text-white text-[3.5vw] md:text-[0.9vw]  max-w-[23rem] md:max-w-[33vw] line-clamp-4 leading-[2] md:leading-[2]">
                   {overview}
                 </p>
               </div>
 
-              <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[2vh] md:mb-[2vh]">
+              <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[2vh] md:mb-[2vh] md:space-x-[0vw] space-x-[3vw]">
                 <Link href={`${href}/${id}`}>
                   <Button
-                    className={`h-10 w-28 md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+                    className={`h-[6vh] w-28 md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                       watched ? "" : "md:mr-[1vw]"
                     }`}
                   >
                     View
-                    <SlArrowRight className="w-[2vw] h-[2vh] ml-6 md:ml-[1vw]" />
+                    <SlArrowRight className="md:w-[2vw] md:h-[2vh] ml-6 md:ml-[1vw]" />
                   </Button>
                 </Link>
 
@@ -994,20 +1057,23 @@ ListViewProp) {
                   <Button
                     onClick={() => handleAdded()}
                     disabled={session === null}
-                    className={`h-10 w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+                    className={`h-[6vh] w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                       isAdded ? "bg-white/90 text-black font-bold" : ""
                     }`}
                   >
                     Watchlist
                     {isAdded ? (
-                      <IoCheckmark className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
+                      <IoCheckmark className="md:w-[2vw] md:h-[2vh] w-[4vw] h-[4vh] ml-2 md:ml-[0.4vw]" />
                     ) : (
-                      <LuPlus className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
+                      <LuPlus className="md:w-[2vw] md:h-[2vh] w-[4vw] h-[4vh] ml-2 md:ml-[0.4vw]" />
                     )}
                   </Button>
                 )}
 
-                <Button onClick={() => setIsTrailer(!isTrailer)} className={``}>
+                <Button
+                  onClick={() => setIsTrailer(!isTrailer)}
+                  className={`${!isDesktop ? `hidden` : ``}`}
+                >
                   <Dialog>
                     <DialogTrigger className="flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
                       Trailer
@@ -1022,6 +1088,7 @@ ListViewProp) {
                         handleEnd={handleEnd}
                         isListView={isListView}
                         src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
+                        isDesktop={isDesktop}
                       />
                     </DialogContent>
                   </Dialog>
@@ -1031,15 +1098,15 @@ ListViewProp) {
                   type="submit"
                   onClick={() => handleLike()}
                   disabled={session === null}
-                  className={`flex justify-center items-center h-10 w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+                  className={`flex justify-center items-center h-[6vh] w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
                     isLiked ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
                   Like
                   {isLiked ? (
-                    <AiFillLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
+                    <AiFillLike className="md:w-[2vw] md:h-[2vh] w-[4vw] h-[4vh] ml-2 md:ml-[0.4vw]" />
                   ) : (
-                    <AiOutlineLike className="w-[2.5vw] h-[2.5vh] ml-[0.4vw]" />
+                    <AiOutlineLike className="md:w-[2vw] md:h-[2vh] w-[4vw] h-[4vh] ml-2 md:ml-[0.4vw]" />
                   )}
                 </Button>
               </div>
@@ -1138,19 +1205,20 @@ ListViewProp) {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-[9vh] content-between p-[1vw] ml-[10vw]">
-              <div>
-                <div className="">
-                  <div className="flex">
-                    <div className=" text-[1vw]">Your Score</div>
-                    <StarRating
-                      title={title}
-                      value={value}
-                      handleValue={handleValue}
-                      id={id}
-                      mediaType={media_type}
-                    />
-                    {/* <StarRating
+            {isDesktop && (
+              <div className="flex flex-col gap-[9vh] content-between p-[1vw] ml-[10vw]">
+                <div>
+                  <div className="">
+                    <div className="flex">
+                      <div className=" text-[1vw]">Your Score</div>
+                      <StarRating
+                        title={title}
+                        value={value}
+                        handleValue={handleValue}
+                        id={id}
+                        mediaType={media_type}
+                      />
+                      {/* <StarRating
                       title={title || undefined}
                       //name={name}
                       value={scores[id] || null}
@@ -1158,34 +1226,35 @@ ListViewProp) {
                         handleScoreChange(id, newValue)
                       }
                     /> */}
-                  </div>
+                    </div>
 
-                  <div className="flex items-end text-[1vw] mt-[1vh]">
-                    <img
-                      className="mr-[0.5vw] w-[1.7vw] h-[1.7vw]"
-                      src="genresIcons/icons8-star.svg"
-                    />{" "}
-                    {value ? value : "--"} / 5<div></div>
+                    <div className="flex items-end text-[1vw] mt-[1vh]">
+                      <img
+                        className="mr-[0.5vw] w-[1.7vw] h-[1.7vw]"
+                        src="genresIcons/icons8-star.svg"
+                      />{" "}
+                      {value ? value : "--"} / 5<div></div>
+                    </div>
                   </div>
                 </div>
+                <div>
+                  <h2 className="text-[0.9vw]">Director</h2>
+                  <span className="text-[0.9vw] text-customTextColor">
+                    {director}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="text-[0.9vw]">Starring</h2>
+                  <span className="text-[0.9vw] text-customTextColor">
+                    {cast[0]?.name},
+                    <br />
+                    {cast[1]?.name},
+                    <br />
+                    {cast[2]?.name}
+                  </span>
+                </div>
               </div>
-              <div>
-                <h2 className="text-[0.9vw]">Director</h2>
-                <span className="text-[0.9vw] text-customTextColor">
-                  {director}
-                </span>
-              </div>
-              <div>
-                <h2 className="text-[0.9vw]">Starring</h2>
-                <span className="text-[0.9vw] text-customTextColor">
-                  {cast[0]?.name},
-                  <br />
-                  {cast[1]?.name},
-                  <br />
-                  {cast[2]?.name}
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
         {/* Divider line */}

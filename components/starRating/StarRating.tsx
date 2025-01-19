@@ -67,15 +67,15 @@ function StarRating({
   return (
     <div>
       <Dialog>
-        <DialogTrigger className="ml-[1vw] mt-[-0.5vw] flex justify-center items-center px-[0vw] py-[0.5vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-          <MdModeEditOutline className="w-[2vw] h-[2vh]" />
+        <DialogTrigger className=" ml-[3vw] md:ml-[1vw] md:mt-[-0.5vw] mt-[-4vw] flex justify-center items-center px-[3vw] py-[1vw] md:px-[0vw] md:py-[0.5vw] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
+          <MdModeEditOutline className="md:w-[2vw] md:h-[2vh] w-[3.5vw] h-[3.5vh]" />
         </DialogTrigger>
-        <DialogContent className="md:w-[25vw] md:h-[16vw] bg-buttonColor flex flex-col items-center justify-center pb-[4vw]">
+        <DialogContent className="rounded-2xl md:w-[25vw] md:h-[16vw] w-[93vw] h-[35vh] bg-buttonColor flex flex-col items-center justify-center pb-[4vw]">
           <img
-            className="w-[4.5vw] h-[4.5vw] mt-[2vw]"
+            className="w-[25vw] h-[25vw] mt-[2vw] md:w-[4.5vw] md:h-[4.5vw] md:mt-[2vw]"
             src="/genresIcons/icons8-star.svg"
           />
-          <div className="font-bold text-[1.2vw]">{title}</div>
+          <div className="font-bold md:text-[1.2vw] text-[5vw]">{title}</div>
           <Rating
             size="large"
             name="hover-feedback"

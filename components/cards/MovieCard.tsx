@@ -337,7 +337,7 @@ function MovieCard({
               {list ? (
                 <img
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
+                  className={`w-[50vw] md:w-[14vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
                 />
               ) : watchlist ? (
                 <WatchListOpt
@@ -357,7 +357,7 @@ function MovieCard({
               ) : single ? (
                 <img
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[30vw] md:w-[16.8vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                  className={`w-[52vw] md:w-[16.8vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     watchlistOptions ? "opacity-25" : ""
                   }`}
                 />

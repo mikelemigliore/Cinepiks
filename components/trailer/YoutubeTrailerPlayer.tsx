@@ -14,6 +14,7 @@ interface YoutubeTrailerPlayerProps {
   handleEnd: () => void;
   unmute?: boolean;
   isListView?: boolean;
+  isDesktop: boolean;
 }
 
 function YoutubeTrailerPlayer({
@@ -27,7 +28,8 @@ function YoutubeTrailerPlayer({
   reload,
   handleReload,
   isListView,
-  handleEnd
+  handleEnd,
+  isDesktop,
 }: YoutubeTrailerPlayerProps) {
   const [fadeOut, setFadeOut] = useState(true);
   const playerRef = useRef<any>(null);
@@ -46,13 +48,50 @@ function YoutubeTrailerPlayer({
       loop: 0,
       fs: 1,
       vq: "hd1080",
+      playsinline: 0,
     },
   };
+
+  // Handle fullscreen exit
+  useEffect(() => {
+    if (isDesktop) return;
+    const handleFullscreenChange = () => {
+      const isFullscreen = document.fullscreenElement;
+
+      if (!isFullscreen && !isDesktop) {
+        // Exit fullscreen on mobile
+        onEnd(); // Reset video when fullscreen is exited
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    // document.addEventListener(
+    //   "webkitfullscreenchange",
+    //   handleFullscreenChange
+    // );
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      // document.removeEventListener(
+      //   "webkitfullscreenchange",
+      //   handleFullscreenChange
+      // );
+    };
+  }, [isDesktop]);
 
   const onEnd = () => {
     setFadeOut(true);
     handleEnd(); // This should reset the play state
     playerRef.current.playVideo();
+  };
+
+  const onPause = () => {
+    if (isDesktop) {
+      return;
+    }
+    setFadeOut(true);
+    handleEnd(); // This should reset the play state
+    playerRef.current.pauseVideo();
   };
 
   const onReady = (event: any) => {
@@ -104,7 +143,7 @@ function YoutubeTrailerPlayer({
       {autoplay && (
         <img
           src={src}
-          className={`absolute inset-0 md:w-full z-10 transition-opacity duration-500 ease-in-out  ${
+          className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-500 ease-in-out  ${
             fadeOut ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         />
@@ -115,6 +154,7 @@ function YoutubeTrailerPlayer({
         opts={opts}
         onReady={onReady}
         onEnd={onEnd}
+        onPause={onPause}
         //onStateChange={handleStateChange} // Detect state changes
         className="absolute top-0 left-0 w-full h-full"
         style={{
@@ -130,3 +170,4 @@ function YoutubeTrailerPlayer({
 }
 
 export default YoutubeTrailerPlayer;
+

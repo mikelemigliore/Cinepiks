@@ -188,17 +188,17 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
   };
 
   return (
-    <ScrollArea className="h-[21.5vw]">
+    <ScrollArea className="md:h-[21.5vw] h-[110vw]">
       {getOrderOfSort().length > 0 ? (
         <div className="">
           {getOrderOfSort().map((reviewsItem) => (
             <div
               key={reviewsItem.id}
-              className="w-[34.5vw] h-[10.5vw] bg-buttonColor rounded-2xl mb-[0.4vw] mr-[1vw]"
+              className="md:w-[34.5vw] w-[95vw] md:h-[10.5vw] h-[28vh] bg-buttonColor rounded-2xl md:mb-[0.4vw] mb-[2vw] mr-[1vw]"
             >
               <div className="flex mx-[1vw]">
-                <div className="flex gap-x-[1vw] mt-[1vw]">
-                  <div className="h-[2vw] w-[2vw]">
+                <div className="flex md:gap-x-[1vw] gap-x-[10vw] md:mt-[1vw] mt-[3vw]">
+                  <div className="h-[2vw] w-[2vw] md:ml-[0vw] ml-[1vw] ">
                     <Avatar>
                       <AvatarImage
                         src={`${BASE_IMAGE_URL}${reviewsItem.author_details.avatar_path}`}
@@ -206,17 +206,17 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                   </div>
-                  <div className="flex w-[29vw] justify-between">
+                  <div className="flex md:w-[29vw] w-[78vw] justify-between">
                     <div className="flex flex-col">
-                      <div className="line-clamp-1 text-[0.9vw]">
+                      <div className="line-clamp-1 md:text-[0.9vw] text-[3.5vw]">
                         {reviewsItem.author_details.username}
                       </div>
-                      <div className="text-[0.7vw] text-customTextColor">
+                      <div className="md:text-[0.7vw] text-[3.5vw] text-customTextColor">
                         {formatDate(reviewsItem.created_at)}
                       </div>
                     </div>
-                    <div className="text-[0.9vw] h-[1.7vw] w-[4vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full">
-                      <GoStarFill className="w-[2.5vw] h-[2.5vh]" />
+                    <div className="md:text-[0.9vw] text-[3.5vw] md:h-[1.7vw] md:w-[4vw] h-[9vw] w-[20vw] bg-backgroundButton  flex items-center justify-center pr-[0.4vw] rounded-full">
+                      <GoStarFill className="md:w-[2.5vw] md:h-[2.5vh] w-[5vw] h-[5vh] md:mr-[0vw] mr-[2vw]" />
                       {reviewsItem.author_details.rating === 0
                         ? "0%"
                         : reviewsItem.author_details.rating + "0%"}
@@ -224,16 +224,16 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
                   </div>
                 </div>
               </div>
-              <div className="ml-[1vw] mt-[0.5vw] text-white text-base md:text-[0.8vw] text-start max-w-[23rem] md:max-w-[32vw] line-clamp-3 leading-[2] md:leading-[1.5]">
+              <div className="md:ml-[1vw] ml-[2vw] md:mt-[0.5vw] mt-[2vw] text-white text-base md:text-[0.8vw] text-start max-w-[23rem] md:max-w-[32vw] line-clamp-3 leading-[2] md:leading-[1.5]">
                 {reviewsItem.content}
               </div>
-              <div className="w-full flex justify-start mt-[1.5vh] pl-[1vw]">
+              <div className="w-full flex justify-start mt-[1.5vh] md:pl-[1vw] pl-[2vw]">
                 <Dialog>
                   <DialogTrigger className="rounded-full py-1 px-3 md:text-[0.8vw] bg-backgroundButton hover:bg-white/90 hover:text-black text-customTextColor">
                     Real All
                   </DialogTrigger>
-                  <DialogContent className=" md:w-[70vw] bg-buttonColor rounded-full ">
-                    <div className="flex w-full mx-[1vw] mt-[2vw]">
+                  <DialogContent className=" md:w-[70vw] w-[93vw] bg-buttonColor rounded-2xl">
+                    <div className="flex w-full md:mt-[2vw] mt-[3vw]">
                       <div className="flex gap-x-[1vw]">
                         <div className=" ml-[2vw]">
                           <Avatar>
@@ -243,22 +243,22 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
                             <AvatarFallback>CN</AvatarFallback>
                           </Avatar>
                         </div>
-                        <div className="">
+                        <div className="md:ml-0 ml-2">
                           <div>{reviewsItem.author_details.username}</div>
-                          <div className="text-[0.7vw] text-customTextColor">
+                          <div className="md:text-[0.7vw] text-[3.5vw] md:w-[7vw] w-[40vw]  text-customTextColor">
                             {formatDate(reviewsItem.created_at)}
                           </div>
                         </div>
-                        <div className="h-[2vw] mt-[1.1vh] bg-backgroundButton ml-[50vw] flex items-center justify-center pr-[0.4vw] rounded-full">
-                          <GoStarFill className="w-[2.5vw] h-[2.5vh]" />
+                        <div className="md:h-[2vw] h-[9vw] w-[20vw]  md:w-[4vw] mt-[1.1vh] bg-backgroundButton md:ml-[50vw] ml-[13vw] flex items-center justify-center pr-[0.4vw] rounded-full">
+                          <GoStarFill className="md:w-[2.5vw] md:h-[2.5vh] w-[5vw] h-[5vh] md:mr-[0vw] mr-[2vw]" />
                           {reviewsItem.author_details.rating === 0
                             ? "0%"
                             : reviewsItem.author_details.rating + "0%"}
                         </div>
                       </div>
                     </div>
-                    <ScrollArea className="h-[27vw] mr-[1vw] mt-[1vw]">
-                      <div className="ml-[3vw]  text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
+                    <ScrollArea className="md:h-[27vw] h-[70vw] md:mr-[1vw] md:mt-[1vw] mr-[1vw] mt-[3vw] md:mb-[0vw] mb-[3vw]">
+                      <div className="md:ml-[2vw] ml-[4vw]   text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
                         {reviewsItem.content}
                       </div>
                     </ScrollArea>

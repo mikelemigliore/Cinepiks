@@ -47,6 +47,7 @@ function SingleMoviePage() {
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
   const [isTrailer, setIsTrailer] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   //const [reviews, setReviews] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState({
     all: true,
@@ -90,6 +91,14 @@ function SingleMoviePage() {
   // }, []);
 
   useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
+
+  useEffect(() => {
     if (movieDetails) {
       setBackdrop(movieDetails.backdrop_path);
       setTitle(movieDetails.title);
@@ -105,31 +114,7 @@ function SingleMoviePage() {
     }
   }, [Id, movieDetails, movieTrailer, movieCast]);
 
-  // useEffect(() => {
-  //   if (Id) {
-  //     const fetchData = async () => {
-  //       try {
-  //const response = await getMovieDetails(Id);
-  //const responseTrailer = await getTrailerMovieVideo(Id);
-  //const responseCast = await getCast(Id);
-  //const data = await response.json();
-  //const dataTrailer = await responseTrailer.json();
-  //const dataCast = await responseCast.json();
 
-  //console.log(data.imdb_id);
-
-  //setBackdrop(data.backdrop_path);
-  //setTitle(data.title);
-  //setVideoKey(dataTrailer.key);
-  //setImdbId(data.imdb_id || null);
-  //setCast(dataCast);
-  //       } catch (error) {
-  //         console.error("Failed to fetch:", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, [Id]);
 
   const handlePlay = () => {
     setPlay(true);
@@ -196,6 +181,7 @@ function SingleMoviePage() {
         handleUnmute={handleUnmute}
         handlePause={handlePause}
         handleSetRelaod={handleSetRelaod}
+        isDesktop={isDesktop}
       />
       <div
         className={`min-h-screen ${
@@ -203,7 +189,9 @@ function SingleMoviePage() {
         }`}
       >
         <div
-          className={`w-full mt-[-6vw] z-[50] absolute transition-transform duration-700 ease-in-out ${
+          className={`w-full mt-[-6vw] z-[50] ${
+            isDesktop ? `absolute` : ``
+          } transition-transform duration-700 ease-in-out ${
             play ? "translate-y-[7vw]" : ""
           }`}
         >
@@ -220,43 +208,11 @@ function SingleMoviePage() {
               setIsLoading={setIsLoading}
               handleReload={handleReload}
               handleEnd={handleEnd}
+              isDesktop={isDesktop}
             />
-            {/* <div className="flex gap-[4vw] mt-[3vw] h-[4vw] w-full justify-start ml-[14vw]">
-              <div className="h-[2vw]">
-                <div className="text-[1vw]">Ratings Websites</div>
-                <div className="flex mb-[2vh] mt-[1vh]">
-                  <Link
-                    href={`https://www.rottentomatoes.com/m/${formatTitle(
-                      title
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
-                  >
-                    Rotten Tomatoes
-                  </Link>
-                  <Link
-                    href={`https://www.imdb.com/title/${imdbId}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
-                  >
-                    IMDb
-                  </Link>
-                  <Link
-                    href={`https://www.themoviedb.org/movie/${Id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-[1vw] h-[4.5vh] bg-customServicesColor rounded-full flex justify-center items-center mr-[0.5vw] text-[0.9vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
-                  >
-                    TMDb
-                  </Link>
-                </div>
-              </div>
-            </div> */}
-            <div className="flex gap-[4vw] mt-[3vw] h-[22vw] w-full justify-center ml-[1vw]">
-              <div className="h-[2vw]">
-                <div className="text-[1vw]">How To Watch</div>
+            <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[3vw]">
+              <div className=" md:h-[2vw] md:mt-[0vh] mt-[6vh]">
+                <div className="md:text-[1vw] text-[4vw]">How To Watch</div>
                 <div className="mb-[2vh] mt-[1vh]">
                   <TagsHowToWatch
                     selectedFilters={selectedFilters}
@@ -271,8 +227,8 @@ function SingleMoviePage() {
                   />
                 </div>
               </div>
-              <div className="h-[2vw]">
-                <div className="text-[1vw]">Reviews</div>
+              <div className="md:h-[2vw]">
+                <div className="md:text-[1vw] text-[4vw]">Reviews</div>
                 <div className="my-[1vh] mb-[2vh]">
                   <TagsHighToLow
                     hightolow={hightolow}
@@ -281,7 +237,7 @@ function SingleMoviePage() {
                     handleLowtohigh={handleLowtohigh}
                   />
                 </div>
-                <div className="w-full h-[22vw]">
+                <div className="w-full md:h-[22vw] h-[110vw]">
                   <Reviews
                     id={Id}
                     hightolow={hightolow}
