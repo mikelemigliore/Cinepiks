@@ -43,6 +43,7 @@ function WatchlistPage() {
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [watchlist, setWatchlist] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(false);
   //const[watchlistdb,setWatchlistdb] = useState<any[]>([])
 
 
@@ -61,6 +62,15 @@ function WatchlistPage() {
   // }, []);  // Fetches only once when the component loads
 
   const watchlistdb = useSelector((state: RootState) => state.content.watchlist);
+
+      useEffect(() => {
+        if (window.innerWidth >= 1024) {
+          setIsDesktop(true);
+        } else {
+          setIsDesktop(false);
+        }
+      }, []);
+  
 
     // const { data: watchlistDB, isSuccess: watchlistSucces } =
     //   useGetWatchlistQuery({});
@@ -140,37 +150,37 @@ function WatchlistPage() {
   };
 
   return (
-    <div className="mt-[20vh] mb-[5vh]">
+    <div className=" md:mt-[20vh] mt-[10vh] mb-[5vh]">
       <div className="flex justify-between ml-[5vw]">
         <div
           className={`transition-transform duration-700 ease-in-out`}
         >
-          <div className="text-[2.5vw] font-bold">Watchlist</div>
-          <div className="h-[5vh] text-[0.7vw] md:text-[0.9vw] text-gray-300">
+          <div className="md:text-[2.5vw] text-[10vw] font-bold">Watchlist</div>
+          {/* <div className="h-[5vh] text-[4vw] md:text-[0.9vw] text-gray-300 md:w-[20vw]">
             Use filter on the left to refine your search
-          </div>
+          </div> */}
         </div>
 
         <div className="relative flex flex-col mr-[2vw]" style={{ top: "3vh" }}>
-          <div className="flex justify-end mb-[2vh] mt-[2vh]">
+          <div className="flex justify-end md:mb-[2vh] mb-[7vh] md:mt-[2vh] mt-[-2vh]">
             <Button
               onClick={handleGrid}
-              className={`p-0 w-[2.5vw] h-[2.5vw] bg-customServicesColor rounded-[0.4vw] mr-[1vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
+              className={`p-0 md:w-[2.5vw] md:h-[2.5vw] w-[10vw] h-[10vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg md:mr-[1vw] mr-[2vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
                 grid ? "bg-white/90" : ""
               }`}
             >
               <BsFillGrid3X3GapFill
-                className={`w-[1.4vw] h-[1.4vw] ${grid ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${grid ? "text-black" : ""}`}
               />
             </Button>
             <Button
               onClick={handleList}
-              className={`p-0 w-[2.5vw] h-[2.5vw] bg-customServicesColor rounded-[0.4vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
+              className={`p-0 md:w-[2.5vw] md:h-[2.5vw] w-[10vw] h-[10vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg md:mr-[1vw] mr-[2vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
                 list ? "bg-white/90" : ""
               }`}
             >
               <FaList
-                className={`w-[1.4vw] h-[1.4vw] ${list ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${list ? "text-black" : ""}`}
               />
             </Button>
           </div>
@@ -183,7 +193,7 @@ function WatchlistPage() {
         >
           {/* Apply the transition to the entire buttons and cards container */}
           <div
-            className={`transition-transform duration-700 ease-in-out flex flex-col ml-[5vw]`}
+            className={`transition-transform duration-700 ease-in-out flex flex-col md:ml-[5vw] ml-[2vw]`}
           >
             <div>
               {watchlistdb.length === 0 ? (
@@ -202,6 +212,7 @@ function WatchlistPage() {
                     backdrop_path={media.backdrop_path}
                     overview={media.overview}
                     list={list}
+                    isDesktop={isDesktop}
                     //likes={likes}
                     // value={value}
                     // handleValue={handleValue}

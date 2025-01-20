@@ -69,7 +69,7 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
   };
 
   return (
-    <div>
+    <div className='md:ml-0 ml-[10vw]'>
       <CldUploadWidget
         uploadPreset="my_movie_preset"
         options={{
@@ -94,10 +94,10 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
       >
         {({ open }) => (
           <button
-            className="ml-[4vw] mt-[1.5vh] px-[0.3vw] py-[0.8vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 outline-none focus:outline-none"
+            className="ml-[4vw] mt-[1.5vh] md:px-[0.3vw] md:py-[0.8vw] px-[4vw] py-[2vh] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 outline-none focus:outline-none"
             onClick={() => open()}
           >
-            <MdModeEditOutline className="w-[2vw] h-[2vh]" />
+            <MdModeEditOutline className="md:w-[2vw] md:h-[2vh] w-[5vw] h-[5vw] " />
           </button>
         )}
       </CldUploadWidget>

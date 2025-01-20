@@ -327,7 +327,17 @@ function MovieCard({
             </DialogContent>
           </Dialog>
         ) : (
-          <Link href={`${href}/${id}`} passHref>
+          <Link
+            href={`${href}/${id}`}
+            passHref
+            onClick={(e) => {
+              // Prevent navigation if it's a WatchListOpt
+              if (watchlist) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent click event from bubbling up
+              }
+            }}
+          >
             {/* <div className="hover:cursor-pointer"> */}
             <div
               className="relative"

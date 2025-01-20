@@ -130,25 +130,6 @@ function ResetPassword({ params }: any) {
               <h1 className="text-[1.5vw]">Reset Password</h1>
               <form onSubmit={handleSubmit}>
                 <div className="space-y-[1.5vw]">
-                  {/* <div>
-                    <h1 className="mb-[1vh]">Username</h1>
-
-                    <input
-                      type="text"
-                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
-                      placeholder="Username..."
-                      required
-                    />
-                  </div> */}
-                  {/* <div>
-                    <h1 className="mb-[1vh]">Email</h1>
-                    <input
-                      type="text"
-                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
-                      placeholder="Email..."
-                      required
-                    />
-                  </div> */}
                   <div>
                     <h1 className="mb-[1vh]">New Password</h1>
                     <div className="flex relative">

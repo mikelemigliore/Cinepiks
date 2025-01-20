@@ -85,51 +85,51 @@ function EmailUpdate({ email }: EmailProp) {
 
   return (
     <div>
-      <h1 className="mb-[1vh] text-[0.9vw]">Email</h1>
+      <h1 className="mb-[1vh] md:text-[0.9vw]">Email</h1>
       <form>
         {/* Search Input */}
         <h1
           //type="text"
-          className={`flex items-center bg-buttonColor md:h-[5.5vh]  md:px-[1.5vw] w-[14vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
+          className={`flex items-center bg-buttonColor h-[7vh] w-[75vw] md:h-[5.5vh]  md:px-[1.5vw] px-[4vw] md:w-[14vw] rounded-full md:text-[0.9vw] placeholder-white`}
           //placeholder={`${email}`}
         >{`${email}`}</h1>
       </form>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger className="mt-[1.5vh] px-[1vw] py-[0.5vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+        <DialogTrigger className="mt-[1.5vh] md:px-[1vw] px-[4vw] md:py-[0.5vw] py-[3vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
           Update
         </DialogTrigger>
-        <DialogContent className="w-[19vw] h-[26vw]  bg-buttonColor pb-[4vw]">
-          <div className="flex flex-col mt-[1vw] ml-[2vw] space-y-[3vh]">
-            <h1 className="text-[1vw]">Update Email</h1>
+        <DialogContent className="md:w-[19vw] md:h-[26vw] w-[82vw] rounded-2xl h-[62vh]  bg-buttonColor pb-[4vw]">
+          <div className="flex flex-col md:mt-[1vw] mt-[5vw] md:ml-[2vw] ml-[4vw] space-y-[3vh]">
+            <h1 className="md:text-[1vw] text-[5vw]">Update Email</h1>
 
-            <form className="space-y-[1.1vw]" onSubmit={handleSubmit}>
-              <h1 className="mb-[1vh] text-[0.9vw]">Current Email</h1>
+            <form className="md:space-y-[1.1vw] space-y-[3vh]" onSubmit={handleSubmit}>
+              <h1 className="mb-[1vh] md:text-[0.9vw]">Current Email</h1>
               <div>
                 {/* Search Input */}
                 <input
                   type="text"
-                  className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                  className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}
                   placeholder="Current Email..."
                 />
               </div>
               <div>
-                <h1 className="mb-[1vh] text-[0.9vw]">New Email</h1>
+                <h1 className="mb-[1vh] md:text-[0.9vw]">New Email</h1>
                 <div>
                   {/* Search Input */}
                   <input
                     type="text"
-                    className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
+                    className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
                     placeholder="New Email..."
                   />
                 </div>
               </div>
               <div>
-                <h1 className="mb-[1vh] text-[0.9vw]">Confirm New Email</h1>
+                <h1 className="mb-[1vh] md:text-[0.9vw]">Confirm New Email</h1>
                 <div>
                   {/* Search Input */}
                   <input
                     type="text"
-                    className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
+                    className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}
                     placeholder="Confirm New Email..."
                   />
                 </div>
@@ -137,13 +137,13 @@ function EmailUpdate({ email }: EmailProp) {
               <div className="flex justify-start pt-[1vh] ml-[-1vw]">
                 <Button
                   onClick={handleCancel}
-                  className="bg-transparent rounded-full px-[1.5vw] py-[1.2vw] text-[0.9vw] m-[0.2vw] hover:bg-transparent"
+                  className="bg-transparent rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-transparent"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-customColorCard rounded-full px-[1.5vw] py-[1.2vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                  className="bg-customColorCard rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
                 >
                   Apply
                 </Button>

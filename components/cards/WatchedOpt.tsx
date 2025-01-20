@@ -100,7 +100,7 @@ function WatchedOpt({
     <div onClick={handleImageClick} className="relative">
       <img
         src={src}
-        className={`w-[30vw] md:w-[14vw] md:rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+        className={`w-[46vw] md:w-[14vw] rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
           watchedOptions ? "opacity-45 pointer-events-none" : ""
         }`}
       />

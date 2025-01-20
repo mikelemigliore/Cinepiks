@@ -37,91 +37,30 @@ function AccountPage() {
     }
   }, [accountDb, isSuccess]);
 
-  // const onCrop = (preview: string) => {
-  //   setPreview(preview);
-  // };
 
-  // // Called when the editor is closed
-  // const onClose = () => {
-  //   setPreview(null);
-  // };
 
   return (
     <div className="">
-      <div className="flex justify-between mx-[22vw] mt-[20vh] mb-[10vh]">
-        <div className="">
-          <h1 className="text-[2.5vw] font-bold mb-[4vh]">Profile</h1>
+      <div className="md:flex justify-between md:mx-[22vw] md:mt-[20vh] mt-[10vh] mb-[10vh]">
+        <div className="md:ml-[0vw] ml-[30vw]">
+          <h1 className="md:text-[2.5vw] text-[10vw] font-bold md:mb-[4vh] md:ml-[0vw] ml-[5vw]">Profile</h1>
           {preview ? (
-            <img src={preview} alt="Preview" className="w-[16vw] h-[11vw] rounded-full object-cover" />
+            <img src={preview} alt="Preview" className=" md:w-[16vw] md:h-[11vw] w-[40vw] h-[40vw] rounded-full object-cover" />
           ) : (
-            <div className="w-[11vw] h-[11vw] bg-buttonColor flex items-center justify-center rounded-full">
-              <IoPersonSharp className="w-[6vw] h-[6vw] text-customTextColor" />
+            <div className="md:w-[11vw] md:h-[11vw] w-[40vw] h-[40vw] bg-buttonColor flex items-center justify-center rounded-full">
+              <IoPersonSharp className="md:w-[6vw] md:h-[6vw] w-[20vw] h-[20vw]  text-customTextColor" />
             </div>
           )}
           <div>
             <ProfilePicture
-              //isDialogOpen={isDialogOpen}
-              //setIsDialogOpen={setIsDialogOpen}
-              //handleSave={handleSave}
-              //preview={preview}
-              //onCrop={onCrop}
-              //onClose={onClose}
               setPreview={setPreview}
               email={email}
             />
           </div>
-          {/* <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="md:w-[36vw] md:h-[33vw] bg-buttonColor pb-[4vw] ">
-              <h1 className="ml-[2.2vw] mt-[1vw] text-[1vw]">
-                Update Profile Picture
-              </h1>
-              <div className="mt-[-2vw] flex items-center justify-center w-full h-full text-white">
-                
-                <div className="relative w-[600px] h-[350px] flex items-center justify-center overflow-hidden rounded-3xl border-[0.15vw] border-solid hover:bg-white/5 mb-[4vw]  mt-[4vw] mx-[2vw]">
-                   <Avatar
-                    width={600}
-                    height={350}
-                    onCrop={onCrop}
-                    onClose={onClose}
-                    //onBeforeFileLoad={onBeforeFileLoad}
-                    src={src}
-                    label="Select Picture"
-                    labelStyle={{
-                      color: "white",
-                      fontSize: "1vw",
-                      display: "inline-block",
-                      fontFamily: "sans-serif",
-                      cursor: "pointer",
-                      lineHeight: "400px",
-                      width: "100%", // Adjust to fit parent container
-                      height: "100%",
-                    }}
-                  /> 
-                </div>
-              </div>
-              <div className="flex justify-center items-center">
-                <Button
-                  onClick={handleSave}
-                  disabled={!preview} // Disable if no image is cropped
-                  className="w-[12vw] mt-[-2vh] px-[1vw] py-[1.3vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500"
-                >
-                  Save
-                </Button>
-              </div>
-            </DialogContent>
-            <div className="flex justify-center">
-              <DialogTrigger className="mt-[1.5vh] px-[0.3vw] py-[0.8vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
-                <MdModeEditOutline className="w-[2vw] h-[2vh]" />
-              </DialogTrigger>
-            </div>
-          </Dialog> */}
         </div>
         <div>
-          <div className="flex space-x-[9vw] ml-[5vw]">
-            <div className="mt-[11vh] space-y-[3vh]">
-              {/* <div>
-                <UsernameUpdate/>
-              </div> */}
+          <div className="md:flex md:space-x-[9vw] ml-[5vw]">
+            <div className="md:mt-[11vh] mt-[6vh] space-y-[4vh]">
               <div>
                 <EmailUpdate email={email} />
               </div>
@@ -129,36 +68,36 @@ function AccountPage() {
                 <Password />
               </div>
               <div>
-                <h1 className="mb-[1vh] text-[0.9vw]">Likes</h1>
-                <h1 className="text-customTextColor text-[0.9vw]">
+                <h1 className="mb-[1vh] md:text-[0.9vw]">Likes</h1>
+                <h1 className="text-customTextColor md:text-[0.9vw]">
                   {` You have liked ${likes} items`}
                 </h1>
                 <Link href="/likes">
-                  <Button className="mt-[1.5vh] px-[1vw] py-[1vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+                  <Button className="mt-[1.5vh] md:px-[1vw] px-[4vw] md:py-[0.5vw] py-[3vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                     View All
                   </Button>
                 </Link>
               </div>
             </div>
-            <div className="mt-[11vh] space-y-[5vh]">
+            <div className="md:mt-[11vh] mt-[5vh] space-y-[5vh]">
               <div>
-                <h1 className="mb-[1vh] text-[0.9vw]">Watchlist Stats</h1>
-                <h1 className="text-customTextColor text-[0.9vw]">
+                <h1 className="mb-[1vh] md:text-[0.9vw]">Watchlist Stats</h1>
+                <h1 className="text-customTextColor md:text-[0.9vw]">
                   {`You have ${watchlist} items in your watchlist`}
                 </h1>
                 <Link href="/watchlist">
-                  <Button className="mt-[1.5vh] px-[1vw] py-[1vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+                  <Button className="mt-[1.5vh] md:px-[1vw] px-[4vw] md:py-[0.5vw] py-[3vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                     View All
                   </Button>
                 </Link>
               </div>
               <div>
-                <h1 className="mb-[1vh] text-[0.9vw]">Watched Stats</h1>
-                <h1 className="text-customTextColor text-[0.9vw]">
+                <h1 className="mb-[1vh] md:text-[0.9vw]">Watched Stats</h1>
+                <h1 className="text-customTextColor md:text-[0.9vw]">
                   {`You have watched ${watched} items`}
                 </h1>
                 <Link href="/watched">
-                  <Button className="mt-[1.5vh] px-[1vw] py-[1vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+                  <Button className="mt-[1.5vh] md:px-[1vw] px-[4vw] md:py-[0.5vw] py-[3vw] rounded-full text-sm md:text-[0.8vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
                     View All
                   </Button>
                 </Link>

@@ -21,13 +21,13 @@ function ForgotPassword() {
     }
   }, [sessionStatus, router]);
 
-//   const togglePasswordVisibility = () => {
-//     setShowPassword((prevState) => !prevState);
-//   };
+  //   const togglePasswordVisibility = () => {
+  //     setShowPassword((prevState) => !prevState);
+  //   };
 
-//   const confirmTogglePasswordVisibility = () => {
-//     setConfirmShowPassword((prevState) => !prevState);
-//   };
+  //   const confirmTogglePasswordVisibility = () => {
+  //     setConfirmShowPassword((prevState) => !prevState);
+  //   };
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -58,29 +58,27 @@ function ForgotPassword() {
     // }
 
     try {
-        const res = await fetch("/api/forgotpassword", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-          }),
-        });
-  
-        if (res.status === 400) {
-          setError("User with this email is not registered");
-        }
-        if (res.status === 200) {
-          setError("");
-          router.push("/");
-        }
-      } catch (error) {
-        setError("Error, try again");
-        console.log(error);
+      const res = await fetch("/api/forgotpassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+        }),
+      });
+
+      if (res.status === 400) {
+        setError("User with this email is not registered");
       }
-
-
+      if (res.status === 200) {
+        setError("");
+        router.push("/");
+      }
+    } catch (error) {
+      setError("Error, try again");
+      console.log(error);
+    }
   };
 
   if (sessionStatus === "loading") {
@@ -91,94 +89,40 @@ function ForgotPassword() {
     sessionStatus !== "authenticated" && (
       <div className="background">
         <div className="w-full h-screen flex justify-center items-center">
-          <div className="w-[19vw] h-[18vw] bg-buttonColor pb-[4vw] rounded-3xl">
-            <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[2vh]">
-              <h1 className="text-[1.5vw]">Reset Password</h1>
-              <p className="text-[0.8vw] text-customTextColor w-[15vw]">Please enter your current email address to receive a link for resetting your password.</p>
+          <div className="md:w-[19vw] md:h-[18vw] w-[82vw] h-[40vh] bg-buttonColor md:pb-[4vw] rounded-3xl">
+            <div className="flex flex-col md:mt-[0.9vw] mt-[5vw] md:ml-[2vw] ml-[4vw] space-y-[2vh]">
+              <h1 className="md:text-[1.5vw] text-[5vw]">Reset Password</h1>
+              <p className="md:text-[0.8vw] text-customTextColor md:w-[15vw]">
+                Please enter your current email address to receive a link for
+                resetting your password.
+              </p>
               <form onSubmit={handleSubmit}>
-                <div className="space-y-[1.5vw]">
-                  {/* <div>
-                    <h1 className="mb-[1vh]">Username</h1>
-
-                    <input
-                      type="text"
-                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw]`}
-                      placeholder="Username..."
-                      required
-                    />
-                  </div> */}
+                <div className="md:space-y-[1.5vw] space-y-[3vh]">
                   <div>
-                    <h1 className="mb-[1vh] text-[0.9vw]">Email</h1>
+                    <h1 className="mb-[1vh] md:text-[0.9vw]">Email</h1>
                     <input
                       type="text"
-                      className={`md:bg-backgroundButton md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] md:rounded-full md:text-[0.8vw] `}
+                      className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
                       placeholder="Email..."
                       required
                     />
                   </div>
-                  {/* <div>
-                    <h1 className="mb-[1vh]">New Password</h1>
-                    <div className="flex relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                          showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                        }`}
-                        placeholder="Password..."
-                        required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-                      />
-                      <div
-                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {showPassword ? (
-                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                        ) : (
-                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
-                  <div>
-                    {/* <h1 className="mb-[1vh]">Confirm New Password</h1> */}
-                    {/* <div className="flex relative">
-                      <input
-                        type={confirmShowPassword ? "text" : "password"}
-                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                          confirmShowPassword ? "text-[0.9vw]" : "text-[0.9vw]"
-                        }`}
-                        placeholder="Confirm password..."
-                        required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
-                      />
-                      <div
-                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
-                        onClick={confirmTogglePasswordVisibility}
-                      >
-                        {confirmShowPassword ? (
-                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                        ) : (
-                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
-                        )}
-                      </div>
-                    </div> */}
-                  </div>
-                  <div className="flex justify-start ml-[-1vw]">
+                  <div></div>
+                  <div className="flex justify-start md:ml-[-1vw] ml-[-5vw]">
                     <Link
                       href="/"
-                      className="bg-transparent rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-transparent"
+                      className="bg-transparent rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-transparent"
                     >
                       Cancel
                     </Link>
                     <button
                       type="submit"
-                      className="bg-customColorCard rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
+                      className="bg-customColorCard rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
                     >
                       Send
                     </button>
                   </div>
-                  <p className="text-red-600 text-[0.9vw] mt-[0.5vw]">
+                  <p className="text-red-600 md:text-[0.9vw] mt-[0.5vw]">
                     {error && error}
                   </p>
                 </div>
