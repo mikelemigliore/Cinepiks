@@ -224,7 +224,7 @@ TeaserCardProps) {
                   src={`${
                     imgBackdrop
                       ? `${BASE_IMAGE_URL}${imgBackdrop}`
-                      : `/placeHolder.jpg`
+                      : `/noPreview6.jpg`
                   }`}
                   alt={title}
                   className={`md:rounded-t-3xl w-full h-full object-cover transition-opacity duration-500 ease-in-out opacity-100 noselect`}

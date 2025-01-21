@@ -87,12 +87,13 @@ GridViewProp) {
           })}
         </>
       ) : (
-        <div className="md:ml-[35vw] ml-[20vw]">
+        <div className="md:ml-[30vw] ml-[20vw]">
           <img
-            src="/noResultsFound.png"
+            src="/noResultsFound7.png"
             alt="No content found"
-            className="md:w-[20vw] w-[50vw]"
+            className="md:w-[30vw] w-[50vw]"
           />
+          {/* <h1 className='text-center md:text-[1.3vw] text-[4vw]'>No Results Found</h1> */}
         </div>
       )}
     </div>

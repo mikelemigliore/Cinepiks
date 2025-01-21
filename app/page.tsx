@@ -333,11 +333,11 @@ function LoginIn() {
             </Carousel>
           </div>
 
-          <div className="md:mt-[1vw] md:ml-[7vw]">
+          <div className="md:mt-[1vw] md:ml-[5vw]">
             <img
-              src="/MovieLogo.png"
+              src="/WebsiteLogo.png"
               alt="Movie Logo"
-              className="md:w-[8vw] md:m-[2vw] w-[30vw] ml-[36vw] mt-[10vw]  md:mb-[1vw] mb-[5vw]"
+              className="md:w-[14vw] md:m-[2vw] w-[50vw] ml-[25vw] mt-[10vw]  md:mb-[2vw] mb-[5vw]"
             />
             <div className="flex flex-col items-center">
               <div className="md:space-y-[1vw] space-y-[5vw]">

@@ -207,7 +207,9 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
     } else if (type === "series") {
       const hours = Math.floor(minutes / 60); // Get the hours
       const remainingMinutes = minutes % 60; // Get the remaining minutes
-      return hours ? `Avg: ${hours}h ${remainingMinutes}m` : `Avg: ${remainingMinutes}m`;
+      return hours
+        ? `Avg: ${hours}h ${remainingMinutes}m`
+        : `Avg: ${remainingMinutes}m`;
     } else {
       return "N/A";
     }
@@ -267,8 +269,12 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
           ))}
         </div>
       ) : (
-        <div className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]">
-          <h1>Not Available</h1>
+        <div className="w-[34.5vw] h-full bg-transparent rounded-[1vw] mb-[0.4vw] mr-[1vw]">
+          <img
+            src="/noResultsFound7.png"
+            alt="No content found"
+            className="md:w-[30vw] w-[100vw] md:ml-[3vw] ml-[0vw] md:mt-[4vh] md:mt-[4vh] mt-[3vh] absolute"
+          />
         </div>
       )}
     </ScrollArea>

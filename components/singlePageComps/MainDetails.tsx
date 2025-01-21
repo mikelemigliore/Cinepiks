@@ -1154,7 +1154,7 @@ MainDetailsProps) {
             </div>
           )}
 
-          <div className="md:ml-[0vw] ml-[-4vw] flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[2vw]">
+          <div className="ml-[0vw]  flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[2vw]">
             <Button
               onClick={() => handleAdded()}
               className={` h-[7vh] w-48 md:w-[7vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${

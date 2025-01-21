@@ -269,9 +269,13 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
           ))}
         </div>
       ) : (
-        <div className="w-[34.5vw] h-[5vw] bg-buttonColor rounded-[1vw] mb-[0.4vw] mr-[1vw]">
-          <h1>Not Available</h1>
-        </div>
+        <div className="w-[34.5vw]  h-full bg-transparent rounded-[1vw] mb-[0.4vw] mr-[1vw]">
+        <img
+          src="/noResultsFound7.png"
+          alt="No content found"
+          className="md:w-[30vw] w-[100vw] md:ml-[3vw] ml-[0vw] md:mt-[4vh] mt-[14vh] absolute"
+        />
+      </div>
       )}
     </ScrollArea>
   );

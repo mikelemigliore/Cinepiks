@@ -19,16 +19,16 @@ function Footer() {
         <div>
           <Link
             href="/"
-            className="inline-block mb-[2vh] md:mb-[2vh] md:mt-[2vh] mt-[5vh] md:ml-[11vw] ml-[39vw]"
+            className="inline-block mb-[2vh] md:mb-[2vh] md:mt-[2vh] mt-[5vh] md:ml-[11vw] ml-[26vw]"
           >
             <img
-              src="/MovieLogo.png"
+              src="/WebsiteLogo.png"
               alt="Movie Logo"
-              className="w-[25vw] md:w-[10vw]"
+              className="w-[45vw] md:w-[15vw]"
             />
           </Link>
         </div>
-        <div className="md:ml-[2vw]">
+        <div className="md:ml-[3vw]">
           {isDesktop ? (
             <>
               <h1 className="mt-[-2vh] text-center mx-[5vw] md:mx-0 md:text-[0.8vw] text-[3vw] w-[30vw]">

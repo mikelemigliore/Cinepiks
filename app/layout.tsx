@@ -32,6 +32,16 @@ export default async function RootLayout({
           name="apple-mobile-web-app-status-bar-style"
           content="customColor"
         />
+        <link
+          rel="icon"
+          href="/logoIcon.png"
+          type="image/x-icon"
+        />
+        <link
+          rel="apple-touch-icon"
+          href="/logoIcon.png"
+        />
+        <title>Cinepiks</title>
       </head>
       <body>
         <AuthProvider session={session}>
