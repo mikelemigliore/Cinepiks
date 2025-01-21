@@ -37,6 +37,9 @@ import {
 } from "../features/homepage/movies/movieSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+
+
 interface Availability {
   id: string;
   tag: string;
@@ -120,14 +123,13 @@ function SearchPage() {
   //   }
   // }, [typeContent]);
 
-    useEffect(() => {
-      if (window.innerWidth >= 1024) {
-        setIsDesktop(true);
-      } else {
-        setIsDesktop(false);
-      }
-    }, []);
-
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeQuery) {
@@ -180,6 +182,7 @@ function SearchPage() {
     data: contentSearch,
     isFetching,
     isSuccess,
+    isLoading: contentLoading,
   } = useGetContentQuery(
     typeContent === "trendingMovies" || parsedTypeSearch !== null
       ? skipToken
@@ -194,11 +197,15 @@ function SearchPage() {
         }
   );
 
-  const { data: trending } = useGetTrendingQuery(
+  const { data: trending, isLoading: trendingLoading } = useGetTrendingQuery(
     typeContent === "trendingMovies" ? { page } : skipToken
   );
 
-  const { data: search, isSuccess: searchSuccess } = useGetSearchItemQuery(
+  const {
+    data: search,
+    isSuccess: searchSuccess,
+    isLoading: searchLoading,
+  } = useGetSearchItemQuery(
     parsedTypeSearch !== null ? { page, query: parsedTypeSearch } : skipToken
   );
 
@@ -335,9 +342,7 @@ function SearchPage() {
   };
 
   return (
-    <div
-      className={` md:mt-[20vh] mt-[10vh] mb-[5vh]`}
-    >
+    <div className={` md:mt-[20vh] mt-[10vh] mb-[5vh]`}>
       <div className="flex justify-between md:ml-[5vw] ml-[3vw]">
         <div
           className={`${
@@ -448,10 +453,18 @@ function SearchPage() {
               </Link>
             </div>
             <div>
-              {ContentSearch.length === 0 ? (
-                <div>No results found.</div>
-              ) : grid ? (
-                <GridView filter={filter} mediaSearch={ContentSearch} />
+              {
+              // ContentSearch.length === 0 ? (
+              //   <div>
+              //     <h1>Ok</h1>
+              //   </div>
+              // ) : 
+              grid ? (
+                <GridView
+                  filter={filter}
+                  mediaSearch={ContentSearch}
+                  isLoadingContent={contentLoading}
+                />
               ) : (
                 ContentSearch.map((media, index) => (
                   <ListView
@@ -465,6 +478,7 @@ function SearchPage() {
                     overview={media.overview}
                     list={list}
                     isDesktop={isDesktop}
+                    isLoadingContent={contentLoading}
                     //value={value}
                     //handleValue={handleValue}
                   />

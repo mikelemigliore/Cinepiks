@@ -27,6 +27,7 @@ import {
 } from "@/app/features/homepage/movies/moviedetailsSlice";
 
 import { useGetSeriesDetailsTeaserCardQuery } from "@/app/features/homepage/series/seriesSlice";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 
 interface MovieCardProps {
   imgUrl: string;
@@ -50,6 +51,7 @@ interface MovieCardProps {
   }>;
   id: number;
   mediaType?: string;
+  isLoading?: boolean;
 }
 
 interface Genre {
@@ -74,6 +76,7 @@ function MovieCard({
   itemsGenres,
   id,
   name,
+  isLoading,
 }: MovieCardProps) {
   const [runtime, setRuntime] = useState();
   const [season, setSeasons] = useState();
@@ -336,14 +339,17 @@ function MovieCard({
                 e.preventDefault();
                 e.stopPropagation(); // Prevent click event from bubbling up
               }
+
+              if (watched) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent click event from bubbling up
+              }
             }}
           >
-            {/* <div className="hover:cursor-pointer"> */}
             <div
               className="relative"
               onClick={handleClick} // Handle click event for conditional navigation
             >
-              {/* Poster Image */}
               {list ? (
                 <img
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
@@ -355,6 +361,7 @@ function MovieCard({
                   watchlistOptions={watchlistOptions}
                   mediaType={mediaType}
                   id={id}
+                  isDesktop={isDesktop}
                 />
               ) : watched ? (
                 <WatchedOpt
@@ -363,6 +370,7 @@ function MovieCard({
                   mediaType={mediaType}
                   //type={type}
                   id={id}
+                  isDesktop={isDesktop}
                 />
               ) : single ? (
                 <img
@@ -410,8 +418,6 @@ function MovieCard({
             <h1 className="md:w-[12vw] w-[40vw] pt-4 md:text-[0.8vw] text-[3.5vw] font-semibold overflow-hidden overflow-ellipsis line-clamp-1">
               {title || name}
             </h1>
-
-            {/* </div> */}
           </Link>
         )}
       </Container>

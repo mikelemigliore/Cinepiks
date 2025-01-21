@@ -24,7 +24,7 @@ const ReduxProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Provider store={store}>
       {/* Prevent rendering until persisted state is rehydrated */}
-      <PersistGate loading={<p>Loading...</p>} persistor={persistor}>
+      <PersistGate persistor={persistor}>
         {children}
       </PersistGate>
     </Provider>

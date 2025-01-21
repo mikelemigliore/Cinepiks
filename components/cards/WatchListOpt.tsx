@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -15,6 +13,7 @@ interface WatchListOptProp {
   watchlistOptions?: boolean;
   mediaType: string; // Define possible values
   id: number;
+  isDesktop: boolean;
 }
 
 function WatchListOpt({
@@ -22,24 +21,25 @@ function WatchListOpt({
   watchlistOptions,
   mediaType,
   id,
+  isDesktop,
 }: WatchListOptProp) {
   const [expand, setExpand] = useState(false);
   const [expandRemove, setExpandRemove] = useState(false);
   const [expandView, setExpandView] = useState(false);
   const [isAdded, setIsAdded] = useState(true);
-  const [isDesktop, setIsDesktop] = useState(false);
+  //const [isDesktop, setIsDesktop] = useState(false);
 
   const dispatch = useDispatch();
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
-  useEffect(() => {
-    if (window.innerWidth >= 1024) {
-      setIsDesktop(true);
-    } else {
-      setIsDesktop(false);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.innerWidth >= 1024) {
+  //     setIsDesktop(true);
+  //   } else {
+  //     setIsDesktop(false);
+  //   }
+  // }, []);
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchlistOptions) {
@@ -164,14 +164,14 @@ function WatchListOpt({
           </div>
         </div>
       ) : !isDesktop ? (
-        <div className="absolute top-0 right-0 flex p-[1vw] z-50 pt-[19.3vh] space-y-[5vh]">
-          {/* Watched Button with expand effect */}
-          <div>
-            <Button
+        <div className="space-y-[5vh]">
+          {/* 5.6 */}
+          <div className="absolute bottom-[7vh] right-0 flex p-[1vw]  z-50">
+            {/* <Button
               // onMouseEnter={handleMouseEnter}
               // onMouseLeave={handleMouseLeave}
               onClick={() => handleWatched()}
-              className={`bg-red-500 flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
+              className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
               `}
             >
               <div className="flex">
@@ -181,7 +181,7 @@ function WatchListOpt({
             </Button>
           </div>
 
-          <div className="absolute top-0 right-0 flex p-[1vw] pt-[19.7vh]  z-50">
+          <div className="absolute bottom-0 right-0 flex p-[1vw]  z-50">
             <Button
               // onMouseEnter={handleMouseEnterRemove}
               // onMouseLeave={handleMouseLeaveRemove}
@@ -193,9 +193,9 @@ function WatchListOpt({
                 <Cross2Icon className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[1vw]" />
               </div>
             </Button>
-          </div>
+          </div> */}
 
-          {/* <div className="absolute top-0 right-0 flex p-[1vw] md:mt-[6vw] pt-[25vh] z-50">
+            {/* <div className="absolute top-0 right-0 flex p-[1vw] md:mt-[6vw] pt-[25vh] z-50">
             <Link href={href}>
               <Button
                 // onMouseEnter={handleMouseEnterView}
@@ -209,6 +209,30 @@ function WatchListOpt({
               </Button>
             </Link>
           </div> */}
+
+
+
+            <Button
+              // onMouseEnter={handleMouseEnter}
+              // onMouseLeave={handleMouseLeave}
+              onClick={() => handleWatched()}
+              className={`items-center justify-center transition-all duration-300 rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
+              `}
+            >
+                <IoCheckmark className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+            </Button>
+          </div>
+
+          <div className="absolute bottom-0 right-0 flex p-[1vw]  z-50">
+            <Button
+              // onMouseEnter={handleMouseEnterRemove}
+              // onMouseLeave={handleMouseLeaveRemove}
+              onClick={() => handleAdded()}
+              className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+            >
+                <Cross2Icon className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+            </Button>
+          </div>
         </div>
       ) : (
         <></>

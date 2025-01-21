@@ -34,7 +34,7 @@ interface BigCardProps {
   isLastOne: boolean;
   mediaType: string;
   href: string;
-  seriesImdbId?:string
+  seriesImdbId?: string;
   //genres: Genre[];
 }
 
@@ -49,7 +49,7 @@ function BigCard({
   id,
   mediaType,
   href,
-  seriesImdbId
+  seriesImdbId,
 }: BigCardProps) {
   const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -145,7 +145,7 @@ function BigCard({
         setRuntime(seriesDetails?.runtime || "N/A");
         setDescription(seriesDetails?.overview || "No description available");
         setTMDbScore(seriesDetails?.vote_average || null);
-        setImdbId(seriesImdbId||null);
+        setImdbId(seriesImdbId || null);
         setTitle(
           seriesDetails.original_title || seriesDetails.name || "Unknown Title"
         );
@@ -192,7 +192,7 @@ function BigCard({
           className={`rounded-tl-3xl rounded-tr-3xl rounded-br-customMobile rounded-bl-customMobile md:rounded-tl-3xl md:rounded-bl-3xl md:rounded-tr-custom md:rounded-br-custom h-[18rem] md:h-full object-cover ${
             isPartialSlide ? "opacity-30 pointer-events-none" : ""
           }`}
-          src={`${BASE_IMAGE_URL}${image}`}
+          src={`${image ? `${BASE_IMAGE_URL}${image}` : `/placeHolder.jpg`}`}
         />
 
         {/* Right Side: Movie Info */}
@@ -373,58 +373,3 @@ function BigCard({
 
 export default BigCard;
 
-// const handleLike = async (id: number) => {
-//   const session = await getSession();
-//   const userEmail = session?.user?.email;
-
-//   if (!userEmail) {
-//     console.error("User not logged in!");
-//     return;
-//   }
-
-//   if (isLiked === true) {
-//     // REMOVE LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(false);
-//         const data = await getLike(id);
-//         const likedContent = await data.json();
-//         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error removing like:", error);
-//     }
-//   } else {
-//     // ADD LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(true);
-//         const data = await getLike(id); // Fetch movie data by IDs
-//         const likedContent = await data.json();
-//         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error adding like:", error);
-//     }
-//   }
-// };

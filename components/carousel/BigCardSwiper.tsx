@@ -6,43 +6,28 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import SwiperNavButtons from "@/utils/swiperButtons";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 
 interface ItemsBigCardsProp {
   id: number;
   type?: string;
-  //image: string;
   title: string;
   name?: string;
   poster_path: string;
   showType: string;
   backdrop_path: string;
   genre_ids: number[];
-  // rated: string;
-  // time: string;
   description: string;
   imdb_id?: string;
 }
 
 interface BigCardProps {
-  // itemBigCards: Array<{
-  //   id: number;
-  //   type:string
-  //   title: string;
-  //   imgUrl: string;
-  //   genres1: string;
-  //   genres2: string;
-  //   genres3: string;
-  //   rated: string;
-  //   time: string;
-  //   description: string;
-  // }>;
-
   itemBigCards: ItemsBigCardsProp[];
-
   mediaType: string; // this line was commented
+  isLoading?: boolean;
 }
 
-function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
+function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -89,47 +74,8 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
               slidesPerGroup: 1,
               spaceBetween: -110,
             },
-            // // when window width is >= 768px
-            // 768: {
-            //   slidesPerView: 3,
-            //   slidesPerGroup: 3,
-            //   spaceBetween: 20,
-            // },
-            // when window width is >= 1024px
-            // 1024: {
-            //   slidesPerView: 7,
-            //   slidesPerGroup: 7,
-            //   spaceBetween: -110,
-            // },
           }}
         >
-          {/* {itemBigCards.map((itemBigCard, index) => {
-            // Define how to find the "8th" slide (partial one)
-            const isPartialSlide =
-              index === (activeIndex + 1) % itemBigCards.length || // Next partial slide on the right
-              index ===
-                (activeIndex - 1 + itemBigCards.length) % itemBigCards.length; // Previous partial slide on the left
-
-            const isLastOne = index === itemBigCards.length - 1;
-
-            return (
-              <SwiperSlide className="pb-[8vh]" key={itemBigCard.id}>
-                <BigCard
-                  id={itemBigCard.id}
-                  //image={itemBigCard.backdrop_path}
-                  //title={itemBigCard.title}
-                  isPartialSlide={isPartialSlide}
-                  isLastOne={isLastOne}
-                  //genres={itemBigCard.genre_ids}
-                  // rated={itemBigCard.rated}
-                  // time={itemBigCard.time}
-                  //description={itemBigCard.description}
-                  mediaType={mediaType}
-                />
-              </SwiperSlide>
-            );
-          })} */}
-
           {/* I am using this method so that i don't excee the api rate limit for the rating score, the rate is 6 request per minute */}
           {itemBigCards.slice(0, 5).map((itemBigCard, index) => {
             // Define how to find the "8th" slide (partial one)
@@ -161,7 +107,7 @@ function BigCardSwiper({ itemBigCards, mediaType }: BigCardProps) {
           })}
         </Swiper>
       ) : (
-        <h1>Loading...</h1>
+        <Skeleton className="w-[96vw] md:w-[90vw] h-[74vh] md:h-[71vh] bg-backgroundButton rounded-2xl ml-2 md:ml-[3.5vw]" />
       )}
 
       <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />

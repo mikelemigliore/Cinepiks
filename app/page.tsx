@@ -24,6 +24,7 @@ import {
 } from "./features/loginpage/loginSlice";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 //import './globals/background.css';
 
 interface ItemProp {
@@ -84,7 +85,7 @@ function LoginIn() {
   const [isDesktop, setIsDesktop] = useState(false);
   const totalSlides = items.length; // Set the total number of slides
 
-  const { data: loginmainCaraseul } = useGetNowPlayingQuery();
+  const { data: loginmainCaraseul, isLoading } = useGetNowPlayingQuery();
 
   const { data: genres } = useGetGenresQuery({});
 
@@ -239,32 +240,17 @@ function LoginIn() {
       password,
     });
 
-    // if(res === undefined){
-    //   console.log("Not working");
-    // }
-
     if (res?.error) {
-      //console.log("Entered");
       setError("Invalid email or password");
       if (res?.url) router.replace("/homepage");
     } else {
-      //console.log("Not entered");
       setError("");
-      // if (res?.url) {
-      //   router.replace("/homepage"); // Navigate to the homepage on success
-      // }
     }
-
-    // console.log(email, password);
   };
 
-  // const handleRedirect = () => {
-  //   router.replace("/homepage"); // Replace with the actual route you want to test
-  // };
-
-  if (sessionStatus === "loading") {
-    return <h1>Loading...</h1>;
-  }
+  // if (sessionStatus === "loading") {
+  //   return <h1>Loading...</h1>;
+  // }
 
   return (
     sessionStatus !== "authenticated" && (
@@ -278,42 +264,63 @@ function LoginIn() {
               totalSlides={totalSlides} //Provides the number of slides in the carousel.
             >
               <CarouselContent>
-                {items.map((item: ItemProp) => (
-                  <CarouselItem className="relative w-full flex justify-center items-center ">
-                    <div className="relative">
-                      <img
-                        src={`${BASE_IMAGE_URL}${item.backdrop_path}`}
-                        className="bg-cover bg-center md:bg-top bg-no-repeat"
-                      />
-                      <div className="absolute inset-0 flex flex-col justify-between md:ml-[7vw] my-[4vw]">
-                        <div>
-                          <h1 className="md:text-[1.7vw] text-[5vw] font-semibold line-clamp-1 ml-[35vw] md:ml-[0vw]">
-                            {isDesktop ? <>Now Playing</> : <>{item.title}</>}
-                          </h1>
-                        </div>
-                        <div className="ml-[50vw] md:ml-[0vw] hidden md:block">
-                          <h1 className="md:text-[2.5vw] font-semibold line-clamp-1">
-                            {item.title}
-                          </h1>
-                          <div className="text-[1vw] md:flex justify-start items-center">
-                            {/* hidden md:block: This will only show on medium screens and above (desktop). */}
-                            <span>
-                              {getGenreNames(item.genre_ids[0], itemsGenres)}
-                            </span>
-                            <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
-                            <span>
-                              {getGenreNames(item.genre_ids[1], itemsGenres)}
-                            </span>
-                            <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
-                            <span className="pr-[0.6vw]">
-                              {getGenreNames(item.genre_ids[2], itemsGenres)}
-                            </span>
+                {items.length === 0 ? (
+                  <div className="md:flex">
+                    <Skeleton className="bg-backgroundButton md:w-[70vw] md:h-[83vh] w-[200vw] h-[44vh] ml-[-25vw] md:ml-[0vw] md:rounded-tr-custom md:rounded-br-custom md:rounded-bl-[0] overflow-hidden rounded-br-custom rounded-bl-custom" />
+                  </div>
+                ) : (
+                  <>
+                    {items.map((item: ItemProp) => (
+                      <CarouselItem className="relative w-full flex justify-center items-center ">
+                        <div className="relative">
+                          <img
+                            src={`${BASE_IMAGE_URL}${item.backdrop_path}`}
+                            className="bg-cover bg-center md:bg-top bg-no-repeat"
+                          />
+                          <div className="absolute inset-0 flex flex-col justify-between md:ml-[7vw] my-[4vw]">
+                            <div>
+                              <h1 className="md:text-[1.7vw] text-[5vw] font-semibold line-clamp-1 ml-[35vw] md:ml-[0vw]">
+                                {isDesktop ? (
+                                  <>Now Playing</>
+                                ) : (
+                                  <>{item.title}</>
+                                )}
+                              </h1>
+                            </div>
+                            <div className="ml-[50vw] md:ml-[0vw] hidden md:block">
+                              <h1 className="md:text-[2.5vw] font-semibold line-clamp-1">
+                                {item.title}
+                              </h1>
+                              <div className="text-[1vw] md:flex justify-start items-center">
+                                {/* hidden md:block: This will only show on medium screens and above (desktop). */}
+                                <span>
+                                  {getGenreNames(
+                                    item.genre_ids[0],
+                                    itemsGenres
+                                  )}
+                                </span>
+                                <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
+                                <span>
+                                  {getGenreNames(
+                                    item.genre_ids[1],
+                                    itemsGenres
+                                  )}
+                                </span>
+                                <GoDotFill className="w-[0.7vw] h-[0.7vw] mx-[0.4vw] rounded-full" />
+                                <span className="pr-[0.6vw]">
+                                  {getGenreNames(
+                                    item.genre_ids[2],
+                                    itemsGenres
+                                  )}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
+                      </CarouselItem>
+                    ))}
+                  </>
+                )}
               </CarouselContent>
               <CarouselPrevious
                 onClick={handlePrevious}
@@ -513,7 +520,10 @@ function LoginIn() {
               <>
                 <div className="md:flex md:justify-center md:items-center md:space-x-[15vw] md:space-y-0 space-y-[10vh]">
                   <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw]">
-                    <img src="/Compass.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <img
+                      src="/Compass.png"
+                      className="md:h-[6vw] h-[25vw]"
+                    ></img>
                     <div className="mt-[1vw] md:w-full w-[80vw]">
                       <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
                         Explore Your Favorite Titles
@@ -533,7 +543,10 @@ function LoginIn() {
                     </div>
                   </div>
                   <div className="md:text-[0.9vw] text-[3.5vw] font-medium text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
-                    <img src="/Bookmark.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <img
+                      src="/Bookmark.png"
+                      className="md:h-[6vw] h-[25vw]"
+                    ></img>
                     <div className="mt-[1vw] md:w-full w-[80vw]">
                       <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
                         Create Personalized Watchlist
@@ -565,7 +578,10 @@ function LoginIn() {
                     </div>
                   </div>
                   <div className="md:text-[0.9vw] text-[3.5vw] font-medium  text-gray-300 text-center break-words flex flex-col justify-center items-center md:w-[15vw] md:h-[15vw] ">
-                    <img src="/Camera.png" className="md:h-[6vw] h-[25vw]"></img>
+                    <img
+                      src="/Camera.png"
+                      className="md:h-[6vw] h-[25vw]"
+                    ></img>
                     <div className="mt-[1vw] md:w-full w-[80vw]">
                       <h1 className="font-bold md:text-[1vw] text-[4vw] text-white">
                         Track Entertainment

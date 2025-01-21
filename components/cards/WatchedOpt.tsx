@@ -25,6 +25,7 @@ interface WatchedOptProp {
   mediaType: string; // Define possible values
   watchedOptions?: boolean;
   id: number;
+  isDesktop: boolean;
 }
 
 function WatchedOpt({
@@ -33,6 +34,7 @@ function WatchedOpt({
   mediaType,
   watchedOptions,
   id,
+  isDesktop,
 }: WatchedOptProp) {
   const [expand, setExpand] = useState(false);
   const [expandRemove, setExpandRemove] = useState(false);
@@ -100,8 +102,8 @@ function WatchedOpt({
     <div onClick={handleImageClick} className="relative">
       <img
         src={src}
-        className={`w-[46vw] md:w-[14vw] rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-          watchedOptions ? "opacity-45 pointer-events-none" : ""
+        className={`w-[46vw] md:w-[14vw] rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out  pointer-events-none ${
+          watchedOptions || !isDesktop ? "opacity-45" : ""
         }`}
       />
 
@@ -110,7 +112,7 @@ function WatchedOpt({
         <div className="absolute inset-0 z-40 pointer-events-auto" />
       )}
 
-      {watchedOptions && (
+      {watchedOptions && isDesktop ? (
         <div>
           <div className="absolute top-0 right-0 flex p-[1vw] z-50">
             {/* Watched Button with expand effect */}
@@ -138,7 +140,7 @@ function WatchedOpt({
             </div>
 
             <div className="absolute top-0 right-0 flex p-[1vw] mt-[3vw] z-50">
-              <Link href={href}>
+              <Link href={`${href}/${id}`}>
                 <Button
                   onMouseEnter={handleMouseEnterView}
                   onMouseLeave={handleMouseLeaveView}
@@ -170,6 +172,83 @@ function WatchedOpt({
             </div>
           </div>
         </div>
+      ) : !isDesktop ? (
+        // <div className="space-y-[5vh]">
+
+        //   <div className="absolute top-0 right-0 flex p-[1vw] z-50">
+        //     <Button
+        //       onMouseEnter={handleMouseEnterRemove}
+        //       onMouseLeave={handleMouseLeaveRemove}
+        //       onClick={() => handleWatched()}
+        //       className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+        //     >
+        //       <div className="flex">
+        //         <span>Remove</span>
+        //         <Cross2Icon className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[0.5vw]" />
+        //       </div>
+        //     </Button>
+        //   </div>
+
+        //   <div className="absolute top-[0.5vh] right-0 flex p-[1vw] mt-[3vw] z-50">
+        //     <Link href={`${href}/${id}`}>
+        //       <Button
+        //         onMouseEnter={handleMouseEnterView}
+        //         onMouseLeave={handleMouseLeaveView}
+        //         className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+        //       >
+        //         <div className="flex">
+        //           <span>View</span>
+        //           <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[0.5vw]" />
+        //         </div>
+        //       </Button>
+        //     </Link>
+        //   </div>
+        //   <div className="absolute flex bottom-0 left-0 p-[1vw]">
+        //     <img
+        //       className="md:w-[2vw] md:h-[2vw] w-[8vw] h-[8vw]"
+        //       src="genresIcons/icons8-star.svg"
+        //     />
+        //     <div className="font-bold md:text-[1vw] text-[5vw] flex items-end ml-[0.5vw]">
+        //       {`${value === 0 ? "--" : value} / 5`}
+        //     </div>
+        //   </div>
+        // </div>
+        <div className="space-y-[5vh]">
+
+        <div className="absolute top-0 right-0 flex p-[1vw] z-50">
+          <Button
+            onMouseEnter={handleMouseEnterRemove}
+            onMouseLeave={handleMouseLeaveRemove}
+            onClick={() => handleWatched()}
+            className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+          >
+              <Cross2Icon className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+          </Button>
+        </div>
+
+        <div className="absolute top-[2vh] right-0 flex p-[1vw] mt-[3vw] z-50">
+          <Link href={`${href}/${id}`}>
+            <Button
+              onMouseEnter={handleMouseEnterView}
+              onMouseLeave={handleMouseLeaveView}
+              className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+            >
+                <SlArrowRight className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+            </Button>
+          </Link>
+        </div>
+        <div className="absolute flex bottom-0 left-0 p-[1vw]">
+          <img
+            className="md:w-[2vw] md:h-[2vw] w-[8vw] h-[8vw]"
+            src="genresIcons/icons8-star.svg"
+          />
+          <div className="font-bold md:text-[1vw] text-[5vw] flex items-end ml-[0.5vw]">
+            {`${value === 0 ? "--" : value} / 5`}
+          </div>
+        </div>
+      </div>
+      ) : (
+        <></>
       )}
     </div>
   );

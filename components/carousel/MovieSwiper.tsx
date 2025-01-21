@@ -9,6 +9,7 @@ import "swiper/css/pagination"; // Import Swiper pagination styles
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
+import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 
 interface Props {
   //tmdbId?:number[];
@@ -34,6 +35,7 @@ interface Props {
   //getGenreNames: () => void;
   description: string;
   serviceId?: number;
+  isLoading?: boolean;
 }
 
 interface Props {
@@ -49,6 +51,7 @@ function MovieSwiper({
   onClick,
   description,
   serviceId,
+  isLoading,
 }: //image = [],
 //tmdbId = []
 // mediaRapid = [],
@@ -120,6 +123,9 @@ Props) {
         </h1>
       </div>
 
+      {/* {inTheatersLoading ? (
+        <Skeleton className="w-[46vw] h-[20vh] bg-red-500 md:h-[8vh] md:w-[12.6vw] rounded-2xl" />
+      ) : ( */}
       <div className="lg:ml-[2.5vw] lg:mr-[3vw] md:ml-[-3vw] md:mr-[12vw] mb-[5vh] md:mb-[0vh]">
         {medias.length > 0 ? (
           <Swiper
@@ -202,6 +208,7 @@ Props) {
                     isPartialSlide={isPartialSlide}
                     isLastThreeSlides={isLastThreeSlides}
                     isLastOne={isLastOne}
+                    isLoading={isLoading}
                     className="" // Apply negative margin
                   />
                 </SwiperSlide>
@@ -209,12 +216,48 @@ Props) {
             })}
           </Swiper>
         ) : (
-          <h1>Loading...</h1>
+          <Swiper
+            speed={1000}
+            modules={[Navigation, Pagination]}
+            slidesPerView={2}
+            slidesPerGroup={2}
+            spaceBetween={-5}
+            loop={false}
+            pagination={{ clickable: true }} 
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
+            }}
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+            }}
+            breakpoints={{
+              1024: {
+                slidesPerView: 7,
+                slidesPerGroup: 7,
+                spaceBetween: -5,
+              },
+              768: {
+                slidesPerView: 6,
+                slidesPerGroup: 6,
+                spaceBetween: -70,
+              },
+            }}
+          >
+            {Array.from({ length: 7 }).map((_, index) => {
+              return (
+                <SwiperSlide className="md:pb-[8vh] pb-[6vh]">
+                  <Skeleton className="w-[46vw] h-[33vh] bg-backgroundButton md:h-[40vh] md:w-[12.6vw] rounded-3xl ml-[3vw] md:ml-[0vw]" />
+                  <Skeleton className="w-[46vw] h-[5vh] bg-backgroundButton md:h-[4vh] md:w-[12.6vw] rounded-3xl md:mt-[0.5vh] mt-[1vh] ml-[3vw] md:ml-[0vw]" />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         )}
 
         {/* Pass the swiper instance to the SwiperNavButtons allowing the navigation buttons inside that component to control the Swiper (e.g., move to the next or previous slide) */}
         <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
       </div>
+      {/* )} */}
     </div>
   );
 }
