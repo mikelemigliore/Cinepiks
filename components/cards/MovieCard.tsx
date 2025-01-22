@@ -88,6 +88,25 @@ function MovieCard({
   const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
   const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
   const hoveredRef = useRef(false);
+  const [clicked, setClicked] = useState(false);
+
+  const handleClicks = (e: any) => {
+    handleClickEffect(e);
+    handleClick(e);
+  };
+
+  const handleClickEffect = (e: any) => {
+    // Trigger click effect
+    setClicked(true);
+
+    // Reset the effect after 300ms
+    setTimeout(() => setClicked(false), 300);
+
+    if (watchlist || watched) {
+      e.preventDefault();
+      e.stopPropagation(); // Prevent navigation
+    }
+  };
   //console.log(type);
 
   const href = type === "movie" ? `/singlemovie` : `/singleseries`;
@@ -335,20 +354,17 @@ function MovieCard({
             passHref
             onClick={(e) => {
               // Prevent navigation if it's a WatchListOpt
-              if (watchlist) {
-                e.preventDefault();
-                e.stopPropagation(); // Prevent click event from bubbling up
-              }
-
-              if (watched) {
+              if (watchlist || watched) {
                 e.preventDefault();
                 e.stopPropagation(); // Prevent click event from bubbling up
               }
             }}
           >
             <div
-              className="relative"
-              onClick={handleClick} // Handle click event for conditional navigation
+              className={`relative ${
+                clicked ? "scale-[0.98]" : "scale-[1]"
+              } transition-transform duration-150 ease-in-out`}
+              onClick={handleClicks} // Handle click event for conditional navigation
             >
               {list ? (
                 <img

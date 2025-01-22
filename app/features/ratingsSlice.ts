@@ -24,10 +24,9 @@ export const ratingsApi = createApi({
     endpoints: (builder) => ({
       getRatings: builder.query({
         query: (id: string ) => `item/?id=${id}`,
-        keepUnusedDataFor: time, // Cache data for 10 minutes
+        keepUnusedDataFor: time, 
       }),
     }),
   });
   
-  // Export the auto-generated hook
   export const { useGetRatingsQuery } = ratingsApi;

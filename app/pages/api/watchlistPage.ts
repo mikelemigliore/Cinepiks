@@ -34,17 +34,12 @@ export async function getWatchlists(ids: any[]) {
       ? await Promise.all(responses.map((res: any) => res.json()))
       : [];
 
-    //console.log(content);
-
     const newData = content.map((item: any) => ({
       ...item,
       media_type: item.first_air_date ? "tv" : "movie",
     }));
 
-    //console.log(newData);
-
     return new Response(JSON.stringify(newData), { status: 200 });
-    //res.status(200).json(movies);
   } catch (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,
@@ -68,17 +63,12 @@ export async function getWatchlist(id: number, mediaType: string) {
     }
     const content = await responses.json();
 
-    //console.log(content);
-
     const newData = {
       ...content,
       media_type: content.first_air_date ? "tv" : "movie",
     };
 
-    //console.log("newData", newData);
-
     return new Response(JSON.stringify(newData), { status: 200 });
-    //res.status(200).json(movies);
   } catch (error) {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
       status: 500,

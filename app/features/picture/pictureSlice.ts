@@ -4,16 +4,16 @@ const time = 600;
 
 export const pictureDBApi = createApi({
   reducerPath: "pictureDBApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for your app's backend
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), 
   endpoints: (builder) => ({
     getPicture: builder.query({
-      query: () => `updateProfilePicture`, // Fetches from /api/likes endpoint in your app
-      keepUnusedDataFor: time, // Cache the data for 10 minutes
+      query: () => `updateProfilePicture`, 
+      keepUnusedDataFor: time, 
       transformResponse: (response: any) => {
         console.log(response);
 
         return response;
-      }, // Transform the response to just the data
+      }, 
     }),
   }),
 });

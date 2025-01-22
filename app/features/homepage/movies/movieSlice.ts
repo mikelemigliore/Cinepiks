@@ -1,7 +1,6 @@
 import {
   createApi,
   fetchBaseQuery,
-  FetchBaseQueryMeta,
 } from "@reduxjs/toolkit/query/react";
 import { getTrailerMovieVideo } from "../../../pages/api/homePage";
 
@@ -9,7 +8,6 @@ const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
 interface MediaProp {
   id: number;
-  //image: string;
   title: string;
   name?: string;
   poster_path: string;
@@ -24,15 +22,12 @@ interface MediaProp {
 interface ItemsBigCardsProp {
   id: number;
   type?: string;
-  //image: string;
   title: string;
   name?: string;
   poster_path: string;
   showType: string;
   backdrop_path: string;
   genre_ids: number[];
-  // rated: string;
-  // time: string;
   description: string;
 }
 
@@ -43,32 +38,28 @@ const horrorGenreCode = 27;
 const animationGenreCode = 16;
 const thrillerGenreCode = 53;
 
-// Function to format a Date object as 'YYYY-MM-DD'
+// Function to format a Date object to 'YYYY-MM-DD'
 function formatDate(date: any) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const month = String(date.getMonth() + 1).padStart(2, "0"); 
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
-// Calculate min_date (current date)
 const today = new Date();
 const min_date = formatDate(today);
 
-// Calculate max_date (e.g., 30 days from today)
+// Calculating max_date 30 days from today
 const daysToAdd = 60;
 const max_date = formatDate(
   new Date(today.getTime() + daysToAdd * 24 * 60 * 60 * 1000)
 );
 
-// Calculate max_date (e.g., 14 days  back from today)
+// Calculating max_date 14 days  back from today
 const daysToSub = 14;
 const max_date_back = formatDate(
   new Date(today.getTime() - daysToSub * 24 * 60 * 60 * 1000)
 );
-
-// console.log(min_date);
-// console.log(max_date);
 
 export const movieApi = createApi({
   reducerPath: "movieApi",
@@ -81,24 +72,16 @@ export const movieApi = createApi({
       keepUnusedDataFor: time,
       transformResponse: async (
         response: any
-        // meta: FetchBaseQueryMeta | undefined,
-        // arg: {
-        //   page: number;
-        // }
       ) => {
-        //const { page } = arg;
-        // Enhance the data with video keys
 
         const filteredPoster = response.results.filter((item: any) => {
-          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+          return !!item.poster_path; 
         });
-
-        //console.log(filteredPoster);
 
         const updatedResults = await Promise.all(
           filteredPoster.map(async (media: any) => {
             try {
-              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const responseTrailer = await getTrailerMovieVideo(media.id);
               const dataTrailer = await responseTrailer.json();
               return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
             } catch (error) {
@@ -106,7 +89,7 @@ export const movieApi = createApi({
                 `Error fetching trailer for media ID ${media.id}:`,
                 error
               );
-              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; 
             }
           })
         );
@@ -117,11 +100,8 @@ export const movieApi = createApi({
     getPopular: builder.query<ItemsBigCardsProp[], { page: number }>({
       query: ({ page }: { page: number }) =>
         `movie/popular?api_key=${apiKey}&page=${page}&language=en-US&region=US&sort_by=popularity.desc&vote_count.gte=100&vote_average.gte=7`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
-        // Enhance the data with video keys
-        // Filter results to ensure the original language is English
         const filteredData = response.results.filter(
           (movie: any) =>
             movie.original_language === "en" && !!movie.poster_path
@@ -133,11 +113,9 @@ export const movieApi = createApi({
       },
     }),
     getNowPlaying: builder.query<MediaProp[], void>({
-      //movie/now_playing?api_key=${apiKey}&region=US
 
       query: () =>
         `discover/movie?api_key=${apiKey}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2|3&release_date.gte=${max_date_back}&release_date.lte=${max_date}`,
-      // `discover/movie?api_key=${apiKey}&region=US&language=en-US&sort_by=popularity.desc`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const results = response.results;
@@ -184,10 +162,10 @@ export const movieApi = createApi({
           sort_by: "popularity.desc",
           with_genres: 27, // Horror genre code
           without_genres: 16, // Animation genre code
-          page: 1, // Default to page 1 initially
+          page: 1, 
         },
       }),
-      keepUnusedDataFor: 60, // Adjust as needed (time in seconds)
+      keepUnusedDataFor: 60, 
       transformResponse: async (response: any) => {
         const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
         const allPagesData: any[] = [];
@@ -223,26 +201,22 @@ export const movieApi = createApi({
       query: (id: number) => `movie/${id}/videos?api_key=${apiKey}`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
-        // Filter teasers
         let teasers = response.results.filter(
           (item: any) => item.type === "Teaser" && item.official === true
         );
 
-        // If no Teasers, fallback to Trailers
         if (teasers.length === 0) {
           teasers = response.results.filter(
             (item: any) => item.type === "Trailer" && item.official === true
           );
         }
 
-        // Sort by published_at date in ascending order
         const sortedTeasers = teasers.sort(
           (a: any, b: any) =>
             new Date(a.published_at).getTime() -
             new Date(b.published_at).getTime()
         );
 
-        // Get the first teaser released
         const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
 
         return firstTeaser;
@@ -252,21 +226,18 @@ export const movieApi = createApi({
       query: (id: number) => `tv/${id}/videos?api_key=${apiKey}`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
-        // Filter teasers
+
         const trailers = response.results.filter(
           (item: any) => item.type === "Trailer" && item.official === true
         );
 
-        // Sort by published_at date in ascending order
         const sortedTeasers = trailers.sort(
           (a: any, b: any) =>
             new Date(a.published_at).getTime() -
             new Date(b.published_at).getTime()
         );
 
-        // Get the first teaser released
         const firstTeaser = sortedTeasers.length > 0 ? sortedTeasers[0] : null;
-        //console.log(firstTeaser);
 
         return firstTeaser;
       },
@@ -274,28 +245,19 @@ export const movieApi = createApi({
     getNewMoviesOnNetflix: builder.query<MediaProp[], { page: number }>({
       query: ({ page }: { page: number }) =>
         `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&page=1&primary_release_date.lte=${min_date}&sort_by=popularity.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=8`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (
         response: any
-        // meta: FetchBaseQueryMeta | undefined,
-        // arg: {
-        //   page: number;
-        // }
       ) => {
-        //const { page } = arg;
-        // Enhance the data with video keys
 
         const filteredPoster = response.results.filter((item: any) => {
-          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+          return !!item.poster_path; 
         });
-
-        //console.log(filteredPoster);
 
         const updatedResults = await Promise.all(
           filteredPoster.map(async (media: any) => {
             try {
-              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const responseTrailer = await getTrailerMovieVideo(media.id); 
               const dataTrailer = await responseTrailer.json();
               return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
             } catch (error) {
@@ -303,7 +265,7 @@ export const movieApi = createApi({
                 `Error fetching trailer for media ID ${media.id}:`,
                 error
               );
-              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; 
             }
           })
         );
@@ -314,28 +276,19 @@ export const movieApi = createApi({
     getNewMoviesOnHulu: builder.query<MediaProp[], { page: number }>({
       query: ({ page }: { page: number }) =>
         `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&primary_release_date.lte=${min_date}&sort_by=popularity.desc&watch_region=US&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=15`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (
         response: any
-        // meta: FetchBaseQueryMeta | undefined,
-        // arg: {
-        //   page: number;
-        // }
       ) => {
-        //const { page } = arg;
-        // Enhance the data with video keys
 
         const filteredPoster = response.results.filter((item: any) => {
-          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+          return !!item.poster_path; 
         });
-
-        //console.log(filteredPoster);
 
         const updatedResults = await Promise.all(
           filteredPoster.map(async (media: any) => {
             try {
-              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const responseTrailer = await getTrailerMovieVideo(media.id); 
               const dataTrailer = await responseTrailer.json();
               return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
             } catch (error) {
@@ -343,7 +296,7 @@ export const movieApi = createApi({
                 `Error fetching trailer for media ID ${media.id}:`,
                 error
               );
-              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; 
             }
           })
         );
@@ -354,28 +307,18 @@ export const movieApi = createApi({
     getNewMoviesOnPrime: builder.query<MediaProp[], { page: number }>({
       query: ({ page }: { page: number }) =>
         `discover/movie?api_key=${apiKey}&page=${page}&include_adult=false&include_video=false&language=en-US&primary_release_date.lte=${min_date}&sort_by=popularity.desc&with_original_language=en&with_watch_monetization_types=flatrate&with_watch_providers=119`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: async (
         response: any
-        // meta: FetchBaseQueryMeta | undefined,
-        // arg: {
-        //   page: number;
-        // }
       ) => {
-        //const { page } = arg;
-        // Enhance the data with video keys
-
         const filteredPoster = response.results.filter((item: any) => {
-          return !!item.poster_path; // Ensure poster_path exists and is not null or undefined
+          return !!item.poster_path; 
         });
-
-        //console.log(filteredPoster);
 
         const updatedResults = await Promise.all(
           filteredPoster.map(async (media: any) => {
             try {
-              const responseTrailer = await getTrailerMovieVideo(media.id); // Fetch the trailer
+              const responseTrailer = await getTrailerMovieVideo(media.id); 
               const dataTrailer = await responseTrailer.json();
               return { ...media, videoKey: dataTrailer?.key || "defaultKey" };
             } catch (error) {
@@ -383,7 +326,7 @@ export const movieApi = createApi({
                 `Error fetching trailer for media ID ${media.id}:`,
                 error
               );
-              return { ...media, videoKey: "6ZfuNTqbHE8" }; // Fallback video key
+              return { ...media, videoKey: "6ZfuNTqbHE8" }; 
             }
           })
         );

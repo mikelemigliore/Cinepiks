@@ -1,10 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
 
 function ForgotPassword() {
   const [error, setError] = useState("");
@@ -14,20 +13,11 @@ function ForgotPassword() {
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
-    //console.log("Session", session);
 
     if (sessionStatus === "authenticated") {
       router.replace("/homepage");
     }
   }, [sessionStatus, router]);
-
-  //   const togglePasswordVisibility = () => {
-  //     setShowPassword((prevState) => !prevState);
-  //   };
-
-  //   const confirmTogglePasswordVisibility = () => {
-  //     setConfirmShowPassword((prevState) => !prevState);
-  //   };
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -36,26 +26,12 @@ function ForgotPassword() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    //const username = e.target[0].value;
     const email = e.target[0].value;
-    // const password = e.target[2].value;
-    // const confirmPassword = e.target[3].value;
 
     if (!isValidEmail(email)) {
       setError("Email is invalid");
       return;
     }
-
-    // if (!password || password.length < 8) {
-    //   setError("Password is invalid");
-    //   return;
-    // }
-
-    // Check if passwords match
-    // if (password !== confirmPassword) {
-    //   alert("Passwords do not match!");
-    //   return; // Prevent form submission
-    // }
 
     try {
       const res = await fetch("/api/forgotpassword", {

@@ -4,16 +4,15 @@ const time = 600;
 
 export const watchedDBApi = createApi({
   reducerPath: "watchedDBApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for your app's backend
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), 
   endpoints: (builder) => ({
     getWatched: builder.query({
-      query: () => `watched`, // Fetches from /api/likes endpoint in your app
-      keepUnusedDataFor: time, // Cache the data for 10 minutes
+      query: () => `watched`, 
+      keepUnusedDataFor: time, 
       transformResponse: (response:any) => {
-        //console.log(response.watchlist);
         
         return response.watched
-      }, // Transform the response to just the data
+      }, 
     }),
   }),
 });

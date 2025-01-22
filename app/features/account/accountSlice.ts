@@ -4,16 +4,16 @@ const time = 600;
 
 export const accountDBApi = createApi({
   reducerPath: "accountDBApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for your app's backend
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for backend
   endpoints: (builder) => ({
     getAccount: builder.query({
-      query: () => `account`, // Fetches from /api/likes endpoint in your app
+      query: () => `account`, 
       keepUnusedDataFor: time, // Cache the data for 10 minutes
       transformResponse: (response: any) => {
         //console.log("response",response);
 
         return response.user
-      }, // Transform the response to just the data
+      }, 
     }),
   }),
 });

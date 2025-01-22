@@ -223,7 +223,7 @@ Props) {
             slidesPerGroup={2}
             spaceBetween={-5}
             loop={false}
-            pagination={{ clickable: true }} 
+            pagination={{ clickable: true }}
             onSwiper={(swiper) => {
               setSwiperInstance(swiper);
             }}
@@ -245,9 +245,11 @@ Props) {
           >
             {Array.from({ length: 7 }).map((_, index) => {
               return (
-                <SwiperSlide className="md:pb-[8vh] pb-[6vh]">
+                <SwiperSlide
+                  key={`skeleton-${index}`}
+                  className="md:pb-[8vh] pb-[6vh]"
+                >
                   <Skeleton className="w-[46vw] h-[33vh] bg-backgroundButton md:h-[40vh] md:w-[12.6vw] rounded-3xl ml-[3vw] md:ml-[0vw]" />
-                  <Skeleton className="w-[46vw] h-[5vh] bg-backgroundButton md:h-[4vh] md:w-[12.6vw] rounded-3xl md:mt-[0.5vh] mt-[1vh] ml-[3vw] md:ml-[0vw]" />
                 </SwiperSlide>
               );
             })}

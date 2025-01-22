@@ -1,10 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 function SignUp() {
   const [error, setError] = useState("");
@@ -14,8 +13,6 @@ function SignUp() {
   const { data: session, status: sessionStatus } = useSession();
 
   useEffect(() => {
-    //console.log("Session", session);
-
     if (sessionStatus === "authenticated") {
       router.replace("/homepage");
     }
@@ -51,10 +48,9 @@ function SignUp() {
       return;
     }
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
-      return; // Prevent form submission
+      return;
     }
 
     try {
@@ -81,13 +77,7 @@ function SignUp() {
       setError("Error, try again");
       console.log(error);
     }
-
-    //console.log(username, email, password, confirmPassword);
   };
-
-  // if (sessionStatus === "loading") {
-  //   return <h1>Loading...</h1>;
-  // }
 
   return (
     sessionStatus !== "authenticated" && (
@@ -101,7 +91,6 @@ function SignUp() {
                   <div>
                     <h1 className="mb-[1vh] md:text-[0.9vw]">Username</h1>
 
-                    {/* Search Input */}
                     <input
                       type="text"
                       className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
@@ -112,7 +101,6 @@ function SignUp() {
                   <div>
                     <h1 className="mb-[1vh] md:text-[0.9vw]">Email</h1>
 
-                    {/* Search Input */}
                     <input
                       type="text"
                       className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
@@ -123,7 +111,6 @@ function SignUp() {
                   <div>
                     <h1 className="mb-[1vh] md:text-[0.9vw]">Password</h1>
                     <div className="flex relative">
-                      {/* Search Input */}
                       <input
                         type={showPassword ? "text" : "password"}
                         className={`bg-transparent h-[7vh] w-[75vw]  md:h-[5.5vh] md:px-[1.5vw] px-[4vw]  md:w-[15vw] placeholder-customTextColor rounded-full md:text-[0.8vw] border border-customTextColor ${
@@ -131,7 +118,6 @@ function SignUp() {
                         }`}
                         placeholder="Password..."
                         required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                       />
                       <div
                         className="absolute md:right-[3vw] right-[7vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
@@ -146,17 +132,19 @@ function SignUp() {
                     </div>
                   </div>
                   <div>
-                    <h1 className="mb-[1vh] md:text-[0.9vw]">Confirm Password</h1>
+                    <h1 className="mb-[1vh] md:text-[0.9vw]">
+                      Confirm Password
+                    </h1>
                     <div className="flex relative">
-                      {/* Search Input */}
                       <input
                         type={confirmShowPassword ? "text" : "password"}
                         className={`bg-transparent h-[7vh] w-[75vw]  md:h-[5.5vh] md:px-[1.5vw] px-[4vw]  md:w-[15vw] placeholder-customTextColor rounded-full md:text-[0.8vw] border border-customTextColor ${
-                          confirmShowPassword ? "md:text-[0.9vw]" : "md:text-[0.9vw]"
+                          confirmShowPassword
+                            ? "md:text-[0.9vw]"
+                            : "md:text-[0.9vw]"
                         }`}
                         placeholder="Confirm password..."
                         required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                       />
                       <div
                         className="absolute md:right-[3vw] right-[7vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"

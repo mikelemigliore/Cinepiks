@@ -1,14 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
 
 interface User {
   email: string;
-  // Add other properties if needed
 }
 
 function ResetPassword({ params }: any) {
@@ -56,7 +54,6 @@ function ResetPassword({ params }: any) {
   }, [params.token]);
 
   useEffect(() => {
-    //console.log("Session", session);
 
     if (sessionStatus === "authenticated") {
       router.replace("/homepage");
@@ -71,11 +68,6 @@ function ResetPassword({ params }: any) {
     setConfirmShowPassword((prevState) => !prevState);
   };
 
-  // const isValidEmail = (email: string): boolean => {
-  //   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  //   return emailRegex.test(email);
-  // };
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const password = e.target[0].value;
@@ -86,10 +78,9 @@ function ResetPassword({ params }: any) {
       return;
     }
 
-    //Check if passwords match
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
-      return; // Prevent form submission
+      return;
     }
 
     try {
@@ -140,7 +131,6 @@ function ResetPassword({ params }: any) {
                         }`}
                         placeholder="Password..."
                         required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                       />
                       <div
                         className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
@@ -164,7 +154,6 @@ function ResetPassword({ params }: any) {
                         }`}
                         placeholder="Confirm password..."
                         required
-                        //value="dthsthsrthesrtvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
                       />
                       <div
                         className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"

@@ -2,14 +2,13 @@ import { NextResponse } from "next/server";
 import connect from "@/utils/db";
 import User from "@/models/User"; // Ensure path is correct for your schema
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+//import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export async function POST(request: Request) {
   const { email, picture } = await request.json();
 
-  //console.log("picture", picture);
-
-  await connect(); // Connect to MongoDB
+  await connect(); 
 
   try {
     if (!email || !picture) {
@@ -21,7 +20,6 @@ export async function POST(request: Request) {
 
     const existingUser = await User.findOne({ email: email });
 
-    //console.log("existingUser",existingUser);
 
     if (!existingUser) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -31,7 +29,7 @@ export async function POST(request: Request) {
     const result = await User.updateOne(
       { email: email },
       {
-        $set: { picture: picture }, // ✅ Correctly updating the top-level email field
+        $set: { picture: picture }, 
       }
     );
 
@@ -51,12 +49,11 @@ export const GET = async (request: any) => {
   try {
     const session: any = await getServerSession(authOptions);
 
-    //console.log("Session", session);
 
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
+    const userEmail = session.user.email; 
     //console.log("userEmail", userEmail);
 
     const user = await User.findOne({ email: userEmail }, "picture");

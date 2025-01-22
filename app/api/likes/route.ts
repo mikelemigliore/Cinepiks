@@ -1,12 +1,12 @@
 import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+//import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export const POST = async (request: any) => {
-  const { like, userEmail, mediaType } = await request.json(); // ✅ Expect userId from the frontend
+  const { like, userEmail, mediaType } = await request.json();
 
   //console.log(mediaType);
 
@@ -20,29 +20,24 @@ export const POST = async (request: any) => {
       );
     }
 
-    // ✅ Ensure the like is added for the correct user
     const existingUser = await User.findOne({ email: userEmail });
-
-    //console.log("existingUser",existingUser);
-    
 
     if (!existingUser) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    // ✅ Check if the like already exists using `some()`
     const existingLike = existingUser.likes.some(
       (likeObj: any) => likeObj.id === like
     );
 
     //console.log("existingLike",existingLike);
-    
+
     if (existingLike) {
       return NextResponse.json("Already liked this content.");
     }
 
     const result = await User.updateOne(
-      { email: userEmail }, // ✅ Update only this specific user
+      { email: userEmail },
       {
         $push: {
           likes: {
@@ -50,11 +45,10 @@ export const POST = async (request: any) => {
             type: mediaType,
           },
         },
-      } // ✅ Add the like to the user's array
+      }
     );
 
     //console.log("result",result);
-    
 
     return NextResponse.json(
       { message: "Like added successfully.", result },
@@ -77,15 +71,12 @@ export const GET = async (request: any) => {
 
     //console.log("Session", session);
 
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
+    const userEmail = session.user.email;
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
     const user = await User.findOne({ email: userEmail }, "likes");
     const likes = user.likes;
-
-    //console.log("likes",likes);
-    
 
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -131,7 +122,7 @@ export const DELETE = async (request: any) => {
             type: mediaType,
           },
         },
-      } 
+      }
     );
 
     return NextResponse.json(

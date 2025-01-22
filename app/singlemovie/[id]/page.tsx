@@ -11,28 +11,14 @@ import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import React from "react";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
-import Link from "next/link";
 import TagsHighToLow from "@/components/tags/TagsHighToLow";
 import {
   useGetMovieDetailsQuery,
   useGetMovieTrailerQuery,
   useGetMovieCastQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/features/store";
-import { useRouter } from "next/navigation";
-
-const movie = [
-  {
-    id: 1,
-    title: "Venom: The Last Dance",
-    imgUrl:
-      "https://image.tmdb.org/t/p/original/k42Owka8v91trK1qMYwCQCNwJKr.jpg",
-  },
-];
 
 type FilterKey = "all" | "buy" | "rent" | "subscription";
-//type SortedKey = "hightolow" | "lowtohigh";
 
 function SingleMoviePage() {
   const [videoKey, setVideoKey] = useState("");
@@ -48,7 +34,6 @@ function SingleMoviePage() {
   const [reload, setReload] = useState(false);
   const [isTrailer, setIsTrailer] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  //const [reviews, setReviews] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState({
     all: true,
     buy: false,
@@ -60,12 +45,10 @@ function SingleMoviePage() {
   const [missingSection, setMissingSetion] = useState(false);
   const type = "movie";
 
-  //const router = useRouter();
-
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
       all: filter === "all",
-      buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
+      buy: filter === "buy",
       rent: filter === "rent",
       subscription: filter === "subscription",
     }));
@@ -77,18 +60,12 @@ function SingleMoviePage() {
   const { id } = params;
   const Id = Number(id);
 
-  // console.log("ID:", Id);
-  // console.log("Media Type:", mediaType);
-
-  const { data: movieDetails } = useGetMovieDetailsQuery(Id || 0);
+  const { data: movieDetails, isLoading: isMovieLoading } =
+    useGetMovieDetailsQuery(Id || 0);
 
   const { data: movieTrailer } = useGetMovieTrailerQuery(Id || 0);
 
   const { data: movieCast } = useGetMovieCastQuery(Id || 0);
-
-  // useEffect(() => {
-  //   router.refresh(); // Forces a full page reload
-  // }, []);
 
   useEffect(() => {
     if (window.innerWidth >= 1024) {
@@ -114,11 +91,9 @@ function SingleMoviePage() {
     }
   }, [Id, movieDetails, movieTrailer, movieCast]);
 
-
-
   const handlePlay = () => {
     setPlay(true);
-    setIsLoading(false); // Stop showing loading spinner once the video plays
+    setIsLoading(false);
     setPause(!pause);
   };
 
@@ -130,7 +105,6 @@ function SingleMoviePage() {
     setPlay(false);
   };
 
-  // Handle when video starts playing
   const handleReload = () => {
     setReload(false);
     setPause(false);
@@ -158,9 +132,9 @@ function SingleMoviePage() {
 
   const formatTitle = (title: string): string => {
     return title
-      .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s]/g, "") // Remove special characters (non-alphanumeric except spaces)
-      .replace(/\s+/g, "_"); // Replace spaces with underscores
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "_");
   };
 
   return (
@@ -198,7 +172,6 @@ function SingleMoviePage() {
           <div className="flex flex-col">
             <MainDetails
               id={Id}
-              media={movie}
               type={type}
               title={title}
               imdbId={imdbId}
@@ -209,6 +182,7 @@ function SingleMoviePage() {
               handleReload={handleReload}
               handleEnd={handleEnd}
               isDesktop={isDesktop}
+              isLoading={isMovieLoading}
             />
             <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[2vw]">
               <div className=" md:h-[2vw] md:mt-[0vh] mt-[6vh]">
@@ -219,7 +193,6 @@ function SingleMoviePage() {
                     toggleFilter={toggleFilter}
                   />
                 </div>
-                {/* it was just w-full in order to remove the bg color */}
                 <div className="md:w-full w-[96vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <HowToWatchCard
                     id={Id}
@@ -238,8 +211,7 @@ function SingleMoviePage() {
                     handleLowtohigh={handleLowtohigh}
                   />
                 </div>
-                {/* it was just w-full md:h-[22vw] h-[110vw] in order to remove the bg color */}
-                <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[110vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
+                <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[114vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
                   <Reviews
                     id={Id}
                     hightolow={hightolow}
@@ -250,25 +222,19 @@ function SingleMoviePage() {
               </div>
             </div>
             <div className="md:h-[6vw] md:mt-[10vw] h-[50vh] mt-[20vw] bg-buttonColor md:rounded-[1vw] rounded-2xl max-w-[75vw] md:ml-[13vw] ml-[3vw]">
-              <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">More Info</div>
+              <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">
+                More Info
+              </div>
               <MoreInfo id={Id} type={type} />
             </div>
-            {/* <div className="mt-[6vw] max-w-[50vw]"> */}
             <div className="md:mt-[4vw] mt-[6vw] max-w-[75vw] ml-[13vw]">
               <CastSwiper cast={cast} />
             </div>
-            {/* Divider line */}
             <div className="max-w-[75vw] ml-[14vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
             <div className="mt-[6vw]">
-              {/* mx-auto max-w-full */}
-              <MoreLikeThisSwiper
-                //collection={wholeCollection}
-                id={Id}
-                mediaType={"movie"}
-              />
+              <MoreLikeThisSwiper id={Id} mediaType={"movie"} />
             </div>
             <div>
-              {/* mx-auto max-w-full */}
               <RecommendationSwiper
                 id={Id}
                 mediaType={"movie"}

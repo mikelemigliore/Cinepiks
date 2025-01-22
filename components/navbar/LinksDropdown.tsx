@@ -52,7 +52,7 @@ function LinksDropdown({ onClick }: Props) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex gap-[1vw] rounded-full p-0 bg-black/10 hover:bg-white/30 text-white"
+          className="flex gap-[1vw] rounded-full p-0 bg-black/10 hover:bg-white/30 text-white mr-[2vw] md:mr-[0vw]" 
         >
           <Avatar>
             <AvatarImage src={src || undefined} />
@@ -61,7 +61,7 @@ function LinksDropdown({ onClick }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="rounded-[2vh] md:w-[14vw] w-[vw] bg-customColor text-white border-none drop-shadow-xl"
+        className="rounded-[2vh] md:w-[14vw] w-[50vw] bg-customColor text-white border-none drop-shadow-xl"
         align="end"
         sideOffset={10}
       >
@@ -69,7 +69,7 @@ function LinksDropdown({ onClick }: Props) {
         {/* return ( */}
         <DropdownMenuItem
           // key={link.href}
-          className="flex flex-col space-y-[1vw] p-[1vh] hover:bg-transparent focus:bg-transparent active:bg-transparent"
+          className="flex flex-col md:space-y-[1vw] md:p-[1vh] space-y-[3vw] p-[1vh] hover:bg-transparent focus:bg-transparent active:bg-transparent"
         >
           {!session ? (
             <></>

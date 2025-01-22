@@ -1,20 +1,18 @@
 import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+//import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export const PUT = async (request: any) => {
-  //console.log("HERE");
-  const { scoreId, userEmail, mediaType, value } = await request.json(); // ✅ Expect userId from the frontend
+  const { scoreId, userEmail, mediaType, value } = await request.json(); 
   //console.log("HERE");
   
   await connect();
 
   try {
 
-    //console.log("HERE");
     if (!scoreId || !userEmail) {
       return NextResponse.json(
         { message: "User ID and like data are required." },
@@ -22,7 +20,6 @@ export const PUT = async (request: any) => {
       );
     }
 
-    // ✅ Ensure the like is added for the correct user
     const existingUser = await User.findOne({ email: userEmail });
 
     if (!existingUser) {
@@ -41,11 +38,9 @@ export const PUT = async (request: any) => {
         { $set: { "score.$.score": value } }
       );
 
-      // existingUser.score[existingScore].score = value;
-      // await existingUser.save();
     } else {
       result = await User.updateOne(
-        { email: userEmail }, // ✅ Update only this specific user
+        { email: userEmail }, 
         {
           $push: {
             score: {
@@ -54,7 +49,7 @@ export const PUT = async (request: any) => {
               score: value,
             },
           },
-        } // ✅ Add the like to the user's array
+        } 
       );
     }
 
@@ -73,7 +68,6 @@ export const PUT = async (request: any) => {
 };
 
 export const GET = async (request: any) => {
-  //console.log("watchlistt");
   await connect(); // Ensure the database is connected
 
   try {
@@ -81,7 +75,7 @@ export const GET = async (request: any) => {
 
     //console.log("Session", session);
 
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
+    const userEmail = session.user.email; 
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }

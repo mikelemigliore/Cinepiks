@@ -14,7 +14,6 @@ export const movieDetailsApi = createApi({
     }),
     getMovieCertification: builder.query({
       query: (id: number) => `movie/${id}/release_dates?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const usRelease = response?.results?.find(
@@ -32,12 +31,10 @@ export const movieDetailsApi = createApi({
     }),
     getSocials: builder.query({
       query: (id: number) => `movie/${id}/external_ids?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
     getDirector: builder.query({
       query: (id: number) => `movie/${id}/credits?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const director = response.crew.filter(
@@ -49,14 +46,13 @@ export const movieDetailsApi = createApi({
     }),
     getMovieTrailer: builder.query({
       query: (id: number) => `movie/${id}/videos?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const trailers = response.results.filter(
           (item: any) => item.type === "Trailer" && item.official === true
         );
 
-        // Sort by published_at date in ascending order
+        // Sorting by published_at date in ascending order
         const sortedTrailer = trailers.sort(
           (a: any, b: any) =>
             new Date(a.published_at).getTime() -
@@ -71,7 +67,6 @@ export const movieDetailsApi = createApi({
     }),
     getMovieCast: builder.query({
       query: (id: number) => `movie/${id}/credits?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const formattedCast = response.cast
@@ -95,69 +90,48 @@ export const movieDetailsApi = createApi({
     }),
     getMovieCollection: builder.query({
       query: (id: number) => `collection/${id}?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
     getMovieSimilar: builder.query({
       query: (genres: any[]) => {
-        // Extract genre IDs and join them
+        // Extracting genre ids and join them
         const genreIds = genres
-          .slice(0, 2) // Adjust slice based on your logic
+          .slice(0, 2)
           .map((genre) => genre.id)
           .join(",");
 
         return `discover/movie?api_key=${apiKey}&language=en-US&region=US&vote_count.gte=100&vote_average.gte=7&sort_by=popularity.desc&with_genres=${genreIds}`;
       },
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
-      // transformResponse: (response: any) => {
-      //   const data = response.results;
-      //   return data;
-      // },
     }),
     getMovieRecommendation: builder.query({
       query: (id: number) =>
         `movie/${id}/recommendations?api_key=${apiKey}&language=en-US&page=1&region=US&sort_by=primary_release_date.desc`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
     getMovieRecommendationFallBack: builder.query({
       query: () => `movie/now_playing?api_key=${apiKey}&region=US`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
     getDetailsTeaserCard: builder.query({
       query: ({ id, media }: { id: number; media: "movie" | "tv" }) =>
         `${media}/${id}?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
     }),
     getHowToWatch: builder.query({
       query: (id: number) => `movie/${id}/watch/providers?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const data = response.results.US;
-        // const combinedServices = [
-        //   ...(data.flatrate || []),
-        //   ...(data.rent || []),
-        //   ...(data.buy || []),
-        // ];
 
         return data;
       },
     }),
     getMovieReview: builder.query({
       query: (id: number) => `movie/${id}/reviews?api_key=${apiKey}`,
-      // Cache the data for 10 minutes
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
         const data = response.results;
-        // const combinedServices = [
-        //   ...(data.flatrate || []),
-        //   ...(data.rent || []),
-        //   ...(data.buy || []),
-        // ];
 
         return data;
       },

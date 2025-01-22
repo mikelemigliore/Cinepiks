@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import SinglePageMainTrailer from "@/components/singlePageComps/SinglePageMainTrailer";
 import MainDetails from "@/components/singlePageComps/MainDetails";
 import SeriesTracker from "@/components/singlePageComps/SeriesTracker";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   useGetSeriesDetailsQuery,
   useGetTrailerSeriesVideoQuery,
@@ -22,19 +22,8 @@ import CastSwiper from "@/components/carousel/CastSwiper";
 import MoreLikeThisSwiper from "@/components/carousel/MoreLikeThisSwiper";
 import RecommendationSwiper from "@/components/carousel/RecommendationSwiper";
 import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSeasonData } from "@/app/features/dbSlice";
-import handleSeasonBtn from "@/utils/handleSeasonBtn";
-import { RootState } from "@/app/features/store";
-
-const series = [
-  {
-    id: 1,
-    title: "Dragon Ball Super",
-    imgUrl:
-      "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-  },
-];
 
 interface Episode {
   id: string;
@@ -58,14 +47,13 @@ interface Season {
 type FilterKey = "all" | "buy" | "rent" | "subscription";
 
 function SingleSeriesPage() {
-  const [selectedSeason, setSelectedSeason] = useState<number>(1); // Start with season 1
+  const [selectedSeason, setSelectedSeason] = useState<number>(1);
 
   const [watchedEpisodes, setWatchedEpisodes] = useState<number[]>([]);
 
-  //const [videoKey4, setVideoKey4] = useState("BAQvCB3Fnm0");
   const [autoplay, setAutoplay] = useState(true);
   const [play, setPlay] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [unmute, setUnmute] = useState(false);
   const [pause, setPause] = useState(false);
   const [reload, setReload] = useState(false);
@@ -101,7 +89,7 @@ function SingleSeriesPage() {
   const toggleFilter = (filter: FilterKey) => {
     setSelectedFilters((prev) => ({
       all: filter === "all",
-      buy: filter === "buy", //If filter === "buy", the logic in the toggleFilter function will set buy to true while ensuring all other filters (all, rent, subscription) are set to false
+      buy: filter === "buy",
       rent: filter === "rent",
       subscription: filter === "subscription",
     }));
@@ -124,39 +112,31 @@ function SingleSeriesPage() {
     selectedSeason,
   });
 
-  //console.log("watchedEpisodes", watchedEpisodes);
+  const {
+    data: seasonDB,
+    isSuccess: seasonSucces,
+    isLoading: isSeasonLoading,
+  } = useGetSeasonQuery({});
 
-  //const seasondb = useSelector((state: RootState) => state.content.season);
-
-  const { data: seasonDB, isSuccess: seasonSucces } = useGetSeasonQuery({});
-
-    useEffect(() => {
-      if (window.innerWidth >= 1024) {
-        setIsDesktop(true);
-      } else {
-        setIsDesktop(false);
-      }
-    }, []);
-
-  // Fetch movie details when IDs are available
   useEffect(() => {
-    //console.log("SeasonDB", seasonDB);
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
 
+  useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
         const data = seasonDB.filter((item: any) => item.seriesId === Id);
-        //console.log("data",data);
         if (data.length > 0) {
           const res = data
             .filter((item: any) => item.seasonNumber === selectedSeason)
             .map((item: any) => item.episodes);
 
-          //console.log("res", res[0]);
-          //setProgress(seasonDB[0].progress);
           dispatch(setSeasonData(seasonDB));
-          handleEpisodeWatched(res[0] || []); // ✅ Ensuring an empty object as fallback
-          // setWatchedEpisodes(res[0]);
-          //console.log("watchedEpisodes", watchedEpisodes.length);
+          handleEpisodeWatched(res[0] || []);
         }
       } catch (error) {
         console.error("Error fetching movie details:", error);
@@ -164,7 +144,7 @@ function SingleSeriesPage() {
     };
 
     fetchMovieDetails();
-  }, [seasonDB]); // Trigger only when the movie IDs are fetched
+  }, [seasonDB]);
 
   useEffect(() => {
     if (seriesDetails) {
@@ -196,7 +176,6 @@ function SingleSeriesPage() {
 
   useEffect(() => {
     if (seasonsReal && seasonEp && selectedSeason) {
-      // Combine the data dynamically
       const combinedSeasons = seasonsReal.map((season: any) => ({
         season: season.season_number,
         name: season.name,
@@ -213,8 +192,6 @@ function SingleSeriesPage() {
           date: episode.air_date,
         })),
       }));
-      //console.log(combinedSeasons);
-
       setSeason(combinedSeasons);
     }
   }, [seasonsReal, seasonEp, selectedSeason]);
@@ -237,13 +214,13 @@ function SingleSeriesPage() {
   const handleLike = (movieId: number) => {
     setIsLiked((prevLiked) => ({
       ...prevLiked,
-      [movieId]: !prevLiked[movieId], // Toggle the like state for the specific movie
+      [movieId]: !prevLiked[movieId],
     }));
   };
 
   const handlePlay = () => {
     setPlay(true);
-    setIsLoading(false); // Stop showing loading spinner once the video plays
+    setIsLoading(false);
     setPause(!pause);
   };
 
@@ -255,7 +232,6 @@ function SingleSeriesPage() {
     setPlay(false);
   };
 
-  // Handle when video starts playing
   const handleReload = () => {
     setReload(false);
     setPause(false);
@@ -280,12 +256,10 @@ function SingleSeriesPage() {
   };
 
   const handleEpisodeWatched = (episodeNumber: number) => {
-    //setWatchedEpisodes(episodeNumber);
-    setWatchedEpisodes(
-      (prev) =>
-        prev.includes(episodeNumber)
-          ? prev.filter((ep) => ep !== episodeNumber) // If already watched, remove it
-          : [...prev, episodeNumber] // If not watched, add it
+    setWatchedEpisodes((prev) =>
+      prev.includes(episodeNumber)
+        ? prev.filter((ep) => ep !== episodeNumber)
+        : [...prev, episodeNumber]
     );
   };
 
@@ -294,133 +268,129 @@ function SingleSeriesPage() {
     setWatchedEpisodes([]);
   };
 
-  const seasonEpisodes = seasons[selectedSeason - 1]?.episodes || []; // Use an empty array as a fallback
-  // const progressValue =
-  //   watchedEpisodes.length > 0 && seasonEpisodes.length > 0
-  //     ? (watchedEpisodes.length / seasonEpisodes.length) * 100
-  //     : 0;
+  const seasonEpisodes = seasons[selectedSeason - 1]?.episodes || [];
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
   return (
-    <div>
-      <SinglePageMainTrailer
-        handlePlay={handlePlay}
-        play={play}
-        unmute={unmute}
-        pause={pause}
-        reload={reload}
-        handleReload={handleReload}
-        handleEnd={handleEnd}
-        autoplay={autoplay}
-        videoKey={videoKey}
-        setIsLoading={setIsLoading}
-        src={`${BASE_IMAGE_URL}${backdrop}`}
-        isLoading={isLoading}
-        handleUnmute={handleUnmute}
-        handlePause={handlePause}
-        handleSetRelaod={handleSetRelaod}
-        isDesktop={isDesktop}
-      />
-      <div
-        className={`min-h-screen ${
-          missingSection ? `md:mb-[100vw]` : `md:mb-[8vw]`
-        }`}
-      >
+    <>
+      <div>
+        <SinglePageMainTrailer
+          handlePlay={handlePlay}
+          play={play}
+          unmute={unmute}
+          pause={pause}
+          reload={reload}
+          handleReload={handleReload}
+          handleEnd={handleEnd}
+          autoplay={autoplay}
+          videoKey={videoKey}
+          setIsLoading={setIsLoading}
+          src={`${BASE_IMAGE_URL}${backdrop}`}
+          isLoading={isLoading}
+          handleUnmute={handleUnmute}
+          handlePause={handlePause}
+          handleSetRelaod={handleSetRelaod}
+          isDesktop={isDesktop}
+        />
         <div
-          className={`w-full mt-[-6vw] z-[50] transition-transform duration-700 ease-in-out ${
-            play ? "translate-y-[7vw]" : ""
+          className={`min-h-screen ${
+            missingSection ? `md:mb-[100vw]` : `md:mb-[8vw]`
           }`}
         >
-          <div className="flex flex-col">
-            <MainDetails
-              id={Id}
-              title={title}
-              media={series}
-              type={type}
-              imdbId={imdbId}
-              cast={cast}
-              handlePlay={handlePlay}
-              videoKey={videoKey}
-              setIsLoading={setIsLoading}
-              handleReload={handleReload}
-              handleEnd={handleEnd}
-              isDesktop={isDesktop}
-            />
-            <SeriesTracker
-              handleOnValueChange={handleOnValueChange}
-              selectedSeason={selectedSeason}
-              seasons={seasons}
-              //progressValue={progressValue}
-              episodes={seasonEpisodes}
-              watchedEpisodes={watchedEpisodes}
-              onEpisodeWatched={handleEpisodeWatched}
-              Id={Id}
-              isDesktop={isDesktop}
-            />
-            <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[2vw]">
-              <div className=" md:h-[2vw] md:mt-[0vh] mt-[3vh]">
-                <div className="md:text-[1vw] text-[5vw]">How To Watch</div>
-                <div className="mb-[2vh] mt-[1vh]">
-                  <TagsHowToWatch
-                    selectedFilters={selectedFilters}
-                    toggleFilter={toggleFilter}
-                  />
+          <div
+            className={`w-full mt-[-6vw] z-[50] transition-transform duration-700 ease-in-out ${
+              play ? "translate-y-[7vw]" : ""
+            }`}
+          >
+            <div className="flex flex-col">
+              <MainDetails
+                id={Id}
+                title={title}
+                type={type}
+                imdbId={imdbId}
+                cast={cast}
+                handlePlay={handlePlay}
+                videoKey={videoKey}
+                setIsLoading={setIsLoading}
+                handleReload={handleReload}
+                handleEnd={handleEnd}
+                isDesktop={isDesktop}
+                isLoading={isSeasonLoading}
+              />
+              <SeriesTracker
+                handleOnValueChange={handleOnValueChange}
+                selectedSeason={selectedSeason}
+                seasons={seasons}
+                //progressValue={progressValue}
+                episodes={seasonEpisodes}
+                watchedEpisodes={watchedEpisodes}
+                onEpisodeWatched={handleEpisodeWatched}
+                Id={Id}
+                isDesktop={isDesktop}
+              />
+              <div className="flex md:flex-row flex-col  md:gap-[4vw] gap-[5vh] md:mt-[3vw] md:h-[22vw] w-full justify-center md:ml-[1vw] ml-[2vw]">
+                <div className=" md:h-[2vw] md:mt-[0vh] mt-[3vh]">
+                  <div className="md:text-[1vw] text-[5vw]">How To Watch</div>
+                  <div className="mb-[2vh] mt-[1vh]">
+                    <TagsHowToWatch
+                      selectedFilters={selectedFilters}
+                      toggleFilter={toggleFilter}
+                    />
+                  </div>
+                  <div className="md:w-full w-[96vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
+                    <HowToWatchCard
+                      id={Id}
+                      selectedFilters={selectedFilters}
+                      type={type}
+                    />
+                  </div>
                 </div>
-                <div className="md:w-full w-[96vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
-                  <HowToWatchCard
-                    id={Id}
-                    selectedFilters={selectedFilters}
-                    type={type}
-                  />
+                <div className="md:h-[2vw]">
+                  <div className="md:text-[1vw] text-[5vw]">Reviews</div>
+                  <div className="my-[1vh] mb-[2vh]">
+                    <TagsHighToLow
+                      hightolow={hightolow}
+                      lowtohigh={lowtohigh}
+                      handleHightolow={handleHightolow}
+                      handleLowtohigh={handleLowtohigh}
+                    />
+                  </div>
+                  <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[115vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
+                    <Reviews
+                      id={Id}
+                      hightolow={hightolow}
+                      lowtohigh={lowtohigh}
+                      type={type}
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="md:h-[2vw]">
-                <div className="md:text-[1vw] text-[5vw]">Reviews</div>
-                <div className="my-[1vh] mb-[2vh]">
-                  <TagsHighToLow
-                    hightolow={hightolow}
-                    lowtohigh={lowtohigh}
-                    handleHightolow={handleHightolow}
-                    handleLowtohigh={handleLowtohigh}
-                  />
+              <div className="md:h-[6vw] md:mt-[10vw] h-[50vh] mt-[20vw] bg-buttonColor md:rounded-[1vw] rounded-2xl max-w-[75vw] md:ml-[13vw] ml-[3vw]">
+                <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">
+                  More Info
                 </div>
-                <div className="md:w-full w-[96vw] md:h-[22.5vw] h-[115vw] bg-customColorCard rounded-2xl p-2 md:mr-[-1vw]">
-                  <Reviews
-                    id={Id}
-                    hightolow={hightolow}
-                    lowtohigh={lowtohigh}
-                    type={type}
-                  />
-                </div>
+                <MoreInfo id={Id} type={type} />
               </div>
-            </div>
-            <div className="md:h-[6vw] md:mt-[10vw] h-[50vh] mt-[20vw] bg-buttonColor md:rounded-[1vw] rounded-2xl max-w-[75vw] md:ml-[13vw] ml-[3vw]">
-              <div className="md:text-[1vw] text-[5vw] md:mt-[-2vw] mt-[-8vw]">More Info</div>
-              <MoreInfo id={Id} type={type} />
-            </div>
-            <div className="md:mt-[4vw] mt-[6vw] max-w-[75vw] ml-[13vw]">
-              <CastSwiper cast={cast} />
-            </div>
-            <div className="max-w-[75vw] ml-[13vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
-            <div className="mt-[6vw]">
-              <MoreLikeThisSwiper
-                //collection={wholeCollection}
-                id={Id}
-                mediaType={"series"}
-              />
-            </div>
-            <div>
-              <RecommendationSwiper
-                id={Id}
-                mediaType={"series"}
-                setMissingSetion={setMissingSetion}
-              />
+              <div className="md:mt-[4vw] mt-[6vw] max-w-[75vw] ml-[13vw]">
+                <CastSwiper cast={cast} />
+              </div>
+              <div className="max-w-[75vw] ml-[13vw] h-[0.1vh] mt-[4vh] bg-white/20"></div>
+              <div className="mt-[6vw]">
+                <MoreLikeThisSwiper id={Id} mediaType={"series"} />
+              </div>
+              <div>
+                <RecommendationSwiper
+                  id={Id}
+                  mediaType={"series"}
+                  setMissingSetion={setMissingSetion}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

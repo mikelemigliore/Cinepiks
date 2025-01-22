@@ -2,12 +2,12 @@
 import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+//mport { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export const POST = async (request: any) => {
-  const { watched, userEmail,mediaType } = await request.json(); // ✅ Expect userId from the frontend
+  const { watched, userEmail,mediaType } = await request.json(); 
 
   await connect();
 
@@ -19,15 +19,12 @@ export const POST = async (request: any) => {
       );
     }
 
-    // ✅ Ensure the like is added for the correct user
     const existingUser = await User.findOne({ email: userEmail });
 
     if (!existingUser) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    //console.log(existingUser);
-    // ✅ Check if the like already exists using `some()`
     const existingWatched = existingUser.watched.some(
       (watchedObj: any) => watchedObj.id === watched
     );
@@ -38,7 +35,7 @@ export const POST = async (request: any) => {
     }
 
     const result = await User.updateOne(
-      { email: userEmail }, // ✅ Update only this specific user
+      { email: userEmail }, 
       {
         $push: {
             watched: {
@@ -46,7 +43,7 @@ export const POST = async (request: any) => {
             type: mediaType,
           },
         },
-      } // ✅ Add the like to the user's array
+      } 
     );
 
     return NextResponse.json(
@@ -63,7 +60,6 @@ export const POST = async (request: any) => {
 
 export const GET = async (request: any) => {
 
-  //console.log("watchlistt");
   await connect(); // Ensure the database is connected
 
   try {
@@ -71,7 +67,7 @@ export const GET = async (request: any) => {
 
     //console.log("Session", session);
 
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
+    const userEmail = session.user.email; 
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }

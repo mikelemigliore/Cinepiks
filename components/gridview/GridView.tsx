@@ -49,7 +49,7 @@ GridViewProp) {
                 //style={{ width: "12.6vw", height: "40vh" }}
               >
                 <Skeleton className="w-[46vw] h-[33vh] bg-backgroundButton md:h-[40vh] md:w-[12.6vw] rounded-2xl ml-[3vw] md:ml-[0vw]" />
-                <Skeleton className="w-[46vw] h-[5vh] bg-backgroundButton md:h-[4vh] md:w-[12.6vw] rounded-full md:mt-[0.5vh] mt-[1vh] ml-[3vw] md:ml-[0vw]" />
+                {/* <Skeleton className="w-[46vw] h-[5vh] bg-backgroundButton md:h-[4vh] md:w-[12.6vw] rounded-full md:mt-[0.5vh] mt-[1vh] ml-[3vw] md:ml-[0vw]" /> */}
               </div>
             );
           })}

@@ -1,15 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// interface Like {
-//   id:number,
-//   type:string
-// }
-
-// interface Watchlist {
-//   id:number,
-//   type:string
-// }
-
 interface Episode {
   episodeNumber: number;
   episodeWatched: boolean;
@@ -19,11 +9,10 @@ interface Season {
   seriesId: number;
   seasonNumber: number;
   episodes: Episode[];
-  //progress: number;
 }
 
 interface QueryState {
-  likes: any[]; // Use an array type instead of any[]
+  likes: any[]; 
   watchlist: any[];
   watched: any[];
   score: any[];
@@ -32,15 +21,13 @@ interface QueryState {
 }
 
 const initialState: QueryState = {
-  // type: "all",
-  likes: [], // Load from localStorage initially,
+  likes: [], 
   watchlist: [],
   watched: [],
   score: [],
   season: [],
   picture: "",
 };
-//JSON.parse(localStorage.getItem("likesdb") || "[]"),
 const dbSlice = createSlice({
   name: "dbSlice",
   initialState,
@@ -79,13 +66,9 @@ const dbSlice = createSlice({
     setScore: (state, action: PayloadAction<any[]>) => {
       state.score = action.payload;
     },
-    // scoreMovie: (state, action: PayloadAction<any>) => {
-    //   state.score.push(action.payload);
-    // },
     unscoreMovie: (state, action: PayloadAction<any>) => {
       state.score = state.score.filter((list) => list.id !== action.payload.id);
     },
-    // ✅ Updates the score if the movie already exists in the array
     updateScore: (state, action: PayloadAction<any>) => {
       const index = state.score.findIndex(
         (item) => item.id === action.payload.id
@@ -103,54 +86,6 @@ const dbSlice = createSlice({
     setSeasonData: (state, action: PayloadAction<Season[]>) => {
       state.season = action.payload;
     },
-    // addEpisode: (
-    //   state,
-    //   action: PayloadAction<{
-    //     seasonNumber: number;
-    //     episodeNumber: number;
-    //     Id: number;
-    //     episodeValue: number;
-    //     progress: number;
-    //     //progressValue: number;
-    //   }>
-    // ) => {
-    //   const { Id, seasonNumber, episodeNumber, episodeValue, progress } =
-    //     action.payload;
-
-    //   // ✅ Find the correct index instead of just the first match
-    //   const seasonEntry = state.season.find(
-    //     (season) =>
-    //       season.seriesId === Id && season.seasonNumber === seasonNumber
-    //   );
-
-    //   if (seasonEntry) {
-    //     // if (!seasonEntry.episodes.includes(episodeNumber)) {
-    //     //   seasonEntry.episodes = [...seasonEntry.episodes, episodeNumber];
-    //     // }
-    //     const episodeExists = seasonEntry.episodes.find(
-    //       (ep) => ep.episodeNumber === episodeNumber
-    //     );
-
-    //     if (!episodeExists) {
-    //       seasonEntry.episodes.push({ episodeNumber, episodeValue });
-    //       // ✅ Increment progress only if the episode is new
-    //       seasonEntry.progress += episodeValue;
-    //     }
-    //   } else {
-    //     // ✅ If the season doesn't exist, add a new entry with the correct Id and seasonNumber
-    //     // state.season.push({
-    //     //   seriesId: Id,
-    //     //   seasonNumber,
-    //     //   episodes: [episodeNumber],
-    //     // });
-    //     state.season.push({
-    //       seriesId: Id,
-    //       seasonNumber,
-    //       episodes: [{ episodeNumber, episodeValue }],
-    //       progress: episodeValue, // ✅ Initialize progress with the first episodeValue
-    //     });
-    //   }
-    // },
     addEpisode: (
       state,
       action: PayloadAction<{
@@ -181,34 +116,9 @@ const dbSlice = createSlice({
           seriesId: Id,
           seasonNumber,
           episodes: [{ episodeNumber, episodeWatched }],
-          //episodeWatched:episodeWatched
         });
       }
     },
-    // removeEpisode: (
-    //   state,
-    //   action: PayloadAction<{
-    //     seasonNumber: number;
-    //     episodeNumber: number;
-    //     Id: number;
-    //     episodeValue: number;
-    //   }>
-    // ) => {
-    //   const { Id, seasonNumber, episodeNumber, episodeValue } = action.payload;
-
-    //   const season = state.season.find(
-    //     (season) =>
-    //       season.seriesId === Id && season.seasonNumber === seasonNumber
-    //   );
-
-    //   if (season) {
-    //     // ✅ Decrease progress only when an episode is removed
-    //     season.progress -= episodeValue;
-    //     season.episodes = season.episodes.filter(
-    //       (ep) => ep.episodeNumber !== episodeNumber
-    //     );
-    //   }
-    // },
     removeEpisode: (
       state,
       action: PayloadAction<{
@@ -254,10 +164,8 @@ export const {
   setScore,
   unscoreMovie,
   setSeasonData,
-  // addSeason,
   removeEpisode,
   addEpisode,
-  //updateEmail,
   updatePicture,
   setPicture,
 } = dbSlice.actions;

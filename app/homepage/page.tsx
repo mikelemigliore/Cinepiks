@@ -1,7 +1,7 @@
 "use client";
 
 import MainCarousel from "@/components/maincarousel/MainCarousel";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import GenresSwiper from "@/components/carousel/GenresSwiper";
@@ -11,7 +11,6 @@ import {
   useGetPopularQuery,
   useGetNowPlayingQuery,
   useGetTrendingQuery,
-  //useGetNewReleasesQuery,
   useGetActionMoviesQuery,
   useGetAdventureMoviesQuery,
   useGetHorrorMoviesQuery,
@@ -29,11 +28,6 @@ import {
   useGetNewSeriesOnPrimeQuery,
   useGetNewSeriesOnParamountQuery,
 } from "../features/homepage/series/seriesSlice";
-// import {
-//   useGetNetflixMoviesQuery,
-//   useGetHuluMoviesQuery,
-//   useGetPrimeMoviesQuery,
-// } from "../features/homepage/movies/moviesStreamServiceSlice";
 import { useGetLikesQuery } from "../features/likes/likesSlice";
 import {
   setLikes,
@@ -50,8 +44,6 @@ import { getWatchlists } from "../pages/api/watchlistPage";
 import { useGetWatchedQuery } from "../features/watched/watchedSlice";
 import { getWatchedList } from "../pages/api/watchedPage";
 import { useGetScoreQuery } from "../features/score/scoreSlice";
-import { useGetPictureQuery } from "../features/picture/pictureSlice";
-import { useGetAccountQuery } from "../features/account/accountSlice";
 
 const services = [
   { id: 8, title: "Netflix", img: "/genresIcons/netflix-3.svg" },
@@ -210,7 +202,6 @@ const genres = [
 
 function HomePage() {
   const dispatch = useDispatch();
-  //const type = useSelector((state: RootState) => state.likes.type);
   const likesdb = useSelector((state: RootState) => state.content.likes);
 
   // Fetch data using RTK Query
@@ -223,21 +214,12 @@ function HomePage() {
 
   const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
-  //const { data: pictureDB, isSuccess: pictureSucces } = useGetPictureQuery({});
-  //const { data: accountDb, isSuccess:imageSuccess } = useGetAccountQuery({});
-
-  // Fetch movie details when IDs are available
   useEffect(() => {
     const fetchMovieDetails = async () => {
       if (isSuccess && likesDB.length > 0) {
         try {
-          // Fetch full movie details for the given IDs
-
-          //const likesId = likesDB.map((item:any)=> item.id);
-
-          const res = await getLikes(likesDB); // Fetch movie data by IDs
+          const res = await getLikes(likesDB); 
           const likedContent = await res.json();
-          // Store the full movie details in Redux
           dispatch(setLikes(likedContent));
         } catch (error) {
           console.error("Error fetching movie details:", error);
@@ -246,10 +228,8 @@ function HomePage() {
 
       if (watchlistSucces && watchlistDB.length > 0) {
         try {
-          // Fetch full movie details for the given IDs
-          const res = await getWatchlists(watchlistDB); // Fetch movie data by IDs
+          const res = await getWatchlists(watchlistDB); 
           const watchlistedContent = await res.json();
-          // Store the full movie details in Redux
           dispatch(setWatchlists(watchlistedContent));
         } catch (error) {
           console.error("Error fetching movie details:", error);
@@ -258,10 +238,8 @@ function HomePage() {
 
       if (watchedSucces && watchedtDB.length > 0) {
         try {
-          // Fetch full movie details for the given IDs
-          const res = await getWatchedList(watchedtDB); // Fetch movie data by IDs
+          const res = await getWatchedList(watchedtDB); 
           const watchedContent = await res.json();
-          // Store the full movie details in Redux
           dispatch(setWatched(watchedContent));
         } catch (error) {
           console.error("Error fetching movie details:", error);
@@ -270,42 +248,15 @@ function HomePage() {
 
       if (scoreSucces && scoreDB.length > 0) {
         try {
-          // const res = await getWatchedList(watchedtDB);
-          // const watchedContent = await res.json();
-
           dispatch(setScore(scoreDB));
         } catch (error) {
           console.error("Error fetching movie details:", error);
         }
       }
-
-      // if (imageSuccess && accountDb) {
-      //   //console.log(accountDb);
-      //   dispatch(setPicture(accountDb?.picture))
-      // }
     };
 
     fetchMovieDetails();
-  }, [likesDB, watchlistDB, watchedtDB, scoreDB]); // Trigger only when the movie IDs are fetched
-
-  // // Fetch movie details when IDs are available
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     if (watchlistSucces && watchlistDB.length > 0) {
-  //       try {
-  //         // Fetch full movie details for the given IDs
-  //         const res = await getWatchlists(watchlistDB); // Fetch movie data by IDs
-  //         const watchlistedContent = await res.json();
-  //         // Store the full movie details in Redux
-  //         dispatch(setWatchlists(watchlistedContent));
-  //       } catch (error) {
-  //         console.error("Error fetching movie details:", error);
-  //       }
-  //     }
-  //   };
-
-  //   fetchMovieDetails();
-  // }, [watchlistDB]); // Trigger only when the movie IDs are fetched
+  }, [likesDB, watchlistDB, watchedtDB, scoreDB]); 
 
   const {
     data: inTheaters,
@@ -365,7 +316,6 @@ function HomePage() {
         <div className="relative -mt-[20rem] md:-mt-[9rem]">
           <div className="relative left-0 my-12 right-0 z-40">
             <MovieSwiper
-              //itemsGenres={itemsGenres}
               medias={inTheaters}
               title={swiperTitle[0].title}
               mediaType={"movie"}

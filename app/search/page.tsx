@@ -1,7 +1,5 @@
-//If you have a form or a button that requires user interaction and changes the UI based on the user's input,
-//you need to mark that component as a client component using "use client"
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
@@ -15,8 +13,6 @@ import {
   useGetSearchItemQuery,
 } from "../features/search/searchSlice";
 import Link from "next/link";
-//import { useDispatch } from "react-redux";
-//import { RootState } from "../features/store";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../features/store";
 import {
@@ -30,15 +26,9 @@ import {
   setRuntime,
 } from "../features/querySlice";
 import _ from "lodash";
-import {
-  useGetPopularQuery,
-  useGetTrendingQuery,
-  useGetUpcomingQuery,
-} from "../features/homepage/movies/movieSlice";
+import { useGetTrendingQuery } from "../features/homepage/movies/movieSlice";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useMemo } from "react";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
-
 
 interface Availability {
   id: string;
@@ -53,41 +43,27 @@ function SearchPage() {
   const typeGenres = searchParams.get("genresParam");
   const typeSearch = searchParams.get("queryParam");
 
-  //console.log("typeSerch", typeSearch);
-
   const parsedTypeSearch = typeSearch
-    ? JSON.parse(typeSearch.replace(/""/g, '"')) // For JSON-like strings, e.g., "[8,15]"
-    : null; // Fallback if null or undefined
-
-  //console.log("parsedTypeSearch", parsedTypeSearch);
-
-  //console.log("Beginning typeGenres", typeGenres);
+    ? JSON.parse(typeSearch.replace(/""/g, '"'))
+    : null;
 
   const parsedTypeService = typeService
-    ? JSON.parse(typeService.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
-    : []; // Fallback if null or undefined
+    ? JSON.parse(typeService.replace(/'/g, '"'))
+    : [];
 
-  // Memoize parsedTypeGenres
   const parsedTypeGenres = useMemo(() => {
-    return typeGenres
-      ? JSON.parse(typeGenres.replace(/'/g, '"')) // For JSON-like strings, e.g., "[8,15]"
-      : []; // Fallback if null or undefined
+    return typeGenres ? JSON.parse(typeGenres.replace(/'/g, '"')) : [];
   }, [typeGenres]);
-
-  //console.log("parsedTypeGenres", parsedTypeGenres);
 
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(typeQuery === "all" ? true : false);
   const [movies, setMovies] = useState(typeQuery === "movie" ? true : false);
   const [series, setSeries] = useState(typeQuery === "series" ? true : false);
-  //const [series, setSeries] = useState(typeQuery === "series" ? true : false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  // const [value, setValue] = React.useState<number | null>(0);
   const [loading, setLoading] = useState(true);
-  // Inside your component
   const dispatch = useDispatch();
 
   const type = useSelector((state: RootState) => state.query.type);
@@ -109,20 +85,6 @@ function SearchPage() {
     (state: RootState) => state.query.withRuntime
   );
 
-  // console.log("Type", type);
-  // console.log("Page", page);
-  // console.log("Sort", sortBy);
-  // console.log("Genre", withFilterGenre);
-  // console.log("Platform", withFilterPlatform);
-  //console.log("Content Search", ContentSearch);
-
-  // useEffect(() => {
-  //   if (typeContent === "upcoming") {
-  //     //dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
-  //     //dispatch(setFilterGenre([])); // Update genre filters
-  //   }
-  // }, [typeContent]);
-
   useEffect(() => {
     if (window.innerWidth >= 1024) {
       setIsDesktop(true);
@@ -133,34 +95,30 @@ function SearchPage() {
 
   useEffect(() => {
     if (typeQuery) {
-      dispatch(setType(typeQuery)); // Update the Redux state with the `typeQuery` value
-      dispatch(setFilterGenre([])); // Update genre filters
+      dispatch(setType(typeQuery));
+      dispatch(setFilterGenre([]));
     } else {
-      dispatch(setType("all")); // Fallback to default if `typeQuery` is null
+      dispatch(setType("all"));
     }
   }, [typeQuery]);
 
   const handleSortBy = (newSort: string) => {
-    dispatch(setPage(1)); // Reset page
+    dispatch(setPage(1));
     dispatch(setContent([]));
-    dispatch(setSortby(newSort)); // Update sortBy
+    dispatch(setSortby(newSort));
   };
 
   const handleFilterParams = (
     newGenreFilters: number[],
     newPlatformFilters: string[],
-    //newAvailability: string[],
     newAvailability: Availability[],
     newRuntime: number[]
   ) => {
-    // console.log("New Genre Filters:", newGenreFilters);
-    //console.log("newAvailability:", newAvailability);
-    dispatch(setPage(1)); // Reset page
+    dispatch(setPage(1));
     dispatch(setContent([]));
-    console.log(newGenreFilters);
 
-    dispatch(setFilterGenre(newGenreFilters)); // Update genre filters
-    dispatch(setFilterPlatform(newPlatformFilters)); // Update platform filters
+    dispatch(setFilterGenre(newGenreFilters));
+    dispatch(setFilterPlatform(newPlatformFilters));
     dispatch(setAvailability(newAvailability));
     dispatch(setRuntime(newRuntime));
   };
@@ -209,13 +167,6 @@ function SearchPage() {
     parsedTypeSearch !== null ? { page, query: parsedTypeSearch } : skipToken
   );
 
-  // useEffect(() => {
-  //   if (search) {
-  //     console.log("Fetched Search Data:", search);
-  //   }
-  //   console.log("Redux ContentSearch State:", ContentSearch);
-  // }, [search, ContentSearch]);
-
   useEffect(() => {
     if (
       (isSuccess && contentSearch && parsedTypeSearch === null) ||
@@ -223,30 +174,24 @@ function SearchPage() {
         parsedTypeSearch === null &&
         typeContent === "popularMovies")
     ) {
-      //console.log("contentSearch");
       const updateDate = [...ContentSearch, ...contentSearch];
       dispatch(setContent(updateDate));
     } else if (trending && typeContent === "trendingMovies") {
-      //console.log("trending");
       const updateDate = [...ContentSearch, ...trending];
       dispatch(setContent(updateDate));
     } else if (typeContent === "upcoming") {
-      //console.log("upcoming");
       handleFilterParams([], [], [{ id: "2|3", tag: "upcoming" }], []);
     } else if (typeContent === "nowPlaying") {
-      //console.log("nowPlaying");
       handleFilterParams([], [], [{ id: "2|3", tag: "inTheaters" }], []);
     } else if (parsedTypeService.length > 0 && parsedTypeSearch === null) {
-      //console.log("parsedTypeService");
       handleFilterParams([], parsedTypeService, [], []);
     } else if (search && parsedTypeSearch !== null) {
       const updateDate = [...ContentSearch, ...search];
       dispatch(setContent(updateDate));
     } else if (parsedTypeGenres.length > 0 && parsedTypeSearch === null) {
-      //console.log("parsedTypeGenres", parsedTypeGenres);
       handleFilterParams(parsedTypeGenres, [], [], []);
     }
-  }, [trending, contentSearch, typeContent, search, typeQuery]); //search
+  }, [trending, contentSearch, typeContent, search, typeQuery]);
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -262,24 +207,15 @@ function SearchPage() {
   }, [page]);
 
   const handleScroll = debounce(() => {
-    const thresholdPercentage = 40; // Trigger when user is within 40% of the bottom
+    const thresholdPercentage = 40;
     const totalHeight = document.documentElement.offsetHeight;
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
       totalHeight - (totalHeight * thresholdPercentage) / 100
     ) {
-      // setPage((prev:number) => prev + 1);
       dispatch(setPage(page + 1));
     }
   }, 300);
-
-  // const handleValue = (newValue: number) => {
-  //   if (newValue !== null) {
-  //     setValue(newValue);
-  //   } else {
-  //     setValue(0);
-  //   }
-  // };
 
   const handleFilter = () => {
     setFilterd(!filter);
@@ -293,8 +229,8 @@ function SearchPage() {
       setMovies(false);
       setSeries(false);
       dispatch(setType(newType));
-      dispatch(setPage(1)); // Reset page when tag changes
-      dispatch(setContent([])); // Clear previous movies
+      dispatch(setPage(1));
+      dispatch(setContent([]));
     }
   };
 
@@ -305,8 +241,8 @@ function SearchPage() {
       setMovies((prev) => !prev);
       setSeries(false);
       dispatch(setType(newType));
-      dispatch(setPage(1)); // Reset page when tag changes
-      dispatch(setContent([])); // Clear previous movies
+      dispatch(setPage(1));
+      dispatch(setContent([]));
     }
   };
 
@@ -317,12 +253,11 @@ function SearchPage() {
       setSeries((prev) => !prev);
       setMovies(false);
       dispatch(setType(newType));
-      dispatch(setPage(1)); // Reset page when tag changes
-      dispatch(setContent([])); // Clear previous movies
+      dispatch(setPage(1));
+      dispatch(setContent([]));
     }
   };
 
-  // Set 'All' to true when none of the other categories are selected
   useEffect(() => {
     if (!movies && !series) {
       setAll(true);
@@ -355,7 +290,10 @@ function SearchPage() {
           </div>
         </div>
 
-        <div className="relative flex flex-col mr-[2vw]" style={{ top: "3vh" }}>
+        <div
+          className="relative flex flex-col mr-[2vw] z-[51] "
+          style={{ top: "3vh" }}
+        >
           <div className="flex justify-end md:mb-[2vh] mb-[7vh] md:mt-[2vh] mt-[-2vh]">
             <Button
               onClick={handleGrid}
@@ -382,7 +320,6 @@ function SearchPage() {
               />
             </Button>
           </div>
-          {/* Sort component */}
           <Sort
             handleSortBy={handleSortBy}
             type={type}
@@ -398,7 +335,6 @@ function SearchPage() {
             filter ? "md:mr-[2vw]" : ""
           }`}
         >
-          {/* Filter component */}
           <Filter
             handleFilter={handleFilter}
             filter={filter}
@@ -411,7 +347,6 @@ function SearchPage() {
             isDesktop={isDesktop}
           />
 
-          {/* Apply the transition to the entire buttons and cards container */}
           <div
             className={`md:transition-transform md:duration-700 md:ease-in-out flex flex-col ${
               filter ? "md:translate-x-[1vw]" : ""
@@ -420,7 +355,6 @@ function SearchPage() {
             <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0vw] space-x-[1.5vw]">
               <Link href={{ pathname: "/search", query: { type: "all" } }}>
                 <Button
-                  //key="all"
                   onClick={() => handleAll("all")}
                   className={` h-[6vh] w-24 md:w-[3vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     all ? "bg-white/90 text-black font-bold" : ""
@@ -431,7 +365,6 @@ function SearchPage() {
               </Link>
               <Link href={{ pathname: "/search", query: { type: "movie" } }}>
                 <Button
-                  //key="movie"
                   onClick={() => handleMovies("movie")}
                   className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     movies ? "bg-white/90 text-black font-bold" : ""
@@ -442,7 +375,6 @@ function SearchPage() {
               </Link>
               <Link href={{ pathname: "/search", query: { type: "series" } }}>
                 <Button
-                  //key="series"
                   onClick={() => handleSeries("series")}
                   className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     series ? "bg-white/90 text-black font-bold" : ""
@@ -453,13 +385,7 @@ function SearchPage() {
               </Link>
             </div>
             <div>
-              {
-              // ContentSearch.length === 0 ? (
-              //   <div>
-              //     <h1>Ok</h1>
-              //   </div>
-              // ) : 
-              grid ? (
+              {grid ? (
                 <GridView
                   filter={filter}
                   mediaSearch={ContentSearch}
@@ -479,8 +405,6 @@ function SearchPage() {
                     list={list}
                     isDesktop={isDesktop}
                     isLoadingContent={contentLoading}
-                    //value={value}
-                    //handleValue={handleValue}
                   />
                 ))
               )}

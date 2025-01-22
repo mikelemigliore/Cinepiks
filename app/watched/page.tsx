@@ -1,467 +1,33 @@
 "use client";
-import MovieCard from "@/components/cards/MovieCard";
 import React, { useEffect, useState } from "react";
-import { FaFilter } from "react-icons/fa";
 import { BsFillGrid3X3GapFill } from "react-icons/bs";
 import { FaList } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
-import Filter from "@/components/filter/Filter";
-import Sort from "@/components/sort/Sort";
-import { GoDotFill } from "react-icons/go";
-import Link from "next/link";
-import { SlArrowRight } from "react-icons/sl";
-import { IoCheckmark } from "react-icons/io5";
-import { LuPlus } from "react-icons/lu";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import { FaPlay } from "react-icons/fa6";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import YoutubePlayerMainCaroisel from "@/components/maincarousel/YoutubePlayerMainCaroisel";
-import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
 import GridView from "@/components/gridview/GridView";
 import ListView from "@/components/listview/ListView";
-import { usePathname, useSearchParams } from 'next/navigation'
 import { useSelector } from "react-redux";
 import { RootState } from "../features/store";
 
-// const WatchlistItemSearch = [
-//   {
-//     id: 1,
-//     type: "movie",
-//     title: "Deadpool & Wolverine",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-//   },
-//   {
-//     id: 2,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 3,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 4,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 5,
-//     type: "movie",
-//     title: "Avatar: The Way of Water",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-//   },
-//   {
-//     id: 6,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 7,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 8,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 9,
-//     type: "movie",
-//     title: "Deadpool & Wolverine",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-//   },
-//   {
-//     id: 10,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 11,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 12,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 13,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 14,
-//     type: "movie",
-//     title: "Avatar: The Way of Water",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-//   },
-//   {
-//     id: 15,
-//     type: "movie",
-//     title: "Deadpool & Wolverine",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-//   },
-//   {
-//     id: 16,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 17,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 18,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 19,
-//     type: "movie",
-//     title: "Avatar: The Way of Water",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-//   },
-//   {
-//     id: 20,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 21,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 22,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 23,
-//     type: "movie",
-//     title: "Deadpool & Wolverine",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-//   },
-//   {
-//     id: 24,
-//     type: "movie",
-//     title: "Spider-Man",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/qFmwhVUoUSXjkKRmca5yGDEXBIj.jpg",
-//   },
-//   {
-//     id: 25,
-//     type: "movie",
-//     title: "Avengers",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
-//   },
-//   {
-//     id: 26,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 27,
-//     type: "movie",
-//     title: "Batman",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-//   },
-//   {
-//     id: 28,
-//     type: "movie",
-//     title: "Avatar: The Way of Water",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/5ScPNT6fHtfYJeWBajZciPV3hEL.jpg",
-//   },
-//   {
-//     id: 29,
-//     title: "The Penguin",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 30,
-//     title: "Breaking Bad",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 31,
-//     title: "The Office",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 32,
-//     title: "Dragon Ball Super",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 33,
-//     title: "The Last Of Us",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 34,
-//     title: "Loki",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 35,
-//     title: "Better Call Saul",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 36,
-//     title: "Invincible",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 37,
-//     title: "The Boys",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 38,
-//     title: "Shougun",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 39,
-//     title: "Baki",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 40,
-//     title: "The Sopranos",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 41,
-//     title: "Peaky Blinders",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 42,
-//     title: "Rick and Morty",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/gdIrmf2DdY5mgN6ycVP0XlzKzbE.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 43,
-//     title: "Drake and Josh",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/udCvGctktHvvf8w51XyTPfcmzDa.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 44,
-//     title: "Moon Knight",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/YksR65as1ppF2N48TJAh2PLamX.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 45,
-//     title: "The Penguin",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/a2fqompEWB2GFp9GOdlqLcfEFfw.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 46,
-//     title: "Breaking Bad",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 47,
-//     title: "The Office",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/dg9e5fPRRId8PoBE0F6jl5y85Eu.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 48,
-//     title: "Dragon Ball Super",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/8xc6QcxN8ZOCW4lo4IpVNm3VqKt.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 49,
-//     title: "The Last Of Us",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/sADB9n2KwhQNsRLfzeuTj8BsqeB.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 50,
-//     title: "Loki",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/oJdVHUYrjdS2IqiNztVIP4GPB1p.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 51,
-//     title: "Better Call Saul",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 52,
-//     title: "Invincible",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/dMOpdkrDC5dQxqNydgKxXjBKyAc.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 53,
-//     title: "The Boys",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/2zmTngn1tYC1AvfnrFLhxeD82hz.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 54,
-//     title: "Shougun",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/7O4iVfOMQmdCSxhOg1WnzG1AgYT.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 55,
-//     title: "Baki",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/x145FSI9xJ6UbkxfabUsY2SFbu3.jpg",
-//     type: "series",
-//   },
-//   {
-//     id: 56,
-//     title: "The Sopranos",
-//     imgUrl:
-//       "https://image.tmdb.org/t/p/original/rTc7ZXdroqjkKivFPvCPX0Ru7uw.jpg",
-//     type: "series",
-//   },
-// ];
-
-// const moviesItemSearch = WatchlistItemSearch.filter((item) => item.type === "movie");
-// const seriesItemSearch = WatchlistItemSearch.filter((item) => item.type === "series");
-
-
-
-
-
-
-
-
-
-
 function WatchedPage() {
-      //const searchParams = useSearchParams()
   const [filter, setFilterd] = useState(false);
   const [all, setAll] = useState(true);
   const [movies, setMovies] = useState(false);
   const [series, setSeries] = useState(false);
-  //const [documentary, setDocumentary] = useState(false);
   const [grid, setGrid] = useState(true);
   const [list, setList] = useState(false);
   const [watched, setWatched] = useState(true);
   const [isDesktop, setIsDesktop] = useState(false);
 
-
+  const isLoading = false;
   const watcheddb = useSelector((state: RootState) => state.content.watched);
 
-
-        useEffect(() => {
-          if (window.innerWidth >= 1024) {
-            setIsDesktop(true);
-          } else {
-            setIsDesktop(false);
-          }
-        }, []);
-    
-
+  useEffect(() => {
+    if (window.innerWidth >= 1024) {
+      setIsDesktop(true);
+    } else {
+      setIsDesktop(false);
+    }
+  }, []);
 
   const handleFilter = () => {
     setFilterd(!filter);
@@ -471,34 +37,18 @@ function WatchedPage() {
     setAll((prev) => !prev);
     setMovies(false);
     setSeries(false);
-    //setDocumentary(false);
   };
 
   const handleMovies = () => {
     setMovies((prev) => !prev);
     setSeries(false);
-    //if (!movies) setAll(false);
   };
-
-  // const handleDocumentary = () => {
-  //   setDocumentary((prev) => !prev);
-  //   // setSeries(false);
-  //   // setMovies(false);
-  //   if (!documentary) setAll(false);
-  // };
 
   const handleSeries = () => {
     setSeries((prev) => !prev);
     setMovies(false);
-    //if (!series) setAll(false);
   };
 
-  // Logic to check if both Movies and Series are selected
-  // if (movies && series) {
-  //   handleAll(); // Re-enable "All" and disable both movies and series
-  // }
-
-  // Set 'All' to true when none of the other categories are selected
   useEffect(() => {
     if (!movies && !series) {
       setAll(true);
@@ -517,9 +67,8 @@ function WatchedPage() {
     setGrid(false);
   };
 
-
-    return (
-      <div className="md:mt-[20vh] mt-[10vh] mb-[5vh]">
+  return (
+    <div className="md:mt-[20vh] mt-[10vh] mb-[5vh]">
       <div className="flex justify-between ml-[5vw]">
         <div
           className={`${
@@ -527,9 +76,6 @@ function WatchedPage() {
           } transition-transform duration-700 ease-in-out`}
         >
           <div className="md:text-[2.5vw] text-[10vw] font-bold">Watched</div>
-          {/* <div className="h-[5vh] text-[0.7vw] md:text-[0.9vw] text-gray-300">
-            Use filter on the left to refine your search
-          </div> */}
         </div>
 
         <div className="relative flex flex-col mr-[2vw]" style={{ top: "3vh" }}>
@@ -541,7 +87,9 @@ function WatchedPage() {
               }`}
             >
               <BsFillGrid3X3GapFill
-                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${grid ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${
+                  grid ? "text-black" : ""
+                }`}
               />
             </Button>
             <Button
@@ -551,7 +99,9 @@ function WatchedPage() {
               }`}
             >
               <FaList
-                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${list ? "text-black" : ""}`}
+                className={`md:w-[1.4vw] md:h-[1.4vw] w-[6vw] h-[6vw] ${
+                  list ? "text-black" : ""
+                }`}
               />
             </Button>
           </div>
@@ -562,48 +112,52 @@ function WatchedPage() {
         <div
           className={`flex justify-start mt-[-2vh] ${filter ? "mr-[2vw]" : ""}`}
         >
-
-          {/* Apply the transition to the entire buttons and cards container */}
           <div className="flex flex-col">
-        <div
-          className={`flex justify-start mt-[-2vh]`}
-        >
-          {/* Apply the transition to the entire buttons and cards container */}
-          <div
-            className={`transition-transform duration-700 ease-in-out flex flex-col md:ml-[5vw] ml-[2vw]`}
-          >
-            <div>
-              {watcheddb.length === 0 ? (
-                <div>No results found.</div>
-              ) : grid ? (
-                <GridView filter={filter} mediaSearch={watcheddb} watched={watched}/>
-              ) : (
-                watcheddb.map((media, index) => (
-                  <ListView
-                    id={media.id}
-                    key={index}
-                    filter={filter}
-                    media_type={media.media_type}
-                    poster_path={media.poster_path}
-                    title={media.title || media.name}
-                    backdrop_path={media.backdrop_path}
-                    overview={media.overview}
-                    list={list}
-                    isDesktop={isDesktop}
-                    //likes={likes}
-                    // value={value}
-                    // handleValue={handleValue}
-                  />
-                ))
-              )}
+            <div className={`flex justify-start mt-[-2vh]`}>
+              <div
+                className={`transition-transform duration-700 ease-in-out flex flex-col md:ml-[5vw] ml-[2vw]`}
+              >
+                <div>
+                  {watcheddb.length === 0 ? (
+                    <div className="md:ml-[30vw] ml-[0vw] md:mt-[2vw] mt-[6vw]">
+                      <img
+                        src="/WatchedListEmpty.png"
+                        alt="No content found"
+                        className="md:w-[30vw] w-[100vw]"
+                      />
+                    </div>
+                  ) : grid ? (
+                    <GridView
+                      filter={filter}
+                      mediaSearch={watcheddb}
+                      watched={watched}
+                      isLoadingContent={isLoading}
+                    />
+                  ) : (
+                    watcheddb.map((media, index) => (
+                      <ListView
+                        id={media.id}
+                        key={index}
+                        filter={filter}
+                        media_type={media.media_type}
+                        poster_path={media.poster_path}
+                        title={media.title || media.name}
+                        backdrop_path={media.backdrop_path}
+                        overview={media.overview}
+                        list={list}
+                        isDesktop={isDesktop}
+                        isLoadingContent={isLoading}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-        </div>
-      </div>
     </div>
-    )
-  }
-  
-  export default WatchedPage
+  );
+}
+
+export default WatchedPage;

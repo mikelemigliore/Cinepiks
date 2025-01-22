@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useGetSeriesDetailsQuery } from "@/app/features/homepage/series/seriesSlice";
 
 interface Genre {
@@ -25,25 +25,18 @@ interface Genre {
 
 interface BigCardProps {
   id: number;
-  //image: string;
-  //title: string;
   rated?: string;
   time?: string;
-  //description: string;
   isPartialSlide: boolean;
   isLastOne: boolean;
   mediaType: string;
   href: string;
   seriesImdbId?: string;
-  //genres: Genre[];
 }
 
 function BigCard({
-  //image,
-  //title,
   rated,
   time,
-  //description,
   isPartialSlide,
   isLastOne,
   id,
@@ -197,7 +190,7 @@ function BigCard({
 
         {/* Right Side: Movie Info */}
         <div className="flex flex-col justify-center items-center ml-[1vw]">
-          <div className="w-full md:w-[27vw] text-2xl md:text-[2.5vw] font-semibold text-center line-clamp-1 md:mt-[0vh] mt-[2vh]">
+          <div className="w-full md:w-[27vw] text-2xl md:text-[2.2vw] font-semibold text-center line-clamp-1 md:mt-[0vh] mt-[2vh]">
             {title}
           </div>
 

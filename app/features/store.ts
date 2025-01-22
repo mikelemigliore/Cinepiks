@@ -11,25 +11,22 @@ import dbSlice from "./dbSlice";
 import { likesDBApi } from "./likes/likesSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import { watchlistDBApi } from "./watchlist/watchlistSlice";
-import storage from "./storage"; // Import the storage created above
+import storage from "./storage"; 
 import { watchedDBApi } from "./watched/watchedSlice";
 import { scoreDBApi } from "./score/scoreSlice";
 import { seasonDBApi } from "./season/seasonSlice";
 import { accountDBApi } from "./account/accountSlice";
 import { pictureDBApi } from "./picture/pictureSlice";
-//import rootReducer from './features/store';
-//import storage from 'redux-persist/lib/storage'
 
-// Combine reducers (if you have multiple slices)
-const rootReducer = dbSlice; // Add other reducers here as needed
+// Combine reducers 
+const rootReducer = dbSlice; 
 
 // Configure Redux Persist
 const persistConfig = {
   key: "root",
-  storage, // Uses createWebStorage here
+  storage, 
 };
 
-// Wrap your slice reducer with persistReducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
@@ -58,7 +55,7 @@ export const store = configureStore({
     [accountDBApi.reducerPath]: accountDBApi.reducer,
     [pictureDBApi.reducerPath]: pictureDBApi.reducer,
     content: persistedReducer,
-    query: querySlice, // Register the querySlice reducer under the 'query' key
+    query: querySlice, 
   },
   middleware: (
     getDefaultMiddleware //This is a function provided by Redux Toolkit that includes default middleware like redux-thunk (uses for async code) for handling asynchronous actions.Middleware for serializable state checks and more.
@@ -81,7 +78,6 @@ export const store = configureStore({
       .concat(pictureDBApi.middleware)
       .concat(searchApi.middleware), //Adds the middleware provided by movieApi. This middleware handles tasks like: Caching API responses. Invalidating or refetching data when queries/mutations change. Tracking loading and error states.
 });
-// ✅ Export the store and persistor
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

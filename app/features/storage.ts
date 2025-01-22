@@ -1,6 +1,5 @@
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage'; //This utility creates a storage engine that works with either localStorage or sessionStorage
 
-// Check if window is defined (for SSR compatibility)
 const createNoopStorage = () => {
   return {
     getItem() {
@@ -15,7 +14,7 @@ const createNoopStorage = () => {
   };
 };
 
-// Use localStorage only on the client side (Next.js SSR compatibility)
+// Use localStorage only on the client side
 const storage = typeof window !== 'undefined' 
     ? createWebStorage('local') 
     : createNoopStorage();

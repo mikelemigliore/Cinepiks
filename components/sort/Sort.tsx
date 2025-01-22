@@ -33,7 +33,7 @@ function Sort({ handleSortBy, type, typeContent,typeQuery }: SortProp) {
             Sort By : <SelectValue placeholder="Popularity" />
           </span>
         </SelectTrigger>
-        <SelectContent className="bg-customServicesColor border-none md:text-[1vw] text-[4vw] text-white mt-[1.5vh] md:rounded-[0.4vw] rounded-lg p-[0.5vh] hover:cursor-pointer">
+        <SelectContent className="bg-customServicesColor border-none md:text-[1vw] text-[4vw] text-white mt-[1.5vh] md:rounded-[0.4vw] rounded-xl md:p-[0.5vh] hover:cursor-pointer">
           <SelectItem
             value={
               type === "series"

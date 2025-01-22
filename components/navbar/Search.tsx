@@ -130,7 +130,7 @@ function Search() {
         <div ref={containerRef} className="flex">
           {/* Search Button */}
           <Button
-            className="md:w-[2.2vw] md:h-[2.2vw] w-[10vw] h-[10vw] md:mr-[0vw] mr-[4vw] p-0 md:bg-transparent rounded-full bg-customColor hover:bg-white/30 text-white flex items-center justify-center z-10 transition-all duration-500 ease-in-out"
+            className="md:w-[2.2vw] md:h-[2.2vw] w-[10vw] h-[10vw] md:mr-[0vw] mr-[2vw] p-0 md:bg-transparent rounded-full bg-customColor hover:bg-white/30 text-white flex items-center justify-center z-10 transition-all duration-500 ease-in-out"
             onClick={toggleSearchMobile}
           >
             <IoSearchOutline className="md:w-[1.3vw] md:h-[1.3vw] w-[6vw] h-[6vh]" />

@@ -4,16 +4,15 @@ const time = 600;
 
 export const scoreDBApi = createApi({
   reducerPath: "scoreDBApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), // Base URL for your app's backend
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/" }), 
   endpoints: (builder) => ({
     getScore: builder.query({
-      query: () => `score`, // Fetches from /api/likes endpoint in your app
-      keepUnusedDataFor: time, // Cache the data for 10 minutes
+      query: () => `score`, 
+      keepUnusedDataFor: time, 
       transformResponse: (response: any) => {
-        //console.log(response.watchlist);
 
         return response.score;
-      }, // Transform the response to just the data
+      }, 
     }),
   }),
 });

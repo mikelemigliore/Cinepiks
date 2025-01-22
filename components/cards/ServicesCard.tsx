@@ -167,8 +167,8 @@ function ServicesCard({
             }}
             onMouseDown={(e) => e.currentTarget.blur()} // Remove focus on click
             onTouchEnd={(e) => e.currentTarget.blur()} // Handle touch events for mobile
-            className={`hover:scale-105 transition-transform duration-300 bg-customServicesColor pt-[19vh] rounded-3xl w-[45vw] md:w-[14vw] text-[2vw] md:text-[1.5vw] font-bold hover:bg-white/90 hover:text-black 
-              hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
+            className={`hover:scale-[1.03] transition-transform duration-300 bg-customServicesColor pt-[19vh] rounded-3xl w-[45vw] md:w-[14vw] text-[2vw] md:text-[1.5vw] font-bold hover:bg-white/90 hover:text-black 
+              hover:font-bold transition-transform duration-300 ease-in-out active:scale-[0.99] ${
                 isPartialSlide ? "opacity-50 pointer-events-none" : ""
               } ${isSelected ? "bg-white/90" : "bg-customServicesColor"}`}
           >

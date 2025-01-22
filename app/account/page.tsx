@@ -1,18 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-//import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MdModeEditOutline } from "react-icons/md";
 import Password from "@/components/password/Password";
 import EmailUpdate from "@/components/emailUpdate/EmailUpdate";
 import DeleteAccount from "@/components/deleteAccount/DeleteAccount";
 import Link from "next/link";
-//import Avatar from "react-avatar-edit";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoPersonSharp } from "react-icons/io5";
 import { useGetAccountQuery } from "../features/account/accountSlice";
 import ProfilePicture from "@/components/profilePicture/ProfilePicture";
-//import UsernameUpdate from "@/components/usernameUpdate/UsernameUpdate";
 
 function AccountPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

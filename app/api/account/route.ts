@@ -1,16 +1,12 @@
 import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+// import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "@/utils/authOptions";
 
 export const PUT = async (request: any) => {
-  const { email, newEmail, confirmNewEmail } = await request.json(); // ✅ Expect userId from the frontend
-
-  //   console.log(email);
-  //   console.log(newEmail);
-  //   console.log(confirmNewEmail);
+  const { email, newEmail, confirmNewEmail } = await request.json(); 
 
   await connect();
 
@@ -43,7 +39,7 @@ export const PUT = async (request: any) => {
     const result = await User.updateOne(
       { email: email },
       {
-        $set: { email: confirmNewEmail }, // ✅ Correctly updating the top-level email field
+        $set: { email: confirmNewEmail }, 
       }
     );
 
@@ -73,13 +69,10 @@ export const GET = async (request: any) => {
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    const userEmail = session.user.email; // ✅ Securely fetch userId from session
-    //console.log("userEmail", userEmail);
+    const userEmail = session.user.email; 
 
     const user = await User.findOne({ email: userEmail }).lean();
     //const email = user.email;
-
-    //console.log("user",user);
 
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -116,7 +109,6 @@ export const DELETE = async (request: any) => {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    // Delete the user completely from the database
     const result = await User.deleteOne({ email });
 
     if (result.deletedCount === 0) {

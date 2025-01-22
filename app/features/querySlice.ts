@@ -1,7 +1,5 @@
-// querySlice.ts
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
-import { RootState } from "./store"; // Adjust the import path as needed
 
 interface QueryState {
   type: string;
@@ -66,9 +64,5 @@ export const {
   setAvailability,
   setRuntime
 } = querySlice.actions;
-
-// const { type, page, sortBy, withFilterGenre, withFilterPlatform } = useSelector(
-//     (state: RootState) => state.query
-//   );
 
 export default querySlice.reducer;

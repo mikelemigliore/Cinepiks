@@ -10,12 +10,10 @@ import {
 } from "@/components/ui/carousel";
 import Link from "next/link";
 import { GoDotFill } from "react-icons/go";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
-import { Checkbox } from "@/components/ui/checkbox";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import ServicesSwiper from "@/components/carousel/ServicesSwiper";
 import MovieSwiper from "@/components/carousel/MovieSwiper";
-//import { getGenres, getLoginMainCarousel, getPopular, getUpcoming } from "./pages/api/loginPage";
 import { useGetNowPlayingQuery } from "./features/homepage/movies/movieSlice";
 import {
   useGetGenresQuery,
@@ -24,12 +22,11 @@ import {
 } from "./features/loginpage/loginSlice";
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
-//import './globals/background.css';
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ItemProp {
-  backdrop_path: string | null; // `null` in case the path is missing
-  title: string; // Other properties in your API response can be added here
+  backdrop_path: string | null;
+  title: string;
   genre_ids: number[];
   poster_path: string | null;
 }
@@ -58,21 +55,11 @@ const services = [
   { id: 9, title: "Fandango", img: "/genresIcons/Fandango_logo14.png" },
 ];
 
-const swiperTitles = [
-  { id: 1, title: "In Theaters" },
-  { id: 2, title: "Popular" },
-];
-
 function LoginIn() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  //const session = useSession();
   const { data: session, status: sessionStatus } = useSession();
-
-  //console.log("Router", router);
-
-  //const { data: session, status } = useSession();
 
   const [items, setItems] = useState<ItemProp[]>([]);
   const [itemsGenres, setItemsGenres] = useState([]);
@@ -83,7 +70,7 @@ function LoginIn() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const totalSlides = items.length; // Set the total number of slides
+  const totalSlides = items.length;
 
   const { data: loginmainCaraseul, isLoading } = useGetNowPlayingQuery();
 
@@ -120,12 +107,9 @@ function LoginIn() {
   }, [loginmainCaraseul, moviesUpcoming, moviesPopular]);
 
   const getGenreNames = (genreId: number, Genres: any[]) => {
-    const genre = Genres.find((g) => g.id === genreId); //The find() method searches the Genres array for an element matching the given condition (g.id === genreId).
+    const genre = Genres.find((g) => g.id === genreId);
 
     return genre ? genre.name : "Unknown Genre";
-    //Without the check, the code assumes that find() will always return an object. When it doesn't (i.e.,
-    //the genreId isn't found in Genres), the code tries to access undefined.name.
-    //This results in the TypeError: Cannot read properties of undefined (reading 'name').
   };
 
   const togglePasswordVisibility = () => {
@@ -145,48 +129,21 @@ function LoginIn() {
     );
   };
 
-  // Reset timeout when manually navigating or auto-advancing
   const resetTimeout = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
       handleNext();
-    }, 10000); // Change every 10 seconds
+    }, 10000);
   };
 
-  //Fetching data from the /pages/api/loginMainCarousel.ts
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await getLoginMainCarousel(); // Await the Promise
-  //       const responseGenres = await getGenres();
-  //       const responsePopular= await getPopular();
-  //       const responseInTheaters= await getUpcoming();
-  //       const data = await response.json(); // Extract JSON data
-  //       const dataGenres = await responseGenres.json();
-  //       const dataPopular = await responsePopular.json();
-  //       const dataInTheaters = await responseInTheaters.json();
-  //      // console.log(dataPopular);
-
-  //       setItems(data.results); // Update state with the resolved data
-  //       setItemsGenres(dataGenres.genres);
-  //       setPopularMovies(dataPopular.results)
-  //       setInTheaters(dataInTheaters.results)
-  //     } catch (error) {
-  //       console.error("Error fetching carousel items:", error);
-  //     }
-  //   };
-
-  //   fetchData(); // Call the async function
-  // }, []);
-
   useEffect(() => {
-    resetTimeout(); // Set or reset the timeout on activeSlide change
+    resetTimeout();
 
     return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current); // Cleanup on unmount
+        clearTimeout(timeoutRef.current);
       }
     };
   }, [activeSlide, handleNext]);
@@ -194,18 +151,10 @@ function LoginIn() {
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
   useEffect(() => {
-    //console.log("Session", session);
-
     if (sessionStatus === "authenticated") {
       router.replace("/homepage");
     }
   }, [sessionStatus, router]);
-
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     router.replace("/homepage");
-  //   }
-  // }, [status, router]);
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -214,15 +163,8 @@ function LoginIn() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    //console.log("Form submitted");
-
-    //const username = e.target[0].value;
     const email = e.target[0].value;
     const password = e.target[1].value;
-    //const confirmPassword = e.target[3].value;
-
-    //console.log("Email:", email, "Password:", password); // E
 
     if (!isValidEmail(email)) {
       setError("Email is invalid");
@@ -248,21 +190,12 @@ function LoginIn() {
     }
   };
 
-  // if (sessionStatus === "loading") {
-  //   return <h1>Loading...</h1>;
-  // }
-
   return (
     sessionStatus !== "authenticated" && (
       <div className="">
         <div className="md:flex">
           <div className="md:w-[70vw] w-[150vw] ml-[-25vw] md:ml-[0vw] md:rounded-tr-custom md:rounded-br-custom md:rounded-bl-[0] overflow-hidden rounded-br-custom rounded-bl-custom">
-            {/* The overflow-hidden property solved the issue because it ensures that any content (such as the CarouselContent, CarouselItem, or img elements) 
-      that extends outside the boundaries of the parent container (div.w-[70vw]) is clipped and confined within those boundaries. */}
-            <Carousel
-              activeSlide={activeSlide} //activeSlide: Keeps track of which slide is currently shown
-              totalSlides={totalSlides} //Provides the number of slides in the carousel.
-            >
+            <Carousel activeSlide={activeSlide} totalSlides={totalSlides}>
               <CarouselContent>
                 {items.length === 0 ? (
                   <div className="md:flex">
@@ -270,8 +203,10 @@ function LoginIn() {
                   </div>
                 ) : (
                   <>
-                    {items.map((item: ItemProp) => (
-                      <CarouselItem className="relative w-full flex justify-center items-center ">
+                    {items.map((item: ItemProp,index) => (
+                      <CarouselItem 
+                      key={index}
+                      className="relative w-full flex justify-center items-center ">
                         <div className="relative">
                           <img
                             src={`${BASE_IMAGE_URL}${item.backdrop_path}`}
@@ -292,7 +227,6 @@ function LoginIn() {
                                 {item.title}
                               </h1>
                               <div className="text-[1vw] md:flex justify-start items-center">
-                                {/* hidden md:block: This will only show on medium screens and above (desktop). */}
                                 <span>
                                   {getGenreNames(
                                     item.genre_ids[0],
@@ -355,7 +289,6 @@ function LoginIn() {
                   </div>
                   <div className="md:mb-[1vw] mb-[5vw]">
                     <div className="flex relative">
-                      {/* Search Input */}
                       <input
                         type={showPassword ? "text" : "password"}
                         className={`bg-transparent md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] placeholder-customTextColor rounded-full md:text-[0.8vw] text-[4vw] border border-customTextColor ${
@@ -379,7 +312,6 @@ function LoginIn() {
                   <div>
                     <button
                       type="submit"
-                      //onClick={handleRedirect}
                       className=" font-bold rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95"
                     >
                       Log In
@@ -404,20 +336,12 @@ function LoginIn() {
                 </div>
 
                 <div>
-                  {/* <Link href={{ pathname: "/homepage", query: { guest: "true" } }}> */}
                   <Link href="/homepage">
                     <Button className=" font-bold rounded-full md:h-[5.5vh] h-[7vh] md:px-[1.5vw] px-[5vw] md:w-[14vw] w-[80vw] md:text-[0.8vw] text-[4vw] bg-white/70 hover:bg-white text-black active:bg-white active:scale-95">
                       Continue As Guest
                     </Button>
                   </Link>
                 </div>
-                {/* <div className="flex">
-                  <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                  <h1 className="flex md:mx-[1vw] mx-[10vw] mt-[0.5vw] md:text-[0.7vw] text-[4vw]">
-                    Or
-                  </h1>
-                  <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
-                </div> */}
                 <div className="">
                   <Button
                     onClick={() => {
@@ -429,15 +353,6 @@ function LoginIn() {
                     Continue with Google
                   </Button>
                 </div>
-                {/* <div>
-                <Button className="rounded-full md:h-[5.5vh] md:px-[1.5vw] w-[14vw] text-[0.8vw] bg-transparent hover:bg-white text-white/90 hover:text-black  active:bg-white active:scale-95 border border-customTextColor">
-                  <img
-                    src="/genresIcons/facebook.svg"
-                    className="w-[1.4vw] h-[1.4vw]  mr-[1vw] text-blue-500"
-                  />
-                  Continue with Facebook
-                </Button>
-              </div> */}
                 <div>
                   <Button
                     onClick={() => {
@@ -600,9 +515,6 @@ function LoginIn() {
               className="absolute md:w-[65vw] md:h-[65vw] h-[505vw]  md:mt-[-30vw] mt-[-300vw]"
             ></img>
           </div>
-          {/* <div className=" flex justify-center items-center">
-          <div className="absolute bg-ellipseColor w-[30vw] h-[30vw] rounded-full opacity-100 filter blur-[200px] mt-[-25vw]"></div>
-        </div> */}
         </div>
         <div className="flex justify-center md:mt-[10vw] mt-[30vw] w-full h-full rounded-3xl overflow-hidden ">
           <img
@@ -662,7 +574,6 @@ function LoginIn() {
               </h2>
             </div>
           </div>
-          {/* {swiperTitles.map((swiperTitle) => ( */}
           <div>
             <h1 className="ml-2 mb-4 md:ml-[3vw] md:mb-[1vh] text-white md:text-[1.5vw] text-xl font-semibold">
               Upcoming
@@ -672,8 +583,6 @@ function LoginIn() {
               logInPage={logInPage}
               medias={inTheaters}
               itemsGenres={itemsGenres}
-              //getGenreNames={getGenreNames}
-              //title={swiperTitle.title}
               mediaType={"movie"}
             />
           </div>
@@ -686,12 +595,9 @@ function LoginIn() {
               logInPage={logInPage}
               medias={popularMovies}
               itemsGenres={itemsGenres}
-              //getGenreNames={getGenreNames}
-              //title={swiperTitle.title}
               mediaType={"movie"}
             />
           </div>
-          {/* ))} */}
         </div>
       </div>
     )
@@ -699,14 +605,3 @@ function LoginIn() {
 }
 
 export default LoginIn;
-
-// function LoginIn() {
-
-//   return (
-//     <div className="">
-//       <h1>Login Page</h1>
-//     </div>
-//   );
-// }
-
-// export default LoginIn;

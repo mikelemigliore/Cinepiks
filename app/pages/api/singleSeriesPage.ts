@@ -29,13 +29,11 @@ export async function getTrailerSeriesVideo(id: number) {
       (item: any) => item.type === "Trailer" && item.official === true
     );
 
-    // Sort by published_at date in ascending order
     const sortedTrailer = trailers.sort(
       (a: any, b: any) =>
         new Date(a.published_at).getTime() - new Date(b.published_at).getTime()
     );
 
-    // Get the first trailer released
     const firstTrailer = sortedTrailer.length > 0 ? sortedTrailer[0] : null;
 
     return new Response(JSON.stringify(firstTrailer), { status: 200 });
@@ -59,8 +57,6 @@ export async function getSeriesCertification(id: number) {
       return item.iso_3166_1 === "US";
     });
 
-    //console.log(filteredCertification[0].rating);
-
     return new Response(JSON.stringify(filteredCertification[0].rating), {
       status: 200,
     });
@@ -71,13 +67,7 @@ export async function getSeriesCertification(id: number) {
   }
 }
 
-
-
-
-
-
 export async function getSeriesRatings(id: string) {
-
   const url = `https://film-show-ratings.p.rapidapi.com/item/?id=${id}`;
   const options = {
     method: "GET",
@@ -91,17 +81,11 @@ export async function getSeriesRatings(id: string) {
     const response = await fetch(url, options);
     const data = await response.json();
 
-    //console.log(data);
-
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error);
   }
 }
-
-
-
-
 
 export async function getSeriesSocials(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -111,8 +95,6 @@ export async function getSeriesSocials(id: number) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    //console.log(data);
 
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
@@ -189,9 +171,6 @@ export async function getReviews(id: number) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    //console.log(data.results);
-
     return new Response(JSON.stringify(data.results), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -207,8 +186,6 @@ export async function getCollection(id: number) {
     const response = await fetch(url);
     const data = await response.json();
 
-    //console.log(data);
-
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -220,7 +197,6 @@ export async function getCollection(id: number) {
 export async function getSimilarMovies(genres: any[]) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 
-  // Build the `with_genres` parameter dynamically
   const genreIds = genres
     .slice(0, 2)
     .map((genre) => genre.id)
@@ -247,8 +223,6 @@ export async function getRecommendation(id: number) {
     const response = await fetch(url);
     const data = await response.json();
 
-    //console.log(data);
-
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: "Failed to fetch data" }), {
@@ -259,14 +233,11 @@ export async function getRecommendation(id: number) {
 
 export async function getFallBackRecommendation() {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  // const today = new Date().toISOString().split("T")[0];
   const url = `https://api.themoviedb.org/3/tv/now_playing?api_key=${apiKey}&region=US`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    //console.log(data);
 
     return new Response(JSON.stringify(data), { status: 200 });
   } catch {
@@ -278,14 +249,11 @@ export async function getFallBackRecommendation() {
 
 export async function getImdbId(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  // const today = new Date().toISOString().split("T")[0];
   const url = `https://api.themoviedb.org/3/tv/${id}/external_ids?api_key=${apiKey}`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    //console.log(data);
 
     return new Response(JSON.stringify(data.imdb_id), { status: 200 });
   } catch {
@@ -297,19 +265,15 @@ export async function getImdbId(id: number) {
 
 export async function getSeriesRuntime(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  // const today = new Date().toISOString().split("T")[0];
   const url = `https://api.themoviedb.org/3/tv/${id}/season/1?api_key=${apiKey}`;
 
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    //console.log(data.episodes);
     const runtime = data.episodes.map((item: any) => {
       return item.runtime;
     });
-
-    //console.log(runtime);
 
     const totalRuntime = runtime.reduce(
       (sum: number, item: number) => sum + item,
@@ -318,8 +282,6 @@ export async function getSeriesRuntime(id: number) {
 
     const averageRuntime =
       runtime.length > 0 ? Math.round(totalRuntime / runtime.length) : 0;
-
-    //console.log(averageRuntime);
 
     return new Response(JSON.stringify(averageRuntime), { status: 200 });
   } catch {

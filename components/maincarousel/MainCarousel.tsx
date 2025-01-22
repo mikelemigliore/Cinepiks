@@ -166,7 +166,9 @@ Props) {
         >
           <CarouselContent>
             {medias.slice(0, 10).map((media, index) => (
-              <CarouselItem className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
+              <CarouselItem 
+              key={media.id}
+              className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
                 {/* Background Image as an absolutely positioned div */}
                 <div>
                   <MainCarouseulitem
