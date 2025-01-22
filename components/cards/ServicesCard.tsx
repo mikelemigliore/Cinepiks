@@ -77,6 +77,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface ServiceCardProp {
   title: string;
@@ -86,7 +87,7 @@ interface ServiceCardProp {
   isSelected: boolean;
   img: any;
   logInPage?: boolean;
-  id:number
+  id: number;
 }
 
 function ServicesCard({
@@ -97,7 +98,7 @@ function ServicesCard({
   isSelected,
   img,
   logInPage,
-  id
+  id,
 }: ServiceCardProp) {
   return (
     <div>
@@ -112,8 +113,15 @@ function ServicesCard({
             <img src={img} alt={title} className="w-[25vw] md:w-[8vw]" />
           </DialogTrigger>
           <DialogContent className="w-[93vw] md:w-[35vw] md:h-[23vw] h-[112vw] bg-customColorCard rounded-3xl">
+            <VisuallyHidden>
+              <DialogTitle></DialogTitle>
+            </VisuallyHidden>
+
             <div className="flex justify-center items-center">
-              <img className="w-[40vw] h-[18vw] md:w-[17vw] md:h-[9vw] md:my-[2vw] my-[12vw]" src={img} />
+              <img
+                className="w-[40vw] h-[18vw] md:w-[17vw] md:h-[9vw] md:my-[2vw] my-[12vw]"
+                src={img}
+              />
             </div>
 
             {/* <div

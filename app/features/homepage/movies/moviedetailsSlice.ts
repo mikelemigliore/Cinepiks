@@ -37,11 +37,11 @@ export const movieDetailsApi = createApi({
       query: (id: number) => `movie/${id}/credits?api_key=${apiKey}`,
       keepUnusedDataFor: time,
       transformResponse: (response: any) => {
-        const director = response.crew.filter(
+        const director = response?.crew.filter(
           (item: any) => item.job === "Director"
         );
 
-        return director[0].name;
+        return director[0]?.name;
       },
     }),
     getMovieTrailer: builder.query({

@@ -1,4 +1,3 @@
-
 "use client";
 import { useState } from "react";
 import YoutubeTrailerPlayer from "@/components/trailer/YoutubeTrailerPlayer";
@@ -10,7 +9,12 @@ import { GoDotFill } from "react-icons/go";
 import MovieCard from "@/components/cards/MovieCard";
 import { IoCheckmark } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { AiFillInstagram, AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
@@ -35,6 +39,8 @@ import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import handleScoreBtn from "@/utils/handleScoreBtn";
 import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useSession } from "next-auth/react";
 
 interface SeriesProp {
   id: number;
@@ -120,6 +126,8 @@ MainDetailsProps) {
   const [isListView, setIsListView] = useState(true);
   const [value, setValue] = React.useState<number>(0);
   const [imdbIdSeries, setImdbIdSeries] = useState("");
+
+  const { data: session }: any = useSession();
 
   const { data: rating } = useGetRatingsQuery(imdbId || "");
 
@@ -326,6 +334,7 @@ MainDetailsProps) {
                         handleValue={handleValue}
                         id={id}
                         mediaType={type}
+                        session={session}
                       />
                     </div>
 
@@ -598,8 +607,9 @@ MainDetailsProps) {
           <div className="ml-[0vw]  flex items-center justify-center md:justify-start mt-[2rem] md:mt-[3vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[2vw]">
             <Button
               onClick={() => handleAdded()}
-              className={` h-[7vh] w-48 md:w-[7vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                isAdded ? "bg-white/90 text-black font-bold" : ""
+              disabled={session === null}
+              className={` h-[7vh] w-48 md:w-[7vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+                isAdded ? "bg-white/90 text-black" : ""
               }`}
             >
               Watchlist
@@ -614,12 +624,15 @@ MainDetailsProps) {
               <DialogTrigger
                 className={`${
                   !isDesktop ? `hidden` : ``
-                } flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500`}
+                } flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500`}
               >
                 Trailer
                 <FaPlay className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
               </DialogTrigger>
               <DialogContent className="md:w-[70vw] md:h-[40vw]">
+                <VisuallyHidden>
+                  <DialogTitle></DialogTitle>
+                </VisuallyHidden>
                 <YoutubeTrailerPlayer
                   //VideoEnd={handleVideoEnd}
                   handlePlay={handlePlay}
@@ -638,8 +651,9 @@ MainDetailsProps) {
 
             <Button
               onClick={() => handleLike()}
-              className={`flex justify-center items-center h-[7vh] w-48  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                isLiked ? "bg-white/90 text-black font-bold" : ""
+              disabled={session === null}
+              className={`flex justify-center items-center h-[7vh] w-48  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+                isLiked ? "bg-white/90 text-black" : ""
               }`}
             >
               Like
@@ -799,13 +813,18 @@ MainDetailsProps) {
                 <div>
                   <div className="">
                     <div className="flex">
-                      <div className=" text-[1vw] z-[50]">Your Score</div>
+                      <div
+                        className=" text-[1vw] z-[50]"
+                      >
+                        Your Score
+                      </div>
                       <StarRating
                         title={title}
                         value={value}
                         handleValue={handleValue}
                         id={id}
                         mediaType={type}
+                        session={session}
                       />
                     </div>
 

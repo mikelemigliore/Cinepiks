@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -19,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
 import { setSeasonData } from "@/app/features/dbSlice";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface EpisodeCardProp {
   episodeNumber: number;
@@ -32,7 +32,7 @@ interface EpisodeCardProp {
   date: string;
   selectedSeason: number;
   Id: number;
-  isDesktop:boolean
+  isDesktop: boolean;
   //progressValue: number;
 }
 
@@ -48,9 +48,9 @@ function EpisodeCard({
   date,
   selectedSeason,
   Id,
-  isDesktop
- // progressValue,
-}: //handleSeason,
+  isDesktop,
+}: // progressValue,
+//handleSeason,
 EpisodeCardProp) {
   const [isWatched, setIsWatched] = useState(false);
   const [episodeWatched, setEpisodeWatched] = useState(true);
@@ -63,7 +63,6 @@ EpisodeCardProp) {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       if (seasondb?.length > 0) {
-
         const data = seasondb.filter((item) => item.seriesId === Id);
         const res =
           data
@@ -75,7 +74,7 @@ EpisodeCardProp) {
     };
 
     fetchMovieDetails();
-  }, [seasondb, selectedSeason, Id, episodeNumber]); 
+  }, [seasondb, selectedSeason, Id, episodeNumber]);
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -115,7 +114,7 @@ EpisodeCardProp) {
 
   const handleSeason = () => {
     //const episodeValue = progressValue; // ✅ Ensure episodeValue is defined correctly
-   // setEpisodeWatched(true)
+    // setEpisodeWatched(true)
     handleSeasonBtn(
       dispatch,
       selectedSeason,
@@ -150,7 +149,9 @@ EpisodeCardProp) {
       </div>
       <div className="flex md:mt-[0.8vw] justify-between  mt-[3vw]">
         <div className="flex">
-          <div className="md:text-[1vw] text-[4vw] mr-[0.5vw]">{episodeNumber}.</div>
+          <div className="md:text-[1vw] text-[4vw] mr-[0.5vw]">
+            {episodeNumber}.
+          </div>
           <div className="md:text-[1vw] text-[4vw] line-clamp-1">{title}</div>
         </div>
 
@@ -161,6 +162,9 @@ EpisodeCardProp) {
               <SlArrowRight className="w-[1.7vw] h-[1.7vh] md:ml-[0.4vw] ml-[3vw]" />
             </DialogTrigger>
             <DialogContent className=" md:w-[35vw] md:h-[30vw]  h-[52vh] bg-customColorCard rounded-2xl">
+              <VisuallyHidden>
+                <DialogTitle></DialogTitle>
+              </VisuallyHidden>
               <img className="rounded-3xl shadow-lg w-full" src={img} />
               <div
                 className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full md:h-[15vw] md:mt-[5vw] h-[30vw] mt-[27vw]`}
@@ -175,7 +179,9 @@ EpisodeCardProp) {
                       <div className="md:text-[1.3vw] text-[4vw] mr-[0.5vw]">
                         {episodeNumber}.
                       </div>
-                      <div className="md:text-[1.3vw] text-[4vw] line-clamp-1">{title}</div>
+                      <div className="md:text-[1.3vw] text-[4vw] line-clamp-1">
+                        {title}
+                      </div>
                     </div>
                     <div className="md:text-[0.8vw] text-[3vw] text-customTextColor flex">
                       <div className="mr-[1.5vw]">{formatDate(date)}</div>
@@ -199,7 +205,9 @@ EpisodeCardProp) {
           </Dialog>
         </div>
       </div>
-      <div className="md:text-[0.7vw] text-[3vw] text-customTextColor">{duration}</div>
+      <div className="md:text-[0.7vw] text-[3vw] text-customTextColor">
+        {duration}
+      </div>
       <p className="mt-[0.5vh] text-white md:text-[0.8vw] text-[3.5vw]  max-w-[23rem] md:max-w-[17vw] line-clamp-2">
         {" "}
         {description}

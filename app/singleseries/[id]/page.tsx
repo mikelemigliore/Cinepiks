@@ -129,8 +129,8 @@ function SingleSeriesPage() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const data = seasonDB.filter((item: any) => item.seriesId === Id);
-        if (data.length > 0) {
+        const data = seasonDB?.filter((item: any) => item.seriesId === Id);
+        if (data?.length > 0) {
           const res = data
             .filter((item: any) => item.seasonNumber === selectedSeason)
             .map((item: any) => item.episodes);

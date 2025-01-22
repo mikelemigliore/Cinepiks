@@ -131,7 +131,13 @@ function LikesPage() {
           >
             <div>
               {likesdb.length === 0 ? (
-                <div>No results found.</div>
+                <div className="md:ml-[30vw] ml-[0vw] md:mt-[2vw] mt-[6vw]">
+                  <img
+                    src="/LikesEmpty.png"
+                    alt="No content found"
+                    className="md:w-[30vw] w-[100vw]"
+                  />
+                </div>
               ) : grid ? (
                 <GridView
                   filter={filter}

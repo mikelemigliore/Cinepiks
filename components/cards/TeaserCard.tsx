@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
 import { GoDotFill } from "react-icons/go";
 import { Button } from "../ui/button";
@@ -17,6 +18,7 @@ import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Genre {
   id: number;
@@ -70,6 +72,7 @@ TeaserCardProps) {
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null); // To manage hover delay
   // const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
   const [touchTimeout, setTouchTimeout] = useState<NodeJS.Timeout | null>(null);
+  const router = useRouter();
 
   const { data: session }: any = useSession();
 
@@ -160,6 +163,12 @@ TeaserCardProps) {
 
   const handleVideoEnd = () => {
     setIsPlaying(false);
+  };
+
+  const handleNavigation = () => {
+    if (isClient) {
+      router.push(`${href}/${id}`);
+    }
   };
 
   if (!isClient) {
@@ -334,12 +343,15 @@ TeaserCardProps) {
                   </div>
 
                   <div>
-                    <Link href={`${href}/${id}`}>
-                      <Button className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300">
-                        View
-                        <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
-                      </Button>
-                    </Link>
+                    {/* <Link href={`${href}/${id}`}> */}
+                    <Button
+                      onClick={handleNavigation}
+                      className="w-[6.2vw] h-[2.5vw] rounded-full text-[1.7vh] bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 transition-transform duration-300"
+                    >
+                      View
+                      <SlArrowRight className="ml-[2vw] w-[1vw] h-[1vw] min-w-[10px] min-h-[10px]" />
+                    </Button>
+                    {/* </Link> */}
                   </div>
                 </div>
               </div>
@@ -352,59 +364,3 @@ TeaserCardProps) {
 }
 
 export default TeaserCard;
-
-// const handleLike = async (id: number) => {
-//   const session = await getSession();
-//   const userEmail = session?.user?.email;
-
-//   if (!userEmail) {
-//     console.error("User not logged in!");
-//     return;
-//   }
-
-//   if (isLiked === true) {
-//     // REMOVE LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(false);
-//         const data = await getLike(id);
-//         const likedContent = await data.json();
-//         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error removing like:", error);
-//     }
-//   } else {
-//     // ADD LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(true);
-//         const data = await getLike(id); // Fetch movie data by IDs
-//         const likedContent = await data.json();
-//         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error adding like:", error);
-//     }
-//   }
-// };

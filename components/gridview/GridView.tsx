@@ -45,6 +45,7 @@ GridViewProp) {
           {Array.from({ length: 21 }).map((_, index) => {
             return (
               <div
+                key={index}
                 className={`m-[1vw] transition-transform duration-700 md:ml-[-0.2vw] ml-[-2vw]`}
                 //style={{ width: "12.6vw", height: "40vh" }}
               >
@@ -65,7 +66,7 @@ GridViewProp) {
 
             return (
               <div
-                key={media.id}
+                key={index}
                 className={`m-[1vw] transition-transform duration-700 md:ml-[-0.2vw]`}
                 //style={{ width: "12.6vw", height: "40vh" }}
               >

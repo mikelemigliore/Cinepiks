@@ -27,11 +27,11 @@ async function handleScoreBtn(
   const userEmail = session?.user?.email;
 
   if (!userEmail) {
-    console.error("User not logged in!");
+    //console.error("User not logged in!");
     return;
   }
 
-  console.log(value);
+  //console.log(value);
   
 
   if (value === 0) {

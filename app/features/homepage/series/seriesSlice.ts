@@ -53,12 +53,12 @@ export const seriesApi = createApi({
           (movie: any) => movie.original_language === "en"
         );
         const normalizedItems = await Promise.all(
-          filteredData.map(async (item: any) => {
+          filteredData?.map(async (item: any) => {
             try {
               const id = item.id;
               const response = await getImdbId(id);
-              const data = await response.json();
-              console.log("data", data);
+              const data = await response?.json();
+              //console.log("data", data);
             
               return {
                 ...item,
@@ -152,7 +152,7 @@ export const seriesApi = createApi({
           return item.iso_3166_1 === "US";
         });
 
-        return filteredCertification[0].rating;
+        return filteredCertification[0]?.rating;
       },
     }),
     getSeriesRuntime: builder.query({

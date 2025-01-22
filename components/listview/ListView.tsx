@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import MovieCard from "../cards/MovieCard";
 import { GoDotFill } from "react-icons/go";
@@ -8,7 +6,12 @@ import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { FaPlay } from "react-icons/fa";
 import YoutubeTrailerPlayer from "../trailer/YoutubeTrailerPlayer";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
@@ -26,6 +29,7 @@ import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { signOut, useSession } from "next-auth/react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface GenresType {
   id: number;
@@ -88,7 +92,7 @@ interface ListViewProp {
   //likes?: number[];
   // genresMovie?: GenresType[];
   isDesktop: boolean;
-  isLoadingContent:boolean
+  isLoadingContent: boolean;
 }
 
 interface CastMember {
@@ -110,7 +114,7 @@ function ListView({
   backdrop_path,
   mediaType,
   isDesktop,
-  isLoadingContent
+  isLoadingContent,
 }: //handleValue
 ListViewProp) {
   const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
@@ -301,6 +305,7 @@ ListViewProp) {
                         handleValue={handleValue}
                         id={id}
                         mediaType={media_type}
+                        session={session}
                       />
                       {/* <StarRating
                       title={title || undefined}
@@ -375,11 +380,11 @@ ListViewProp) {
                 </p>
               </div>
 
-              <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[2vh] md:mb-[2vh] md:space-x-[0vw] space-x-[3vw]">
+              <div className="flex items-center justify-center md:justify-start mt-[2rem] md:mt-[2vh] md:mb-[2vh] md:space-x-[0.5vw] space-x-[3vw]">
                 <Link href={`${href}/${id}`}>
                   <Button
-                    className={`h-[6vh] w-28 md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
-                      watched ? "" : "md:mr-[1vw]"
+                    className={`h-[6vh] w-28 md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
+                      watched ? "" : "md:mr-[0vw]"
                     }`}
                   >
                     View
@@ -393,7 +398,7 @@ ListViewProp) {
                   <Button
                     onClick={() => handleAdded()}
                     disabled={session === null}
-                    className={`h-[6vh] w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+                    className={`h-[6vh] w-28 md:w-[7vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                       isAdded ? "bg-white/90 text-black font-bold" : ""
                     }`}
                   >
@@ -406,35 +411,44 @@ ListViewProp) {
                   </Button>
                 )}
 
-                <Button
+                {/* <Button
                   onClick={() => setIsTrailer(!isTrailer)}
                   className={`${!isDesktop ? `hidden` : ``}`}
-                >
-                  <Dialog>
-                    <DialogTrigger className="flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500">
-                      Trailer
-                      <FaPlay className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
-                    </DialogTrigger>
-                    <DialogContent className="md:w-[70vw] md:h-[40vw]">
-                      <YoutubeTrailerPlayer
-                        handlePlay={handlePlay}
-                        videoKey={videoKey}
-                        setIsLoading={setIsLoading}
-                        handleReload={handleReload}
-                        handleEnd={handleEnd}
-                        isListView={isListView}
-                        src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
-                        isDesktop={isDesktop}
-                      />
-                    </DialogContent>
-                  </Dialog>
-                </Button>
+                > */}
+                <Dialog>
+                  <DialogTrigger
+                    onClick={() => setIsTrailer(!isTrailer)}
+                    className={`${
+                      !isDesktop ? `hidden` : ``
+                    }  flex justify-center items-center h-10 w-28 md:pl-[0.4vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500`}
+                  >
+                    Trailer
+                    <FaPlay className="w-[2vw] h-[2vh] md:ml-[0.4vw]" />
+                  </DialogTrigger>
+                  <DialogContent className="md:w-[70vw] md:h-[40vw]">
+                    <VisuallyHidden>
+                      <DialogTitle></DialogTitle>
+                    </VisuallyHidden>
+                    <YoutubeTrailerPlayer
+                      handlePlay={handlePlay}
+                      videoKey={videoKey}
+                      setIsLoading={setIsLoading}
+                      handleReload={handleReload}
+                      handleEnd={handleEnd}
+                      isListView={isListView}
+                      src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
+                      isDesktop={isDesktop}
+                    />
+                  </DialogContent>
+                </Dialog>
+                
+                {/* </Button> */}
 
                 <Button
                   type="submit"
                   onClick={() => handleLike()}
                   disabled={session === null}
-                  className={`flex justify-center items-center h-[6vh] w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 duration-500 ${
+                  className={`flex justify-center items-center h-[6vh] w-28  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                     isLiked ? "bg-white/90 text-black font-bold" : ""
                   }`}
                 >
@@ -553,6 +567,7 @@ ListViewProp) {
                         handleValue={handleValue}
                         id={id}
                         mediaType={media_type}
+                        session={session}
                       />
                       {/* <StarRating
                       title={title || undefined}

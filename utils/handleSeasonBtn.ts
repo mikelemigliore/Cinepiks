@@ -30,7 +30,7 @@ async function handleSeasonBtn(
   const userEmail = session?.user?.email;
 
   if (!userEmail) {
-    console.error("User not logged in!");
+    //console.error("User not logged in!");
     return;
   }
 

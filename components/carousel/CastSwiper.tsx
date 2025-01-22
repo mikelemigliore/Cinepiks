@@ -19,9 +19,9 @@ interface CastProp {
 }
 
 function CastSwiper({ cast }: CastProp) {
-//   const [swiperInstance, setSwiperInstance] = useState<any>(null);
-//   const [showButtons, setShowButtons] = useState(false);
-//   const [activeIndex, setActiveIndex] = useState(0);
+  //   const [swiperInstance, setSwiperInstance] = useState<any>(null);
+  //   const [showButtons, setShowButtons] = useState(false);
+  //   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <div>
@@ -36,14 +36,18 @@ function CastSwiper({ cast }: CastProp) {
           }}
         >
           <CarouselContent>
-            {cast.map((castItem) => (
-              <CarouselItem className="basis-2/9 md:basis-1/9">
-                <CastCard picture={castItem.picture} name={castItem.name} character={castItem.character}/>
+            {cast.map((castItem, index) => (
+              <CarouselItem key={index} className="basis-2/9 md:basis-1/9">
+                <CastCard
+                  picture={castItem.picture}
+                  name={castItem.name}
+                  character={castItem.character}
+                />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className='bg-transparent border-none hover:bg-transparent hover:text-white' />
-          <CarouselNext className='bg-transparent border-none hover:bg-transparent hover:text-white'/>
+          <CarouselPrevious className="bg-transparent border-none hover:bg-transparent hover:text-white" />
+          <CarouselNext className="bg-transparent border-none hover:bg-transparent hover:text-white" />
         </Carousel>
       </div>
     </div>

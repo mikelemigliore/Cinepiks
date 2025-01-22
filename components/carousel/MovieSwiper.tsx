@@ -123,98 +123,82 @@ Props) {
         </h1>
       </div>
 
-      {/* {inTheatersLoading ? (
-        <Skeleton className="w-[46vw] h-[20vh] bg-red-500 md:h-[8vh] md:w-[12.6vw] rounded-2xl" />
-      ) : ( */}
       <div className="lg:ml-[2.5vw] lg:mr-[3vw] md:ml-[-3vw] md:mr-[12vw] mb-[5vh] md:mb-[0vh]">
         {medias.length > 0 ? (
-          <Swiper
-            speed={1000}
-            modules={[Navigation, Pagination]}
-            slidesPerView={2}
-            slidesPerGroup={2}
-            spaceBetween={-5}
-            loop={false} // Ensure loop is enabled
-            pagination={{ clickable: true }} // Add pagination with clickable dots
-            //The onSwiper callback is a function that gets called once Swiper is ready and fully set up. It gives you access to the Swiper instance
-            // (which is like Swiper's control panel). This instance allows you to use its built-in methods, like moving to the next or previous slide.
-            //Think of the Swiper instance like a remote control for your TV. Once your TV is turned on (initialized), you can use the remote to change the channel (move between slides).
-            //By doing the onSwiper, we are updating the state, giving it the "remote control" to the next and prev buttons. Thats is why they work only with state
-            onSwiper={(swiper) => {
-              setSwiperInstance(swiper);
-            }}
-            onSlideChange={(swiper) => {
-              setActiveIndex(swiper.realIndex);
-            }}
-            breakpoints={{
-              // when window width is >= 640px
-              1024: {
-                slidesPerView: 7,
-                slidesPerGroup: 7,
-                spaceBetween: -5,
-              },
-              768: {
-                slidesPerView: 6,
-                slidesPerGroup: 6,
-                spaceBetween: -70,
-              },
-              // // when window width is >= 768px
-              // 768: {
-              //   slidesPerView: 3,
-              //   slidesPerGroup: 3,
-              //   spaceBetween: 20,
-              // },
-              // when window width is >= 1024px
-              // 1024: {
-              //   slidesPerView: 7,
-              //   slidesPerGroup: 7,
-              //   spaceBetween: -110,
-              // },
-            }}
-          >
-            {medias.map((media, index) => {
-              // Define how to find the "8th" slide (partial one)
+          <>
+            <Swiper
+              speed={1000}
+              modules={[Navigation, Pagination]}
+              slidesPerView={2}
+              slidesPerGroup={2}
+              spaceBetween={-5}
+              loop={false} // Ensure loop is enabled
+              pagination={{ clickable: true }}
+              onSwiper={(swiper) => {
+                setSwiperInstance(swiper);
+              }}
+              onSlideChange={(swiper) => {
+                setActiveIndex(swiper.realIndex);
+              }}
+              breakpoints={{
+                // when window width is >= 640px
+                1024: {
+                  slidesPerView: 7,
+                  slidesPerGroup: 7,
+                  spaceBetween: -5,
+                },
+                768: {
+                  slidesPerView: 6,
+                  slidesPerGroup: 6,
+                  spaceBetween: -70,
+                },
+              }}
+            >
+              {medias.map((media, index) => {
+                const isPartialSlide =
+                  index === (activeIndex + 7) % medias.length || // Next partial slide on the right
+                  index === (activeIndex - 1 + medias.length) % medias.length; // Previous partial slide on the left
 
-              //console.log(description === "newMoviesOnNetflix" ? media: "");
+                const isLastThreeSlides =
+                  (index >= (activeIndex + 6) % medias.length &&
+                    index <= (activeIndex + 7) % medias.length) || // Next partial slides on the right
+                  (index >= (activeIndex - 3 + medias.length) % medias.length &&
+                    index <= (activeIndex - 1 + medias.length) % medias.length); // Previous partial slides on the left
 
-              const isPartialSlide =
-                index === (activeIndex + 7) % medias.length || // Next partial slide on the right
-                index === (activeIndex - 1 + medias.length) % medias.length; // Previous partial slide on the left
+                const isLastOne = index === medias.length - 1;
 
-              const isLastThreeSlides =
-                (index >= (activeIndex + 6) % medias.length &&
-                  index <= (activeIndex + 7) % medias.length) || // Next partial slides on the right
-                (index >= (activeIndex - 3 + medias.length) % medias.length &&
-                  index <= (activeIndex - 1 + medias.length) % medias.length); // Previous partial slides on the left
-
-              const isLastOne = index === medias.length - 1;
-
-              return (
-                <SwiperSlide className="md:pb-[8vh] pb-[6vh]" key={media.id}>
-                  <MovieCard
-                    logInPage={logInPage}
-                    type={mediaType}
-                    // type={media.showType}
-                    imgBackdrop={media.backdrop_path}
-                    imgUrl={media.poster_path}
-                    //image={image[0]}
-                    genre={media.genre_ids}
-                    title={media.title}
-                    name={media.name}
-                    itemsGenres={itemsGenres}
-                    id={media.id}
-                    //tmdbId={tmdbId}
-                    //getGenreNames={getGenreNames}
-                    isPartialSlide={isPartialSlide}
-                    isLastThreeSlides={isLastThreeSlides}
-                    isLastOne={isLastOne}
-                    isLoading={isLoading}
-                    className="" // Apply negative margin
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+                return (
+                  //key={media.id} but it gives an error where it says that the key is not unique
+                  <SwiperSlide className="md:pb-[8vh] pb-[6vh]" key={index}>
+                    <MovieCard
+                      logInPage={logInPage}
+                      type={mediaType}
+                      // type={media.showType}
+                      imgBackdrop={media.backdrop_path}
+                      imgUrl={media.poster_path}
+                      //image={image[0]}
+                      genre={media.genre_ids}
+                      title={media.title}
+                      name={media.name}
+                      itemsGenres={itemsGenres}
+                      id={media.id}
+                      //tmdbId={tmdbId}
+                      //getGenreNames={getGenreNames}
+                      isPartialSlide={isPartialSlide}
+                      isLastThreeSlides={isLastThreeSlides}
+                      isLastOne={isLastOne}
+                      isLoading={isLoading}
+                      className="" // Apply negative margin
+                    />
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+            <SwiperNavButtons
+              swiper={swiperInstance}
+              showButtons={showButtons}
+            />
+          </>
         ) : (
           <Swiper
             speed={1000}
@@ -255,9 +239,6 @@ Props) {
             })}
           </Swiper>
         )}
-
-        {/* Pass the swiper instance to the SwiperNavButtons allowing the navigation buttons inside that component to control the Swiper (e.g., move to the next or previous slide) */}
-        <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
       </div>
       {/* )} */}
     </div>

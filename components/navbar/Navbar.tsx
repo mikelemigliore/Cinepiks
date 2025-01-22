@@ -52,7 +52,7 @@ function Navbar() {
                 <Logo />
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 <Search />
                 <LinksDropdown />
               </div>

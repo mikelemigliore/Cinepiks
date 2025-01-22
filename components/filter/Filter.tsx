@@ -132,7 +132,7 @@ interface FilterProp {
   typeContent: string | null;
   typeService: string[] | null;
   typeGenres: string[] | null;
-  isDesktop:boolean
+  isDesktop: boolean;
   //listGenres: number[]
 }
 
@@ -170,7 +170,7 @@ function Filter({
   typeContent,
   typeService,
   typeGenres,
-  isDesktop
+  isDesktop,
 }: FilterProp) {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     availability: {
@@ -265,7 +265,6 @@ function Filter({
       setShowTags(false);
     }
   }, [filter]);
-
 
   const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
@@ -628,9 +627,9 @@ function Filter({
                   Availability
                 </div>
                 <div>
-                  {availability.map((item) => (
+                  {availability.map((item, index) => (
                     <Button
-                      key={item.id} //Each <Button> needs a unique key prop when mapping to help React manage its updates efficiently. Here, tag is used as the unique identifier
+                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness //Each <Button> needs a unique key prop when mapping to help React manage its updates efficiently. Here, tag is used as the unique identifier
                       onClick={() =>
                         handleFilterClick("availability", item.tag)
                       }
@@ -655,7 +654,7 @@ function Filter({
                 <div>
                   {genresMovie.map((item) => (
                     <Button
-                      key={item.id}
+                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
                       onClick={() => handleFilterClick("genresMovie", item.tag)}
                       className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                         selectedFilters.genresMovie[item.tag]?.selected
@@ -678,7 +677,7 @@ function Filter({
                 <div>
                   {genresSeries.map((item) => (
                     <Button
-                      key={item.id}
+                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
                       onClick={() =>
                         handleFilterClick("genresSeries", item.tag)
                       }
@@ -702,7 +701,7 @@ function Filter({
             <div>
               {platforms.map((item) => (
                 <Button
-                  key={item.id}
+                  key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
                   onClick={() => handleFilterClick("platforms", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.platforms[item.tag]?.selected
@@ -724,7 +723,7 @@ function Filter({
                 <div>
                   {runtime.map((item) => (
                     <Button
-                      key={item.id}
+                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
                       onClick={() => handleFilterClick("runtime", item.tag)}
                       className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                         selectedFilters.runtime[item.tag]?.selected

@@ -177,7 +177,7 @@ export const movieApi = createApi({
           const data = await response.json();
 
           // Filter results for original_language
-          const filteredData = data.results.filter(
+          const filteredData = data.results?.filter(
             (movie: any) => movie.original_language === "en"
           );
 

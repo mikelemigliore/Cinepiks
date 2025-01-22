@@ -352,8 +352,9 @@ function SearchPage() {
               filter ? "md:translate-x-[1vw]" : ""
             }`}
           >
-            <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0vw] space-x-[1.5vw]">
-              <Link href={{ pathname: "/search", query: { type: "all" } }}>
+            <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0.5vw] space-x-[1.5vw]">
+              {/* <Link 
+              href={{ pathname: "/search", query: { type: "all" } }}>
                 <Button
                   onClick={() => handleAll("all")}
                   className={` h-[6vh] w-24 md:w-[3vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
@@ -362,8 +363,17 @@ function SearchPage() {
                 >
                   All
                 </Button>
+              </Link> */}
+              <Link
+                onClick={() => handleAll("all")}
+                href={{ pathname: "/search", query: { type: "all" } }}
+                className={`h-[6vh] w-24 md:w-[3vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center  text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  all ? "bg-white/90 text-black font-bold" : ""
+                }`}
+              >
+                All
               </Link>
-              <Link href={{ pathname: "/search", query: { type: "movie" } }}>
+              {/* <Link href={{ pathname: "/search", query: { type: "movie" } }}>
                 <Button
                   onClick={() => handleMovies("movie")}
                   className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
@@ -372,8 +382,17 @@ function SearchPage() {
                 >
                   Movies
                 </Button>
+              </Link> */}
+              <Link
+                href={{ pathname: "/search", query: { type: "movie" } }}
+                onClick={() => handleMovies("movie")}
+                className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  movies ? "bg-white/90 text-black font-bold" : ""
+                }`}
+              >
+                Movies
               </Link>
-              <Link href={{ pathname: "/search", query: { type: "series" } }}>
+              {/* <Link href={{ pathname: "/search", query: { type: "series" } }}>
                 <Button
                   onClick={() => handleSeries("series")}
                   className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
@@ -382,6 +401,15 @@ function SearchPage() {
                 >
                   Series
                 </Button>
+              </Link> */}
+              <Link
+                href={{ pathname: "/search", query: { type: "series" } }}
+                onClick={() => handleSeries("series")}
+                className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                  series ? "bg-white/90 text-black font-bold" : ""
+                }`}
+              >
+                Series
               </Link>
             </div>
             <div>

@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { GoDotFill, GoStarFill } from "react-icons/go";
 import { Button } from "../ui/button";
 // import {
@@ -203,63 +204,6 @@ function MovieCard({
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
-  // const handleReload = () => {
-  //   window.location.href = `${href}/${id}`; // Force page reload
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const mediaType = type === "movie" ? "movie" : "tv";
-
-  //       if (mediaType === "movie") {
-  //         const response = await getMovieDetails(id, mediaType);
-  //         const data = await response.json();
-  //         const responseCetification = await getMovieCertification(
-  //           id,
-  //           mediaType
-  //         );
-  //         const dataCertification = await responseCetification.json();
-
-  //         // Find the US release dates and certification
-  //         const usRelease = dataCertification.results.find(
-  //           (item: any) => item.iso_3166_1 === "US"
-  //         );
-
-  //         //console.log(data.genres);
-
-  //         //console.log(data);
-  //         //console.log(data.runtime);
-  //         setRuntime(data.runtime);
-  //         setGenres(data.genres);
-  //         setDescription(data.overview);
-
-  //         if (usRelease) {
-  //           const usCertification =
-  //             usRelease.release_dates[0].certification || "Not Rated";
-  //           setCertification(usCertification);
-  //         }
-  //       } else {
-  //         const response = await getSeriesDetails(id, mediaType);
-  //         const data = await response.json();
-
-  //         //console.log(data.genres);
-
-  //         //console.log(data);
-  //         //console.log(data.number_of_seasons);
-
-  //         setSeasons(data.number_of_seasons);
-  //         setGenres(data.genres);
-  //         setDescription(data.overview);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching carousel items:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -285,6 +229,9 @@ function MovieCard({
               </div>
             </DialogTrigger>
             <DialogContent className="w-[93vw] md:w-[35vw] md:h-[33vw] h-[118vw] bg-customColorCard rounded-3xl">
+              <VisuallyHidden>
+                <DialogTitle></DialogTitle>
+              </VisuallyHidden>
               <img
                 className="w-full rounded-3xl"
                 src={`${BASE_IMAGE_URL}${imgBackdrop}`}
@@ -361,10 +308,8 @@ function MovieCard({
             }}
           >
             <div
-              className={`relative ${
-                clicked ? "scale-[0.98]" : "scale-[1]"
-              } transition-transform duration-150 ease-in-out`}
-              onClick={handleClicks} // Handle click event for conditional navigation
+              className={`relative transition-transform duration-150 ease-in-out`}
+              onClick={handleClicks}
             >
               {list ? (
                 <img
@@ -398,9 +343,9 @@ function MovieCard({
               ) : (
                 <img
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[46vw] md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                    expandCard ? "opacity-0" : "opacity-100"
-                  }`}
+                  className={`w-[46vw]  md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    expandCard ? "opacity-0 " : "opacity-100"
+                  } ${clicked ? "scale-[0.98]" : "scale-[1]"}`}
                 />
               )}
               <div>
