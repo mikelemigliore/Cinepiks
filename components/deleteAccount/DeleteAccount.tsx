@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { signOut, useSession } from "next-auth/react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface DeleteProp {
   email: any;
@@ -71,6 +72,9 @@ function DeleteAccount({ email }: DeleteProp) {
           Delete
         </DialogTrigger>
         <DialogContent className="md:w-[25vw] md:h-[13.5vw] w-[83vw] h-[28vh] bg-buttonColor rounded-2xl">
+        <VisuallyHidden>
+                <DialogTitle></DialogTitle>
+              </VisuallyHidden>
           <div className="flex flex-col md:mt-[1vw] mt-[5vw] md:mx-[2vw] ml-[4vw] space-y-[3vh]">
             <h1 className="md:text-[0.9vw]">
               {`To confirm you cancellation, type '${deleteSentence}' in the text box

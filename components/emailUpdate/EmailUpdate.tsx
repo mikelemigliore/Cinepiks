@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 //import { updateEmail } from "@/app/features/dbSlice";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface EmailProp {
   email: any;
@@ -21,7 +22,6 @@ function EmailUpdate({ email }: EmailProp) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-
 
   const handleCancel = () => {
     setIsDialogOpen(false);
@@ -99,10 +99,16 @@ function EmailUpdate({ email }: EmailProp) {
           Update
         </DialogTrigger>
         <DialogContent className="md:w-[19vw] md:h-[26vw] w-[82vw] rounded-2xl h-[62vh]  bg-buttonColor pb-[4vw]">
+          <VisuallyHidden>
+            <DialogTitle></DialogTitle>
+          </VisuallyHidden>
           <div className="flex flex-col md:mt-[1vw] mt-[5vw] md:ml-[2vw] ml-[4vw] space-y-[3vh]">
             <h1 className="md:text-[1vw] text-[5vw]">Update Email</h1>
 
-            <form className="md:space-y-[1.1vw] space-y-[3vh]" onSubmit={handleSubmit}>
+            <form
+              className="md:space-y-[1.1vw] space-y-[3vh]"
+              onSubmit={handleSubmit}
+            >
               <h1 className="mb-[1vh] md:text-[0.9vw]">Current Email</h1>
               <div>
                 {/* Search Input */}

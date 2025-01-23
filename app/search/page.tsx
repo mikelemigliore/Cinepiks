@@ -97,6 +97,7 @@ function SearchPage() {
     if (typeQuery) {
       dispatch(setType(typeQuery));
       dispatch(setFilterGenre([]));
+      //dispatch(setContent([]));
     } else {
       dispatch(setType("all"));
     }
@@ -168,14 +169,33 @@ function SearchPage() {
   );
 
   useEffect(() => {
+    console.log("Updated ContentSearch:", ContentSearch);
+  }, [ContentSearch]);
+
+  useEffect(() => {
+    // Clear content immediately when switching pages
+    dispatch(setContent([]));
+    dispatch(setPage(1)); // Reset pagination
+  }, [typeQuery]);
+
+  useEffect(() => {
     if (
       (isSuccess && contentSearch && parsedTypeSearch === null) ||
       (contentSearch &&
         parsedTypeSearch === null &&
         typeContent === "popularMovies")
     ) {
-      const updateDate = [...ContentSearch, ...contentSearch];
-      dispatch(setContent(updateDate));
+      if (contentSearch.length === 0) {
+        const updateDate = [...ContentSearch, ...contentSearch];
+        dispatch(setContent(updateDate));
+      } else {
+        const updateDate = [...ContentSearch, ...contentSearch];
+        const uniqueContent = updateDate.filter(
+          (item, index, self) =>//Self is the whole updateDate array and then, finds the first index in the array where an object with the same id as the current item exists.
+            index === self.findIndex((t) => t.id === item.id)
+        ); 
+        dispatch(setContent(uniqueContent));
+      }
     } else if (trending && typeContent === "trendingMovies") {
       const updateDate = [...ContentSearch, ...trending];
       dispatch(setContent(updateDate));
@@ -192,6 +212,7 @@ function SearchPage() {
       handleFilterParams(parsedTypeGenres, [], [], []);
     }
   }, [trending, contentSearch, typeContent, search, typeQuery]);
+
 
   const debounce = (func: any, delay: any) => {
     let timeout: string | number | NodeJS.Timeout | undefined;
@@ -353,17 +374,6 @@ function SearchPage() {
             }`}
           >
             <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0.5vw] space-x-[1.5vw]">
-              {/* <Link 
-              href={{ pathname: "/search", query: { type: "all" } }}>
-                <Button
-                  onClick={() => handleAll("all")}
-                  className={` h-[6vh] w-24 md:w-[3vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                    all ? "bg-white/90 text-black font-bold" : ""
-                  }`}
-                >
-                  All
-                </Button>
-              </Link> */}
               <Link
                 onClick={() => handleAll("all")}
                 href={{ pathname: "/search", query: { type: "all" } }}
@@ -373,16 +383,6 @@ function SearchPage() {
               >
                 All
               </Link>
-              {/* <Link href={{ pathname: "/search", query: { type: "movie" } }}>
-                <Button
-                  onClick={() => handleMovies("movie")}
-                  className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                    movies ? "bg-white/90 text-black font-bold" : ""
-                  }`}
-                >
-                  Movies
-                </Button>
-              </Link> */}
               <Link
                 href={{ pathname: "/search", query: { type: "movie" } }}
                 onClick={() => handleMovies("movie")}
@@ -392,16 +392,6 @@ function SearchPage() {
               >
                 Movies
               </Link>
-              {/* <Link href={{ pathname: "/search", query: { type: "series" } }}>
-                <Button
-                  onClick={() => handleSeries("series")}
-                  className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
-                    series ? "bg-white/90 text-black font-bold" : ""
-                  }`}
-                >
-                  Series
-                </Button>
-              </Link> */}
               <Link
                 href={{ pathname: "/search", query: { type: "series" } }}
                 onClick={() => handleSeries("series")}
@@ -417,7 +407,7 @@ function SearchPage() {
                 <GridView
                   filter={filter}
                   mediaSearch={ContentSearch}
-                  isLoadingContent={contentLoading}
+                  isLoadingContent={isFetching}
                 />
               ) : (
                 ContentSearch.map((media, index) => (
@@ -432,7 +422,7 @@ function SearchPage() {
                     overview={media.overview}
                     list={list}
                     isDesktop={isDesktop}
-                    isLoadingContent={contentLoading}
+                    isLoadingContent={isFetching}
                   />
                 ))
               )}

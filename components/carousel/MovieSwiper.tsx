@@ -172,7 +172,7 @@ Props) {
                   <SwiperSlide className="md:pb-[8vh] pb-[6vh]" key={index}>
                     <MovieCard
                       logInPage={logInPage}
-                      type={mediaType}
+                      type={mediaType === "series" ? "tv" : "movie"}
                       // type={media.showType}
                       imgBackdrop={media.backdrop_path}
                       imgUrl={media.poster_path}

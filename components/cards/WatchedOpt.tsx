@@ -8,6 +8,7 @@ import StarRating from "../starRating/StarRating";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
+import { useRouter } from "next/navigation";
 import { useGetWatchedQuery } from "@/app/features/watched/watchedSlice";
 
 const watchedItem = [
@@ -45,6 +46,7 @@ function WatchedOpt({
   const [value, setValue] = React.useState<number>(0);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
@@ -143,10 +145,11 @@ function WatchedOpt({
             </div>
 
             <div className="absolute top-0 right-0 flex p-[1vw] mt-[3vw] z-50">
-              <Link href={`${href}/${id}`}>
+              {/* <Link href={`${href}/${id}`}> */}
                 <Button
                   onMouseEnter={handleMouseEnterView}
                   onMouseLeave={handleMouseLeaveView}
+                  onClick={() => router.push(`${href}/${id}`)}
                   className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
                     expandView
                       ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
@@ -162,7 +165,7 @@ function WatchedOpt({
                     <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
                   )}
                 </Button>
-              </Link>
+              {/* </Link> */}
             </div>
           </div>
           <div className="absolute flex bottom-0 left-0 p-[1vw]">
@@ -230,15 +233,16 @@ function WatchedOpt({
         </div>
 
         <div className="absolute top-[2vh] right-0 flex p-[1vw] mt-[3vw] z-50">
-          <Link href={`${href}/${id}`}>
+          {/* <Link href={`${href}/${id}`}> */}
             <Button
               onMouseEnter={handleMouseEnterView}
               onMouseLeave={handleMouseLeaveView}
+              onClick={() => router.push(`${href}/${id}`)}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
             >
                 <SlArrowRight className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
             </Button>
-          </Link>
+          {/* </Link> */}
         </div>
         <div className="absolute flex bottom-0 left-0 p-[1vw]">
           <img

@@ -69,7 +69,7 @@ function WatchedPage() {
 
   return (
     <div className="md:mt-[20vh] mt-[10vh] mb-[5vh]">
-      <div className="flex justify-between ml-[5vw]">
+      <div className="flex justify-between ml-[3vw]">
         <div
           className={`${
             filter ? "translate-x-[15vw]" : ""
@@ -78,8 +78,8 @@ function WatchedPage() {
           <div className="md:text-[2.5vw] text-[10vw] font-bold">Watched</div>
         </div>
 
-        <div className="relative flex flex-col mr-[2vw]" style={{ top: "3vh" }}>
-          <div className="flex justify-end md:mb-[2vh] mb-[7vh] md:mt-[2vh] mt-[-2vh]">
+        <div className="relative flex flex-col mr-[2vw] md:mr-[0vw]" style={{ top: "3vh" }}>
+          <div className="flex justify-end md:mb-[2vh] mb-[7vh] md:mt-[-2vh] mt-[-2vh]">
             <Button
               onClick={handleGrid}
               className={`p-0 md:w-[2.5vw] md:h-[2.5vw] w-[10vw] h-[10vw] bg-customServicesColor md:rounded-[0.4vw] rounded-lg md:mr-[1vw] mr-[2vw] flex justify-center items-center hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 duration-100 ${
@@ -115,7 +115,7 @@ function WatchedPage() {
           <div className="flex flex-col">
             <div className={`flex justify-start mt-[-2vh]`}>
               <div
-                className={`transition-transform duration-700 ease-in-out flex flex-col md:ml-[5vw] ml-[2vw]`}
+                className={`transition-transform duration-700 ease-in-out flex flex-col md:ml-[3vw] ml-[2vw]`}
               >
                 <div>
                   {watcheddb.length === 0 ? (

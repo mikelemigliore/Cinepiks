@@ -11,6 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Eye icons for toggle
 import { signOut, useSession } from "next-auth/react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 function Password() {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +48,9 @@ function Password() {
           Update
         </DialogTrigger>
         <DialogContent className="md:w-[21vw] md:h-[13vw] w-[70vw] h-[58vw] rounded-2xl bg-buttonColor md:pb-[4vw]">
+        <VisuallyHidden>
+                <DialogTitle></DialogTitle>
+              </VisuallyHidden>
           <div className="flex flex-col md:mt-[1vw] mt-[5vw] md:ml-[2vw] ml-[4vw] space-y-[3vh]">
             <h1 className="md:text-[1vw] text-[5vw]">Update Passowrd</h1>
             <h1 className="md:mb-[1vh] md:text-[0.9vw] md:max-w-[17vw]">

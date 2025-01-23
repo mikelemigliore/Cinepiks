@@ -64,7 +64,7 @@ function SingleSeriesPage() {
   const [isListView, setIsListView] = useState(true);
   const [reviews, setReviews] = useState(true);
   const [value, setValue] = React.useState<number | null>(0);
-  const type = "series";
+  const type = "tv";
   const [videoKey, setVideoKey] = useState("");
   const [backdrop, setBackdrop] = useState();
   const [title, setTitle] = useState("");

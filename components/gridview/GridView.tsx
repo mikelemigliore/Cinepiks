@@ -40,7 +40,7 @@ GridViewProp) {
         filter ? "grid-cols-2 md:grid-cols-6" : "grid-cols-2 md:grid-cols-7"
       }`}
     >
-      {isLoadingContent ? (
+      {isLoadingContent === true ? (
         <>
           {Array.from({ length: 21 }).map((_, index) => {
             return (
@@ -55,7 +55,7 @@ GridViewProp) {
             );
           })}
         </>
-      ) : mediaSearch.length > 0 && !isLoadingContent ? (
+      ) : mediaSearch.length > 0 && isLoadingContent === false ? (
         <>
           {mediaSearch?.map((media, index) => {
             const numColumns = filter ? 6 : 7;
@@ -94,7 +94,6 @@ GridViewProp) {
             alt="No content found"
             className="md:w-[30vw] w-[50vw]"
           />
-          {/* <h1 className='text-center md:text-[1.3vw] text-[4vw]'>No Results Found</h1> */}
         </div>
       )}
     </div>
