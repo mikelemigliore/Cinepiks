@@ -1,4 +1,3 @@
-
 import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
@@ -7,7 +6,7 @@ import { NextResponse } from "next/server";
 import { authOptions } from "@/utils/authOptions";
 
 export const POST = async (request: any) => {
-  const { watched, userEmail,mediaType } = await request.json(); 
+  const { watched, userEmail, mediaType } = await request.json();
 
   await connect();
 
@@ -28,22 +27,23 @@ export const POST = async (request: any) => {
     const existingWatched = existingUser.watched.some(
       (watchedObj: any) => watchedObj.id === watched
     );
-    
 
     if (existingWatched) {
+      console.log("Already liked this content.", existingWatched);
+
       return NextResponse.json("Already liked this content.");
     }
 
     const result = await User.updateOne(
-      { email: userEmail }, 
+      { email: userEmail },
       {
         $push: {
-            watched: {
+          watched: {
             id: watched,
             type: mediaType,
           },
         },
-      } 
+      }
     );
 
     return NextResponse.json(
@@ -59,7 +59,6 @@ export const POST = async (request: any) => {
 };
 
 export const GET = async (request: any) => {
-
   await connect(); // Ensure the database is connected
 
   try {
@@ -67,7 +66,7 @@ export const GET = async (request: any) => {
 
     //console.log("Session", session);
 
-    const userEmail = session.user.email; 
+    const userEmail = session.user.email;
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -75,7 +74,6 @@ export const GET = async (request: any) => {
     const watched = user.watched;
 
     //console.log("watchlist",watchlist);
-    
 
     if (!user) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
@@ -94,7 +92,7 @@ export const GET = async (request: any) => {
 };
 
 export const DELETE = async (request: any) => {
-  const { watched, userEmail,mediaType } = await request.json();
+  const { watched, userEmail, mediaType } = await request.json();
 
   await connect();
 
@@ -116,12 +114,12 @@ export const DELETE = async (request: any) => {
       { email: userEmail },
       {
         $pull: {
-            watched: {
+          watched: {
             id: watched,
             type: mediaType,
           },
         },
-      } 
+      }
     );
 
     return NextResponse.json(

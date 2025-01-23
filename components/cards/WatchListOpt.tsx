@@ -7,6 +7,8 @@ import { SlArrowRight } from "react-icons/sl";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { useDispatch } from "react-redux";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
+import { useRouter } from "next/navigation";
+import { useGetWatchlistQuery } from "@/app/features/watchlist/watchlistSlice";
 
 interface WatchListOptProp {
   src: string;
@@ -27,19 +29,27 @@ function WatchListOpt({
   const [expandRemove, setExpandRemove] = useState(false);
   const [expandView, setExpandView] = useState(false);
   const [isAdded, setIsAdded] = useState(true);
+  //const [status, setStatus] = useState<"watchlist" | "watched" | null>(null);
   //const [isDesktop, setIsDesktop] = useState(false);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
+  // const { data: watchlistDB, isSuccess: watchlistSucces } =
+  //   useGetWatchlistQuery({});
+
   // useEffect(() => {
-  //   if (window.innerWidth >= 1024) {
-  //     setIsDesktop(true);
-  //   } else {
-  //     setIsDesktop(false);
+  //   // // Check if the current item exists in the watchlist
+  //   const isInWatchlist = watchlistDB?.some(
+  //     (item: any) => item.id === id && item.type === mediaType
+  //   );
+
+  //   if (isInWatchlist) {
+  //     setIsAdded(true);
   //   }
-  // }, []);
+  // }, [watchlistDB]);
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchlistOptions) {
@@ -73,12 +83,12 @@ function WatchListOpt({
   };
 
   const handleAdded = async () => {
-    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+    handleWatchlistBtn(dispatch, setIsAdded, true, id, mediaType);
   };
 
-  const handleWatched = () => {
-    handleWatchedBtn(dispatch, setIsAdded, !isAdded, id, mediaType);
-    handleWatchlistBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  const handleWatched = async () => {
+    handleWatchedBtn(dispatch, setIsAdded, false, id, mediaType);
+    handleWatchlistBtn(dispatch, setIsAdded, true, id, mediaType);
   };
 
   return (
@@ -101,7 +111,7 @@ function WatchListOpt({
           <Button
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={() => handleWatched()}
+            onClick={handleWatched}
             className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
               expand
                 ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
@@ -122,7 +132,7 @@ function WatchListOpt({
             <Button
               onMouseEnter={handleMouseEnterRemove}
               onMouseLeave={handleMouseLeaveRemove}
-              onClick={() => handleAdded()}
+              onClick={handleAdded}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
                 expandRemove
                   ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
@@ -141,85 +151,40 @@ function WatchListOpt({
           </div>
 
           <div className="absolute top-0 right-0 flex p-[1vw] mt-[6vw] z-50">
-            <Link href={href}>
-              <Button
-                onMouseEnter={handleMouseEnterView}
-                onMouseLeave={handleMouseLeaveView}
-                className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
-                  expandView
-                    ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
-                    : "px-[0.7vw] py-[1.2vw]"
-                }`}
-              >
-                {expandView ? (
-                  <div className="flex">
-                    <span>View</span>
-                    <SlArrowRight className="w-[1.2vw] h-[1.2vw] ml-[1vw]" />
-                  </div>
-                ) : (
-                  <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
-                )}
-              </Button>
-            </Link>
+            {/* <Link href={href}> */}
+            <Button
+              onClick={() => router.push(`${href}/${id}`)}
+              onMouseEnter={handleMouseEnterView}
+              onMouseLeave={handleMouseLeaveView}
+              className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
+                expandView
+                  ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
+                  : "px-[0.7vw] py-[1.2vw]"
+              }`}
+            >
+              {expandView ? (
+                <div className="flex">
+                  <span>View</span>
+                  <SlArrowRight className="w-[1.2vw] h-[1.2vw] ml-[1vw]" />
+                </div>
+              ) : (
+                <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
+              )}
+            </Button>
+            {/* </Link> */}
           </div>
         </div>
       ) : !isDesktop ? (
         <div className="space-y-[5vh]">
-          {/* 5.6 */}
           <div className="absolute bottom-[7vh] right-0 flex p-[1vw]  z-50">
-            {/* <Button
-              // onMouseEnter={handleMouseEnter}
-              // onMouseLeave={handleMouseLeave}
-              onClick={() => handleWatched()}
-              className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
-              `}
-            >
-              <div className="flex">
-                <span>Watched</span>
-                <IoCheckmark className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[1vw]" />
-              </div>
-            </Button>
-          </div>
-
-          <div className="absolute bottom-0 right-0 flex p-[1vw]  z-50">
-            <Button
-              // onMouseEnter={handleMouseEnterRemove}
-              // onMouseLeave={handleMouseLeaveRemove}
-              onClick={() => handleAdded()}
-              className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
-            >
-              <div className="flex">
-                <span>Remove</span>
-                <Cross2Icon className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[1vw]" />
-              </div>
-            </Button>
-          </div> */}
-
-            {/* <div className="absolute top-0 right-0 flex p-[1vw] md:mt-[6vw] pt-[25vh] z-50">
-            <Link href={href}>
-              <Button
-                // onMouseEnter={handleMouseEnterView}
-                // onMouseLeave={handleMouseLeaveView}
-                className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
-              >
-                <div className="flex ">
-                  <span>View</span>
-                  <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[1vw]" />
-                </div>
-              </Button>
-            </Link>
-          </div> */}
-
-
-
             <Button
               // onMouseEnter={handleMouseEnter}
               // onMouseLeave={handleMouseLeave}
-              onClick={() => handleWatched()}
+              onClick={handleWatched}
               className={`items-center justify-center transition-all duration-300 rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
               `}
             >
-                <IoCheckmark className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+              <IoCheckmark className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
             </Button>
           </div>
 
@@ -227,10 +192,10 @@ function WatchListOpt({
             <Button
               // onMouseEnter={handleMouseEnterRemove}
               // onMouseLeave={handleMouseLeaveRemove}
-              onClick={() => handleAdded()}
+              onClick={handleAdded}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
             >
-                <Cross2Icon className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+              <Cross2Icon className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
             </Button>
           </div>
         </div>

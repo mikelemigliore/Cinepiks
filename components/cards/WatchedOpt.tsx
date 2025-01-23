@@ -8,6 +8,7 @@ import StarRating from "../starRating/StarRating";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
+import { useGetWatchedQuery } from "@/app/features/watched/watchedSlice";
 
 const watchedItem = [
   {
@@ -47,6 +48,8 @@ function WatchedOpt({
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
+  //const { data: watchedtDB, isSuccess: watchedSucces } = useGetWatchedQuery({});
+  
   const scoredb = useSelector((state: RootState) => state.content.score);
 
   useEffect(() => {
@@ -94,8 +97,8 @@ function WatchedOpt({
     }));
   };
 
-  const handleWatched = () => {
-    handleWatchedBtn(dispatch, setIsAdded, isAdded, id, mediaType);
+  const handleWatched = async () => {
+    handleWatchedBtn(dispatch, setIsAdded, true, id, mediaType);
   };
 
   return (
@@ -121,7 +124,7 @@ function WatchedOpt({
               <Button
                 onMouseEnter={handleMouseEnterRemove}
                 onMouseLeave={handleMouseLeaveRemove}
-                onClick={() => handleWatched()}
+                onClick={handleWatched}
                 className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
                   expandRemove
                     ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"

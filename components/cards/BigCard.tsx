@@ -329,7 +329,7 @@ function BigCard({
             </Link>
 
             <Button
-              onClick={() => handleAdded()}
+              onClick={handleAdded}
               disabled={session === null}
               className={`h-12 w-28 md:w-[8vw] md:h-[6vh]  rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isAdded ? "bg-white/90 text-black" : ""
@@ -344,7 +344,7 @@ function BigCard({
             </Button>
 
             <Button
-              onClick={() => handleLike()}
+              onClick={handleLike}
               disabled={session === null}
               className={`h-12 w-28 md:w-[8vw] md:h-[6vh] rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500 ${
                 isLiked ? "bg-white/90 text-black" : ""

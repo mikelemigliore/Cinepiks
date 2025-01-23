@@ -96,8 +96,6 @@ TeaserCardProps) {
     //console.log(expandCard);
     if (!expandCard) return;
 
-    console.log("likesdb", likesdb);
-
     const Liked = likesdb.map((like) => like.id).includes(id);
 
     const Watchlisted = watchlistdb
@@ -314,7 +312,7 @@ TeaserCardProps) {
                   <div className="space-x-[0.5vw]">
                     <Button
                       disabled={session === null}
-                      onClick={() => handleAdded()}
+                      onClick={handleAdded}
                       className={`w-[2.8vw] h-[2.8vw] rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-3xl hover:bg-white/90 hover:text-black hover:font-bold active:bg-white active:scale-95 ${
                         isAdded ? "bg-white/90 text-black font-bold" : ""
                       }`}

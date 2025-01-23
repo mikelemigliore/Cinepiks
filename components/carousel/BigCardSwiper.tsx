@@ -99,7 +99,7 @@ function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
                   // rated={itemBigCard.rated}
                   // time={itemBigCard.time}
                   //description={itemBigCard.description}
-                  mediaType={mediaType}
+                  mediaType={mediaType === "series" ? "tv" : "movie"}
                   href={href}
                 />
               </SwiperSlide>

@@ -50,6 +50,10 @@ function LinksDropdown({ onClick }: Props) {
     window.location.href = "/likes"; // Force page reload
   };
 
+  const handleWatchlistReload = () => {
+    window.location.href = "/watchlist"; // Force page reload
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -98,7 +102,11 @@ function LinksDropdown({ onClick }: Props) {
           >
             <Button
               variant="ghost"
-              onClick={() => router.push("/watchlist")}
+              //onClick={() => router.push("/watchlist")}
+              onClick={(e) => {
+                if (onClick) onClick(e); // Call the passed onClick handler if provided
+                handleWatchlistReload(); // Reload the page
+              }}
               className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <LuPlus size={25} />

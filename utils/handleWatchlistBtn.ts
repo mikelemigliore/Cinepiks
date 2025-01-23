@@ -2,14 +2,24 @@ import { getSession } from "next-auth/react";
 //import ListView from "@/components/listview/ListView";
 import { getLike } from "@/app/pages/api/likesPage";
 //import { useDispatch } from "react-redux";
-import { likeMovie, unlikeMovie, unwatchlistMovie, watchlistMovie } from "@/app/features/dbSlice";
+import {
+  likeMovie,
+  unlikeMovie,
+  unwatchlistMovie,
+  watchlistMovie,
+} from "@/app/features/dbSlice";
 import { getWatchlist } from "@/app/pages/api/watchlistPage";
 
 //const dispatch = useDispatch();
 
-async function handleWatchlistBtn(dispatch:any, setIsAdded: any, isAdded: boolean, id: number, mediaType:string) {
-
-  
+async function handleWatchlistBtn(
+  dispatch: any,
+  setIsAdded: any,
+  isAdded: boolean,
+  id: number,
+  mediaType: string
+  //watchlistDB:any
+) {
   const session = await getSession();
   const userEmail = session?.user?.email;
 
@@ -18,13 +28,20 @@ async function handleWatchlistBtn(dispatch:any, setIsAdded: any, isAdded: boolea
     return;
   }
 
+  
+
+  // const isInWatchlist = watchlistDB?.some(
+  //   (item: any) => item.id === id && item.type === mediaType
+  // );
+  //console.log("isAdded", isAdded);
+
   if (isAdded === true) {
     // REMOVE LIKE
     try {
       const res = await fetch("/api/watchlist", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userEmail, watchlist: id , mediaType}),
+        body: JSON.stringify({ userEmail, watchlist: id, mediaType }),
       });
 
       if (res.status === 400) {
@@ -33,9 +50,11 @@ async function handleWatchlistBtn(dispatch:any, setIsAdded: any, isAdded: boolea
 
       if (res.status === 200) {
         setIsAdded(false);
-        const data = await getWatchlist(id,mediaType);
+        const data = await getWatchlist(id, mediaType);
         const watchlistedContent = await data.json();
-        dispatch(unwatchlistMovie(watchlistedContent)); // ✅ Dispatch Redux action
+        console.log("watchlistedContent", watchlistedContent);
+
+        dispatch(unwatchlistMovie(watchlistedContent));
       }
     } catch (error) {
       console.error("Error removing watchlist:", error);
@@ -46,7 +65,7 @@ async function handleWatchlistBtn(dispatch:any, setIsAdded: any, isAdded: boolea
       const res = await fetch("/api/watchlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userEmail, watchlist: id,mediaType }),
+        body: JSON.stringify({ userEmail, watchlist: id, mediaType }),
       });
 
       if (res.status === 400) {
@@ -55,9 +74,9 @@ async function handleWatchlistBtn(dispatch:any, setIsAdded: any, isAdded: boolea
 
       if (res.status === 200) {
         setIsAdded(true);
-        const data = await getWatchlist(id,mediaType); // Fetch movie data by IDs
+        const data = await getWatchlist(id, mediaType);
         const watchlistedContent = await data.json();
-        dispatch(watchlistMovie(watchlistedContent)); // ✅ Dispatch Redux action
+        dispatch(watchlistMovie(watchlistedContent));
       }
     } catch (error) {
       console.error("Error adding watchlist:", error);

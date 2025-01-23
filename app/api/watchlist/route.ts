@@ -10,6 +10,11 @@ export const POST = async (request: any) => {
 
   await connect();
 
+  // console.log("watchlist", watchlist);
+  // console.log("userEmail", userEmail);
+  // console.log("mediaType", mediaType);
+  
+
   try {
     if (!watchlist || !userEmail) {
       return NextResponse.json(
@@ -71,7 +76,6 @@ export const GET = async (request: any) => {
     const user = await User.findOne({ email: userEmail }, "watchlist");
     const watchlist = user.watchlist;
 
-    //console.log("watchlist",watchlist);
     
 
     if (!user) {
@@ -92,6 +96,11 @@ export const GET = async (request: any) => {
 
 export const DELETE = async (request: any) => {
   const { watchlist, userEmail,mediaType } = await request.json();
+
+
+  console.log("watchlist", watchlist);
+  console.log("userEmail", userEmail);
+  console.log("mediaType", mediaType);
 
   await connect();
 
