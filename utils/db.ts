@@ -4,7 +4,7 @@ const connect = async () => {
   if (mongoose.connections[0].readyState) return;
 
   try {
-    const mongoUrl = process.env.MONGO_URL;
+    const mongoUrl = process.env.NEXT_PUBLIC_MONGO_URL;
     if (!mongoUrl) {
       throw new Error("MONGO_URL is not defined");
     }
