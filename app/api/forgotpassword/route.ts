@@ -26,7 +26,7 @@ export const POST = async (request: any) => {
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
-  const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`;
+  const resetUrl = `https://cinepiks.com/resetpassword/${resetToken}`;
 
   console.log(resetUrl);
 

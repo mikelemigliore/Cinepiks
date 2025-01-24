@@ -1,4 +1,4 @@
-"use client"; // Add this line at the top
+"use client"; 
 import Container from "../global/Container";
 import React, { useState } from "react";
 import LinksDropdown from "./LinksDropdown";
@@ -8,7 +8,7 @@ import Series from "./Series";
 import Watchlist from "./Watchlist";
 import Home from "./Home";
 import Search from "./Search";
-import { IoMenuOutline, IoCloseOutline } from "react-icons/io5"; // Icons for hamburger menu
+import { IoMenuOutline, IoCloseOutline } from "react-icons/io5"; 
 import { usePathname } from "next/navigation";
 
 function Navbar() {
