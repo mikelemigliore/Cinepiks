@@ -128,7 +128,7 @@ export const searchApi = createApi({
           }${pickGenres(withFilterGenre)}${pickPlatform(
             withFilterPlatform
           )}${pickAvailability(withAvailability)}${pickRuntime(withRuntime)}`,
-          series: `discover/tv?api_key=${apiKey}&include_adult=false&include_null_first_air_dates=false&language=en-US&sort_by=${sortBy}&page=${page}&first_air_date.lte=${min_date}${pickGenres( //&vote_count.gte=100&vote_average.gte=7
+          series: `discover/tv?api_key=${apiKey}&include_adult=false&include_null_first_air_dates=false&language=en-US&sort_by=${sortBy}&page=${page}&first_air_date.lte=${min_date}${pickGenres( 
             withFilterGenre
           )}${pickPlatform(withFilterPlatform)}&with_original_language=en&with_watch_monetization_types=flatrate`,
           all: `trending/all/day?api_key=${apiKey}&page=${page}`,

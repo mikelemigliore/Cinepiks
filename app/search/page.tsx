@@ -173,9 +173,8 @@ function SearchPage() {
   }, [ContentSearch]);
 
   useEffect(() => {
-    // Clear content immediately when switching pages
     dispatch(setContent([]));
-    dispatch(setPage(1)); // Reset pagination
+    dispatch(setPage(1)); 
   }, [typeQuery]);
 
   useEffect(() => {
