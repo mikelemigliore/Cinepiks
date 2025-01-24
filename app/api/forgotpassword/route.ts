@@ -27,7 +27,6 @@ export const POST = async (request: any) => {
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
   const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`;
-  //to test on phone sub localhost with 192.168.1.219:3000
 
   console.log(resetUrl);
 

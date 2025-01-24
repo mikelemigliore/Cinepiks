@@ -36,8 +36,7 @@ import {
   setWatched,
   setWatchlists,
 } from "../features/dbSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../features/store";
+import { useDispatch } from "react-redux";
 import { getLikes } from "../pages/api/likesPage";
 import { useGetWatchlistQuery } from "../features/watchlist/watchlistSlice";
 import { getWatchlists } from "../pages/api/watchlistPage";
@@ -202,7 +201,6 @@ const genres = [
 
 function HomePage() {
   const dispatch = useDispatch();
-  const likesdb = useSelector((state: RootState) => state.content.likes);
 
   // Fetch data using RTK Query
   const { data: likesDB, isLoading, error, isSuccess } = useGetLikesQuery({});

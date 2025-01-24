@@ -1,22 +1,5 @@
-
 import { getSession } from "next-auth/react";
-//import ListView from "@/components/listview/ListView";
-import { getLike } from "@/app/pages/api/likesPage";
-//import { useDispatch } from "react-redux";
-import {
-  likeMovie,
-  addEpisode,
-  unlikeMovie,
-  unwatchedMovie,
-  unwatchlistMovie,
-  watchedMovie,
-  watchlistMovie,
-  removeEpisode,
-} from "@/app/features/dbSlice";
-import { getWatchlist } from "@/app/pages/api/watchlistPage";
-import { getWatched } from "@/app/pages/api/watchedPage";
-
-//const dispatch = useDispatch();
+import { addEpisode, removeEpisode } from "@/app/features/dbSlice";
 
 async function handleSeasonBtn(
   dispatch: any,
@@ -24,18 +7,16 @@ async function handleSeasonBtn(
   episodeNumber: any,
   Id: any,
   isWatched: any,
-  episodeWatched:any
+  episodeWatched: any
 ) {
   const session = await getSession();
   const userEmail = session?.user?.email;
 
   if (!userEmail) {
-    //console.error("User not logged in!");
     return;
   }
 
   if (isWatched === true) {
-    // REMOVE LIKE
     try {
       const res = await fetch("/api/season", {
         method: "DELETE",
@@ -45,7 +26,7 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
-          episodeWatched
+          episodeWatched,
         }),
       });
 
@@ -59,16 +40,14 @@ async function handleSeasonBtn(
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
             Id,
-            episodeWatched
+            episodeWatched,
           })
-        ); // ✅ Dispatch Redux action
+        );
       }
     } catch (error) {
       console.error("Error removing watchlist:", error);
     }
   } else {
-    // ADD LIKE
-    //console.log("watchedEpisodes",episodeNumber);
     try {
       const res = await fetch("/api/season", {
         method: "POST",
@@ -78,7 +57,7 @@ async function handleSeasonBtn(
           season: selectedSeason,
           episodeNumber,
           Id,
-          episodeWatched
+          episodeWatched,
         }),
       });
 
@@ -92,9 +71,9 @@ async function handleSeasonBtn(
             Id,
             seasonNumber: selectedSeason,
             episodeNumber: episodeNumber,
-            episodeWatched
+            episodeWatched,
           })
-        ); // ✅ Dispatch Redux action
+        );
       }
     } catch (error) {
       console.error("Error adding watchlist:", error);

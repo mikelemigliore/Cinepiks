@@ -99,7 +99,7 @@ function ForgotPassword() {
                       Send
                     </button>
                   </div>
-                  <p className="text-red-600 md:text-[0.9vw] mt-[0.5vw]">
+                  <p className="text-red-600 md:text-[0.9vw] text-[4vw] mt-[0.5vw]">
                     {error && error}
                   </p>
                 </div>

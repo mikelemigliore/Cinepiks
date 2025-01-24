@@ -1,16 +1,9 @@
 import { getSession } from "next-auth/react";
-//import ListView from "@/components/listview/ListView";
-import { getLike } from "@/app/pages/api/likesPage";
-//import { useDispatch } from "react-redux";
 import {
-  likeMovie,
-  unlikeMovie,
   unwatchlistMovie,
   watchlistMovie,
 } from "@/app/features/dbSlice";
 import { getWatchlist } from "@/app/pages/api/watchlistPage";
-
-//const dispatch = useDispatch();
 
 async function handleWatchlistBtn(
   dispatch: any,
@@ -18,7 +11,6 @@ async function handleWatchlistBtn(
   isAdded: boolean,
   id: number,
   mediaType: string
-  //watchlistDB:any
 ) {
   const session = await getSession();
   const userEmail = session?.user?.email;
@@ -28,15 +20,7 @@ async function handleWatchlistBtn(
     return;
   }
 
-  
-
-  // const isInWatchlist = watchlistDB?.some(
-  //   (item: any) => item.id === id && item.type === mediaType
-  // );
-  //console.log("isAdded", isAdded);
-
   if (isAdded === true) {
-    // REMOVE LIKE
     try {
       const res = await fetch("/api/watchlist", {
         method: "DELETE",
@@ -52,7 +36,6 @@ async function handleWatchlistBtn(
         setIsAdded(false);
         const data = await getWatchlist(id, mediaType);
         const watchlistedContent = await data.json();
-        console.log("watchlistedContent", watchlistedContent);
 
         dispatch(unwatchlistMovie(watchlistedContent));
       }
@@ -60,7 +43,6 @@ async function handleWatchlistBtn(
       console.error("Error removing watchlist:", error);
     }
   } else {
-    // ADD LIKE
     try {
       const res = await fetch("/api/watchlist", {
         method: "POST",

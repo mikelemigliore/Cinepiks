@@ -3,7 +3,6 @@ import Navbar from "@/components/navbar/Navbar";
 import Container from "@/components/global/Container";
 import Footer from "@/components/footer/Footer";
 import { getServerSession } from "next-auth";
-//import { authOptions } from "./api/auth/[...nextauth]/route";
 import { authOptions } from "@/utils/authOptions";
 import AuthProvider from "@/utils/SessionProvider";
 import ReduxProvider from "@/utils/ReduxProvider";

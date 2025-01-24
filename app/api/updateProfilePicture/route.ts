@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import connect from "@/utils/db";
-import User from "@/models/User"; // Ensure path is correct for your schema
+import User from "@/models/User"; 
 import { getServerSession } from "next-auth";
-//import { authOptions } from "../auth/[...nextauth]/route";
 import { authOptions } from "@/utils/authOptions";
 
 export async function POST(request: Request) {
@@ -44,7 +43,7 @@ export async function POST(request: Request) {
 }
 
 export const GET = async (request: any) => {
-  await connect(); // Ensure the database is connected
+  await connect(); 
 
   try {
     const session: any = await getServerSession(authOptions);

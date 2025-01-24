@@ -1,10 +1,6 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import SwiperNavButtons from "@/utils/swiperButtons";
-import { useState } from "react";
-import "swiper/css/pagination"; // Import Swiper pagination styles
+import "swiper/css/pagination";
 import CastCard from "../cards/CastCard";
 import {
   Carousel,
@@ -19,10 +15,6 @@ interface CastProp {
 }
 
 function CastSwiper({ cast }: CastProp) {
-  //   const [swiperInstance, setSwiperInstance] = useState<any>(null);
-  //   const [showButtons, setShowButtons] = useState(false);
-  //   const [activeIndex, setActiveIndex] = useState(0);
-
   return (
     <div>
       <div className="md:text-[1.2vw] text-[5vw] mb-[0.7vw] md:ml-[0vw] ml-[-8vw]">

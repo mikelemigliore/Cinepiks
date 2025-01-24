@@ -7,7 +7,7 @@ interface YoutubeTrailerPlayerProps {
   autoplay?: boolean;
   play?: boolean;
   handlePlay: () => void;
-  setIsLoading: (loading: boolean) => void; // Add prop to manage loading state
+  setIsLoading: (loading: boolean) => void;
   pause?: boolean;
   reload?: boolean;
   handleReload: () => void;
@@ -52,36 +52,26 @@ function YoutubeTrailerPlayer({
     },
   };
 
-  // Handle fullscreen exit
   useEffect(() => {
     if (isDesktop) return;
     const handleFullscreenChange = () => {
       const isFullscreen = document.fullscreenElement;
 
       if (!isFullscreen && !isDesktop) {
-        // Exit fullscreen on mobile
-        onEnd(); // Reset video when fullscreen is exited
+        onEnd();
       }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    // document.addEventListener(
-    //   "webkitfullscreenchange",
-    //   handleFullscreenChange
-    // );
 
     return () => {
       document.removeEventListener("fullscreenchange", handleFullscreenChange);
-      // document.removeEventListener(
-      //   "webkitfullscreenchange",
-      //   handleFullscreenChange
-      // );
     };
   }, [isDesktop]);
 
   const onEnd = () => {
     setFadeOut(true);
-    handleEnd(); // This should reset the play state
+    handleEnd();
     playerRef.current.playVideo();
   };
 
@@ -90,23 +80,21 @@ function YoutubeTrailerPlayer({
       return;
     }
     setFadeOut(true);
-    handleEnd(); // This should reset the play state
+    handleEnd();
     playerRef.current.pauseVideo();
   };
 
   const onReady = (event: any) => {
     playerRef.current = event.target;
-    setIsLoading(false); // Video is ready, hide loading spinner
+    setIsLoading(false);
   };
 
   useEffect(() => {
     if (playerRef.current) {
       if (play) {
-        // Play the video
         playerRef.current.playVideo();
         setFadeOut(false);
       } else {
-        // Pause the video
         playerRef.current.pauseVideo();
       }
     }
@@ -124,13 +112,10 @@ function YoutubeTrailerPlayer({
 
   useEffect(() => {
     if (playerRef.current && reload) {
-      playerRef.current.seekTo(0); // Restart the video from the beginning
-      //playerRef.current.playVideo(); // Play the video
-
-      // Reset the reload state after the video has restarted
+      playerRef.current.seekTo(0);
       setTimeout(() => {
         handleReload();
-      }, 100); // Short timeout to allow reset
+      }, 100);
     }
   }, [reload]);
 
@@ -155,11 +140,9 @@ function YoutubeTrailerPlayer({
         onReady={onReady}
         onEnd={onEnd}
         onPause={onPause}
-        //onStateChange={handleStateChange} // Detect state changes
         className="absolute top-0 left-0 w-full h-full"
         style={{
-          transform: isListView ? "scale(1)" : "scale(1.6)", // Scale based on play state
-          // transform: play ? "scale(1.6)" : "scale(1)", // Scale based on play state
+          transform: isListView ? "scale(1)" : "scale(1.6)",
           transformOrigin: "center center",
           objectFit: "cover",
           zIndex: 1,
@@ -170,4 +153,3 @@ function YoutubeTrailerPlayer({
 }
 
 export default YoutubeTrailerPlayer;
-

@@ -7,8 +7,6 @@ import { useState } from "react";
 import "swiper/css/pagination"; // Import Swiper pagination styles
 import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
-import ServicesCard from "../cards/ServicesCard";
-import Link from "next/link";
 import GenresCard from "../cards/GenresCard";
 
 interface GenresProp {
@@ -23,39 +21,30 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // State to track the selected items by their ID
   const [selectedItems, setSelectedItems] = useState<{
     [key: number]: boolean;
   }>({});
 
-  // Get only the IDs of the selected genres
   const activeServiceIds = genres
     .filter((genre) => selectedItems[genre.id])
     .map((genre) => genre.id);
 
   const handleReload = () => {
-    // Serialize the medias array and store it in sessionStorage
-    //sessionStorage.setItem("movieData", JSON.stringify(medias));
-
-    // Define the query parameters
     const queryParams = new URLSearchParams({
       type: mediaType === "movie" ? "movie" : "tv",
-      genresParam: JSON.stringify(activeServiceIds), // Convert activeServices to a string
+      genresParam: JSON.stringify(activeServiceIds),
     });
 
-    // Navigate to the search page with query parameters
     window.location.href = `/search?${queryParams.toString()}`;
   };
 
-  // Handle the selection of a specific item
   const handleSelect = (id: number) => {
     setSelectedItems((prevSelectedItems) => ({
       ...prevSelectedItems,
-      [id]: !prevSelectedItems[id], // Toggle the selection for the clicked item
+      [id]: !prevSelectedItems[id],
     }));
   };
 
-  // Check if any item is selected
   const isAnyItemSelected = Object.values(selectedItems).some(
     (isSelected) => isSelected
   );
@@ -104,10 +93,10 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
         >
           {genres.map((genre, index) => {
             const isPartialSlide =
-              index === (activeIndex + 9) % genres.length || // Next partial slide on the right
-              index === (activeIndex - 1 + genres.length) % genres.length; // Previous partial slide on the left
+              index === (activeIndex + 9) % genres.length ||
+              index === (activeIndex - 1 + genres.length) % genres.length;
 
-            const isSelected = !!selectedItems[genre.id]; // Check if the current service is selected
+            const isSelected = !!selectedItems[genre.id];
 
             return (
               <SwiperSlide key={genre.id} className="pb-[5vh] md:pb-[8vh]">
@@ -118,7 +107,7 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
                   isPartialSlide={isPartialSlide}
                   activeIndex={activeIndex}
                   isSelected={isSelected}
-                  onSelect={() => handleSelect(genre.id)} // Pass the specific id to the handler
+                  onSelect={() => handleSelect(genre.id)}
                 />
               </SwiperSlide>
             );
@@ -128,23 +117,19 @@ function GenresSwiper({ genres, onClick, description, mediaType }: GenresProp) {
 
       <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
 
-      {/* Explore All button with disabled state */}
-      {/* Conditionally render Link only when the button is enabled */}
       {isAnyItemSelected ? (
-        // <Link href="/search">
         <Button
           onClick={(e) => {
-            if (onClick) onClick(e); // Call the passed onClick handler if provided
-            handleReload(); // Reload the page
+            if (onClick) onClick(e);
+            handleReload();
           }}
-          onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
+          onMouseDown={(e) => e.currentTarget.blur()}
           className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
         >
           Explore All
           <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </Button>
       ) : (
-        // </Link>
         <div className="ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center">
           Explore All
           <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />

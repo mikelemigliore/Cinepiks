@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface DeleteProp {
@@ -17,8 +17,6 @@ interface DeleteProp {
 }
 
 function DeleteAccount({ email }: DeleteProp) {
-  //console.log(email);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState("");
   const deleteSentence = "delete-account";

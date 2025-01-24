@@ -1,6 +1,5 @@
 import React from "react";
 
-// Define the props type for DotsCarousel
 interface DotsCarouselProps {
   totalSlides: number;
   activeSlide: number;
@@ -9,7 +8,6 @@ interface DotsCarouselProps {
 function DotsCarousel({ totalSlides, activeSlide }: DotsCarouselProps) {
   return (
     <div className="flex justify-center space-x-2 absolute z-50 border">
-      {/* Creates an array with totalSlides number of elements. */}
       {Array.from({ length: totalSlides }).map((_, index) => (
         <div
           key={index}

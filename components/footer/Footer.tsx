@@ -90,31 +90,13 @@ function Footer() {
           </div>
           <div>
             <Link
-              href="/testpage" //Link to linkedin
+              href="https://www.linkedin.com/in/michele-migliore-b377b7278/"
               className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               About Me
             </Link>
           </div>
-          {/* <div>
-            <h1 className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw] w-[25vw]">
-            The following website is for informational purposes only. This
-                  website is not affiliated with or endorsed by Netflix, Hulu,
-                  Amazon Prime, or any other streaming service. All trademarks and service
-                  marks are the property of their respective owners.
-            </h1>
-          </div> */}
         </div>
-        {/* <div>
-          <div>
-            <h1 className="inline-block mt-[17vh] ml-[6vw] md:ml-[5vw] w-[25vw] text-center">
-              The following website is for informational purposes only. This
-              website is not affiliated with or endorsed by Netflix, Hulu,
-              Amazon Prime, or any other streaming service. All trademarks and
-              service marks are the property of their respective owners.
-            </h1>
-          </div>
-        </div> */}
       </div>
     </div>
   );

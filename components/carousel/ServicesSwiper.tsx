@@ -4,18 +4,17 @@ import "swiper/css";
 import "swiper/css/navigation";
 import SwiperNavButtons from "@/utils/swiperButtons";
 import { useState } from "react";
-import "swiper/css/pagination"; // Import Swiper pagination styles
+import "swiper/css/pagination";
 import { Button } from "../ui/button";
 import { SlArrowRight } from "react-icons/sl";
 import ServicesCard from "../cards/ServicesCard";
-import Link from "next/link";
 
 interface Prop {
   services: Array<{ id: number; title: string; img: any }>;
   logInPage?: boolean;
   description?: string;
   mediaType?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function ServicesSwiper({
@@ -28,44 +27,31 @@ function ServicesSwiper({
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  //const [activeServices, setActiveServices] = useState<{ id: number; title: string; img: any }[]>([]);
 
-  // State to track the selected items by their ID
   const [selectedItems, setSelectedItems] = useState<{
     [key: number]: boolean;
   }>({});
 
-  // Get only the IDs of the selected services
   const activeServiceIds = services
     .filter((service) => selectedItems[service.id])
     .map((service) => service.id);
 
-  //console.log(activeServiceIds);
-
   const handleReload = () => {
-    // Serialize the medias array and store it in sessionStorage
-    //sessionStorage.setItem("movieData", JSON.stringify(medias));
-
-    // Define the query parameters
     const queryParams = new URLSearchParams({
       type: mediaType === "movie" ? "movie" : "tv",
-      servicesParam: JSON.stringify(activeServiceIds), // Convert activeServices to a string
+      servicesParam: JSON.stringify(activeServiceIds),
     });
-    console.log("queryParams.toString()", queryParams.toString());
 
-    // Navigate to the search page with query parameters
     window.location.href = `/search?${queryParams.toString()}`;
   };
 
-  // Handle the selection of a specific item
   const handleSelect = (id: number) => {
     setSelectedItems((prevSelectedItems) => ({
       ...prevSelectedItems,
-      [id]: !prevSelectedItems[id], // Toggle the selection for the clicked item
+      [id]: !prevSelectedItems[id],
     }));
   };
 
-  // Check if any item is selected
   const isAnyItemSelected = Object.values(selectedItems).some(
     (isSelected) => isSelected
   );
@@ -135,15 +121,10 @@ function ServicesSwiper({
         >
           {services.map((service, index) => {
             const isPartialSlide =
-              index === (activeIndex + 6) % services.length || // Next partial slide on the right
-              index === (activeIndex - 1 + services.length) % services.length; // Previous partial slide on the left
+              index === (activeIndex + 6) % services.length ||
+              index === (activeIndex - 1 + services.length) % services.length;
 
-            const isSelected = !!selectedItems[service.id]; // Check if the current service is selected
-
-            //const activeServices = (services.filter((service) => selectedItems[service.id]));
-            //setActiveServices((prev: any) => [...prev, isSelected]);
-
-            //console.log(activeServices);
+            const isSelected = !!selectedItems[service.id];
 
             return (
               <SwiperSlide key={service.id} className="pb-[7vh] md:pb-[8vh]">
@@ -155,7 +136,7 @@ function ServicesSwiper({
                   activeIndex={activeIndex}
                   isSelected={isSelected}
                   id={service.id}
-                  onSelect={() => handleSelect(service.id)} // Pass the specific id to the handler
+                  onSelect={() => handleSelect(service.id)}
                 />
               </SwiperSlide>
             );
@@ -165,22 +146,19 @@ function ServicesSwiper({
 
       <SwiperNavButtons swiper={swiperInstance} showButtons={showButtons} />
 
-      {/* Explore All button with disabled state */}
       {isAnyItemSelected && !logInPage ? (
-        // <Link href="/search">
         <Button
           onClick={(e) => {
-            if (onClick) onClick(e); // Call the passed onClick handler if provided
-            handleReload(); // Reload the page
+            if (onClick) onClick(e);
+            handleReload();
           }}
-          onMouseDown={(e) => e.currentTarget.blur()} // Blurs the button to reset active/focus state
+          onMouseDown={(e) => e.currentTarget.blur()}
           className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full transition-transform duration-300 ease-in-out active:scale-95 bg-customServicesColor hover:bg-white/90 hover:text-black`}
         >
           Explore All
           <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[4vw] md:ml-[1vw]" />
         </Button>
       ) : (
-        // </Link>
         <div
           className={`ml-[1vw] h-[8vh] w-[93vw] md:h-[6vh] md:w-[20vw] md:ml-[3vw] md:w-[8vw] md:h-[6vh] md:text-[0.9vw] text-[4vw] rounded-full bg-customDisabledColor/40 text-gray-500 cursor-not-allowed pointer-events-none flex items-center justify-center ${
             logInPage ? "hidden" : ""

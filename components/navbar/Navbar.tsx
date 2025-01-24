@@ -11,8 +11,6 @@ import Search from "./Search";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5"; // Icons for hamburger menu
 import { usePathname } from "next/navigation";
 
-//const pathname = usePathname();
-
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,9 +33,8 @@ function Navbar() {
       ) : (
         <div className="fixed w-full bg-customColor py-[1vw] md:bg-transparent lg:bg-gradient-to-b md:from-customColor/50 md:to-transparent md:hover:bg-customColor md:transition-all md:duration-700 z-[100]">
           <Container className="flex justify-between gap-4 flex-wrap md:py-0 px-[1vw] md:px-[2vw] mt-[1.5vh] md:mt-[0vh]">
-            {/* Hamburger Menu for mobile */}
             <div className="sm:hidden flex space-x-4 items-center justify-between w-full">
-              <div className='flex items-center'>
+              <div className="flex items-center">
                 <button
                   className="text-white"
                   onClick={toggleMenu}
@@ -58,16 +55,11 @@ function Navbar() {
               </div>
             </div>
 
-            {/* Logo in desktop menu */}
             <div className="hidden sm:flex sm:items-center">
               <Logo />
             </div>
 
-            {/* Main Navigation Links - Hidden on small screens */}
-            {/* This components are styled first and controlled by the tailwind in the Container and nav for desktop view, 
-        this div and style will only apply when the screen is sm for phone. */}
             <div
-              // Try to apply smothing transition when the user clicks on hamburger, i was unable to do so.
               className={`sm:flex ${
                 isOpen
                   ? "flex flex-col h-screen items-center justify-center pb-[200px]"
@@ -80,7 +72,6 @@ function Navbar() {
               <Watchlist onClick={handleRouteClick} />
             </div>
 
-            {/* Search and Dropdown for desktop*/}
             <div className="sm:flex hidden flex space-x-[1vw] items-center">
               <Search />
               <LinksDropdown />

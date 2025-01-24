@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Carousel,
   CarouselContent,
@@ -8,11 +7,6 @@ import {
   CarouselPrevious,
 } from "../ui/carousel";
 import EpisodeCard from "../cards/EpisodeCard";
-import handleSeasonBtn from "@/utils/handleSeasonBtn";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/features/store";
-import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
-import { setSeasonData } from "@/app/features/dbSlice";
 
 interface Episode {
   id: string;
@@ -30,9 +24,8 @@ interface SwiperEpisodeProps {
   watchedEpisodes: number[];
   onEpisodeWatched: (episodeNumber: number) => void;
   selectedSeason: number;
-  Id:number
-  isDesktop:boolean
-  //progressValue:number
+  Id: number;
+  isDesktop: boolean;
 }
 
 function CarouselEpisode({
@@ -41,11 +34,8 @@ function CarouselEpisode({
   onEpisodeWatched,
   selectedSeason,
   Id,
-  isDesktop
- // progressValue,
+  isDesktop,
 }: SwiperEpisodeProps) {
-
-  //console.log("progressValue",progressValue);
   return (
     <div>
       <div className="">
@@ -61,8 +51,8 @@ function CarouselEpisode({
                 className="basis-1/1 md:basis-1/4"
               >
                 <EpisodeCard
-                  watched={watchedEpisodes.includes(episodesItem.episode)}//This line ensures the value is always a boolean.
-                  onWatch={() => onEpisodeWatched(episodesItem.episode)} // is called with episodesItem.episode as an argument. This function presumably toggles the watched status of the specified episode.
+                  watched={watchedEpisodes.includes(episodesItem.episode)}
+                  onWatch={() => onEpisodeWatched(episodesItem.episode)}
                   episodeNumber={episodesItem.episode}
                   img={episodesItem.img}
                   title={episodesItem.title}
@@ -70,11 +60,9 @@ function CarouselEpisode({
                   score={episodesItem.score}
                   description={episodesItem.description}
                   date={episodesItem.date}
-                  //handleSeason={handleSeason}
                   selectedSeason={selectedSeason}
                   Id={Id}
                   isDesktop={isDesktop}
-                  //progressValue={progressValue}
                 />
               </CarouselItem>
             ))}

@@ -19,11 +19,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
   setApi?: (api: CarouselApi) => void;
-
-  //Edit from Shadt/ci original
-  // These new props (totalSlides, activeSlide, and setActiveSlide) are added to allow the Carousel component to know how many slides there are in total,
-  //which slide is currently active, and to provide a way to update the active slide
-  totalSlides?: number; // Add totalSlides prop
+  totalSlides?: number;
   activeSlide?: number;
   setActiveSlide?: React.Dispatch<React.SetStateAction<number>>;
 };
@@ -72,7 +68,7 @@ const Carousel = React.forwardRef<
       {
         ...opts,
         axis: orientation === "horizontal" ? "x" : "y",
-        loop: true, // Enable looping
+        loop: true,
       },
       plugins
     );
@@ -87,25 +83,16 @@ const Carousel = React.forwardRef<
 
         setCanScrollPrev(api.canScrollPrev());
         setCanScrollNext(api.canScrollNext());
-        //The line setActiveSlide(api.selectedScrollSnap()); updates the activeSlide state to the index of the current slide. This keeps the
-        //carousel and the dots in sync by telling React which slide is currently active.
-        //api is an instance of the carousel API provided by embla-carousel-react
-        //This API provides various methods to interact with and control the carousel, like scrolling to a specific slide, getting the current slide index, and more.
-        //selectedScrollSnap() is a method of the api object.
-        //It returns the index of the currently selected slide (or snap point) in the carousel.
-        if (setActiveSlide) { // Check if setActiveSlide is provided
+        if (setActiveSlide) {
           setActiveSlide(api.selectedScrollSnap());
         }
       },
       [setActiveSlide]
     );
 
-    //This effect runs whenever activeSlide changes. It uses the carousel api to scroll to the slide that matches the current
-    // activeSlide index. This ensures that whenever you change activeSlide (for example, by clicking the arrow buttons), the carousel will scroll to the correct slide
     React.useEffect(() => {
       if (!api) return;
-      api.scrollTo(activeSlide ?? 0);  // Default to 0 if activeSlide is undefined
-      //This line below updated the state of both
+      api.scrollTo(activeSlide ?? 0);
     }, [api, activeSlide]);
 
     React.useEffect(() => {

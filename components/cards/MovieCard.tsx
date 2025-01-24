@@ -15,32 +15,25 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { GoDotFill, GoStarFill } from "react-icons/go";
-import { Button } from "../ui/button";
-// import {
-//   getMovieCertification,
-//   getMovieDetails,
-//   getSeriesDetails,
-// } from "@/app/pages/api/loginPage";
+import { GoDotFill } from "react-icons/go";
 import {
   useGetDetailsTeaserCardQuery,
   useGetMovieCertificationQuery,
 } from "@/app/features/homepage/movies/moviedetailsSlice";
 
 import { useGetSeriesDetailsTeaserCardQuery } from "@/app/features/homepage/series/seriesSlice";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 
 interface MovieCardProps {
   imgUrl: string;
   title?: string;
   name?: string;
-  className?: string; // Optional className prop
-  isPartialSlide?: boolean; // Optional prop to indicate if it's a partial slide
+  className?: string;
+  isPartialSlide?: boolean;
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   list?: boolean;
   single?: boolean;
-  type?: string; // Define possible values
+  type?: string;
   watchlist?: boolean;
   watched?: boolean;
   logInPage?: boolean;
@@ -83,11 +76,11 @@ function MovieCard({
   const [season, setSeasons] = useState();
   const [description, setDescription] = useState();
   const [certification, setCertification] = useState();
-  const [genres, setGenres] = useState<Genre[]>([]); // Explicit type for genres
+  const [genres, setGenres] = useState<Genre[]>([]);
   const [expandCard, setExpandCard] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
-  const [watchlistOptions, setWatchlistOptions] = useState(false); // Track if the view is desktop
-  const [watchedOptions, setWatchedOptions] = useState(false); // Track if the view is desktop
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [watchlistOptions, setWatchlistOptions] = useState(false);
+  const [watchedOptions, setWatchedOptions] = useState(false);
   const hoveredRef = useRef(false);
   const [clicked, setClicked] = useState(false);
 
@@ -97,15 +90,13 @@ function MovieCard({
   };
 
   const handleClickEffect = (e: any) => {
-    // Trigger click effect
     setClicked(true);
 
-    // Reset the effect after 300ms
     setTimeout(() => setClicked(false), 300);
 
     if (watchlist || watched) {
       e.preventDefault();
-      e.stopPropagation(); // Prevent navigation
+      e.stopPropagation();
     }
   };
   //console.log(type);
@@ -125,10 +116,6 @@ function MovieCard({
     id,
     media: mediaType,
   });
-
-  //const { data: movieTrailer } = useGetMovieTrailerQuery(Id || 0);
-
-  //const { data: movieCast } = useGetMovieCastQuery(Id || 0);
 
   useEffect(() => {
     if (mediaType === "movie") {
@@ -152,15 +139,13 @@ function MovieCard({
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
+      setIsDesktop(window.innerWidth >= 768);
     };
 
-    handleResize(); // Check the initial screen size
+    handleResize();
 
-    // Add event listener to update on window resize
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -189,16 +174,14 @@ function MovieCard({
   };
 
   const handleClick = (e: React.MouseEvent) => {
-    // Prevent navigation if the card is expanded or a button is clicked
     if (expandCard) {
       e.preventDefault();
     }
-    //window.location.href = `${href}/${id}`; // Force page reload when traveling to singlepage, it works but too many reloads
   };
 
   const formatRuntime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60); // Get the hours
-    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
   };
 
@@ -300,10 +283,9 @@ function MovieCard({
             href={`${href}/${id}`}
             passHref
             onClick={(e) => {
-              // Prevent navigation if it's a WatchListOpt
               if (watchlist || watched) {
                 e.preventDefault();
-                e.stopPropagation(); // Prevent click event from bubbling up
+                e.stopPropagation();
               }
             }}
           >
@@ -369,7 +351,6 @@ function MovieCard({
                     isLastThreeSlides={isLastThreeSlides}
                     isLastOne={isLastOne}
                     expandCard={expandCard}
-                    //showContent={showContent}
                     isDesktop={isDesktop}
                     id={id}
                   />

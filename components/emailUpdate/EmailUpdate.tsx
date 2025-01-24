@@ -9,9 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
-//import { updateEmail } from "@/app/features/dbSlice";
 import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface EmailProp {
@@ -90,11 +89,8 @@ function EmailUpdate({ email }: EmailProp) {
     <div>
       <h1 className="mb-[1vh] md:text-[0.9vw]">Email</h1>
       <form>
-        {/* Search Input */}
         <h1
-          //type="text"
           className={`flex items-center bg-buttonColor h-[7vh] w-[75vw] md:h-[5.5vh]  md:px-[1.5vw] px-[4vw] md:w-[14vw] rounded-full md:text-[0.9vw] placeholder-white`}
-          //placeholder={`${email}`}
         >{`${email}`}</h1>
       </form>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -114,7 +110,6 @@ function EmailUpdate({ email }: EmailProp) {
             >
               <h1 className="mb-[1vh] md:text-[0.9vw]">Current Email</h1>
               <div>
-                {/* Search Input */}
                 <input
                   type="text"
                   className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}
@@ -125,19 +120,17 @@ function EmailUpdate({ email }: EmailProp) {
               <div>
                 <h1 className="mb-[1vh] md:text-[0.9vw]">New Email</h1>
                 <div>
-                  {/* Search Input */}
                   <input
                     type="text"
                     className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
                     placeholder="New Email..."
-                    required  
+                    required
                   />
                 </div>
               </div>
               <div>
                 <h1 className="mb-[1vh] md:text-[0.9vw]">Confirm New Email</h1>
                 <div>
-                  {/* Search Input */}
                   <input
                     type="text"
                     className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}

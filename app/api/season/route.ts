@@ -2,16 +2,12 @@ import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-//import { authOptions } from "../auth/[...nextauth]/route";
 import { authOptions } from "@/utils/authOptions";
 
 export const POST = async (request: any) => {
   const { season, userEmail, episodeNumber, Id, episodeValue, episodeWatched, } =
     await request.json();
 
-  // console.log("ID", Id);
-  // console.log("season", season);
-  //console.log("progressValue", progressValue);
   await connect();
 
   try {

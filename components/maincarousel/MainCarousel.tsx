@@ -1,11 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import YoutubePlayerMainCaroisel from "./YoutubePlayerMainCaroisel";
-import { GoMute, GoUnmute } from "react-icons/go";
-import { CiPlay1, CiPause1 } from "react-icons/ci";
-import { IoCheckmark, IoReloadSharp } from "react-icons/io5";
-import { MdOutlineReplay } from "react-icons/md";
-
-// Import the necessary components
 import {
   Carousel,
   CarouselContent,
@@ -13,19 +6,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Button } from "../ui/button";
-import { SlArrowRight } from "react-icons/sl";
-import { LuPlus } from "react-icons/lu";
-import Link from "next/link";
-import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/features/store";
 import MainCarouseulitem from "./MainCarouseulitem";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MediaProp {
   id: number;
-  //image: string;
   title: string;
   name?: string;
   poster_path: string;
@@ -38,10 +23,7 @@ interface MediaProp {
 }
 
 interface Props {
-  //tmdbId?:number[];
-  //image?: string[];
   medias: MediaProp[];
-  //mediaRapid?: MediaRapid[];
   title?: string;
   logInPage?: boolean;
   itemsGenres?: Array<{
@@ -50,7 +32,6 @@ interface Props {
   }>;
   mediaType: string;
   inTheatersLoading: boolean;
-  //getGenreNames: () => void;
 }
 
 function MainCarousel({
@@ -60,54 +41,40 @@ function MainCarousel({
   itemsGenres = [],
   mediaType,
   inTheatersLoading,
-}: //image = [],
-//tmdbId = []
-// mediaRapid = [],
-Props) {
+}: Props) {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(false); // Track if the view is desktop
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 768); // Set true for desktop view
+      setIsDesktop(window.innerWidth >= 768);
     };
 
-    handleResize(); // Check the initial screen size
+    handleResize();
 
-    // Add event listener to update on window resize
     window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on unmount
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const totalSlides = 10; // Set the total number of slides
-  const [isTransitioning, setIsTransitioning] = useState(false); // Debounce transition
+  const totalSlides = 10;
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Handle the next slide action
-  //These functions are wrapped with useCallback to ensure they are only re-created if totalSlides changes.
-  //This can help with performance optimization
-  // Handle the next slide action
   const handleNext = useCallback(() => {
-    if (isTransitioning) return; // Debounce next transition
-    setIsTransitioning(true); // Set transition state
+    if (isTransitioning) return;
+    setIsTransitioning(true);
 
     setActiveSlide((prevSlide) => (prevSlide + 1) % totalSlides);
-    setTimeout(() => setIsTransitioning(false), 500); // Reset after 500ms (matches transition duration)
+    setTimeout(() => setIsTransitioning(false), 500);
   }, [totalSlides, isTransitioning]);
 
-  // Handle the previous slide action
   const handlePrev = useCallback(() => {
-    if (isTransitioning) return; // Debounce previous transition
+    if (isTransitioning) return;
     setIsTransitioning(true);
 
     setActiveSlide((prevSlide) => (prevSlide - 1 + totalSlides) % totalSlides);
-    setTimeout(() => setIsTransitioning(false), 500); // Reset after 500ms
+    setTimeout(() => setIsTransitioning(false), 500);
   }, [totalSlides, isTransitioning]);
-
-  // useEffect(() => {
-  //   console.log("Current activeSlide:", activeSlide);
-  // }, [activeSlide]);
 
   const formatDate = (date: string | undefined) => {
     if (date) {
@@ -119,21 +86,12 @@ Props) {
     }
   };
 
-  // const handleAdded = async (index: number) => {
-  //   handleWatchlistBtn(dispatch, setIsAdded, isAdded[index], medias[index].id);
-  // };
-
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
   return (
     <div>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[5vh] top-[53.1vh] z-20 md:h-[15vh] md:top-[90vh] md:z-40" />
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customColor h-[2rem] top-[19rem] z-10 md:h-[10rem] md:top-[53.5rem] md:z-30" /> */}
-      {/* // In the MainCarousel component, we pass the activeSlide, setActiveSlide, and totalSlides to the Carousel. This allows the Carousel component 
-      to use and modify the state (activeSlide) that tracks which slide is currently active. 
-      This link ensures that when the carousel scrolls, the dots and the slides are in sync */}
       {inTheatersLoading ? (
-        // Skeleton Loading State
         <div className="relative w-full h-screen flex justify-center items-center rounded-2xl">
           <Skeleton className="md:w-[10vw] md:h-[4vh] w-[40vw] h-[3vh] bg-backgroundButton rounded-2xl ml-[4vw] md:ml-[0vw] absolute top-[37vh] md:top-[30vh] left-[5%] md:left-[4%]" />
           <Skeleton className="md:w-[20vw] md:h-[6vh] w-[30vw] h-[4vh] bg-backgroundButton rounded-2xl ml-[4vw] md:ml-[0vw] absolute top-[41vh] md:top-[35vh] left-[5%] md:left-[4%]" />
@@ -160,20 +118,19 @@ Props) {
         </div>
       ) : (
         <Carousel
-          activeSlide={activeSlide} //activeSlide: Keeps track of which slide is currently shown
-          setActiveSlide={setActiveSlide} //setActiveSlide: Allows the carousel to update the active slide state
-          totalSlides={totalSlides} //Provides the number of slides in the carousel.
+          activeSlide={activeSlide}
+          setActiveSlide={setActiveSlide}
+          totalSlides={totalSlides}
         >
           <CarouselContent>
             {medias.slice(0, 10).map((media, index) => (
-              <CarouselItem 
-              key={media.id}
-              className="relative w-full h-screen flex justify-center items-center px-0 md:px-0">
-                {/* Background Image as an absolutely positioned div */}
+              <CarouselItem
+                key={media.id}
+                className="relative w-full h-screen flex justify-center items-center px-0 md:px-0"
+              >
                 <div>
                   <MainCarouseulitem
-                    //watchlistdb={watchlistdb}
-                    media={media} // Passing the entire media object
+                    media={media}
                     index={index}
                     activeSlide={activeSlide}
                     setActiveSlide={setActiveSlide}
@@ -187,8 +144,6 @@ Props) {
               </CarouselItem>
             ))}
           </CarouselContent>
-
-          {/* Position the dots at the bottom center of the carousel */}
 
           <div className="absolute bottom-[40vh] md:bottom-[17vh] left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
             {Array.from({ length: totalSlides }).map((_, index) => (

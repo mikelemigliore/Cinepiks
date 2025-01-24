@@ -7,8 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-//import { links } from "@/utils/links";
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoPersonSharp } from "react-icons/io5";
 import { LuPlus } from "react-icons/lu";
@@ -16,42 +14,33 @@ import { IoCheckmark } from "react-icons/io5";
 import { AiFillLike } from "react-icons/ai";
 import { IoMdLogOut } from "react-icons/io";
 import { signOut, useSession } from "next-auth/react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/app/features/store";
 import { useGetAccountQuery } from "@/app/features/account/accountSlice";
 import { useRouter } from "next/navigation";
 
 interface Props {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function LinksDropdown({ onClick }: Props) {
   const [src, setSrc] = useState<string | null>(null);
   const { data: session }: any = useSession();
 
-  //console.log("session", session);
-
   const { data: accountDb, isSuccess } = useGetAccountQuery({});
 
   const router = useRouter();
 
-  //console.log(email);
-
   useEffect(() => {
     if (isSuccess && accountDb) {
-      //console.log(accountDb);
       setSrc(accountDb?.picture);
     }
   }, [accountDb, isSuccess]);
 
-  //console.log("picturedb", src);
-
   const handleLikesReload = () => {
-    window.location.href = "/likes"; // Force page reload
+    window.location.href = "/likes";
   };
 
   const handleWatchlistReload = () => {
-    window.location.href = "/watchlist"; // Force page reload
+    window.location.href = "/watchlist";
   };
 
   return (
@@ -72,19 +61,11 @@ function LinksDropdown({ onClick }: Props) {
         align="end"
         sideOffset={10}
       >
-        {/* {links.map((link) => { */}
-        {/* return ( */}
-        <DropdownMenuItem
-          // key={link.href}
-          className="flex flex-col md:space-y-[1vw] md:p-[1vh] space-y-[3vw] p-[1vh] hover:bg-transparent focus:bg-transparent active:bg-transparent"
-        >
+        <DropdownMenuItem className="flex flex-col md:space-y-[1vw] md:p-[1vh] space-y-[3vw] p-[1vh] hover:bg-transparent focus:bg-transparent active:bg-transparent">
           {!session ? (
             <></>
           ) : (
-            <div
-              //href={"/account"}
-              className="flex items-center font-medium text-[1.2vw] capitalize w-full"
-            >
+            <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
               <Button
                 variant="ghost"
                 onClick={() => router.push("/account")}
@@ -96,27 +77,17 @@ function LinksDropdown({ onClick }: Props) {
             </div>
           )}
 
-          <div
-            //href={"/watchlist"}
-            className="flex items-center font-medium text-[1.2vw] capitalize w-full"
-          >
+          <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
             <Button
               variant="ghost"
               onClick={() => router.push("/watchlist")}
-              // onClick={(e) => {
-              //   if (onClick) onClick(e); // Call the passed onClick handler if provided
-              //   handleWatchlistReload(); // Reload the page
-              // }}
               className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <LuPlus size={25} />
               Watchlist
             </Button>
           </div>
-          <div
-            // href={"/watched"}
-            className="flex items-center font-medium text-[1.2vw] capitalize w-full"
-          >
+          <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
             <Button
               variant="ghost"
               onClick={() => router.push("/watched")}
@@ -130,8 +101,8 @@ function LinksDropdown({ onClick }: Props) {
             <Button
               variant="ghost"
               onClick={(e) => {
-                if (onClick) onClick(e); // Call the passed onClick handler if provided
-                handleLikesReload(); // Reload the page
+                if (onClick) onClick(e);
+                handleLikesReload();
               }}
               className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
@@ -139,14 +110,10 @@ function LinksDropdown({ onClick }: Props) {
               Likes
             </Button>
           </div>
-          {/* </Link> */}
           {!session ? (
             <></>
           ) : (
-            <div
-              //href={"/"}
-              className="flex items-center font-medium text-[1.2vw] capitalize w-full"
-            >
+            <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
               <Button
                 onClick={() => {
                   signOut({ callbackUrl: "/" });

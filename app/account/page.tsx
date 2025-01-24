@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Password from "@/components/password/Password";
 import EmailUpdate from "@/components/emailUpdate/EmailUpdate";
 import DeleteAccount from "@/components/deleteAccount/DeleteAccount";
-import Link from "next/link";
 import { IoPersonSharp } from "react-icons/io5";
 import { useGetAccountQuery } from "../features/account/accountSlice";
 import ProfilePicture from "@/components/profilePicture/ProfilePicture";

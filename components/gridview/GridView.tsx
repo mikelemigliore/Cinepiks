@@ -1,13 +1,12 @@
 import React from "react";
 import MovieCard from "../cards/MovieCard";
-import Link from "next/link";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Media {
   id: number;
   title?: string;
   poster_path: string;
-  media_type: string; // Add type here to indicate the media type
+  media_type: string;
   backdrop_path: string;
   name?: string;
   genre_ids?: number[];
@@ -19,7 +18,6 @@ interface GridViewProp {
   watchlist?: boolean;
   watched?: boolean;
   isLoadingContent: boolean;
-  //mediaType?: string | null; // Indicates the type of content
 }
 
 function GridView({
@@ -28,8 +26,7 @@ function GridView({
   watchlist,
   watched,
   isLoadingContent,
-}: //mediaType,
-GridViewProp) {
+}: GridViewProp) {
   return (
     <div
       className={`${
@@ -47,10 +44,8 @@ GridViewProp) {
               <div
                 key={index}
                 className={`m-[1vw] transition-transform duration-700 md:ml-[-0.2vw] ml-[-2vw]`}
-                //style={{ width: "12.6vw", height: "40vh" }}
               >
                 <Skeleton className="w-[46vw] h-[33vh] bg-backgroundButton md:h-[40vh] md:w-[12.6vw] rounded-2xl ml-[3vw] md:ml-[0vw]" />
-                {/* <Skeleton className="w-[46vw] h-[5vh] bg-backgroundButton md:h-[4vh] md:w-[12.6vw] rounded-full md:mt-[0.5vh] mt-[1vh] ml-[3vw] md:ml-[0vw]" /> */}
               </div>
             );
           })}
@@ -59,7 +54,6 @@ GridViewProp) {
         <>
           {mediaSearch?.map((media, index) => {
             const numColumns = filter ? 6 : 7;
-            //const isLastOne = filter ? index === 5 : index === 6;
             const isLastOne = (index + 1) % numColumns === 0;
 
             //console.log(media);
@@ -68,12 +62,10 @@ GridViewProp) {
               <div
                 key={index}
                 className={`m-[1vw] transition-transform duration-700 md:ml-[-0.2vw]`}
-                //style={{ width: "12.6vw", height: "40vh" }}
               >
                 <MovieCard
                   watched={watched}
                   watchlist={watchlist}
-                  //type={mediaType === "movie" ? "movie" : "tv"}
                   type={media.media_type}
                   imgUrl={media.poster_path}
                   title={media.title}

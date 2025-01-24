@@ -1,21 +1,5 @@
 import { getSession } from "next-auth/react";
-//import ListView from "@/components/listview/ListView";
-import { getLike } from "@/app/pages/api/likesPage";
-//import { useDispatch } from "react-redux";
-import {
-  likeMovie,
-  unlikeMovie,
-  unscoreMovie,
-  unwatchedMovie,
-  unwatchlistMovie,
-  updateScore,
-  watchedMovie,
-  watchlistMovie,
-} from "@/app/features/dbSlice";
-import { getWatchlist } from "@/app/pages/api/watchlistPage";
-import { getWatched } from "@/app/pages/api/watchedPage";
-
-//const dispatch = useDispatch();
+import { unscoreMovie, updateScore } from "@/app/features/dbSlice";
 
 async function handleScoreBtn(
   dispatch: any,
@@ -27,15 +11,10 @@ async function handleScoreBtn(
   const userEmail = session?.user?.email;
 
   if (!userEmail) {
-    //console.error("User not logged in!");
     return;
   }
 
-  //console.log(value);
-  
-
   if (value === 0) {
-    // REMOVE LIKE
     try {
       const res = await fetch("/api/score", {
         method: "DELETE",
@@ -48,13 +27,12 @@ async function handleScoreBtn(
       }
 
       if (res.status === 200) {
-        dispatch(unscoreMovie(res)); // ✅ Dispatch Redux action
+        dispatch(unscoreMovie(res));
       }
     } catch (error) {
       console.error("Error removing watchlist:", error);
     }
   } else {
-    // ADD LIKE
     try {
       const res = await fetch("/api/score", {
         method: "PUT",
@@ -68,10 +46,10 @@ async function handleScoreBtn(
 
       if (res.status === 200) {
         console.log(res);
-        
+
         const data = await res.json();
         console.log(data);
-        dispatch(updateScore(data)); // ✅ Dispatch Redux action
+        dispatch(updateScore(data));
       }
     } catch (error) {
       console.error("Error adding watchlist:", error);
@@ -80,6 +58,3 @@ async function handleScoreBtn(
 }
 
 export default handleScoreBtn;
-
-
-

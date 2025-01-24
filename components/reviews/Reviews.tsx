@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getReviews } from "@/app/pages/api/singleMoviePage";
 import { useGetMovieReviewQuery } from "@/app/features/homepage/movies/moviedetailsSlice";
 import { useGetSeriesReviewQuery } from "@/app/features/homepage/series/seriesSlice";
 
@@ -40,7 +39,6 @@ interface ReviewStyleProp {
 
 function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
   const [reviews, setReviews] = useState<ReviewStyleProp[]>([]);
-  //const [hightToLow, setHighToLow] = useState<ReviewStyleProp[]>([])
   const [lowToHigh, setLowToHigh] = useState<ReviewStyleProp[]>([]);
 
   const { data: movieReviews } = useGetMovieReviewQuery(id);
@@ -50,7 +48,6 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
   useEffect(() => {
     if (type === "movie") {
       if (movieReviews) {
-        // Ensure rating is parsed as a number
         const parsedReviews = movieReviews.map((review: any) => ({
           ...review,
           author_details: {
@@ -59,13 +56,11 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
           },
         }));
 
-        // Sort reviews from high to low by rating
         const sortedReviews = [...parsedReviews].sort(
           (a: ReviewStyleProp, b: ReviewStyleProp) =>
             b.author_details.rating - a.author_details.rating
         );
 
-        // Sort reviews from low to high by rating
         const sortedLowToHigh = [...parsedReviews].sort(
           (a: ReviewStyleProp, b: ReviewStyleProp) =>
             a.author_details.rating - b.author_details.rating
@@ -76,7 +71,6 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
       }
     } else if (type === "series") {
       if (seriesReviews) {
-        // Ensure rating is parsed as a number
         const parsedReviews = seriesReviews.map((review: any) => ({
           ...review,
           author_details: {
@@ -85,13 +79,11 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
           },
         }));
 
-        // Sort reviews from high to low by rating
         const sortedReviews = [...parsedReviews].sort(
           (a: ReviewStyleProp, b: ReviewStyleProp) =>
             b.author_details.rating - a.author_details.rating
         );
 
-        // Sort reviews from low to high by rating
         const sortedLowToHigh = [...parsedReviews].sort(
           (a: ReviewStyleProp, b: ReviewStyleProp) =>
             a.author_details.rating - b.author_details.rating
@@ -103,51 +95,11 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
     }
   }, [id, movieReviews, seriesReviews]);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     const fetchData = async () => {
-  //       try {
-  //         const responseReviews = await getReviews(id);
-  //         const dataReviews = await responseReviews.json();
-
-  //         // Ensure rating is parsed as a number
-  //         const parsedReviews = dataReviews.map((review: any) => ({
-  //           ...review,
-  //           author_details: {
-  //             ...review.author_details,
-  //             rating: Number(review.author_details.rating),
-  //           },
-  //         }));
-
-  //         // Sort reviews from high to low by rating
-  //         const sortedReviews = [...parsedReviews].sort(
-  //           (a: ReviewStyleProp, b: ReviewStyleProp) =>
-  //             b.author_details.rating - a.author_details.rating
-  //         );
-
-  //         // Sort reviews from low to high by rating
-  //         const sortedLowToHigh = [...parsedReviews].sort(
-  //           (a: ReviewStyleProp, b: ReviewStyleProp) =>
-  //             a.author_details.rating - b.author_details.rating
-  //         );
-
-  //         setReviews(sortedReviews);
-  //         setLowToHigh(sortedLowToHigh);
-  //       } catch (error) {
-  //         console.error("Failed to fetch:", error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }
-  // }, [id]);
-
   const formatDate = (date: string | undefined) => {
     if (date) {
-      // Extract only the date part (before the 'T')
       const datePart = date.split("T")[0];
       const [year, month, day] = datePart.split("-");
 
-      // Lookup table for month names
       const monthNames = [
         "January",
         "February",
@@ -163,13 +115,10 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
         "December",
       ];
 
-      // Convert the month number to a month name
       const monthName = monthNames[parseInt(month, 10) - 1];
 
-      // Remove leading zeros from the day
       const formattedDay = parseInt(day, 10);
 
-      // Format the final string
       const formattedDate = `${monthName} ${formattedDay}, ${year}`;
       return formattedDate;
     } else {
@@ -270,12 +219,12 @@ function Reviews({ id, hightolow, lowtohigh, type }: ReviewsProp) {
         </div>
       ) : (
         <div className="w-[34.5vw]  h-full bg-transparent rounded-[1vw] mb-[0.4vw] mr-[1vw]">
-        <img
-          src="/noResultsFound7.png"
-          alt="No content found"
-          className="md:w-[30vw] w-[100vw] md:ml-[3vw] ml-[0vw] md:mt-[4vh] mt-[14vh] absolute"
-        />
-      </div>
+          <img
+            src="/noResultsFound7.png"
+            alt="No content found"
+            className="md:w-[30vw] w-[100vw] md:ml-[3vw] ml-[0vw] md:mt-[4vh] mt-[14vh] absolute"
+          />
+        </div>
       )}
     </ScrollArea>
   );

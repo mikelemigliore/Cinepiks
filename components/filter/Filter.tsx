@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { FaFilter } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 
-// Define genres and availability arrays with `as const`
 const availability = [
   { id: "4", tag: "streaming" },
   { id: "2|3", tag: "theaters" },
@@ -17,7 +16,7 @@ const genresMovie = [
   { id: 35, tag: "comedy" },
   { id: 80, tag: "crime" },
   { id: 10751, tag: "family" },
-  { id: 878, tag: "sciFi" }, // Science Fiction
+  { id: 878, tag: "sciFi" },
   { id: 18, tag: "drama" },
   { id: 27, tag: "horror" },
   { id: 53, tag: "thriller" },
@@ -59,15 +58,7 @@ const platforms = [
   { id: 350, tag: "AppleTv" },
   { id: 337, tag: "DisneyPlus" },
   { id: 531, tag: "ParamountPlus" },
-  //{ id: 279, tag: "Fandango" },
 ] as const;
-
-// const ratings = [
-//   { id: 1, tag: "G" },
-//   { id: 2, tag: "PG" },
-//   { id: 3, tag: "R" },
-//   { id: 4, tag: "PG13" },
-// ] as const;
 
 const runtime = [
   { id: 1, tag: "LessThan1h" },
@@ -75,7 +66,6 @@ const runtime = [
   { id: 3, tag: "MoreThan2hr" },
 ] as const;
 
-// Display name mapping
 const displayNames: { [key: string]: string } = {
   warAndPolitics: "War And Politics",
   sciFiAndFantasy: "SciFi And Fantasy",
@@ -87,15 +77,12 @@ const displayNames: { [key: string]: string } = {
   primeVideo: "Prime Video",
   DisneyPlus: "Disney+",
   ParamountPlus: "Paramount+",
-  //awarded: "Award Winners",
 };
 
-// Dynamically infer types from arrays
 type GenresFilter = (typeof genresMovie)[number]["tag"];
 type SeriesGenresFilter = (typeof genresSeries)[number]["tag"];
 type AvailabilityFilter = (typeof availability)[number]["tag"];
 type PlatformFilter = (typeof platforms)[number]["tag"];
-//type RatingsFilter = (typeof ratings)[number]["tag"];
 type RuntimeFilter = (typeof runtime)[number]["tag"];
 type FilterName =
   | GenresFilter
@@ -160,7 +147,7 @@ interface SelectedFilters {
     { id: number; selected: boolean; tag: string }
   >;
 }
-//Next objective is to also add the states of the filter buttons in redux so that they don't disapper when going from single page back to grid view.
+
 function Filter({
   filter,
   handleFilter,
@@ -179,7 +166,6 @@ function Filter({
       upcoming: {
         id: "2|3",
         selected: false,
-        //selected: typeContent === "upcoming" ? true : false,
         tag: "upcoming",
       },
     },
@@ -236,15 +222,7 @@ function Filter({
       AppleTv: { id: 350, selected: false, tag: "AppleTv" },
       DisneyPlus: { id: 337, selected: false, tag: "DisneyPlus" },
       ParamountPlus: { id: 531, selected: false, tag: "ParamountPlus" },
-      //Fandango: { id: 279, selected: false, tag: "Fandango" },
     },
-
-    // ratings: {
-    //   G: false,
-    //   PG: false,
-    //   R: false,
-    //   PG13: false,
-    // },
 
     runtime: {
       LessThan1h: { id: 90, selected: false, tag: "LessThan1h" },
@@ -269,7 +247,6 @@ function Filter({
   const [isApplyDisabled, setIsApplyDisabled] = useState(true);
 
   useEffect(() => {
-    // Check if at least one filter is selected
     const isAnySelected = Object.values(selectedFilters).some((category) =>
       Object.values(category).some((item: any) => item.selected)
     );
@@ -338,12 +315,6 @@ function Filter({
         ParamountPlus: { id: 531, selected: false, tag: "ParamountPlus" },
         //Fandango: { id: 279, selected: false, tag: "Fandango" },
       },
-      // ratings: {
-      //   G: false,
-      //   PG: false,
-      //   R: false,
-      //   PG13: false,
-      // },
       runtime: {
         LessThan1h: { id: 1, selected: false, tag: "LessThan1h" },
         OneToTwohours: { id: 2, selected: false, tag: "OneToTwohours" },
@@ -354,7 +325,6 @@ function Filter({
 
   useEffect(() => {
     if (typeContent === "upcoming") {
-      // Automatically select "upcoming" in the availability filter
       setSelectedFilters((prevState) => ({
         ...prevState,
         availability: {
@@ -368,7 +338,6 @@ function Filter({
     }
 
     if (typeContent === "nowPlaying") {
-      // Automatically select "upcoming" in the availability filter
       setSelectedFilters((prevState) => ({
         ...prevState,
         availability: {
@@ -449,32 +418,26 @@ function Filter({
 
     if (typeQuery !== "series") {
       selectedGenreIds = Object.entries(selectedFilters.genresMovie)
-        .filter(([_, value]) => value.selected) // Filter only selected genres
-        .map(([_, value]) => value.id); // Map to their IDs
-      //console.log("Movie");
+        .filter(([_, value]) => value.selected)
+        .map(([_, value]) => value.id);
     } else {
       selectedGenreIds = Object.entries(selectedFilters.genresSeries)
-        .filter(([_, value]) => value.selected) // Filter only selected genres
-        .map(([_, value]) => value.id); // Map to their IDs
-      //console.log("Series");
+        .filter(([_, value]) => value.selected)
+        .map(([_, value]) => value.id);
     }
 
     const selectedPlatformIds = Object.entries(selectedFilters.platforms)
-      .filter(([_, value]) => value.selected) // Filter only selected genres
-      .map(([_, value]) => String(value.id)); // Map to their IDs
+      .filter(([_, value]) => value.selected)
+      .map(([_, value]) => String(value.id));
 
     const selectedAvailabilityIds = Object.entries(selectedFilters.availability)
-      .filter(([_, value]) => value.selected) // Filter only selected genres
-      //.map(([_, value]) =>  value.id); // Map to their IDs
-      .map(([_, value]) => ({ id: value.id, tag: value.tag })); // Map to their IDs
+      .filter(([_, value]) => value.selected)
+      .map(([_, value]) => ({ id: value.id, tag: value.tag }));
 
     const selectedRuntimeIds = Object.entries(selectedFilters.runtime)
-      .filter(([_, value]) => value.selected) // Filter only selected genres
-      .map(([_, value]) => value.id); // Map to their IDs
+      .filter(([_, value]) => value.selected)
+      .map(([_, value]) => value.id);
 
-    //console.log("Platform item", selectedPlatformIds);
-
-    // Pass the selectedGenreIds to handleFilterParams
     handleFilterParams(
       selectedGenreIds,
       selectedPlatformIds,
@@ -483,27 +446,22 @@ function Filter({
     );
   };
 
-  // Type guard for narrowing down category-specific filter names
   const handleFilterClick = (
     category: FilterCategory,
     filterName: FilterName
   ) => {
     setSelectedFilters((prevState: any) => {
-      //We pass a function to setSelectedFilters to access the current state (prevState)
       if (category === "availability" && filterName in prevState.availability) {
-        //Ensures that filterName is a valid key in prevState.availability (e.g., "streaming", "theaters").
         return {
           ...prevState,
           availability: {
-            //By not wrapping availability in square brackets, JavaScript interprets it as a fixed key.
-            ...prevState.availability, //Creates a copy of prevState.availability so only the specific filterName is modified.
-            //Toggles the current value (if true, it becomes false, and vice versa)
+            ...prevState.availability,
             [filterName]: {
               ...prevState.availability[filterName as AvailabilityFilter],
               selected:
                 !prevState.availability[filterName as AvailabilityFilter]
                   .selected,
-            }, //By wrapping filterName in square brackets, JavaScript interprets it as a variable instead of a fixed key.
+            },
           },
         };
       } else if (
@@ -551,18 +509,7 @@ function Filter({
             },
           },
         };
-      }
-      // else if (category === "ratings" && filterName in prevState.ratings) {
-      //   return {
-      //     ...prevState,
-      //     ratings: {
-      //       ...prevState.ratings,
-      //       [filterName]: !prevState.ratings[filterName as RatingsFilter],
-      //     },
-      //   };
-      // }
-      else if (category === "runtime" && filterName in prevState.runtime) {
-        // Reset all runtime selections first
+      } else if (category === "runtime" && filterName in prevState.runtime) {
         const resetRuntime = Object.keys(prevState.runtime).reduce(
           (acc, key) => ({
             ...acc,
@@ -629,7 +576,7 @@ function Filter({
                 <div>
                   {availability.map((item, index) => (
                     <Button
-                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness //Each <Button> needs a unique key prop when mapping to help React manage its updates efficiently. Here, tag is used as the unique identifier
+                      key={`${item.id}-${item.tag}`}
                       onClick={() =>
                         handleFilterClick("availability", item.tag)
                       }
@@ -654,7 +601,7 @@ function Filter({
                 <div>
                   {genresMovie.map((item) => (
                     <Button
-                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
+                      key={`${item.id}-${item.tag}`}
                       onClick={() => handleFilterClick("genresMovie", item.tag)}
                       className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                         selectedFilters.genresMovie[item.tag]?.selected
@@ -677,7 +624,7 @@ function Filter({
                 <div>
                   {genresSeries.map((item) => (
                     <Button
-                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
+                      key={`${item.id}-${item.tag}`}
                       onClick={() =>
                         handleFilterClick("genresSeries", item.tag)
                       }
@@ -701,7 +648,7 @@ function Filter({
             <div>
               {platforms.map((item) => (
                 <Button
-                  key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
+                  key={`${item.id}-${item.tag}`}
                   onClick={() => handleFilterClick("platforms", item.tag)}
                   className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                     selectedFilters.platforms[item.tag]?.selected
@@ -723,7 +670,7 @@ function Filter({
                 <div>
                   {runtime.map((item) => (
                     <Button
-                      key={`${item.id}-${item.tag}`} // Combines id and tag for uniqueness
+                      key={`${item.id}-${item.tag}`}
                       onClick={() => handleFilterClick("runtime", item.tag)}
                       className={`bg-customColorCard rounded-full p-[1.1vw] text-[0.8vw] m-[0.2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                         selectedFilters.runtime[item.tag]?.selected
@@ -780,7 +727,7 @@ function Filter({
                   <div>
                     {availability.map((item) => (
                       <Button
-                        key={item.id} //Each <Button> needs a unique key prop when mapping to help React manage its updates efficiently. Here, tag is used as the unique identifier
+                        key={item.id}
                         onClick={() =>
                           handleFilterClick("availability", item.tag)
                         }

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { CldUploadWidget } from "next-cloudinary";
-import { updatePicture } from "@/app/features/dbSlice";
 import { MdModeEditOutline } from "react-icons/md";
 
 interface ProfilePicProp {
@@ -32,7 +31,7 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
         const saveData = await saveResponse.json();
         if (saveData.result.modifiedCount === 1) {
           alert("Profile picture updated successfully!");
-          window.location.reload(); // Refreshes the current page
+          window.location.reload();
         } else {
           alert("Error updating profile picture.");
         }
@@ -46,9 +45,8 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
 
   const handleImageUpload = (result: any) => {
     if (result.event === "success") {
-      const { secure_url, coordinates } = result.info; //The cropping coordinates are extracted
+      const { secure_url, coordinates } = result.info;
 
-      // Check if cropping coordinates exist and apply them
       if (coordinates && coordinates.custom) {
         const [x, y, width, height] = coordinates.custom[0];
         const croppedUrl = `${secure_url.replace(
@@ -58,10 +56,9 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
 
         console.log(croppedUrl);
 
-        setImageUrl(croppedUrl); // Save the cropped URL
+        setImageUrl(croppedUrl);
         setPreview(croppedUrl);
       } else {
-        // Fallback to original URL if no cropping occurred
         setImageUrl(secure_url);
         setPreview(secure_url);
       }
@@ -69,7 +66,7 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
   };
 
   return (
-    <div className='md:ml-0 ml-[10vw]'>
+    <div className="md:ml-0 ml-[10vw]">
       <CldUploadWidget
         uploadPreset="my_movie_preset"
         options={{
@@ -78,17 +75,6 @@ const ProfilePicture = ({ email, setPreview }: ProfilePicProp) => {
           croppingValidateDimensions: true,
           multiple: false,
           clientAllowedFormats: ["png", "jpg", "jpeg"],
-          // styles: {
-          //   palette: {
-          //     sourceBg: "#2E2E2E", // Source area background
-          //   },
-          //   fonts: {
-          //     default: {
-          //         active: true,
-          //         color: "#FFFFFF", // Text color while typing
-          //     },
-          // },
-          // },
         }}
         onSuccess={handleImageUpload}
       >

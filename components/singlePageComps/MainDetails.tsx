@@ -37,7 +37,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import handleScoreBtn from "@/utils/handleScoreBtn";
 import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useSession } from "next-auth/react";
@@ -72,8 +71,8 @@ interface CastProp {
 interface MainDetailsProps {
   id: number;
   title: string;
-  className?: string; // Optional className prop
-  isPartialSlide?: boolean; // Optional prop to indicate if it's a partial slide
+  className?: string;
+  isPartialSlide?: boolean;
   isLastThreeSlides?: boolean;
   isLastOne?: boolean;
   list?: boolean;
@@ -139,8 +138,6 @@ MainDetailsProps) {
 
   const { data: movieDirector } = useGetDirectorQuery(id || 0);
 
-  //const { data: seriesImdbId } = useGetImdbIdQuery(id || 0);
-
   const { data: seriesDetails } = useGetSeriesDetailsQuery(id || 0);
 
   const { data: seriesCertification } = useGetSeriesCertificationQuery(id || 0);
@@ -160,18 +157,12 @@ MainDetailsProps) {
 
   useEffect(() => {
     const Liked = likesdb.map((like) => like.id).includes(id);
-    //console.log("Liked", Liked);
 
     const Watchlisted = watchlistdb
       .map((watchlist) => watchlist.id)
       .includes(id);
-    //console.log("Liked", Liked);
 
     const Score = scoredb.map((score) => score.id).includes(id);
-
-    // console.log("SCPRE", Score);
-
-    // console.log("scoredb", scoredb);
 
     if (Liked) {
       setIsLiked(true);
@@ -195,7 +186,7 @@ MainDetailsProps) {
     } else {
       setValue(0);
     }
-  }, [id]); // Run only once when the component mounts or id changes
+  }, [id]);
 
   useEffect(() => {
     if (type === "movie") {
@@ -289,22 +280,21 @@ MainDetailsProps) {
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
   const formatRuntime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60); // Get the hours
-    const remainingMinutes = minutes % 60; // Get the remaining minutes
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
     return hours ? `${hours}h ${remainingMinutes}m` : `${remainingMinutes}m`;
   };
 
   const formatTitle = (title: string): string => {
     return title
-      .toLowerCase() // Convert to lowercase
-      .replace(/[^a-z0-9\s]/g, "") // Remove special characters (non-alphanumeric except spaces)
-      .replace(/\s+/g, "_"); // Replace spaces with underscores
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "_");
   };
 
   return (
     <div
       className={`md:flex w-full transition-transform duration-700 justify-center`}
-      //style={{ width: "12.6vw", height: "40vh" }}
     >
       {!isDesktop ? (
         <div className="flex ml-[3vw]">
@@ -431,7 +421,6 @@ MainDetailsProps) {
 
       <div className="flex">
         <div className="flex flex-col pl-[3vw] z-[50]">
-          {/* Movie info here */}
           {isLoading ? (
             <Skeleton className="w-[65vw] h-[9vh] bg-backgroundButton md:h-[10vh] md:w-[25vw] rounded-3xl md:my-[0vw] my-[2vw]" />
           ) : (
@@ -482,7 +471,6 @@ MainDetailsProps) {
                 </h1>
               </div>
 
-              {/* Box for Three Titles */}
               <div className="w-full flex justify-between items-start mt-[1.7vh]">
                 <div className="flex justify-between">
                   <div className="text-customTextColor md:text-[1vw] text-[4vw]">
@@ -634,7 +622,6 @@ MainDetailsProps) {
                   <DialogTitle></DialogTitle>
                 </VisuallyHidden>
                 <YoutubeTrailerPlayer
-                  //VideoEnd={handleVideoEnd}
                   handlePlay={handlePlay}
                   videoKey={videoKey}
                   setIsLoading={setIsLoading}
@@ -664,7 +651,6 @@ MainDetailsProps) {
               )}
             </Button>
           </div>
-          {/* Box for Ratings */}
           {isDesktop && (
             <div className="w-[22vw]">
               {isLoading ? (
@@ -677,7 +663,6 @@ MainDetailsProps) {
                     </h1>
                   </div>
 
-                  {/* Box for Three Titles */}
                   <div className="w-full flex justify-between items-start mt-[1.7vh] hidden md:block">
                     <div className="flex flex-col md:flex-row justify-between">
                       <div className="text-customTextColor text-sm md:text-[1vw]">
@@ -813,11 +798,7 @@ MainDetailsProps) {
                 <div>
                   <div className="">
                     <div className="flex">
-                      <div
-                        className=" text-[1vw] z-[50]"
-                      >
-                        Your Score
-                      </div>
+                      <div className=" text-[1vw] z-[50]">Your Score</div>
                       <StarRating
                         title={title}
                         value={value}

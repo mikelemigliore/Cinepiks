@@ -1,6 +1,6 @@
 export async function getDetails(id: number) {
   const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0]; 
 
   const type = await getItemType(id);
   const url = `https://api.themoviedb.org/3/${type}/${id}?api_key=${apiKey}`;

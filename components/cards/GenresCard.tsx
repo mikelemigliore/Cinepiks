@@ -42,25 +42,16 @@ function GenresCard({
                 isPartialSlide ? "opacity-50 pointer-events-none" : ""
               } ${isSelected ? "bg-white/90" : ""}`}
       >
-        {/* Center the icon within the button */}
         <div className="flex justify-center items-center absolute">
           {hovered || isSelected ? (
             <img
               src={iconBlack}
               className="md:w-[5vw] md:h-[5vw] w-[20vw] h-[20vw]"
-              // style={{
-              //   width: "5vw",
-              //   height: "5vw",
-              // }}
             />
           ) : (
             <img
               src={iconWhite}
               className="md:w-[5vw] md:h-[5vw] w-[20vw] h-[20vw]"
-              // style={{
-              //   width: "5vw",
-              //   height: "5vw",
-              // }}
             />
           )}
         </div>

@@ -2,7 +2,6 @@ import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-// import { authOptions } from "../auth/[...nextauth]/route";
 import { authOptions } from "@/utils/authOptions";
 
 export const PUT = async (request: any) => {

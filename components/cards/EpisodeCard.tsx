@@ -7,17 +7,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FaPlay } from "react-icons/fa";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { GoStarFill, GoUnmute } from "react-icons/go";
+import { GoStarFill } from "react-icons/go";
 import { SlArrowRight } from "react-icons/sl";
 import { Button } from "../ui/button";
 import { IoCheckmark } from "react-icons/io5";
 import handleSeasonBtn from "@/utils/handleSeasonBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
-import { useGetSeasonQuery } from "@/app/features/season/seasonSlice";
-import { setSeasonData } from "@/app/features/dbSlice";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface EpisodeCardProp {
@@ -33,7 +30,6 @@ interface EpisodeCardProp {
   selectedSeason: number;
   Id: number;
   isDesktop: boolean;
-  //progressValue: number;
 }
 
 function EpisodeCard({
@@ -49,9 +45,7 @@ function EpisodeCard({
   selectedSeason,
   Id,
   isDesktop,
-}: // progressValue,
-//handleSeason,
-EpisodeCardProp) {
+}: EpisodeCardProp) {
   const [isWatched, setIsWatched] = useState(false);
   const [episodeWatched, setEpisodeWatched] = useState(true);
   const dispatch = useDispatch();
@@ -78,11 +72,9 @@ EpisodeCardProp) {
 
   const formatDate = (date: string | undefined) => {
     if (date) {
-      // Extract only the date part (before the 'T')
       const datePart = date.split("T")[0];
       const [year, month, day] = datePart.split("-");
 
-      // Lookup table for month names
       const monthNames = [
         "January",
         "February",
@@ -98,13 +90,10 @@ EpisodeCardProp) {
         "December",
       ];
 
-      // Convert the month number to a month name
       const monthName = monthNames[parseInt(month, 10) - 1];
 
-      // Remove leading zeros from the day
       const formattedDay = parseInt(day, 10);
 
-      // Format the final string
       const formattedDate = `${monthName} ${formattedDay}, ${year}`;
       return formattedDate;
     } else {
@@ -113,8 +102,6 @@ EpisodeCardProp) {
   };
 
   const handleSeason = () => {
-    //const episodeValue = progressValue; // ✅ Ensure episodeValue is defined correctly
-    // setEpisodeWatched(true)
     handleSeasonBtn(
       dispatch,
       selectedSeason,

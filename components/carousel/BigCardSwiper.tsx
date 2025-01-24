@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import BigCard from "../cards/BigCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import Link from "next/link";
-import { Button } from "../ui/button";
-import { SlArrowRight } from "react-icons/sl";
 import SwiperNavButtons from "@/utils/swiperButtons";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ItemsBigCardsProp {
   id: number;
@@ -23,7 +20,7 @@ interface ItemsBigCardsProp {
 
 interface BigCardProps {
   itemBigCards: ItemsBigCardsProp[];
-  mediaType: string; // this line was commented
+  mediaType: string;
   isLoading?: boolean;
 }
 
@@ -38,7 +35,7 @@ function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
     <div
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}
-      className="relative z-80" //bottom-[3rem]
+      className="relative z-80"
     >
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white md:text-[1.5vw] text-[5vw] font-semibold">
         {mediaType === "movie" ? (
@@ -55,8 +52,8 @@ function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
           slidesPerView={1}
           slidesPerGroup={1}
           spaceBetween={-5}
-          loop={false} // Ensure loop is enabled
-          pagination={{ clickable: true }} // Add pagination with clickable dots
+          loop={false}
+          pagination={{ clickable: true }}
           //The onSwiper callback is a function that gets called once Swiper is ready and fully set up. It gives you access to the Swiper instance
           // (which is like Swiper's control panel). This instance allows you to use its built-in methods, like moving to the next or previous slide.
           //Think of the Swiper instance like a remote control for your TV. Once your TV is turned on (initialized), you can use the remote to change the channel (move between slides).
@@ -68,7 +65,6 @@ function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
             setActiveIndex(swiper.realIndex);
           }}
           breakpoints={{
-            // when window width is >= 640px
             1024: {
               slidesPerView: 1,
               slidesPerGroup: 1,
@@ -76,29 +72,21 @@ function BigCardSwiper({ itemBigCards, mediaType, isLoading }: BigCardProps) {
             },
           }}
         >
-          {/* I am using this method so that i don't excee the api rate limit for the rating score, the rate is 6 request per minute */}
           {itemBigCards.slice(0, 5).map((itemBigCard, index) => {
-            // Define how to find the "8th" slide (partial one)
             const isPartialSlide =
-              index === (activeIndex + 1) % 5 || // Next partial slide on the right
-              index === (activeIndex - 1 + 5) % 5; // Previous partial slide on the left
+              index === (activeIndex + 1) % 5 ||
+              index === (activeIndex - 1 + 5) % 5;
 
-            const isLastOne = index === 4; // Since we are slicing to 6 items, the last one is at index 5.
+            const isLastOne = index === 4;
             console.log(mediaType === "series" ? itemBigCard : "");
 
             return (
               <SwiperSlide className="pb-[8vh]" key={itemBigCard.id}>
                 <BigCard
                   id={itemBigCard.id}
-                  //image={itemBigCard.backdrop_path}
-                  //title={itemBigCard.title}
                   isPartialSlide={isPartialSlide}
                   isLastOne={isLastOne}
                   seriesImdbId={itemBigCard.imdb_id}
-                  //genres={itemBigCard.genre_ids}
-                  // rated={itemBigCard.rated}
-                  // time={itemBigCard.time}
-                  //description={itemBigCard.description}
                   mediaType={mediaType === "series" ? "tv" : "movie"}
                   href={href}
                 />

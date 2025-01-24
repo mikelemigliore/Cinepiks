@@ -12,7 +12,7 @@ interface SinglePageMainTrailerProp {
   autoplay?: boolean;
   play?: boolean;
   handlePlay: () => void;
-  setIsLoading: (loading: boolean) => void; // Add prop to manage loading state
+  setIsLoading: (loading: boolean) => void;
   pause?: boolean;
   reload?: boolean;
   handleReload: () => void;
@@ -58,7 +58,7 @@ function SinglePageMainTrailer({
           autoplay={autoplay}
           videoKey={videoKey}
           src={src}
-          setIsLoading={setIsLoading} // Pass the loading state handler
+          setIsLoading={setIsLoading}
           isDesktop={isDesktop}
         />
       ) : (
@@ -88,14 +88,15 @@ function SinglePageMainTrailer({
           <>
             <div className="">
               <CiPlay1 className="md:w-[2vw] md:h-[2vw] w-[7vw] h-[7vw]" />
-              <h1 className="absolute md:text-[1.1vw] text-[4vw]  md:mt-[2vw] md:ml-[-1.5vw] mt-[6vw] ml-[-6vw] ">Play Trailer</h1>
+              <h1 className="absolute md:text-[1.1vw] text-[4vw]  md:mt-[2vw] md:ml-[-1.5vw] mt-[6vw] ml-[-6vw] ">
+                Play Trailer
+              </h1>
             </div>
           </>
         )}
       </Button>
       {isDesktop && (
         <>
-          {/* Display the appropriate icon based on fullscreen state */}
           {play && (
             <div className="ml-[80vw] mt-[-10vw]  z-[100] absolute">
               <Button

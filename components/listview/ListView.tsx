@@ -28,7 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface GenresType {
@@ -41,32 +41,11 @@ interface Genre {
   name: string;
 }
 
-const genresMovie = [
-  { id: 28, tag: "Action" },
-  { id: 12, tag: "Adventure" },
-  { id: 16, tag: "Animated" },
-  { id: 35, tag: "Comedy" },
-  { id: 80, tag: "Crime" },
-  { id: 10751, tag: "Family" },
-  { id: 878, tag: "SciFi" }, // Science Fiction
-  { id: 18, tag: "Drama" },
-  { id: 27, tag: "Horror" },
-  { id: 53, tag: "Thriller" },
-  { id: 10749, tag: "Romance" },
-  { id: 36, tag: "History" },
-  { id: 9648, tag: "Mystery" },
-  { id: 10752, tag: "War" },
-  { id: 37, tag: "Western" },
-  { id: 99, tag: "Documentary" },
-  { id: 10402, tag: "Music" },
-  { id: 14, tag: "Fantasy" },
-];
-
 interface Movie {
   id: number;
   title?: string;
   poster_path: string;
-  media_type: string; // Add type here to indicate the media type
+  media_type: string;
   backdrop_path: string;
   name?: string;
   overview?: string;
@@ -75,22 +54,16 @@ interface Movie {
 
 interface ListViewProp {
   filter?: boolean;
-  //mediaSearch: Movie[];
   media_type: string;
   poster_path: string;
   title?: string;
   overview: string;
   backdrop_path: string;
-  //name?:string
   list?: boolean;
   watchlist?: boolean;
   watched?: boolean;
-  //value: number | null; //This was commented out
-  //handleValue: (newValue: number) => void; //This was commented out
-  mediaType?: string; // Indicates the type of content
+  mediaType?: string;
   id: number;
-  //likes?: number[];
-  // genresMovie?: GenresType[];
   isDesktop: boolean;
   isLoadingContent: boolean;
 }
@@ -101,11 +74,9 @@ interface CastMember {
 
 function ListView({
   filter,
-  //mediaSearch,
   list,
   watchlist,
   watched,
-  //value,
   id,
   media_type,
   poster_path,
@@ -115,16 +86,12 @@ function ListView({
   mediaType,
   isDesktop,
   isLoadingContent,
-}: //handleValue
-ListViewProp) {
-  const [isAdded, setIsAdded] = useState(false); //Record<number, boolean> means that the object will have keys of type number (e.g., movie IDs) and values of type boolean (e.g., true or false to indicate if a movie is added).
+}: ListViewProp) {
+  const [isAdded, setIsAdded] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [scores, setScores] = useState<Record<number, number | null>>({}); //Purpose: This state variable, scores, keeps track of the rating (or score) for each movie.
-  //Type: Record<number, number | null> means scores is an object where each key is a movie ID (number) and each value is a number representing the movie’s score or null if there’s no score yet.
-  //Initial Value: {}, so initially, no movie has a score.
+  const [scores, setScores] = useState<Record<number, number | null>>({});
   const [isTrailer, setIsTrailer] = useState(false);
-  //const [videoKey3, setVideoKey3] = useState("o17MF9vnabg"); // avatar
-  const [isLoading, setIsLoading] = useState(false); // Track loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [isListView, setIsListView] = useState(true);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [imdbId, setImdbId] = useState();
@@ -141,7 +108,7 @@ ListViewProp) {
   const [director, setDirector] = useState();
   const [cast, setCast] = useState<CastMember[]>([]);
   const [videoKey, setVideoKey] = useState("");
-  //const [likes, setLikes] = useState<number[]>([]);
+
   const [value, setValue] = React.useState<number>(0);
 
   const { data: session }: any = useSession();
@@ -174,7 +141,6 @@ ListViewProp) {
     const Watchlisted = watchlistdb
       .map((watchlist) => watchlist.id)
       .includes(id);
-    //console.log("Liked", Liked);
 
     const Score = scoredb.map((score) => score.id).includes(id);
 
@@ -200,7 +166,7 @@ ListViewProp) {
     } else {
       setValue(0);
     }
-  }, [id]); // Run only once when the component mounts or id changes
+  }, [id]);
 
   useEffect(() => {
     if (movieDetails) {
@@ -307,14 +273,6 @@ ListViewProp) {
                         mediaType={media_type}
                         session={session}
                       />
-                      {/* <StarRating
-                      title={title || undefined}
-                      //name={name}
-                      value={scores[id] || null}
-                      handleValue={(newValue) =>
-                        handleScoreChange(id, newValue)
-                      }
-                    /> */}
                     </div>
 
                     <div className="flex items-end text-[4vw] mt-[1vh]">
@@ -411,10 +369,6 @@ ListViewProp) {
                   </Button>
                 )}
 
-                {/* <Button
-                  onClick={() => setIsTrailer(!isTrailer)}
-                  className={`${!isDesktop ? `hidden` : ``}`}
-                > */}
                 <Dialog>
                   <DialogTrigger
                     onClick={() => setIsTrailer(!isTrailer)}
@@ -441,8 +395,6 @@ ListViewProp) {
                     />
                   </DialogContent>
                 </Dialog>
-                
-                {/* </Button> */}
 
                 <Button
                   type="submit"
@@ -460,7 +412,6 @@ ListViewProp) {
                   )}
                 </Button>
               </div>
-              {/* Box for Ratings */}
               <div className="w-[22vw]">
                 <div className="w-full mt-[1vw] hidden md:block">
                   <h1 className="text-white text-base md:text-[0.9vw]">
@@ -468,7 +419,6 @@ ListViewProp) {
                   </h1>
                 </div>
 
-                {/* Box for Three Titles */}
                 <div className="w-full flex justify-between items-start mt-[1vh] hidden md:block">
                   <div className="flex flex-col md:flex-row justify-between">
                     <div className="text-customTextColor text-sm md:text-[0.9vw]">
@@ -569,14 +519,6 @@ ListViewProp) {
                         mediaType={media_type}
                         session={session}
                       />
-                      {/* <StarRating
-                      title={title || undefined}
-                      //name={name}
-                      value={scores[id] || null}
-                      handleValue={(newValue) =>
-                        handleScoreChange(id, newValue)
-                      }
-                    /> */}
                     </div>
 
                     <div className="flex items-end text-[1vw] mt-[1vh]">
@@ -608,69 +550,10 @@ ListViewProp) {
             )}
           </div>
         </div>
-        {/* Divider line */}
         <div className="w-full h-[0.1vh] mt-[2vh] bg-white/20"></div>
       </div>
-      {/* ); */}
-      {/* })} */}
     </div>
   );
 }
 
 export default ListView;
-
-// const handleLike = async (id: number) => {
-//   const session = await getSession();
-//   const userEmail = session?.user?.email;
-
-//   if (!userEmail) {
-//     console.error("User not logged in!");
-//     return;
-//   }
-
-//   if (isLiked === true) {
-//     // REMOVE LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "DELETE",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(false);
-//         const data = await getLike(id);
-//         const likedContent = await data.json();
-//         dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error removing like:", error);
-//     }
-//   } else {
-//     // ADD LIKE
-//     try {
-//       const res = await fetch("/api/likes", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ userEmail, like: id }),
-//       });
-
-//       if (res.status === 400) {
-//         console.log("Error");
-//       }
-
-//       if (res.status === 200) {
-//         setIsLiked(true);
-//         const data = await getLike(id); // Fetch movie data by IDs
-//         const likedContent = await data.json();
-//         dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
-//       }
-//     } catch (error) {
-//       console.error("Error adding like:", error);
-//     }
-//   }
-// };

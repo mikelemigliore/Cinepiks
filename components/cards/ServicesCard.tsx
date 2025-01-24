@@ -1,73 +1,5 @@
-// import React, { useState } from "react";
-// import { Button } from "../ui/button";
-// import { IoTvOutline, IoTv } from "react-icons/io5";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faMasksTheater } from "@fortawesome/free-solid-svg-icons"; // Example icon
-
-// interface ServicesCardProp {
-//   title: string;
-//   isPartialSlide: boolean;
-//   activeIndex: number;
-//   onSelect: () => void;
-//   isSelected: boolean;
-//   iconBlack: any;
-//   iconWhite: any;
-// }
-// function ServicesCard({
-//   title,
-//   isPartialSlide,
-//   activeIndex,
-//   onSelect,
-//   isSelected,
-//   iconBlack,
-//   iconWhite,
-// }: ServicesCardProp) {
-//   //const [isSelected, setIsSelected] = useState(false);
-//   const [hovered, setHovered] = useState(false);
-
-//   return (
-//     <div className="relative">
-//       <Button
-//         onMouseEnter={() => setHovered(true)}
-//         onMouseLeave={() => setHovered(false)}
-//         onClick={() => onSelect()}
-//         className={`bg-customServicesColor pt-[10rem] rounded-full w-[12rem] h-[12rem] text-2xl font-bold hover:bg-white/90 hover:text-black
-//               hover:font-bold transition-transform duration-300 ease-in-out active:scale-95 ${
-//                 isPartialSlide ? "opacity-50 pointer-events-none" : ""
-//               } ${isSelected ? "bg-white/90" : ""}`}
-//       >
-//         {/* Center the icon within the button */}
-//         <div className="flex justify-center items-center absolute mb-[10rem]">
-//           {hovered || isSelected ? (
-//             <img
-//               src={iconBlack}
-//               style={{
-//                 width: "6rem",
-//                 height: "6rem",
-//               }}
-//             />
-//           ) : (
-//             <img
-//               src={iconWhite}
-//               style={{
-//                 width: "6rem",
-//                 height: "6rem",
-//               }}
-//             />
-//           )}
-//         </div>
-//         <h1 className="mt-[7rem] pointer-events-none text-white transform-none">
-//           {title}
-//         </h1>
-//       </Button>
-//     </div>
-//   );
-// }
-
-// export default ServicesCard;
 import React from "react";
 import { Button } from "../ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import {
   Dialog,
@@ -123,23 +55,7 @@ function ServicesCard({
                 src={img}
               />
             </div>
-
-            {/* <div
-              className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
-            />
-            <div
-              className={`z-[10] absolute inset-0 bg-gradient-to-t from-customColorCard to-transparent w-full h-[15vw] mt-[5vw]`}
-            /> */}
-
             <div className="md:ml-[1.5vw] ml-[4vw] md:mt-[-1.5vw] mt-[-6vw]">
-              {/* <div className="flex justify-between relative z-[100]">
-                <div>
-                  <div className="flex mt-[1vh]">
-                    <div className="text-[1.3vw] line-clamp-1">{title}</div>
-                  </div>
-                </div>
-              </div> */}
-
               <div className="md:h-[5.5vw] mr-[1vw] md:mt-[1vw]">
                 <div className=" text-white text-base md:text-[0.9vw] text-start max-w-[23rem] md:max-w-[65vw] leading-[2] md:leading-[1.5]">
                   Although this website is not affiliated with any streaming
@@ -171,10 +87,10 @@ function ServicesCard({
         <div>
           <Button
             onClick={() => {
-              onSelect(); // Handle selection
+              onSelect();
             }}
-            onMouseDown={(e) => e.currentTarget.blur()} // Remove focus on click
-            onTouchEnd={(e) => e.currentTarget.blur()} // Handle touch events for mobile
+            onMouseDown={(e) => e.currentTarget.blur()}
+            onTouchEnd={(e) => e.currentTarget.blur()}
             className={`hover:scale-[1.03] transition-transform duration-300 bg-customServicesColor pt-[19vh] rounded-3xl w-[45vw] md:w-[14vw] text-[2vw] md:text-[1.5vw] font-bold hover:bg-white/90 hover:text-black 
               hover:font-bold transition-transform duration-300 ease-in-out active:scale-[0.99] ${
                 isPartialSlide ? "opacity-50 pointer-events-none" : ""

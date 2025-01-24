@@ -1,30 +1,14 @@
 import { getSession } from "next-auth/react";
-//import ListView from "@/components/listview/ListView";
-import { getLike } from "@/app/pages/api/likesPage";
-//import { useDispatch } from "react-redux";
-import {
-  likeMovie,
-  unlikeMovie,
-  unwatchedMovie,
-  unwatchlistMovie,
-  watchedMovie,
-  watchlistMovie,
-} from "@/app/features/dbSlice";
-import { getWatchlist } from "@/app/pages/api/watchlistPage";
+import { unwatchedMovie, watchedMovie } from "@/app/features/dbSlice";
 import { getWatched } from "@/app/pages/api/watchedPage";
-import { useGetWatchlistQuery } from "@/app/features/watchlist/watchlistSlice";
-
-//const dispatch = useDispatch();
 
 async function handleWatchedBtn(
   dispatch: any,
   setIsAdded: any,
   isAdded: boolean,
   id: number,
-  mediaType: string,
-  //watchlistDB:any
+  mediaType: string
 ) {
-
   const session = await getSession();
   const userEmail = session?.user?.email;
 
@@ -33,14 +17,7 @@ async function handleWatchedBtn(
     return;
   }
 
-
-  // const isInWatchlist = watchlistDB?.some(
-  //   (item: any) => item.id === id && item.type === mediaType
-  // );
-
-
   if (isAdded === true) {
-    // REMOVE
     try {
       const res = await fetch("/api/watched", {
         method: "DELETE",
@@ -56,13 +33,12 @@ async function handleWatchedBtn(
         setIsAdded(true);
         const data = await getWatched(id, mediaType);
         const watchedContent = await data.json();
-        dispatch(unwatchedMovie(watchedContent)); // ✅ Dispatch Redux action
+        dispatch(unwatchedMovie(watchedContent));
       }
     } catch (error) {
       console.error("Error removing watchlist:", error);
     }
   } else {
-    // ADD
     try {
       const res = await fetch("/api/watched", {
         method: "POST",
@@ -76,9 +52,9 @@ async function handleWatchedBtn(
 
       if (res.status === 200) {
         setIsAdded(true);
-        const data = await getWatched(id, mediaType); // Fetch movie data by IDs
+        const data = await getWatched(id, mediaType);
         const watchedContent = await data.json();
-        dispatch(watchedMovie(watchedContent)); // ✅ Dispatch Redux action
+        dispatch(watchedMovie(watchedContent));
       }
     } catch (error) {
       console.error("Error adding watchlist:", error);

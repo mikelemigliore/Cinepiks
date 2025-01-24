@@ -80,7 +80,6 @@ function BigCard({
     (state: RootState) => state.content.watchlist
   );
 
-  //Temporarly commented because it was causing an error
   useEffect(() => {
     //console.log(likesdb[0].id);
 
@@ -96,14 +95,13 @@ function BigCard({
     const Watchlisted = watchlistdb
       .map((watchlist) => watchlist.id)
       .includes(id);
-    //console.log("Liked", Liked);
 
     if (Watchlisted) {
       setIsAdded(true);
     } else {
       setIsAdded(false);
     }
-  }, [id, watchlistdb]); // Run only once when the component mounts or id changes
+  }, [id, watchlistdb]);
 
   useEffect(() => {
     if (mediaType === "movie") {
@@ -180,7 +178,6 @@ function BigCard({
   return (
     <div className="ml-2 md:ml-[3.5vw] bg-gradient-to-b md:bg-gradient-to-r from-customServicesColor via-customServicesColor/96 to-customColorBigCard w-[96vw] md:w-[90vw] h-[74vh] md:h-[71vh] rounded-3xl shadow-2xl">
       <div className="flex flex-col md:flex-row md:h-full h-[38rem]">
-        {/* Left Side: Image */}
         <img
           className={`rounded-tl-3xl rounded-tr-3xl rounded-br-customMobile rounded-bl-customMobile md:rounded-tl-3xl md:rounded-bl-3xl md:rounded-tr-custom md:rounded-br-custom h-[18rem] md:h-full object-cover ${
             isPartialSlide ? "opacity-30 pointer-events-none" : ""
@@ -188,13 +185,11 @@ function BigCard({
           src={`${image ? `${BASE_IMAGE_URL}${image}` : `/placeHolder.jpg`}`}
         />
 
-        {/* Right Side: Movie Info */}
         <div className="flex flex-col justify-center items-center ml-[1vw]">
           <div className="w-full md:w-[27vw] text-2xl md:text-[2.2vw] font-semibold text-center line-clamp-1 md:mt-[0vh] mt-[2vh]">
             {title}
           </div>
 
-          {/* Add more info below the title */}
           <div className="md:mt-[2vh] text-center">
             <div className="flex justify-start items-center text-customTextColor font-bold md:text-[0.8vw] text-[3vw] md:space-x-[0.5vw] space-x-[2vw]">
               <span>{genres[0]?.name || "Undefined"}</span>
@@ -223,19 +218,16 @@ function BigCard({
             </p>
           </div>
 
-          {/* Box for Ratings */}
           <div className="w-[22vw]">
             <div className="w-full mt-[2vw] hidden md:block">
               <h1 className="text-white text-base md:text-[1vw]">Ratings</h1>
             </div>
 
-            {/* Box for Three Titles */}
             <div className="w-full flex justify-between items-start mt-[1vh] hidden md:block">
               <div className="flex flex-col md:flex-row justify-between">
                 <div className="text-customTextColor text-sm md:text-[0.9vw]">
                   <span>Rotten&nbsp;Tomatoes</span>
                   <div className="flex items-center space-x-[2.5vw]">
-                    {/* <div className="flex items-center mt-[1.5vh]"> */}
                     <div className="flex flex-col">
                       <div className="flex items-center mt-[1.5vh]">
                         {rottenTomatoesCritics && (
@@ -257,8 +249,6 @@ function BigCard({
                       </div>
                       <h1 className="text-[0.7vw] mt-[0.5vw]">Critics</h1>
                     </div>
-                    {/* </div> */}
-                    {/* <div className="flex items-center mt-[1.5vh]"> */}
                     <div className="flex flex-col">
                       <div className="flex items-center mt-[1.5vh]">
                         {rottenTomatoesAudience && (
@@ -281,7 +271,6 @@ function BigCard({
 
                       <h1 className="text-[0.7vw] mt-[0.5vw]">Audience</h1>
                     </div>
-                    {/* </div> */}
                   </div>
                 </div>
                 <div className="text-customTextColor mt-5 md:mt-0 text-sm md:text-[0.9vw] md:ml-[1vw]">
@@ -365,4 +354,3 @@ function BigCard({
 }
 
 export default BigCard;
-

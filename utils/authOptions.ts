@@ -16,13 +16,11 @@ interface OAuthProfile {
 }
 
 export const authOptions: any = {
-  // Configures one or more authentication providers
   providers: [
     CredentialsProvider({
       id: "credentials",
       name: "Credentials",
       credentials: {
-        //username:{label:"Username", type:"text"},
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },

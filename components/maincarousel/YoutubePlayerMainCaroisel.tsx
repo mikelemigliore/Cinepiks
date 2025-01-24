@@ -14,10 +14,10 @@ interface YoutubePlayerProps {
   videoKey?: string;
   VideoEnd: () => void;
   pause: boolean;
-  reload:boolean
-  handleReload:() => void;
-  handleStarted:() => void;
-  src:string
+  reload: boolean;
+  handleReload: () => void;
+  handleStarted: () => void;
+  src: string;
 }
 
 function YoutubePlayerMainCaroisel({
@@ -29,35 +29,28 @@ function YoutubePlayerMainCaroisel({
   reload,
   handleReload,
   handleStarted,
-  src
+  src,
 }: YoutubePlayerProps) {
   const [fadeOut, setFadeOut] = useState(true);
-  const playerRef = useRef<any>(null); // Ref to store the player instance
+  const playerRef = useRef<any>(null);
   const [isReady, setIsReady] = useState(false);
 
-
-
-
-
-  // YouTube player options
   const opts = {
-    height: "100%", // Ensure it fills the height of the container
-    width: "100%", // Ensure it fills the width of the container
+    height: "100%",
+    width: "100%",
     playerVars: {
       autoplay: isCarouselPlaying ? 1 : 0,
       mute: 1,
-      controls: 0, // Hide the controls (play/pause, volume, etc.)
-      modestbranding: 1, // Reduce YouTube branding
-      rel: 0, // Don't show related videos at the end
-      showinfo: 0, // Hide video title (deprecated but useful in some cases)
-      disablekb: 1, // Disable keyboard controls
+      controls: 0,
+      modestbranding: 1,
+      rel: 0,
+      showinfo: 0,
+      disablekb: 1,
       loop: 0,
-      fs: 0, // Disable fullscreen button
-      vq: "hd1080", // Suggested video quality level to load
+      fs: 0,
+      vq: "hd1080",
     },
   };
-
-
 
   useEffect(() => {
     if (playerRef.current) {
@@ -69,7 +62,6 @@ function YoutubePlayerMainCaroisel({
     }
   }, [pause]);
 
-
   useEffect(() => {
     if (playerRef.current) {
       if (unmute) {
@@ -80,55 +72,45 @@ function YoutubePlayerMainCaroisel({
     }
   }, [unmute]);
 
-
   useEffect(() => {
     if (playerRef.current && reload) {
-      playerRef.current.seekTo(0); // Restart the video from the beginning
-      //playerRef.current.playVideo(); // Play the video
+      playerRef.current.seekTo(0);
 
-      // Reset the reload state after the video has restarted
       setTimeout(() => {
         handleReload();
-      }, 100); // Short timeout to allow reset
+      }, 100);
     }
   }, [reload]);
 
-
-
-  // Event handler when the player is ready
   const onReady = (event: any) => {
-
     if (event && event.target) {
-      playerRef.current = event.target; // Store player reference
+      playerRef.current = event.target;
       setIsReady(true);
-  
+
       if (isCarouselPlaying) {
-        playerRef.current.playVideo(); // Play the video if isCarouselPlaying is true
+        playerRef.current.playVideo();
       }
-  
+
       if (unmute) {
         playerRef.current.unMute();
       } else {
         playerRef.current.mute();
       }
-  
-      playerRef.current.setPlaybackQuality('highres'); // Set to highest quality
-  
-      // Trigger fade-out and signal video started
+
+      playerRef.current.setPlaybackQuality("highres");
+
       setTimeout(() => {
         setFadeOut(false);
         handleStarted();
       }, 2000);
     } else {
-      console.error('Player reference is not available');
+      console.error("Player reference is not available");
     }
   };
 
   const onEnd = (event: any) => {
     VideoEnd();
   };
-
-
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -146,7 +128,6 @@ function YoutubePlayerMainCaroisel({
         }}
       />
 
-      {/* Gradient Overlay */}
       <div className="absolute inset-y-0 left-0 bg-gradient-to-tr from-customColor to-transparent w-full h-full z-20 opacity-100" />
 
       <img

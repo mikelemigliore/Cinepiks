@@ -4,19 +4,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import MovieCard from "../cards/MovieCard";
 import SwiperNavButtons from "@/utils/swiperButtons";
-import { useEffect, useState } from "react";
-import "swiper/css/pagination"; // Import Swiper pagination styles
+import { useState } from "react";
+import "swiper/css/pagination";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
-  //tmdbId?:number[];
-  //image?: string[];
   medias?: Array<{
     id: number;
-    //image: string;
     title: string;
     name?: string;
     poster_path: string;
@@ -24,22 +20,20 @@ interface Props {
     backdrop_path: string;
     genre_ids: number[];
   }>;
-  //mediaRapid?: MediaRapid[];
   title?: string;
-  mediaType: string; // this line was commented
+  mediaType: string;
   logInPage?: boolean;
   itemsGenres?: Array<{
     id: number;
     name: string;
   }>;
-  //getGenreNames: () => void;
   description: string;
   serviceId?: number;
   isLoading?: boolean;
 }
 
 interface Props {
-  onClick?: React.MouseEventHandler<HTMLButtonElement>; // Button Element
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 function MovieSwiper({
@@ -52,33 +46,24 @@ function MovieSwiper({
   description,
   serviceId,
   isLoading,
-}: //image = [],
-//tmdbId = []
-// mediaRapid = [],
-Props) {
+}: Props) {
   const [swiperInstance, setSwiperInstance] = useState<any>(null);
   const [showButtons, setShowButtons] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleReload = () => {
-    // Serialize the medias array and store it in sessionStorage
-    //sessionStorage.setItem("movieData", JSON.stringify(medias));
     if (serviceId) {
-      // Define the query parameters
       const queryParams = new URLSearchParams({
         type: mediaType === "movie" ? "movie" : "series",
         servicesParam: JSON.stringify([serviceId]), // Hulu 15 , Prime 119
       });
-      // Navigate to the search page with query parameters
       window.location.href = `/search?${queryParams.toString()}`;
     } else {
-      // Define the query parameters
       const queryParams = new URLSearchParams({
         type: mediaType === "movie" ? "movie" : "series",
-        customParam: description, // Add your custom parameter here
+        customParam: description,
       });
 
-      // Navigate to the search page with query parameters
       window.location.href = `/search?${queryParams.toString()}`;
     }
   };
@@ -87,7 +72,7 @@ Props) {
     <div
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}
-      className="relative z-80" //bottom-[3rem]
+      className="relative z-80"
     >
       <div className="ml-2 mb-4 md:ml-[3.7vw] md:mb-[2vh] text-white md:text-[1.5vw] text-[5vw] font-semibold">
         <h1 className="flex">
@@ -98,12 +83,11 @@ Props) {
             <div></div>
           ) : (
             <div>
-              {/* <Link href="/search"> */}
               <Button
                 variant="ghost"
                 onClick={(e) => {
-                  if (onClick) onClick(e); // Call the passed onClick handler if provided
-                  handleReload(); // Reload the page
+                  if (onClick) onClick(e);
+                  handleReload();
                 }}
                 className={`md:w-[7vw] ml-4 rounded-full md:text-[1vw] text-[3vw] !bg-transparent hover:text-white 
           md:transition-all md:duration-500 md:ease-in-out md:transform
@@ -117,7 +101,6 @@ Props) {
                 View All
                 <SlArrowRight className="w-4 h-4 md:w-4 md:h-4 md:ml-[.5vw] ml-[2vw]" />
               </Button>
-              {/* </Link> */}
             </div>
           )}
         </h1>
@@ -132,7 +115,7 @@ Props) {
               slidesPerView={2}
               slidesPerGroup={2}
               spaceBetween={-5}
-              loop={false} // Ensure loop is enabled
+              loop={false}
               pagination={{ clickable: true }}
               onSwiper={(swiper) => {
                 setSwiperInstance(swiper);
@@ -141,7 +124,6 @@ Props) {
                 setActiveIndex(swiper.realIndex);
               }}
               breakpoints={{
-                // when window width is >= 640px
                 1024: {
                   slidesPerView: 7,
                   slidesPerGroup: 7,
@@ -156,39 +138,34 @@ Props) {
             >
               {medias.map((media, index) => {
                 const isPartialSlide =
-                  index === (activeIndex + 7) % medias.length || // Next partial slide on the right
-                  index === (activeIndex - 1 + medias.length) % medias.length; // Previous partial slide on the left
+                  index === (activeIndex + 7) % medias.length ||
+                  index === (activeIndex - 1 + medias.length) % medias.length;
 
                 const isLastThreeSlides =
                   (index >= (activeIndex + 6) % medias.length &&
-                    index <= (activeIndex + 7) % medias.length) || // Next partial slides on the right
+                    index <= (activeIndex + 7) % medias.length) ||
                   (index >= (activeIndex - 3 + medias.length) % medias.length &&
-                    index <= (activeIndex - 1 + medias.length) % medias.length); // Previous partial slides on the left
+                    index <= (activeIndex - 1 + medias.length) % medias.length);
 
                 const isLastOne = index === medias.length - 1;
 
                 return (
-                  //key={media.id} but it gives an error where it says that the key is not unique
                   <SwiperSlide className="md:pb-[8vh] pb-[6vh]" key={index}>
                     <MovieCard
                       logInPage={logInPage}
                       type={mediaType === "series" ? "tv" : "movie"}
-                      // type={media.showType}
                       imgBackdrop={media.backdrop_path}
                       imgUrl={media.poster_path}
-                      //image={image[0]}
                       genre={media.genre_ids}
                       title={media.title}
                       name={media.name}
                       itemsGenres={itemsGenres}
                       id={media.id}
-                      //tmdbId={tmdbId}
-                      //getGenreNames={getGenreNames}
                       isPartialSlide={isPartialSlide}
                       isLastThreeSlides={isLastThreeSlides}
                       isLastOne={isLastOne}
                       isLoading={isLoading}
-                      className="" // Apply negative margin
+                      className=""
                     />
                   </SwiperSlide>
                 );

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { IoCheckmark } from "react-icons/io5";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { SlArrowRight } from "react-icons/sl";
@@ -8,12 +7,11 @@ import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { useDispatch } from "react-redux";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
 import { useRouter } from "next/navigation";
-import { useGetWatchlistQuery } from "@/app/features/watchlist/watchlistSlice";
 
 interface WatchListOptProp {
   src: string;
   watchlistOptions?: boolean;
-  mediaType: string; // Define possible values
+  mediaType: string;
   id: number;
   isDesktop: boolean;
 }
@@ -29,32 +27,16 @@ function WatchListOpt({
   const [expandRemove, setExpandRemove] = useState(false);
   const [expandView, setExpandView] = useState(false);
   const [isAdded, setIsAdded] = useState(true);
-  //const [status, setStatus] = useState<"watchlist" | "watched" | null>(null);
-  //const [isDesktop, setIsDesktop] = useState(false);
 
   const dispatch = useDispatch();
   const router = useRouter();
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
-  // const { data: watchlistDB, isSuccess: watchlistSucces } =
-  //   useGetWatchlistQuery({});
-
-  // useEffect(() => {
-  //   // // Check if the current item exists in the watchlist
-  //   const isInWatchlist = watchlistDB?.some(
-  //     (item: any) => item.id === id && item.type === mediaType
-  //   );
-
-  //   if (isInWatchlist) {
-  //     setIsAdded(true);
-  //   }
-  // }, [watchlistDB]);
-
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchlistOptions) {
-      e.preventDefault(); // Prevent default click behavior
-      e.stopPropagation(); // Stop the click event from bubbling
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -100,14 +82,12 @@ function WatchListOpt({
         }`}
       />
 
-      {/* Overlay to block clicks */}
       {watchlistOptions && (
         <div className="absolute inset-0 z-40 pointer-events-auto" />
       )}
 
       {watchlistOptions && isDesktop ? (
         <div className="absolute top-0 right-0 flex p-[1vw] z-50">
-          {/* Watched Button with expand effect */}
           <Button
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -151,7 +131,6 @@ function WatchListOpt({
           </div>
 
           <div className="absolute top-0 right-0 flex p-[1vw] mt-[6vw] z-50">
-            {/* <Link href={href}> */}
             <Button
               onClick={() => router.push(`${href}/${id}`)}
               onMouseEnter={handleMouseEnterView}
@@ -171,15 +150,12 @@ function WatchListOpt({
                 <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
               )}
             </Button>
-            {/* </Link> */}
           </div>
         </div>
       ) : !isDesktop ? (
         <div className="space-y-[5vh]">
           <div className="absolute bottom-[7vh] right-0 flex p-[1vw]  z-50">
             <Button
-              // onMouseEnter={handleMouseEnter}
-              // onMouseLeave={handleMouseLeave}
               onClick={handleWatched}
               className={`items-center justify-center transition-all duration-300 rounded-full bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95
               `}
@@ -190,8 +166,6 @@ function WatchListOpt({
 
           <div className="absolute bottom-0 right-0 flex p-[1vw]  z-50">
             <Button
-              // onMouseEnter={handleMouseEnterRemove}
-              // onMouseLeave={handleMouseLeaveRemove}
               onClick={handleAdded}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-base md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
             >

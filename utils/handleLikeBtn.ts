@@ -1,10 +1,7 @@
 import { getSession } from "next-auth/react";
-//import ListView from "@/components/listview/ListView";
 import { getLike } from "@/app/pages/api/likesPage";
-//import { useDispatch } from "react-redux";
 import { likeMovie, unlikeMovie } from "@/app/features/dbSlice";
 
-//const dispatch = useDispatch();
 
 async function handleLikeBtn(
   dispatch: any,
@@ -22,7 +19,6 @@ async function handleLikeBtn(
   }
 
   if (isLiked === true) {
-    // REMOVE LIKE
     try {
       const res = await fetch("/api/likes", {
         method: "DELETE",
@@ -38,13 +34,12 @@ async function handleLikeBtn(
         setIsLiked(false);
         const data = await getLike(id, mediaType);
         const likedContent = await data.json();
-        dispatch(unlikeMovie(likedContent)); // ✅ Dispatch Redux action
+        dispatch(unlikeMovie(likedContent)); 
       }
     } catch (error) {
       console.error("Error removing like:", error);
     }
   } else {
-    // ADD LIKE
     try {
       const res = await fetch("/api/likes", {
         method: "POST",
@@ -58,9 +53,9 @@ async function handleLikeBtn(
 
       if (res.status === 200) {
         setIsLiked(true);
-        const data = await getLike(id, mediaType); // Fetch movie data by IDs
+        const data = await getLike(id, mediaType);
         const likedContent = await data.json();
-        dispatch(likeMovie(likedContent)); // ✅ Dispatch Redux action
+        dispatch(likeMovie(likedContent)); 
       }
     } catch (error) {
       console.error("Error adding like:", error);

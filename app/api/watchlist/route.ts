@@ -2,7 +2,6 @@ import User from "@/models/User";
 import connect from "@/utils/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-//import { authOptions } from "../auth/[...nextauth]/route";
 import { authOptions } from "@/utils/authOptions";
 
 export const POST = async (request: any) => {
@@ -10,11 +9,7 @@ export const POST = async (request: any) => {
 
   await connect();
 
-  // console.log("watchlist", watchlist);
-  // console.log("userEmail", userEmail);
-  // console.log("mediaType", mediaType);
   
-
   try {
     if (!watchlist || !userEmail) {
       return NextResponse.json(
@@ -96,11 +91,6 @@ export const GET = async (request: any) => {
 
 export const DELETE = async (request: any) => {
   const { watchlist, userEmail,mediaType } = await request.json();
-
-
-  console.log("watchlist", watchlist);
-  console.log("userEmail", userEmail);
-  console.log("mediaType", mediaType);
 
   await connect();
 

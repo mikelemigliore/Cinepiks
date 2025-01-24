@@ -3,11 +3,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "../ui/button";
 import { CiPlay1 } from "react-icons/ci";
 import Link from "next/link";
-//import {
-//getMovieCertification,
-//getMovieDetails,
-//getWatchProviders,
-//} from "@/app/pages/api/singleMoviePage";
 import {
   useGetMovieCertificationQuery,
   useGetMovieDetailsQuery,
@@ -184,7 +179,6 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
 
   const getFilteredServices = () => {
     if (selectedFilters.all) {
-      // Remove duplicates based on provider_id
       const allServicesNoRepeat = Array.from(
         new Map(allServices.map((item) => [item.provider_id, item])).values()
       );
@@ -201,12 +195,12 @@ function HowToWatchCard({ id, selectedFilters, type }: HowToWatchProp) {
 
   const formatRuntime = (minutes: number): string => {
     if (type === "movie") {
-      const hours = Math.floor(minutes / 60); // Get the hours
-      const remainingMinutes = minutes % 60; // Get the remaining minutes
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
       return `${hours}h ${remainingMinutes}m`;
     } else if (type === "series") {
-      const hours = Math.floor(minutes / 60); // Get the hours
-      const remainingMinutes = minutes % 60; // Get the remaining minutes
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
       return hours
         ? `Avg: ${hours}h ${remainingMinutes}m`
         : `Avg: ${remainingMinutes}m`;

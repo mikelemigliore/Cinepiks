@@ -1,30 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { IoCheckmark } from "react-icons/io5";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { SlArrowRight } from "react-icons/sl";
-import StarRating from "../starRating/StarRating";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import { useRouter } from "next/navigation";
-import { useGetWatchedQuery } from "@/app/features/watched/watchedSlice";
-
-const watchedItem = [
-  {
-    id: 1,
-    type: "movie",
-    title: "Deadpool & Wolverine",
-    imgUrl:
-      "https://image.tmdb.org/t/p/original/jbwYaoYWZwxtPP76AZnfYKQjCEB.jpg",
-  },
-];
 
 interface WatchedOptProp {
   src: string;
   watchlistOptions?: boolean;
-  mediaType: string; // Define possible values
+  mediaType: string;
   watchedOptions?: boolean;
   id: number;
   isDesktop: boolean;
@@ -50,8 +36,6 @@ function WatchedOpt({
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
-  //const { data: watchedtDB, isSuccess: watchedSucces } = useGetWatchedQuery({});
-  
   const scoredb = useSelector((state: RootState) => state.content.score);
 
   useEffect(() => {
@@ -67,12 +51,12 @@ function WatchedOpt({
     } else {
       setValue(0);
     }
-  }, [id]); // Run only once when the component mounts or id changes
+  }, [id]);
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchedOptions) {
-      e.preventDefault(); // Prevent default click behavior
-      e.stopPropagation(); // Stop the click event from bubbling
+      e.preventDefault();
+      e.stopPropagation();
     }
   };
 
@@ -112,7 +96,6 @@ function WatchedOpt({
         }`}
       />
 
-      {/* Overlay to block clicks */}
       {watchedOptions && (
         <div className="absolute inset-0 z-40 pointer-events-auto" />
       )}
@@ -120,8 +103,6 @@ function WatchedOpt({
       {watchedOptions && isDesktop ? (
         <div>
           <div className="absolute top-0 right-0 flex p-[1vw] z-50">
-            {/* Watched Button with expand effect */}
-
             <div className="absolute top-0 right-0 flex p-[1vw] z-50">
               <Button
                 onMouseEnter={handleMouseEnterRemove}
@@ -145,27 +126,25 @@ function WatchedOpt({
             </div>
 
             <div className="absolute top-0 right-0 flex p-[1vw] mt-[3vw] z-50">
-              {/* <Link href={`${href}/${id}`}> */}
-                <Button
-                  onMouseEnter={handleMouseEnterView}
-                  onMouseLeave={handleMouseLeaveView}
-                  onClick={() => router.push(`${href}/${id}`)}
-                  className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
-                    expandView
-                      ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
-                      : "px-[0.7vw] py-[1.2vw]"
-                  }`}
-                >
-                  {expandView ? (
-                    <div className="flex">
-                      <span>View</span>
-                      <SlArrowRight className="w-[1.2vw] h-[1.2vw] ml-[1vw]" />
-                    </div>
-                  ) : (
-                    <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
-                  )}
-                </Button>
-              {/* </Link> */}
+              <Button
+                onMouseEnter={handleMouseEnterView}
+                onMouseLeave={handleMouseLeaveView}
+                onClick={() => router.push(`${href}/${id}`)}
+                className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl ${
+                  expandView
+                    ? "px-[1vw] py-[1.2vw] hover:bg-white/90 hover:text-black active:scale-95"
+                    : "px-[0.7vw] py-[1.2vw]"
+                }`}
+              >
+                {expandView ? (
+                  <div className="flex">
+                    <span>View</span>
+                    <SlArrowRight className="w-[1.2vw] h-[1.2vw] ml-[1vw]" />
+                  </div>
+                ) : (
+                  <SlArrowRight className="w-[1.2vw] h-[1.2vw]" />
+                )}
+              </Button>
             </div>
           </div>
           <div className="absolute flex bottom-0 left-0 p-[1vw]">
@@ -179,81 +158,38 @@ function WatchedOpt({
           </div>
         </div>
       ) : !isDesktop ? (
-        // <div className="space-y-[5vh]">
-
-        //   <div className="absolute top-0 right-0 flex p-[1vw] z-50">
-        //     <Button
-        //       onMouseEnter={handleMouseEnterRemove}
-        //       onMouseLeave={handleMouseLeaveRemove}
-        //       onClick={() => handleWatched()}
-        //       className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
-        //     >
-        //       <div className="flex">
-        //         <span>Remove</span>
-        //         <Cross2Icon className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[0.5vw]" />
-        //       </div>
-        //     </Button>
-        //   </div>
-
-        //   <div className="absolute top-[0.5vh] right-0 flex p-[1vw] mt-[3vw] z-50">
-        //     <Link href={`${href}/${id}`}>
-        //       <Button
-        //         onMouseEnter={handleMouseEnterView}
-        //         onMouseLeave={handleMouseLeaveView}
-        //         className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[44vw] h-[5vh] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
-        //       >
-        //         <div className="flex">
-        //           <span>View</span>
-        //           <SlArrowRight className="w-[4vw] h-[4vw] md:w-[1vw] md:h-[1vw] ml-[3vw] mt-[0.5vw]" />
-        //         </div>
-        //       </Button>
-        //     </Link>
-        //   </div>
-        //   <div className="absolute flex bottom-0 left-0 p-[1vw]">
-        //     <img
-        //       className="md:w-[2vw] md:h-[2vw] w-[8vw] h-[8vw]"
-        //       src="genresIcons/icons8-star.svg"
-        //     />
-        //     <div className="font-bold md:text-[1vw] text-[5vw] flex items-end ml-[0.5vw]">
-        //       {`${value === 0 ? "--" : value} / 5`}
-        //     </div>
-        //   </div>
-        // </div>
         <div className="space-y-[5vh]">
-
-        <div className="absolute top-0 right-0 flex p-[1vw] z-50">
-          <Button
-            onMouseEnter={handleMouseEnterRemove}
-            onMouseLeave={handleMouseLeaveRemove}
-            onClick={() => handleWatched()}
-            className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
-          >
+          <div className="absolute top-0 right-0 flex p-[1vw] z-50">
+            <Button
+              onMouseEnter={handleMouseEnterRemove}
+              onMouseLeave={handleMouseLeaveRemove}
+              onClick={() => handleWatched()}
+              className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
+            >
               <Cross2Icon className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
-          </Button>
-        </div>
+            </Button>
+          </div>
 
-        <div className="absolute top-[2vh] right-0 flex p-[1vw] mt-[3vw] z-50">
-          {/* <Link href={`${href}/${id}`}> */}
+          <div className="absolute top-[2vh] right-0 flex p-[1vw] mt-[3vw] z-50">
             <Button
               onMouseEnter={handleMouseEnterView}
               onMouseLeave={handleMouseLeaveView}
               onClick={() => router.push(`${href}/${id}`)}
               className={`flex items-center justify-center transition-all duration-300 rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl w-[12vw] h-[12vw] md:w-[11vw] md:h-[5vh] hover:bg-white/90 hover:text-black active:scale-95`}
             >
-                <SlArrowRight className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
+              <SlArrowRight className="w-[5vw] h-[5vh] md:w-[1vw] md:h-[1vw]" />
             </Button>
-          {/* </Link> */}
-        </div>
-        <div className="absolute flex bottom-0 left-0 p-[1vw]">
-          <img
-            className="md:w-[2vw] md:h-[2vw] w-[8vw] h-[8vw]"
-            src="genresIcons/icons8-star.svg"
-          />
-          <div className="font-bold md:text-[1vw] text-[5vw] flex items-end ml-[0.5vw]">
-            {`${value === 0 ? "--" : value} / 5`}
+          </div>
+          <div className="absolute flex bottom-0 left-0 p-[1vw]">
+            <img
+              className="md:w-[2vw] md:h-[2vw] w-[8vw] h-[8vw]"
+              src="genresIcons/icons8-star.svg"
+            />
+            <div className="font-bold md:text-[1vw] text-[5vw] flex items-end ml-[0.5vw]">
+              {`${value === 0 ? "--" : value} / 5`}
+            </div>
           </div>
         </div>
-      </div>
       ) : (
         <></>
       )}

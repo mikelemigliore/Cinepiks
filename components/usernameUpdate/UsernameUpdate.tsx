@@ -22,7 +22,6 @@ function UsernameUpdate() {
     <div>
       <h1 className="mb-[1vh] text-[0.9vw]">Username</h1>
       <form>
-        {/* Search Input */}
         <input
           type="text"
           className={`bg-buttonColor md:h-[5.5vh] md:px-[1.5vw] w-[14vw] md:rounded-full md:text-[0.9vw] placeholder-white`}
