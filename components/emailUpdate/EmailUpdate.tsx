@@ -34,9 +34,12 @@ function EmailUpdate({ email }: EmailProp) {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const currentEmail = e.target[0].value;
-    const newEmail = e.target[1].value;
-    const confirmNewEmail = e.target[2].value;
+    const currentEmailInput = e.target[0].value;
+    const currentEmail = currentEmailInput.toLowerCase();
+    const newEmailInput = e.target[1].value;
+    const newEmail = newEmailInput.toLowerCase();
+    const confirmNewEmailInput = e.target[2].value;
+    const confirmNewEmail = confirmNewEmailInput.toLowerCase();
 
     if (
       !isValidEmail(currentEmail) ||
@@ -116,6 +119,7 @@ function EmailUpdate({ email }: EmailProp) {
                   type="text"
                   className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}
                   placeholder="Current Email..."
+                  required
                 />
               </div>
               <div>
@@ -126,6 +130,7 @@ function EmailUpdate({ email }: EmailProp) {
                     type="text"
                     className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw] `}
                     placeholder="New Email..."
+                    required  
                   />
                 </div>
               </div>
@@ -137,6 +142,7 @@ function EmailUpdate({ email }: EmailProp) {
                     type="text"
                     className={`bg-backgroundButton h-[7vh] w-[75vw] md:h-[5.5vh] md:w-[15vw] md:px-[1.5vw] px-[4vw] rounded-full md:text-[0.8vw]`}
                     placeholder="Confirm New Email..."
+                    required
                   />
                 </div>
               </div>

@@ -33,8 +33,10 @@ function SignUp() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const username = e.target[0].value;
-    const email = e.target[1].value;
+    const usernameInput = e.target[0].value;
+    const username = usernameInput.toLowerCase();
+    const  emailInput = e.target[1].value
+    const email = emailInput.toLowerCase();
     const password = e.target[2].value;
     const confirmPassword = e.target[3].value;
 

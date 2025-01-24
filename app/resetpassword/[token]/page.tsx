@@ -154,6 +154,7 @@ function ResetPassword({ params }: any) {
                         }`}
                         placeholder="Confirm password..."
                         required
+                        
                       />
                       <div
                         className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
@@ -186,7 +187,7 @@ function ResetPassword({ params }: any) {
                       Reset Password
                     </button>
                   </div>
-                  <p className="text-red-600 text-[0.9vw] mt-[0.5vw]">
+                  <p className="text-red-600 md:text-[0.9vw] text-[4vw] mt-[0.5vw]">
                     {error && error}
                   </p>
                 </div>

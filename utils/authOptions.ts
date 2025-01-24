@@ -1,14 +1,4 @@
-// import NextAuth from "next-auth";
-// import { authOptions } from "../app/api/auth/[...nextauth]/route"; // Adjust the path as needed
 
-// export const handler = NextAuth(authOptions);
-// export { handler as GET, handler as POST };
-
-
-
-
-
-//import NextAuth from "next-auth";
 import { Account, User as AuthUser } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -102,7 +92,3 @@ export const authOptions: any = {
     },
   },
 };
-
-// export const handler = NextAuth(authOptions);
-// //console.log("API Route reached");
-// export { handler as GET, handler as POST };

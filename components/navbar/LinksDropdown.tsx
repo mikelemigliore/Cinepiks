@@ -148,7 +148,9 @@ function LinksDropdown({ onClick }: Props) {
               className="flex items-center font-medium text-[1.2vw] capitalize w-full"
             >
               <Button
-                onClick={() => signOut({ callbackUrl: "/" })}
+                onClick={() => {
+                  signOut({ callbackUrl: "/" });
+                }}
                 variant="ghost"
                 className="justify-start w-full md:text-[0.8vw] text-[3vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] gap-[1.5vw]"
               >

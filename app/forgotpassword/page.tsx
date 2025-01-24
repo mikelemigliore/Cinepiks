@@ -26,7 +26,8 @@ function ForgotPassword() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const email = e.target[0].value;
+    const emailInput = e.target[0].value;
+    const email = emailInput.toLowerCase();
 
     if (!isValidEmail(email)) {
       setError("Email is invalid");
