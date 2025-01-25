@@ -312,7 +312,7 @@ MainDetailsProps) {
                 single={single}
                 id={id}
               />
-              <div className="flex flex-col gap-[3vh] content-between  ml-[11vw]">
+              <div className="flex flex-col gap-[3vh] content-between  md:ml-[4vw]  ml-[11vw]">
                 <div>
                   <div className="">
                     <div className="flex">
@@ -653,17 +653,17 @@ MainDetailsProps) {
             </Button>
           </div>
           <div className={`${isDesktop ? "hidden" : "mt-[3vh]"}`}>
-            <h1 className="text-[3.5vw]">
+            <h1 className="text-[3.5vw] md:text-[0.9vw]">
               If the player on the top doesn't work, please click below.
             </h1>
             <Link
               href={`https://www.youtube.com/watch?v=${videoKey}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`mt-[1vh] flex justify-center items-center h-[7vh] w-90  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500`}
+              className={`mt-[1vh] flex justify-center items-center h-[7vh] w-90  md:pl-[1vw] md:w-[10vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500`}
             >
               Trailer
-              <FaPlay className="md:w-[2.5vw] md:h-[2.5vh] w-[5vw] h-[5vh] md:ml-[0.4vw] ml-[4vw]" />
+              <FaPlay className="md:w-[2vw] md:h-[2vh] w-[5vw] h-[5vh] md:ml-[0.4vw] ml-[4vw]" />
             </Link>
           </div>
           {isDesktop && (
