@@ -46,6 +46,7 @@ interface MovieCardProps {
   id: number;
   mediaType?: string;
   isLoading?: boolean;
+  onClick?: any;
 }
 
 interface Genre {
@@ -71,6 +72,7 @@ function MovieCard({
   id,
   name,
   isLoading,
+  onClick,
 }: MovieCardProps) {
   const [runtime, setRuntime] = useState();
   const [season, setSeasons] = useState();
@@ -187,6 +189,10 @@ function MovieCard({
 
   const BASE_IMAGE_URL = "https://image.tmdb.org/t/p/original";
 
+  const handleReload = () => {
+    window.location.href = `${href}/${id}`;
+  };
+
   return (
     <div
       onMouseEnter={handleMouseEnter}
@@ -287,6 +293,11 @@ function MovieCard({
                 e.preventDefault();
                 e.stopPropagation();
               }
+
+              if (onClick) {
+                onClick(e);
+              }
+              handleReload();
             }}
           >
             <div

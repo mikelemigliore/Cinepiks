@@ -4,13 +4,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { useToast } from "@/hooks/use-toast";
+import { use } from "react";
 
 interface User {
   email: string;
 }
 
-function ResetPassword({ params }: any) {
-  console.log(params.token);
+function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
+
+  
+    const unwrappedParams = use(params);
+  const token = unwrappedParams.token;
 
   const [error, setError] = useState("");
   const [verified, setVerified] = useState(false);
@@ -22,6 +27,8 @@ function ResetPassword({ params }: any) {
   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
 
+  const { toast } = useToast();
+
   useEffect(() => {
     const verifyToken = async () => {
       try {
@@ -31,7 +38,7 @@ function ResetPassword({ params }: any) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            token: params.token,
+            token: token,
           }),
         });
 
@@ -51,7 +58,7 @@ function ResetPassword({ params }: any) {
       }
     };
     verifyToken();
-  }, [params.token]);
+  }, [token]);
 
   useEffect(() => {
 
@@ -178,6 +185,13 @@ function ResetPassword({ params }: any) {
                     <button
                       type="submit"
                       disabled={error.length > 0}
+                      onClick={() =>
+                        toast({
+                          title: "Password Reset Successful!",
+                          description: "You can now log in with your new password.",
+                          className: "bg-customServicesColor text-white", 
+                        })
+                      }
                       className={`bg-customColorCard rounded-full px-[1.5vw] py-[0.7vw] text-[0.9vw] m-[0.2vw] ${
                         error.length > 0
                           ? ""
@@ -201,3 +215,133 @@ function ResetPassword({ params }: any) {
 }
 
 export default ResetPassword;
+
+
+
+// "use client";
+
+// import { useSession } from "next-auth/react";
+// import Link from "next/link";
+// import { useRouter } from "next/navigation";
+// import React, { useEffect, useState } from "react";
+// import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+// import { useToast } from "@/hooks/use-toast";
+// import { use } from "react";
+
+// interface User {
+//   email: string;
+// }
+
+// function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
+//   // Unwrap params using React.use()
+//   const unwrappedParams = use(params);
+//   const token = unwrappedParams.token;
+
+//   console.log("Unwrapped Token:", token);
+
+//   const [error, setError] = useState("");
+//   const [verified, setVerified] = useState(false);
+//   const [user, setUser] = useState<User | null>(null);
+//   const router = useRouter();
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
+//   const { data: session, status: sessionStatus } = useSession();
+//   const { toast } = useToast();
+
+//   useEffect(() => {
+//     const verifyToken = async () => {
+//       try {
+//         const res = await fetch("/api/verifytoken", {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({ token }),
+//         });
+
+//         if (res.status === 400) {
+//           setError("Invalid token or has expired");
+//           setVerified(false);
+//         } else if (res.status === 200) {
+//           setError("");
+//           setVerified(true);
+//           const userData = await res.json();
+//           setUser(userData);
+//         }
+//       } catch (error) {
+//         setError("Error, try again");
+//         console.error(error);
+//       }
+//     };
+
+//     verifyToken();
+//   }, [token]);
+
+//   useEffect(() => {
+//     if (sessionStatus === "authenticated") {
+//       router.replace("/homepage");
+//     }
+//   }, [sessionStatus, router]);
+
+//   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+//   const confirmTogglePasswordVisibility = () => setConfirmShowPassword((prev) => !prev);
+
+//   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+//     e.preventDefault();
+//     const form = e.currentTarget;
+//     const password = (form[0] as HTMLInputElement).value;
+//     const confirmPassword = (form[1] as HTMLInputElement).value;
+
+//     if (!password || password.length < 8) {
+//       setError("Password is invalid");
+//       return;
+//     }
+
+//     if (password !== confirmPassword) {
+//       alert("Passwords do not match!");
+//       return;
+//     }
+
+//     try {
+//       const res = await fetch("/api/resetpassword", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           password,
+//           email: user?.email,
+//         }),
+//       });
+
+//       if (res.status === 400) {
+//         setError("Something went wrong, try again");
+//       } else if (res.status === 200) {
+//         setError("");
+//         toast({
+//           title: "Password Reset Successful!",
+//           description: "You can now log in with your new password.",
+//           className: "bg-customServicesColor text-white",
+//         });
+//         router.push("/");
+//       }
+//     } catch (error) {
+//       setError("Error, try again");
+//       console.error(error);
+//     }
+//   };
+
+//   if (sessionStatus === "loading" || !verified) {
+//     return <h1>Loading...</h1>;
+//   }
+
+//   return (
+//     sessionStatus !== "authenticated" && (
+//       <div className="background">
+//         {/* Render Reset Password UI */}
+//       </div>
+//     )
+//   );
+// }
+
+// export default ResetPassword;

@@ -39,8 +39,8 @@ function LinksDropdown({ onClick }: Props) {
     window.location.href = "/likes";
   };
 
-  const handleWatchlistReload = () => {
-    window.location.href = "/watchlist";
+  const handleWatchedReload = () => {
+    window.location.href = "/watched";
   };
 
   return (
@@ -90,7 +90,11 @@ function LinksDropdown({ onClick }: Props) {
           <div className="flex items-center font-medium text-[1.2vw] capitalize w-full">
             <Button
               variant="ghost"
-              onClick={() => router.push("/watched")}
+              //onClick={() => router.push("/watched")}
+              onClick={(e) => {
+                if (onClick) onClick(e);
+                handleWatchedReload();
+              }}
               className="justify-start w-full md:text-[0.8vw] text-[3.5vw] hover:text-black text-white rounded-[2vh] p-[2.4vh] md:gap-[1.5vw] gap-[5vw]"
             >
               <IoCheckmark size={25} />

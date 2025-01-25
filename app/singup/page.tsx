@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { useToast } from "@/hooks/use-toast";
 
 function SignUp() {
   const [error, setError] = useState("");
@@ -11,6 +12,8 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
+
+  const { toast } = useToast();
 
   useEffect(() => {
     if (sessionStatus === "authenticated") {
@@ -35,7 +38,7 @@ function SignUp() {
     e.preventDefault();
     const usernameInput = e.target[0].value;
     const username = usernameInput.toLowerCase();
-    const  emailInput = e.target[1].value
+    const emailInput = e.target[1].value;
     const email = emailInput.toLowerCase();
     const password = e.target[2].value;
     const confirmPassword = e.target[3].value;
@@ -169,6 +172,13 @@ function SignUp() {
                     </Link>
                     <button
                       type="submit"
+                      onClick={() =>
+                        toast({
+                          title: "Welcome to CinePiks!",
+                          description: "Your account has been created successfully.",
+                          className: "bg-customServicesColor text-white", 
+                        })
+                      }
                       className="bg-customColorCard rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
                     >
                       Apply

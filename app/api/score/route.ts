@@ -67,7 +67,7 @@ export const PUT = async (request: any) => {
 };
 
 export const GET = async (request: any) => {
-  await connect(); // Ensure the database is connected
+  await connect(); 
 
   try {
     const session: any = await getServerSession(authOptions);

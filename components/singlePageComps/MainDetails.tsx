@@ -37,9 +37,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import { Skeleton } from "@/components/ui/skeleton"; // Import Skeleton from Shadcn/UI
+import { Skeleton } from "@/components/ui/skeleton"; 
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useSession } from "next-auth/react";
+import { useGetScoreQuery } from "@/app/features/score/scoreSlice";
 
 interface SeriesProp {
   id: number;
@@ -153,7 +154,8 @@ MainDetailsProps) {
     (state: RootState) => state.content.watchlist
   );
 
-  const scoredb = useSelector((state: RootState) => state.content.score);
+  //const scoredb = useSelector((state: RootState) => state.content.score);
+  const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   useEffect(() => {
     const Liked = likesdb.map((like) => like.id).includes(id);
@@ -162,7 +164,7 @@ MainDetailsProps) {
       .map((watchlist) => watchlist.id)
       .includes(id);
 
-    const Score = scoredb.map((score) => score.id).includes(id);
+    const Score = scoreDB?.map((score: any) => score.id).includes(id);
 
     if (Liked) {
       setIsLiked(true);
@@ -177,16 +179,15 @@ MainDetailsProps) {
     }
 
     if (Score) {
-      const res = scoredb.filter((item: any) => {
+      const res = scoreDB.filter((item: any) => {
         return item.id === id;
       });
-      console.log("RES", res);
 
       setValue(res[0].score);
     } else {
       setValue(0);
     }
-  }, [id]);
+  }, [id, scoreDB]);
 
   useEffect(() => {
     if (type === "movie") {

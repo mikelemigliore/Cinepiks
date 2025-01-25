@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/utils/authOptions";
 import AuthProvider from "@/utils/SessionProvider";
 import ReduxProvider from "@/utils/ReduxProvider";
+import { Toaster } from "@/components/ui/toaster"
 
 export default async function RootLayout({
   children,
@@ -34,6 +35,7 @@ export default async function RootLayout({
             </nav>
             <main>
               <Container>{children}</Container>
+              <Toaster />
             </main>
             <footer className="mt-auto bg-customFooterBackground text-white pb-10 md:pb-0">
               <Footer />

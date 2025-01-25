@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 function ForgotPassword() {
   const [error, setError] = useState("");
@@ -11,6 +12,8 @@ function ForgotPassword() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmShowPassword, setConfirmShowPassword] = useState(false);
   const { data: session, status: sessionStatus } = useSession();
+
+  const { toast } = useToast();
 
   useEffect(() => {
 
@@ -94,6 +97,13 @@ function ForgotPassword() {
                     </Link>
                     <button
                       type="submit"
+                      onClick={() =>
+                        toast({
+                          title: "Password reset link as been sent",
+                          description: "Check your email and click the link to reset your password.",
+                          className: "bg-customServicesColor text-white", 
+                        })
+                      }
                       className="bg-customColorCard rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95"
                     >
                       Send

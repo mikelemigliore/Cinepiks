@@ -1,11 +1,12 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { SlArrowRight } from "react-icons/sl";
 import handleWatchedBtn from "@/utils/handleWatchedBtn";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/features/store";
+import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useGetScoreQuery } from "@/app/features/score/scoreSlice";
 
 interface WatchedOptProp {
   src: string;
@@ -14,7 +15,9 @@ interface WatchedOptProp {
   watchedOptions?: boolean;
   id: number;
   isDesktop: boolean;
+  
 }
+
 
 function WatchedOpt({
   src,
@@ -36,22 +39,22 @@ function WatchedOpt({
 
   const href = mediaType === "movie" ? "/singlemovie" : "/singleseries";
 
-  const scoredb = useSelector((state: RootState) => state.content.score);
+  //const scoredb = useSelector((state: RootState) => state.content.score);
+  const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   useEffect(() => {
-    const Score = scoredb.map((score) => score.id).includes(id);
+    const Score = scoreDB?.map((score: any) => score.id).includes(id);
 
     if (Score) {
-      const res = scoredb.filter((item: any) => {
+      const res = scoreDB.filter((item: any) => {
         return item.id === id;
       });
-      console.log("RES", res);
 
       setValue(res[0].score);
     } else {
       setValue(0);
     }
-  }, [id]);
+  }, [id, scoreDB]);
 
   const handleImageClick = (e: React.MouseEvent) => {
     if (watchedOptions) {

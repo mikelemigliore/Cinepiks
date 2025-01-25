@@ -23,7 +23,7 @@ async function handleScoreBtn(
       });
 
       if (res.status === 400) {
-        console.log("ErrorRRR");
+        console.log("Error");
       }
 
       if (res.status === 200) {
@@ -41,14 +41,11 @@ async function handleScoreBtn(
       });
 
       if (res.status === 400) {
-        console.log("ErrorDDD");
+        console.log("Error");
       }
 
       if (res.status === 200) {
-        console.log(res);
-
         const data = await res.json();
-        console.log(data);
         dispatch(updateScore(data));
       }
     } catch (error) {
