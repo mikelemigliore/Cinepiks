@@ -37,7 +37,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/features/store";
 import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
-import { Skeleton } from "@/components/ui/skeleton"; 
+import { Skeleton } from "@/components/ui/skeleton";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useSession } from "next-auth/react";
 import { useGetScoreQuery } from "@/app/features/score/scoreSlice";
@@ -651,6 +651,20 @@ MainDetailsProps) {
                 <AiOutlineLike className="md:w-[2.5vw] md:h-[2.5vh] w-[6vw] h-[6vh] md:ml-[0.4vw] ml-[4vw]" />
               )}
             </Button>
+          </div>
+          <div className={`${isDesktop ? "hidden" : "mt-[3vh]"}`}>
+            <h1 className="text-[3.5vw]">
+              If the player on the top doesn't work, please click below.
+            </h1>
+            <Link
+              href={`https://www.youtube.com/watch?v=${videoKey}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`mt-[1vh] flex justify-center items-center h-[7vh] w-90  md:pl-[1vw] md:w-[6vw] md:h-[5vh] rounded-full text-[4vw] md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500`}
+            >
+              Trailer
+              <FaPlay className="md:w-[2.5vw] md:h-[2.5vh] w-[5vw] h-[5vh] md:ml-[0.4vw] ml-[4vw]" />
+            </Link>
           </div>
           {isDesktop && (
             <div className="w-[22vw]">

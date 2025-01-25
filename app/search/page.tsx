@@ -168,9 +168,9 @@ function SearchPage() {
     parsedTypeSearch !== null ? { page, query: parsedTypeSearch } : skipToken
   );
 
-  useEffect(() => {
-    console.log("Updated ContentSearch:", ContentSearch);
-  }, [ContentSearch]);
+  // useEffect(() => {
+  //   console.log("Updated ContentSearch:", ContentSearch);
+  // }, [ContentSearch]);
 
   useEffect(() => {
     dispatch(setContent([]));
@@ -406,7 +406,7 @@ function SearchPage() {
                 <GridView
                   filter={filter}
                   mediaSearch={ContentSearch}
-                  isLoadingContent={isFetching}
+                  isLoadingContent={contentLoading}
                 />
               ) : (
                 ContentSearch.map((media, index) => (
@@ -421,7 +421,7 @@ function SearchPage() {
                     overview={media.overview}
                     list={list}
                     isDesktop={isDesktop}
-                    isLoadingContent={isFetching}
+                    isLoadingContent={contentLoading}
                   />
                 ))
               )}
