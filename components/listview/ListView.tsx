@@ -30,6 +30,7 @@ import handleLikeBtn from "@/utils/handleLikeBtn";
 import handleWatchlistBtn from "@/utils/handleWatchlistBtn";
 import { useSession } from "next-auth/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useGetScoreQuery } from "@/app/features/score/scoreSlice";
 
 interface GenresType {
   id: number;
@@ -133,7 +134,8 @@ function ListView({
     (state: RootState) => state.content.watchlist
   );
 
-  const scoredb = useSelector((state: RootState) => state.content.score);
+  //const scoredb = useSelector((state: RootState) => state.content.score);
+  const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   useEffect(() => {
     const Liked = likesdb.map((like) => like.id).includes(id);
@@ -142,7 +144,7 @@ function ListView({
       .map((watchlist) => watchlist.id)
       .includes(id);
 
-    const Score = scoredb.map((score) => score.id).includes(id);
+    const Score = scoreDB?.map((score: any) => score.id).includes(id);
 
     if (Liked) {
       setIsLiked(true);
@@ -157,16 +159,15 @@ function ListView({
     }
 
     if (Score) {
-      const res = scoredb.filter((item: any) => {
+      const res = scoreDB.filter((item: any) => {
         return item.id === id;
       });
-      console.log("RES", res);
 
       setValue(res[0].score);
     } else {
       setValue(0);
     }
-  }, [id]);
+  }, [id, scoreDB]);
 
   useEffect(() => {
     if (movieDetails) {

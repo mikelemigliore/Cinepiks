@@ -372,7 +372,7 @@ function SearchPage() {
               filter ? "md:translate-x-[1vw]" : ""
             }`}
           >
-            <div className="flex z-50  transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0.5vw] space-x-[1.5vw]">
+            <div className="flex z-[60] md:w-[20vw] transition-transform duration-700 ease-in-out mt-[-10vh] md:mt-[0vh] mb-[10vh] md:mb-[0vh] md:space-x-[0.5vw] space-x-[1.5vw]">
               <Link
                 onClick={() => handleAll("all")}
                 href={{ pathname: "/search", query: { type: "all" } }}
@@ -394,7 +394,7 @@ function SearchPage() {
               <Link
                 href={{ pathname: "/search", query: { type: "series" } }}
                 onClick={() => handleSeries("series")}
-                className={`h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
+                className={` h-[6vh] w-24 md:w-[7vw] md:h-[5.5vh] bg-customServicesColor rounded-full flex justify-center items-center md:mr-[0.5vw] text-[4vw] md:text-[1vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                   series ? "bg-white/90 text-black font-bold" : ""
                 }`}
               >
