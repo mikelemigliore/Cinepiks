@@ -120,34 +120,56 @@ function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
     );
   }
 
+  const resetClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const form = e.currentTarget.form as HTMLFormElement;
+    const password = (form[0] as HTMLInputElement).value;
+    const confirmPassword = (form[1] as HTMLInputElement).value;
+
+    if (!password || !confirmPassword) {
+      setError("Both fields must be filled.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
+    toast({
+      title: "Password Reset Successful!",
+      description: "You can now log in with your new password.",
+      className: "bg-customServicesColor text-white",
+    });
+  };
+
   return (
     sessionStatus !== "authenticated" && (
       <div className="background">
         <div className="w-full h-screen flex justify-center items-center">
-          <div className="w-[19vw] h-[20vw] bg-buttonColor pb-[4vw] rounded-3xl">
-            <div className="flex flex-col mt-[0.9vw] ml-[2vw] space-y-[3vh]">
-              <h1 className="text-[1.5vw]">Reset Password</h1>
+          <div className="md:w-[19vw] md:h-[20vw] h-[46vh] w-[82vw] bg-buttonColor pb-[4vw] rounded-3xl">
+            <div className="flex flex-col md:mt-[0.9vw] mt-[5vw] md:ml-[2vw] ml-[4vw] space-y-[3vh]">
+              <h1 className="md:text-[1.5vw] text-[5vw]">Reset Password</h1>
               <form onSubmit={handleSubmit}>
-                <div className="space-y-[1.5vw]">
+                <div className="md:space-y-[1.5vw] space-y-[3vh]">
                   <div>
-                    <h1 className="mb-[1vh]">New Password</h1>
+                    <h1 className="mb-[1vh] md:text-[0.9vw]">New Password</h1>
                     <div className="flex relative">
                       <input
                         type={showPassword ? "text" : "password"}
-                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                          showPassword ? "text-[0.9vw]" : "text-[0.9vw]"
+                        className={`bg-transparent h-[7vh] w-[75vw]  md:h-[5.5vh] md:px-[1.5vw] px-[4vw]  md:w-[15vw] placeholder-customTextColor rounded-full md:text-[0.8vw] border border-customTextColor ${
+                          showPassword ? "md:text-[0.9vw]" : "md:text-[0.9vw]"
                         }`}
                         placeholder="Password..."
                         required
                       />
                       <div
-                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
+                        className="absolute md:right-[3vw] right-[7vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
                         onClick={togglePasswordVisibility}
                       >
                         {showPassword ? (
-                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEyeInvisible className="bg-buttonColor md:w-[1.3vw] md:h-[1.3vw] w-[6vw] h-[6vh]" />
                         ) : (
-                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEye className="bg-buttonColor md:w-[1.3vw] md:h-[1.3vw] w-[6vw] h-[6vh]" />
                         )}
                       </div>
                     </div>
@@ -157,20 +179,22 @@ function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
                     <div className="flex relative">
                       <input
                         type={confirmShowPassword ? "text" : "password"}
-                        className={`md:bg-transparent md:h-[5.5vh] md:px-[1.5vw] w-[15vw] placeholder-customTextColor md:rounded-full md:text-[0.8vw] border border-customTextColor ${
-                          confirmShowPassword ? "text-[0.9vw]" : "text-[0.9vw]"
+                        className={`bg-transparent h-[7vh] w-[75vw]  md:h-[5.5vh] md:px-[1.5vw] px-[4vw]  md:w-[15vw] placeholder-customTextColor rounded-full md:text-[0.8vw] border border-customTextColor ${
+                          confirmShowPassword
+                            ? "md:text-[0.9vw]"
+                            : "md:text-[0.9vw]"
                         }`}
                         placeholder="Confirm password..."
                         required
                       />
                       <div
-                        className="absolute right-[3vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
+                        className="absolute md:right-[3vw] right-[7vw] top-[50%] transform -translate-y-[50%] cursor-pointer bg-buttonColor pl-[0.5vw]"
                         onClick={confirmTogglePasswordVisibility}
                       >
                         {confirmShowPassword ? (
-                          <AiOutlineEyeInvisible className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEyeInvisible className="bg-buttonColor md:w-[1.3vw] md:h-[1.3vw] w-[6vw] h-[6vh]" />
                         ) : (
-                          <AiOutlineEye className="bg-buttonColor w-[1.3vw] h-[1.3vw]" />
+                          <AiOutlineEye className="bg-buttonColor md:w-[1.3vw] md:h-[1.3vw] w-[6vw] h-[6vh]" />
                         )}
                       </div>
                     </div>
@@ -178,22 +202,15 @@ function ResetPassword({ params }: { params: Promise<{ token: string }> }) {
                   <div className="flex justify-start ml-[-1vw]">
                     <Link
                       href="/"
-                      className="bg-transparent rounded-full px-[1.5vw] py-[0.5vw] text-[0.9vw] m-[0.2vw] hover:bg-transparent"
+                      className="bg-transparent rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-transparent"
                     >
                       Cancel
                     </Link>
                     <button
                       type="submit"
                       disabled={error.length > 0}
-                      onClick={() =>
-                        toast({
-                          title: "Password Reset Successful!",
-                          description:
-                            "You can now log in with your new password.",
-                          className: "bg-customServicesColor text-white",
-                        })
-                      }
-                      className={`bg-customColorCard rounded-full px-[1.5vw] py-[0.7vw] text-[0.9vw] m-[0.2vw] ${
+                      onClick={(e) => resetClick(e)}
+                      className={`bg-customColorCard rounded-full md:px-[1.5vw] px-[5vw] md:py-[0.5vw] py-[2vw] md:text-[0.9vw] md:m-[0.2vw] m-[2vw] hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95 ${
                         error.length > 0
                           ? ""
                           : `hover:bg-white/90 hover:text-black active:bg-white/90 active:scale-95`

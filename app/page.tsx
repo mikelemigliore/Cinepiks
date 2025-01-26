@@ -166,7 +166,6 @@ function LoginIn() {
     const emailInput = e.target[0].value;
     const email = emailInput.toLowerCase();
     const password = e.target[1].value;
-    
 
     if (!isValidEmail(email)) {
       setError("Email is invalid");
@@ -205,10 +204,11 @@ function LoginIn() {
                   </div>
                 ) : (
                   <>
-                    {items.map((item: ItemProp,index) => (
-                      <CarouselItem 
-                      key={index}
-                      className="relative w-full flex justify-center items-center ">
+                    {items.map((item: ItemProp, index) => (
+                      <CarouselItem
+                        key={index}
+                        className="relative w-full flex justify-center items-center "
+                      >
                         <div className="relative">
                           <img
                             src={`${BASE_IMAGE_URL}${item.backdrop_path}`}
