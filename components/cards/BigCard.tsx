@@ -310,12 +310,15 @@ function BigCard({
           </div>
 
           <div className="flex justify-center md:justify-start mt-[2rem] md:mt-[6vh] md:space-x-[1vw] space-x-[2vw]">
-            <Link href={`/${href}/${id}`}>
-              <Button className="h-12 w-28 md:w-[8vw] md:h-[6vh]  rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500">
+            <div>
+              <Button
+                onClick={() => (window.location.href = `/${href}/${id}`)}
+                className="h-12 w-28 md:w-[8vw] md:h-[6vh]  rounded-full text-sm md:text-[0.9vw] bg-slate-300 bg-opacity-10 backdrop-blur-xl hover:bg-white/90 hover:text-black active:bg-white active:scale-95 duration-500"
+              >
                 View
                 <SlArrowRight className="w-[4vw] h-[4vh] md:w-[2vw] md:h-[2vh] ml-6 md:ml-[2vw]" />
               </Button>
-            </Link>
+            </div>
 
             <Button
               onClick={handleAdded}

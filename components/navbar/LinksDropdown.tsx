@@ -52,7 +52,7 @@ function LinksDropdown({ onClick }: Props) {
         >
           <Avatar>
             <AvatarImage src={src || undefined} />
-            <AvatarFallback>MM</AvatarFallback>
+            <AvatarFallback><IoPersonSharp className="md:w-[1vw] md:h-[1vw] w-[5vw] h-[5vw]  text-white" /></AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

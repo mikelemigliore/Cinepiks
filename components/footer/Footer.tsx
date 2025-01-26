@@ -91,6 +91,8 @@ function Footer() {
           <div>
             <Link
               href="https://www.linkedin.com/in/michele-migliore-b377b7278/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block mt-[4vh] ml-[6vw] md:ml-[5vw]"
             >
               About Me

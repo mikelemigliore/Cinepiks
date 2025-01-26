@@ -26,17 +26,18 @@ export const POST = async (request: any) => {
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
-  const resetUrl = `https://cinepiks.com/resetpassword/${resetToken}`;
+  const resetUrl = `http://localhost:3000/resetpassword/${resetToken}`;
 
-  console.log(resetUrl);
-
-  const body = ` Reset your password by clicking on the link below:` + resetUrl;
+  //const body = ` Reset your password by clicking on the link below:` + resetUrl;
 
   const msg = {
     to: email,
     from: "mikelemigliore@hotmail.com",
-    subject: "reset Password",
-    text: body,
+    subject: "Reset Password",
+    templateId: "d-244504fe4d9842f3bb4860ccb2755001",
+    dynamicTemplateData: {
+      resetUrl,
+    },
   };
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");

@@ -294,10 +294,16 @@ function MovieCard({
                 e.stopPropagation();
               }
 
-              if (onClick) {
-                onClick(e);
+              if (expandCard) {
+                if (onClick) {
+                  onClick(e);
+                  handleReload();
+                } else {
+                  e.preventDefault();
+                }
+              } else {
+                handleReload();
               }
-              handleReload();
             }}
           >
             <div

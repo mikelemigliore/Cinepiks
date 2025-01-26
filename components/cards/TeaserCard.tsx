@@ -154,7 +154,8 @@ TeaserCardProps) {
 
   const handleNavigation = () => {
     if (isClient) {
-      router.push(`${href}/${id}`);
+      //router.push(`${href}/${id}`);
+      window.location.href = `${href}/${id}`;
     }
   };
 
