@@ -10,10 +10,10 @@ Login Page:
 ![Image](https://github.com/user-attachments/assets/f4fdd419-c0da-46dd-81e4-ba01437fb9e3)
 
 Home Page:
-
+![Image](https://github.com/user-attachments/assets/dbd77ea5-9604-428a-bee4-409525272ec3)
 
 Search Page:
-
+![Image](https://github.com/user-attachments/assets/90f351aa-f7d5-4830-9a0e-af0ad6161857)
 
 
 ## Features
@@ -28,6 +28,8 @@ Search Page:
 - See a preview effect when hovering over a poster on the home and search pages.
 - Switch between grid and list views for a customized browsing experience.
 - Sort by release date, popularity, rating, or alphabetical order.
+- Updating email and password.
+- Including a profile image.
 
 
 ## Technologies Used (NextJs Project)
