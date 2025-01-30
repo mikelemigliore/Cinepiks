@@ -66,9 +66,14 @@ Search Page:
  
 ## Final Reflection
 
-This project took me approximately 4month to complete dure to begina Computer cience student and the learning curve I faced and the goal was to have an ambitious project as my first real project that would challenge me and at the same time allow me to get familiar with various concepts and ttechnologies and especially gain some confidence.
+This project took me approximately four months to complete due to the learning curve I faced, especially in the beginning, and begin a Computer Science student. My goal was to challenge myself with an ambitious first real-world project that would push me to learn new concepts, work with modern technologies, and, most importantly, gain confidence as a developer.
 
-Balancing university and development at the same time, I was able to complete this project in about four months. Throughout the process, I faced many ups and downs, but that’s exactly what made it such a valuable learning experience. I picked up new technologies along the way, learning and adapting as I went.
+My goal was to build a platform that allows users to:
+- Explore the latest movies and TV shows across multiple streaming services.
+- Compare what different streaming platforms offer without switching between multiple apps.
+- Track their watchlist, mark watched content, and rate movies and series.
 
-I know my code may not be perfect—it might even look like a mess to an experienced developer—but I’m proud of what I’ve built. More importantly, this project has reinforced my passion for learning and my drive to become a better, more efficient developer. CinePiks is just the beginning, and I’m excited for what comes next.
+The biggest challenge I faced was Authentication using NextAuth and understanding and implementing Redux Toolkit for caching data and state managment, which resulted in a lot of reasearch and testing to make sure I was following the correct process. But I also faced multiple small challenges, including handling API responses, formatting data correctly, and ensuring smooth UI interactions. 
+
+In conclusion, I chose Next.js for this project because I wanted to work with modern industry standards and build something scalable. While I acknowledge that my code may not be perfect from an expert's perspective, I am incredibly proud of this achievement. More importantly, this experience has fueled my passion for learning and my drive to become a better developer.
 
