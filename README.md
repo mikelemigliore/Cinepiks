@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Cinepiks - Track Movies and Series 
 
-## Getting Started
+#### Overview:
 
-First, run the development server:
+Cinkepiks is my first big project that allowed me to really learn a lot. The goal was to challenge myself and create a website that would allow the user to explore, track and srutinize many contents offered by many different platform all in one place. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Project Screen Shot(s)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Login Page:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Home Pagez:
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Search Page:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Features
+- Find movies and series by title, genre, platform, availability, or rating using an intuitive filter component.
+- Add content to a **Watchlist** to track what you wish to see
+- Mark content as Watched and keep track of what you've seen.
+- Mark content as Liked to have all your likes in one place.
+- Using a star rating system, you can give a score to each content you watch.
+- View trailers, item info, cast information, reviews, and how-to-watch in one place.
+- View ratings from multiple sources (Rotten Tomatoes, IMDb, TMDB)  
+- Fully responsive design optimized for both desktop and mobile.
+- See a preview effect when hovering over a poster on the home and search pages.
+- Switch between grid and list views for a customized browsing experience.
+- Sort by release date, popularity, rating, or alphabetical order.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologies Used (NextJs Project)
+#### Front-end:
+- Next.js
+- React 
+- Tailwind CSS 
+- ShadCN/UI and Material UI
+#### Backend and Database:
+- MongoDB
+- NextAuth
+- Redux Toolkit
+- TMDB API
+- YouTube Player API
+- RapidAPI (Streaming Availability)
+#### Deployment & Hosting:
+- Netlify
+- Squarespace (Custom Domain)
+
+ 
+## Reflection
+
+  - 
+  - What did you set out to build?
+  - Why was this project challenging and therefore a really good learning experience?
+  - What were some unexpected obstacles?
+  - What tools did you use to implement this project?
+      - This might seem obvious because you are IN this codebase, but to all other humans now is the time to talk about why you chose webpack instead of create react app, or D3, or vanilla JS instead of a framework etc. Brag about your choices and justify them here.  
+
+#### Example:  
+
+This was a 3 week long project built during my third module at Turing School of Software and Design. Project goals included using technologies learned up until this point and familiarizing myself with documentation for new features.  
+
+Originally I wanted to build an application that allowed users to pull data from the Twitter API based on what they were interested in, such as 'most tagged users'. I started this process by using the `create-react-app` boilerplate, then adding `react-router-4.0` and `redux`.  
+
+One of the main challenges I ran into was Authentication. This lead me to spend a few days on a research spike into OAuth, Auth0, and two-factor authentication using Firebase or other third parties. Due to project time constraints, I had to table authentication and focus more on data visualization from parts of the API that weren't restricted to authenticated users.
+
+At the end of the day, the technologies implemented in this project are React, React-Router 4.0, Redux, LoDash, D3, and a significant amount of VanillaJS, JSX, and CSS. I chose to use the `create-react-app` boilerplate to minimize initial setup and invest more time in diving into weird technological rabbit holes. In the next iteration I plan on handrolling a `webpack.config.js` file to more fully understand the build process.
