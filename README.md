@@ -75,5 +75,5 @@ My goal was to build a platform that allows users to:
 
 The biggest challenge I faced was Authentication using NextAuth and understanding and implementing Redux Toolkit for caching data and state managment, which resulted in a lot of reasearch and testing to make sure I was following the correct process. But I also faced multiple small challenges, including handling API responses, formatting data correctly, and ensuring smooth UI interactions. 
 
-In conclusion, I chose Next.js for this project because I wanted to work with modern industry standards and build something scalable. While I acknowledge that my code may not be perfect from an expert's perspective, I am incredibly proud of this achievement. More importantly, this experience has fueled my passion for learning and my drive to become a better developer.
+In conclusion, I chose Next.js for this project because I wanted to work with modern industry standards and build something scalable. I understand that my code may seem a mess from an expert's perspective, but I am incredibly proud of this achievement and eager to learn more.
 
