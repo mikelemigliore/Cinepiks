@@ -10,6 +10,8 @@ Login Page:
 ![Image](https://github.com/user-attachments/assets/f4fdd419-c0da-46dd-81e4-ba01437fb9e3)
 
 Home Page:
+![Image](https://github.com/user-attachments/assets/09fbfbd5-ef3b-4e79-8c38-e8da5de8735f)
+
 ![Image](https://github.com/user-attachments/assets/dbd77ea5-9604-428a-bee4-409525272ec3)
 
 Search Page:
