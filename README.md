@@ -66,7 +66,7 @@ Search Page:
  
 ## Final Reflection
 
-As a Computer Science student, my coursework has taught me a lot, but I felt the need to go beyond theory and gain hands-on experience with real-world technologies. That’s why I challenged myself to build CinePiks, a project I’m truly passionate about.
+This project took me approximately 4month to complete dure to begina Computer cience student and the learning curve I faced and the goal was to have an ambitious project as my first real project that would challenge me and at the same time allow me to get familiar with various concepts and ttechnologies and especially gain some confidence.
 
 Balancing university and development at the same time, I was able to complete this project in about four months. Throughout the process, I faced many ups and downs, but that’s exactly what made it such a valuable learning experience. I picked up new technologies along the way, learning and adapting as I went.
 
