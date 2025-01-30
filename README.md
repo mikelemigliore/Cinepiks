@@ -6,16 +6,24 @@ Cinkepiks is my first big project that allowed me to really learn a lot. The goa
 
 ## Project Screen Shot(s)
 
+
 Login Page:
-![Image](https://github.com/user-attachments/assets/f4fdd419-c0da-46dd-81e4-ba01437fb9e3)
+
+<img src="https://github.com/user-attachments/assets/f4fdd419-c0da-46dd-81e4-ba01437fb9e3" height="300">
+
+
 
 Home Page:
-![Image](https://github.com/user-attachments/assets/09fbfbd5-ef3b-4e79-8c38-e8da5de8735f)
 
-![Image](https://github.com/user-attachments/assets/dbd77ea5-9604-428a-bee4-409525272ec3)
+<img src="https://github.com/user-attachments/assets/09fbfbd5-ef3b-4e79-8c38-e8da5de8735f" height="300">
+
+<img src="https://github.com/user-attachments/assets/dbd77ea5-9604-428a-bee4-409525272ec3" height="300">
+
+
 
 Search Page:
-![Image](https://github.com/user-attachments/assets/90f351aa-f7d5-4830-9a0e-af0ad6161857)
+
+<img src="https://github.com/user-attachments/assets/90f351aa-f7d5-4830-9a0e-af0ad6161857" height="300">
 
 
 ## Features
@@ -32,6 +40,7 @@ Search Page:
 - Sort by release date, popularity, rating, or alphabetical order.
 - Updating email and password.
 - Including a profile image.
+- And more...
 
 
 ## Technologies Used (NextJs Project)
@@ -54,7 +63,7 @@ Search Page:
  
 ## Reflection
 
-  - 
+  - While currently persuing a 
   - What did you set out to build?
   - Why was this project challenging and therefore a really good learning experience?
   - What were some unexpected obstacles?
