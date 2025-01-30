@@ -1,10 +1,13 @@
 ## Cinepiks - Track Movies and Series 
 
+#### Link:
+[Cinepiks.com](https://cinepiks.com)
+
 #### Overview:
 
-Cinkepiks is my first big project that allowed me to really learn a lot. The goal was to challenge myself and create a website that would allow the user to explore, track and srutinize many contents offered by many different platform all in one place. 
+CinePiks is my first major project, designed to push my skills and challenge me as a developer. The goal was to create a platform where users can explore, track, and analyze movies and TV shows from multiple streaming services—all in one place. This project allowed me to gain hands-on experience with frontend and backend development, authentication, state management, API integrations, and UI/UX design.
 
-## Project Screen Shot(s)
+## A Few Project Screenshots
 
 
 Login Page:
@@ -61,21 +64,11 @@ Search Page:
 - Squarespace (Custom Domain)
 
  
-## Reflection
+## Final Reflection
 
-  - While currently persuing a 
-  - What did you set out to build?
-  - Why was this project challenging and therefore a really good learning experience?
-  - What were some unexpected obstacles?
-  - What tools did you use to implement this project?
-      - This might seem obvious because you are IN this codebase, but to all other humans now is the time to talk about why you chose webpack instead of create react app, or D3, or vanilla JS instead of a framework etc. Brag about your choices and justify them here.  
+As a Computer Science student, my coursework has taught me a lot, but I felt the need to go beyond theory and gain hands-on experience with real-world technologies. That’s why I challenged myself to build CinePiks, a project I’m truly passionate about.
 
-#### Example:  
+Balancing university and development at the same time, I was able to complete this project in about four months. Throughout the process, I faced many ups and downs, but that’s exactly what made it such a valuable learning experience. I picked up new technologies along the way, learning and adapting as I went.
 
-This was a 3 week long project built during my third module at Turing School of Software and Design. Project goals included using technologies learned up until this point and familiarizing myself with documentation for new features.  
+I know my code may not be perfect—it might even look like a mess to an experienced developer—but I’m proud of what I’ve built. More importantly, this project has reinforced my passion for learning and my drive to become a better, more efficient developer. CinePiks is just the beginning, and I’m excited for what comes next.
 
-Originally I wanted to build an application that allowed users to pull data from the Twitter API based on what they were interested in, such as 'most tagged users'. I started this process by using the `create-react-app` boilerplate, then adding `react-router-4.0` and `redux`.  
-
-One of the main challenges I ran into was Authentication. This lead me to spend a few days on a research spike into OAuth, Auth0, and two-factor authentication using Firebase or other third parties. Due to project time constraints, I had to table authentication and focus more on data visualization from parts of the API that weren't restricted to authenticated users.
-
-At the end of the day, the technologies implemented in this project are React, React-Router 4.0, Redux, LoDash, D3, and a significant amount of VanillaJS, JSX, and CSS. I chose to use the `create-react-app` boilerplate to minimize initial setup and invest more time in diving into weird technological rabbit holes. In the next iteration I plan on handrolling a `webpack.config.js` file to more fully understand the build process.
