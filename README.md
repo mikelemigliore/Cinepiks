@@ -7,9 +7,9 @@ Cinkepiks is my first big project that allowed me to really learn a lot. The goa
 ## Project Screen Shot(s)
 
 Login Page:
+![Image](https://github.com/user-attachments/assets/f4fdd419-c0da-46dd-81e4-ba01437fb9e3)
 
-
-Home Pagez:
+Home Page:
 
 
 Search Page:
