@@ -215,6 +215,7 @@ TeaserCardProps) {
                 </div>
               ) : (
                 <img
+                  loading="lazy"
                   src={`${
                     imgBackdrop
                       ? `${BASE_IMAGE_URL}${imgBackdrop}`

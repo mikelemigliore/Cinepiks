@@ -312,6 +312,7 @@ function MovieCard({
             >
               {list ? (
                 <img
+                  loading="lazy"
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[50vw] md:w-[14vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out`}
                 />
@@ -334,6 +335,7 @@ function MovieCard({
                 />
               ) : single ? (
                 <img
+                  loading="lazy"
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
                   className={`w-[52vw] md:w-[16.8vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
                     watchlistOptions ? "opacity-25" : ""
@@ -341,9 +343,13 @@ function MovieCard({
                 />
               ) : (
                 <img
+                  loading="lazy"
                   src={`${BASE_IMAGE_URL}${imgUrl}`}
-                  className={`w-[46vw]  md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
-                    expandCard ? "opacity-0 " : "opacity-100"
+                  onError={(e) => {
+                    e.currentTarget.src = "/fallback.jpg";
+                  }}
+                  className={`w-[46vw] md:w-[12.6vw] md:rounded-2xl rounded-2xl shadow-lg transition-opacity duration-500 ease-in-out ${
+                    expandCard ? "opacity-0" : "opacity-100"
                   } ${clicked ? "scale-[0.98]" : "scale-[1]"}`}
                 />
               )}

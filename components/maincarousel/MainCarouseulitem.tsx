@@ -140,7 +140,11 @@ function MainCarouseulitem({
           />
         ) : (
           <img
+            loading="lazy"
             src={`${BASE_IMAGE_URL}${media.backdrop_path}`}
+            onError={(e) => {
+              e.currentTarget.src = "/fallbackHorizontal.jpg";
+            }}
             className="absolute inset-0 bg-cover bg-center md:bg-top bg-no-repeat h-[50vh] object-cover md:h-[120vh] w-full"
           />
         )}
