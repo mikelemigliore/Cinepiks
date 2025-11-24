@@ -213,10 +213,22 @@ function HomePage() {
   const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   useEffect(() => {
+    console.log("Reloading page...");
+    if (typeof window !== "undefined") {
+      const alreadyReloaded = sessionStorage.getItem("cinepiks_reloaded");
+
+      if (!alreadyReloaded) {
+        sessionStorage.setItem("cinepiks_reloaded", "true");
+        window.location.reload();
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchMovieDetails = async () => {
       if (isSuccess && likesDB.length > 0) {
         try {
-          const res = await getLikes(likesDB); 
+          const res = await getLikes(likesDB);
           const likedContent = await res.json();
           dispatch(setLikes(likedContent));
         } catch (error) {
@@ -226,7 +238,7 @@ function HomePage() {
 
       if (watchlistSucces && watchlistDB.length > 0) {
         try {
-          const res = await getWatchlists(watchlistDB); 
+          const res = await getWatchlists(watchlistDB);
           const watchlistedContent = await res.json();
           dispatch(setWatchlists(watchlistedContent));
         } catch (error) {
@@ -236,7 +248,7 @@ function HomePage() {
 
       if (watchedSucces && watchedtDB.length > 0) {
         try {
-          const res = await getWatchedList(watchedtDB); 
+          const res = await getWatchedList(watchedtDB);
           const watchedContent = await res.json();
           dispatch(setWatched(watchedContent));
         } catch (error) {
@@ -254,7 +266,7 @@ function HomePage() {
     };
 
     fetchMovieDetails();
-  }, [likesDB, watchlistDB, watchedtDB, scoreDB]); 
+  }, [likesDB, watchlistDB, watchedtDB, scoreDB]);
 
   const {
     data: inTheaters,
@@ -263,7 +275,9 @@ function HomePage() {
     isFetching: inTheatersFetching,
   } = useGetUpcomingQuery({ page: 1 });
 
-  const { data: popularMovies, isLoading: popularLoading } = useGetPopularQuery({ page: 1 });
+  const { data: popularMovies, isLoading: popularLoading } = useGetPopularQuery(
+    { page: 1 }
+  );
 
   const { data: nowPlaying } = useGetNowPlayingQuery();
 
