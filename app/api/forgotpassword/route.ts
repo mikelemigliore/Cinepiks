@@ -4,8 +4,6 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY || "");
-
 export const POST = async (request: any) => {
   const { email } = await request.json();
 
@@ -30,6 +28,13 @@ export const POST = async (request: any) => {
   existingUser.resetTokenExpiry = passwordResetExpires;
 
   const resetUrl = `https://cinepiks.com/resetpassword/${resetToken}`;
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error("RESEND_API_KEY is missing");
+    return new NextResponse("Email service not configured", { status: 500 });
+  }
+  const resend = new Resend(apiKey);
 
   try {
     // 1) Save token & expiry
