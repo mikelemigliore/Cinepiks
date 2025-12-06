@@ -213,14 +213,15 @@ function HomePage() {
   const { data: scoreDB, isSuccess: scoreSucces } = useGetScoreQuery({});
 
   useEffect(() => {
-    console.log("Reloading page...");
-    if (typeof window !== "undefined") {
-      const alreadyReloaded = sessionStorage.getItem("cinepiks_reloaded");
+    if (typeof window === "undefined") return;
 
-      if (!alreadyReloaded) {
-        sessionStorage.setItem("cinepiks_reloaded", "true");
-        window.location.reload();
-      }
+    const alreadyReloaded = sessionStorage.getItem("cinepiks_reloaded");
+
+    if (!alreadyReloaded) {
+      sessionStorage.setItem("cinepiks_reloaded", "true");
+      setTimeout(() => {
+        window.location.href = window.location.href; // safer than reload()
+      }, 150);
     }
   }, []);
 
