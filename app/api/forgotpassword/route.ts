@@ -2,7 +2,9 @@ import User from "@/models/User";
 import connect from "@/utils/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import sgMail from "@sendgrid/mail";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY || "");
 
 export const POST = async (request: any) => {
   const { email } = await request.json();
@@ -22,32 +24,37 @@ export const POST = async (request: any) => {
     .update(resetToken)
     .digest("hex");
 
-  const passwordResetExpires = Date.now() + 3600000;
+  const passwordResetExpires = Date.now() + 3600000; // 1 hour
 
   existingUser.resetToken = passwordResetToken;
   existingUser.resetTokenExpiry = passwordResetExpires;
+
   const resetUrl = `https://cinepiks.com/resetpassword/${resetToken}`;
 
-  //const body = ` Reset your password by clicking on the link below:` + resetUrl;
+  try {
+    // 1) Save token & expiry
+    await existingUser.save();
 
-  const msg = {
-    to: email,
-    from: "mikelemigliore@hotmail.com",
-    subject: "Reset Password",
-    templateId: "d-244504fe4d9842f3bb4860ccb2755001",
-    dynamicTemplateData: {
-      resetUrl,
-    },
-  };
+    // 2) Send email with Resend
+    //const from = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
+    const { error } = await resend.emails.send({
+      from: "Cinepiks <no-reply@cinepiks.com>",
+      to: email,
+      subject: "Reset Your Cinepiks Password",
+      html: `
+        <p>Hi,</p>
+        <p>You requested to reset your Cinepiks password.</p>
+        <p>Click the link below to reset it:</p>
+        <p><a href="${resetUrl}">${resetUrl}</a></p>
+        <p>If you did not request this, you can safely ignore this email.</p>
+      `,
+    });
 
-  sgMail
-    .send(msg)
-    .then(() => {
-      return new NextResponse("Reset password email is sent", { status: 200 });
-    })
-    .catch(async (error) => {
+    if (error) {
+      console.error("Resend error:", error);
+
+      // clear token if sending fails
       existingUser.resetToken = undefined;
       existingUser.resetTokenExpiry = undefined;
       await existingUser.save();
@@ -55,14 +62,21 @@ export const POST = async (request: any) => {
       return new NextResponse("Failed sending email. Try again", {
         status: 400,
       });
-    });
+    }
 
-  try {
-    await existingUser.save();
-    return new NextResponse("Email is sent for restting passord", {
+    return new NextResponse("Email is sent for resetting password", {
       status: 200,
     });
   } catch (error: any) {
-    return new NextResponse(error, { status: 500 });
+    console.error("Error during password reset:", error);
+
+    // if something went wrong after setting the token
+    existingUser.resetToken = undefined;
+    existingUser.resetTokenExpiry = undefined;
+    await existingUser.save();
+
+    return new NextResponse("Failed sending email. Try again", {
+      status: 500,
+    });
   }
 };
